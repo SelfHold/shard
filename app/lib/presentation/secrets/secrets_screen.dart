@@ -13,10 +13,12 @@ import '../../data/rpc/core_client.dart';
 import '../../data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
 import '../common/hm.dart';
 import '../core/core_cubit.dart';
+import 'password_import.dart';
 import 'secret_card.dart';
 import 'secret_editor.dart';
 import 'secret_util.dart';
 import 'totp.dart';
+import 'totp_import.dart';
 
 /// Group filter: every entry, or the entries without a (known) group.
 const _all = '*all';
@@ -109,7 +111,7 @@ class _SecretsScreenState extends State<SecretsScreen> {
       };
       if (!inGroup) return false;
       if (q.isEmpty) return true;
-      return [e.title, e.username, e.url, e.address, e.comment].any((s) => s.toLowerCase().contains(q));
+      return [e.title, e.username, e.url, e.address, e.comment, e.server.folder, ...e.server.tags].any((s) => s.toLowerCase().contains(q));
     }).toList();
   }
 
@@ -128,14 +130,26 @@ class _SecretsScreenState extends State<SecretsScreen> {
     final saved = await showSecretEditor(
       context,
       groups: _groups,
+      entries: _entries,
       initialGroup: group,
       kinds: _totp ? const [pb.SecretKind.SECRET_TOTP] : passwordKinds,
     );
     if (saved != null) await _load(quiet: true);
   }
 
+  Future<void> _import() async {
+    final group = _group == _all || _group == _none ? '' : _group;
+    final show = _totp ? showTotpImport : showPasswordImport;
+    final n = await show(context, groups: _groups, initialGroup: group);
+    if (n != null && mounted) await _load(quiet: true);
+  }
+
+  /// No engine yet (no storage, or too few): the core serves the safe from
+  /// this device's copy, read only.
+  bool get _readOnly => !(_core.state.state?.ready ?? false);
+
   Future<void> _open(pb.SecretEntry e) async {
-    await showSecretCard(context, entry: e, groups: _groups);
+    await showSecretCard(context, entry: e, groups: _groups, entries: _entries, readOnly: _readOnly);
     if (mounted) await _load(quiet: true);
   }
 
@@ -168,6 +182,8 @@ class _SecretsScreenState extends State<SecretsScreen> {
           await SecretClipboard.copyPlain(e.publicKey, tr('Public key', 'Публичный ключ'));
         case pb.SecretKind.SECRET_WEB3:
           await SecretClipboard.copyPlain(e.address, tr('Address', 'Адрес'));
+        case pb.SecretKind.SECRET_SERVER:
+          await SecretClipboard.copyPlain(sshTarget(e), tr('Address', 'Адрес'));
         default:
           final full = await _core.api.getSecret(pb.IdRequest(id: e.id));
           final pw = full.password;
@@ -190,6 +206,7 @@ class _SecretsScreenState extends State<SecretsScreen> {
   @override
   Widget build(BuildContext context) {
     final hm = Hm.of(context);
+    final readOnly = !(context.select<CoreCubit, bool>((c) => c.state.state?.ready ?? false));
     final groups = _groupById;
     final selected = groups[_group];
     final showNone = _groups.isNotEmpty && _count(_none) > 0;
@@ -199,7 +216,7 @@ class _SecretsScreenState extends State<SecretsScreen> {
       showNone: showNone,
       count: _count,
       onSelect: (id) => setState(() => _group = id),
-      onAdd: () => _editGroup(),
+      onAdd: readOnly ? null : () => _editGroup(),
       horizontal: hm.mobile,
     );
     final table = HmTable<pb.SecretEntry>(
@@ -212,13 +229,18 @@ class _SecretsScreenState extends State<SecretsScreen> {
                 ? (_totp ? tr('No 2FA codes yet', '2FA-кодов пока нет') : tr('The safe is empty', 'Сейф пуст'))
                 : tr('No entries in this group', 'В группе нет записей')),
       emptyIcon: _query.text.isNotEmpty ? Icons.search_off : (_totp ? Icons.pin_outlined : Icons.password_outlined),
-      emptyAction: _query.text.isEmpty && !_loading
+      emptyAction: _query.text.isEmpty && !_loading && !readOnly
           ? HmButton(_totp ? tr('Add 2FA code', 'Добавить 2FA-код') : tr('Add entry', 'Добавить запись'), icon: Icons.add, onPressed: _add)
           : null,
       search: HmSearchField(controller: _query, placeholder: tr('Search…', 'Поиск…'), onChanged: (_) => setState(() {})),
       controls: [
-        HmButton(tr('Add', 'Добавить'), variant: HmVariant.primary, icon: Icons.add, onPressed: _add),
-        if (selected != null)
+        if (!readOnly) ...[
+          HmButton(tr('Add', 'Добавить'), variant: HmVariant.primary, icon: Icons.add, onPressed: _add),
+          _totp
+              ? HmButton(tr('From link', 'Из ссылки'), icon: Icons.link, onPressed: _import)
+              : HmButton(tr('Import', 'Импорт'), icon: Icons.file_download_outlined, onPressed: _import),
+        ],
+        if (selected != null && !readOnly)
           HmButton(tr('Edit group', 'Изменить группу'), icon: Icons.edit_outlined, onPressed: () => _editGroup(selected)),
       ],
       onRefresh: () => _load(),
@@ -234,7 +256,8 @@ class _SecretsScreenState extends State<SecretsScreen> {
             onPressed: () => _quickCopy(e),
           ),
         if (!_totp) ..._passwordActions(e),
-        HmActionButton(icon: Icons.delete_outline, label: tr('Delete', 'Удалить'), kind: HmAction.delete, onPressed: () => _delete(e)),
+        if (!readOnly)
+          HmActionButton(icon: Icons.delete_outline, label: tr('Delete', 'Удалить'), kind: HmAction.delete, onPressed: () => _delete(e)),
       ],
     );
     final modes = HmSegmented<bool>(
@@ -243,13 +266,22 @@ class _SecretsScreenState extends State<SecretsScreen> {
       onChanged: _setMode,
     );
     return BlocListener<CoreCubit, CoreState>(
-      listenWhen: (a, b) => a.treeRev != b.treeRev || a.secretsRev != b.secretsRev,
+      listenWhen: (a, b) =>
+          a.treeRev != b.treeRev || a.secretsRev != b.secretsRev || (a.state?.ready ?? false) != (b.state?.ready ?? false),
       listener: (_, _) => _load(quiet: true),
       child: HmPage(
         onRefresh: () => _load(quiet: true),
         children: [
           HmPageTitle(tr('Passwords', 'Пароли')),
           modes,
+          if (readOnly)
+            HmBanner(
+              tr(
+                'No storage is available: this is the copy kept on this device. Codes and passwords can be read; changes are possible once storages are back.',
+                'Хранилища недоступны: показана копия на этом устройстве. Коды и пароли можно читать; изменения — когда хранилища вернутся.',
+              ),
+              tone: HmTone.warning,
+            ),
           if (_broken > 0)
             HmBanner(
               tr(
@@ -314,7 +346,10 @@ class _SecretsScreenState extends State<SecretsScreen> {
   ];
 
   List<Widget> _passwordActions(pb.SecretEntry e) => [
-    if (e.kind != pb.SecretKind.SECRET_SSH && e.kind != pb.SecretKind.SECRET_WEB3 && e.username.isNotEmpty)
+    if (e.kind != pb.SecretKind.SECRET_SSH &&
+        e.kind != pb.SecretKind.SECRET_WEB3 &&
+        e.kind != pb.SecretKind.SECRET_SERVER &&
+        e.username.isNotEmpty)
       HmActionButton(
         icon: Icons.person_outline,
         label: tr('Copy login', 'Копировать логин'),
@@ -325,7 +360,7 @@ class _SecretsScreenState extends State<SecretsScreen> {
       icon: Icons.copy_outlined,
       label: switch (e.kind) {
         pb.SecretKind.SECRET_SSH => tr('Copy public key', 'Копировать публичный ключ'),
-        pb.SecretKind.SECRET_WEB3 => tr('Copy address', 'Копировать адрес'),
+        pb.SecretKind.SECRET_WEB3 || pb.SecretKind.SECRET_SERVER => tr('Copy address', 'Копировать адрес'),
         _ => tr('Copy password', 'Копировать пароль'),
       },
       kind: HmAction.neutral,
@@ -370,6 +405,7 @@ class _SecretsScreenState extends State<SecretsScreen> {
   static String _subtitle(pb.SecretEntry e) => switch (e.kind) {
     pb.SecretKind.SECRET_SSH => e.fingerprint,
     pb.SecretKind.SECRET_WEB3 => e.address,
+    pb.SecretKind.SECRET_SERVER => sshTarget(e),
     _ => e.username.isNotEmpty ? e.username : e.url,
   };
 }
@@ -407,6 +443,7 @@ IconData kindIcon(pb.SecretKind k) => switch (k) {
   pb.SecretKind.SECRET_TOTP => Icons.pin_outlined,
   pb.SecretKind.SECRET_SSH => Icons.terminal,
   pb.SecretKind.SECRET_WEB3 => Icons.account_balance_wallet_outlined,
+  pb.SecretKind.SECRET_SERVER => Icons.dns_outlined,
   _ => Icons.key_outlined,
 };
 
@@ -420,6 +457,7 @@ class _KindBadge extends StatelessWidget {
     pb.SecretKind.SECRET_SSH => const HmBadge('SSH', tone: HmTone.info),
     pb.SecretKind.SECRET_WEB3 => HmBadge(entry.network == pb.Web3Network.WEB3_SOLANA ? 'SOLANA' : 'EVM', tone: HmTone.accent),
     pb.SecretKind.SECRET_TOTP => const HmBadge('2FA', tone: HmTone.ok),
+    pb.SecretKind.SECRET_SERVER => HmBadge(tr('server', 'сервер'), tone: HmTone.info),
     _ => HmBadge(tr('password', 'пароль')),
   };
 }
@@ -441,7 +479,7 @@ class _GroupList extends StatelessWidget {
   final bool showNone;
   final int Function(String) count;
   final ValueChanged<String> onSelect;
-  final VoidCallback onAdd;
+  final VoidCallback? onAdd; // null: no new groups (read only)
   final bool horizontal;
 
   @override
@@ -473,7 +511,8 @@ class _GroupList extends StatelessWidget {
         child: Row(
           children: [
             for (final w in items) Padding(padding: const EdgeInsets.only(right: 8), child: w),
-            HmIconButton(icon: Icons.create_new_folder_outlined, label: tr('New group', 'Новая группа'), onPressed: onAdd),
+            if (onAdd != null)
+              HmIconButton(icon: Icons.create_new_folder_outlined, label: tr('New group', 'Новая группа'), onPressed: onAdd!),
           ],
         ),
       );
@@ -485,8 +524,10 @@ class _GroupList extends StatelessWidget {
         children: [
           Padding(padding: const EdgeInsets.fromLTRB(4, 4, 4, 8), child: HmSectionTitle(tr('Groups', 'Группы'))),
           for (final w in items) Padding(padding: const EdgeInsets.only(bottom: 4), child: w),
-          const SizedBox(height: 8),
-          HmButton(tr('New group', 'Новая группа'), icon: Icons.create_new_folder_outlined, onPressed: onAdd),
+          if (onAdd != null) ...[
+            const SizedBox(height: 8),
+            HmButton(tr('New group', 'Новая группа'), icon: Icons.create_new_folder_outlined, onPressed: onAdd),
+          ],
         ],
       ),
     );

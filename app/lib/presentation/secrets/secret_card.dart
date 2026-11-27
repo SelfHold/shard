@@ -18,39 +18,51 @@ import 'totp.dart';
 /// Shows one entry. Its secret fields are asked from the core when the card
 /// opens and dropped when it closes: they live only in memory, only while
 /// the card is on screen.
-Future<void> showSecretCard(BuildContext context, {required pb.SecretEntry entry, required List<pb.SecretGroup> groups}) {
+/// With [readOnly] (no storage: the safe is this device's copy) nothing
+/// can be changed. [entries] (the safe's list, without secrets) name the
+/// keys and servers an entry refers to.
+Future<void> showSecretCard(
+  BuildContext context, {
+  required pb.SecretEntry entry,
+  required List<pb.SecretGroup> groups,
+  List<pb.SecretEntry> entries = const [],
+  bool readOnly = false,
+}) {
   final card = GlobalKey<_SecretCardState>();
   return showHmModal<void>(
     context,
     title: entry.title,
     size: HmModalSize.lg,
-    body: (_) => _SecretCard(key: card, entry: entry, groups: groups),
+    body: (_) => _SecretCard(key: card, entry: entry, groups: groups, entries: entries, readOnly: readOnly),
     actions: (ctx) => [
       HmButton(tr('Close', 'Закрыть'), variant: HmVariant.neutral, expand: Hm.of(ctx).mobile, onPressed: () => Navigator.pop(ctx)),
-      HmButton(
-        tr('Edit', 'Изменить'),
-        variant: HmVariant.primary,
-        icon: Icons.edit_outlined,
-        expand: Hm.of(ctx).mobile,
-        onPressed: () async {
-          final opened = card.currentState?._opened;
-          if (opened == null) return;
-          // The editor gets its own copy; the card closes either way.
-          final copy = opened.deepCopy();
-          Navigator.pop(ctx);
-          await showSecretEditor(context, groups: groups, entry: copy);
-          copy.clear();
-        },
-      ),
+      if (!readOnly)
+        HmButton(
+          tr('Edit', 'Изменить'),
+          variant: HmVariant.primary,
+          icon: Icons.edit_outlined,
+          expand: Hm.of(ctx).mobile,
+          onPressed: () async {
+            final opened = card.currentState?._opened;
+            if (opened == null) return;
+            // The editor gets its own copy; the card closes either way.
+            final copy = opened.deepCopy();
+            Navigator.pop(ctx);
+            await showSecretEditor(context, groups: groups, entries: entries, entry: copy);
+            copy.clear();
+          },
+        ),
     ],
   );
 }
 
 class _SecretCard extends StatefulWidget {
-  const _SecretCard({super.key, required this.entry, required this.groups});
+  const _SecretCard({super.key, required this.entry, required this.groups, required this.entries, this.readOnly = false});
 
   final pb.SecretEntry entry;
   final List<pb.SecretGroup> groups;
+  final List<pb.SecretEntry> entries;
+  final bool readOnly;
 
   @override
   State<_SecretCard> createState() => _SecretCardState();
@@ -148,7 +160,8 @@ class _SecretCardState extends State<_SecretCard> {
             _isTotp ? tr('Account', 'Аккаунт') : tr('Login', 'Логин'),
             _Copyable(meta.username, onCopy: () => SecretClipboard.copyPlain(meta.username, tr('Login', 'Логин'))),
           ),
-        if (meta.url.isNotEmpty) HmField('URL', _Link(meta.url)),
+        if (meta.url.isNotEmpty && meta.kind != pb.SecretKind.SECRET_SERVER) HmField('URL', _Link(meta.url)),
+        if (meta.kind == pb.SecretKind.SECRET_SERVER) ..._serverFields(meta),
         if (meta.kind == pb.SecretKind.SECRET_SSH) ...[
           HmField(tr('Key type', 'Тип ключа'), Text(meta.keyType)),
           HmField(
@@ -159,6 +172,7 @@ class _SecretCardState extends State<_SecretCard> {
             tr('Public key', 'Публичный ключ'),
             _Copyable(meta.publicKey, onCopy: () => SecretClipboard.copyPlain(meta.publicKey, tr('Public key', 'Публичный ключ'))),
           ),
+          HmField(tr('Used by servers', 'Используют серверы'), _usedBy(meta)),
         ],
         if (meta.kind == pb.SecretKind.SECRET_WEB3) ...[
           HmField(
@@ -186,8 +200,10 @@ class _SecretCardState extends State<_SecretCard> {
                   ),
           )
         else ...[
-          if (meta.kind == pb.SecretKind.SECRET_PASSWORD)
+          if (meta.kind == pb.SecretKind.SECRET_PASSWORD || (meta.kind == pb.SecretKind.SECRET_SERVER && e.password.isNotEmpty))
             HmField(tr('Password', 'Пароль'), _Secret(e.password, what: tr('Password', 'Пароль'))),
+          if (e.server.extraKeys.isNotEmpty)
+            HmField(tr('Kept by apps', 'Хранят приложения'), Text(e.server.extraKeys.join(', '), style: HmText.small)),
           if (_isTotp) ...[
             HmField(tr('Code', 'Код'), TotpCodeView(codes: _codes!, id: meta.id, large: true)),
             HmField(
@@ -214,6 +230,43 @@ class _SecretCardState extends State<_SecretCard> {
 }
 
 extension on _SecretCardState {
+  String _titleOf(String id) => widget.entries.where((x) => x.id == id).firstOrNull?.title ?? tr('(missing: $id)', '(нет: $id)');
+
+  List<Widget> _serverFields(pb.SecretEntry meta) {
+    final sv = meta.server;
+    final target = sshTarget(meta);
+    return [
+      HmField(tr('Host', 'Хост'), _Copyable(target, onCopy: () => SecretClipboard.copyPlain(target, tr('Address', 'Адрес')))),
+      if (sv.folder.isNotEmpty) HmField(tr('Folder', 'Папка'), Text(sv.folder)),
+      HmField(
+        tr('Log in with', 'Вход'),
+        Text(switch (sv.auth) {
+          pb.ServerAuth.SERVER_AUTH_SSH_KEY => '${tr('SSH key', 'SSH-ключ')} · ${sv.sshKeyId.isEmpty ? '—' : _titleOf(sv.sshKeyId)}',
+          pb.ServerAuth.SERVER_AUTH_AGENT => tr('ssh-agent of the device', 'ssh-agent устройства'),
+          pb.ServerAuth.SERVER_AUTH_PASSWORD => tr('Password', 'Пароль'),
+          _ => tr('Not set', 'Не задан'),
+        }),
+      ),
+      if (sv.jumpServerId.isNotEmpty) HmField(tr('Through', 'Через'), Text(_titleOf(sv.jumpServerId))),
+      if (sv.tags.isNotEmpty) HmField(tr('Tags', 'Теги'), Wrap(spacing: 6, runSpacing: 4, children: [for (final t in sv.tags) HmBadge(t)])),
+      if (sv.hostKeys.isNotEmpty)
+        HmField(
+          tr('Trusted host keys', 'Доверенные ключи хоста'),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [for (final k in sv.hostKeys) SelectableText(k, style: HmText.jb(11))],
+          ),
+        ),
+    ];
+  }
+
+  /// The servers that log in with this SSH key.
+  Widget _usedBy(pb.SecretEntry key) {
+    final servers = widget.entries.where((x) => x.kind == pb.SecretKind.SECRET_SERVER && x.server.sshKeyId == key.id).toList();
+    if (servers.isEmpty) return Text(tr('None', 'Нет'), style: HmText.body.copyWith(color: HmColors.muted));
+    return Wrap(spacing: 6, runSpacing: 4, children: [for (final sv in servers) HmBadge(sv.title, tone: HmTone.info)]);
+  }
+
   Widget _recoveryCodes(pb.SecretEntry e) {
     final codes = e.recoveryCodes;
     if (codes.isEmpty) {
@@ -261,12 +314,14 @@ extension on _SecretCardState {
                           label: tr('Copy', 'Копировать'),
                           onPressed: () => SecretClipboard.copy(c, tr('Recovery code', 'Код восстановления')),
                         ),
-                        const SizedBox(width: 6),
-                        HmIconButton(
-                          icon: Icons.task_alt,
-                          label: tr('Used — remove', 'Использован — удалить'),
-                          onPressed: () => _useCode(c),
-                        ),
+                        if (!widget.readOnly) ...[
+                          const SizedBox(width: 6),
+                          HmIconButton(
+                            icon: Icons.task_alt,
+                            label: tr('Used — remove', 'Использован — удалить'),
+                            onPressed: () => _useCode(c),
+                          ),
+                        ],
                       ],
                     ),
                   ),

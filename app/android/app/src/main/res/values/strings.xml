@@ -7,4 +7,12 @@
     <!-- Root shown in the system file picker (VaultProvider). -->
     <string name="vault_root_unlocked">Encrypted storage</string>
     <string name="vault_root_locked">Unlock the vault in the app</string>
+    <!-- Pairing requests of other apps (ConnectorService). -->
+    <string name="apps_channel_name">Connected apps</string>
+    <string name="apps_channel_description">An app asks to keep its data in CloudSync</string>
+    <string name="apps_notice_title">An app asks for access</string>
+    <string name="apps_notice_text">Open CloudSync to allow or refuse it</string>
+    <string name="apps_notice_passwords_title">%1$s wants to read and change all your website passwords</string>
+    <string name="apps_notice_ssh_keys_title">%1$s wants to use your SSH keys</string>
+    <string name="apps_notice_servers_title">%1$s wants to read and change your servers</string>
 </resources>

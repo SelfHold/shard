@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -34,6 +35,12 @@ type Journal struct {
 	loaded   map[string]bool       // segment names already read
 	packed   map[string][]seqRange // device → ranges of packs already read
 	packTo   uint64                // highest seq of this device's packs seen
+	writing  map[string]bool       // own segments whose background writes still run
+
+	// The listing of the last Pull, for Spread (nil once used or stale).
+	lastList []listing
+	lastGen  uint64
+	fillMu   sync.Mutex // one Spread / Replicate at a time
 
 	// Coverage per storage from the last full listing (Pull), so Counts
 	// does not list every storage again right after a sync.
@@ -100,6 +107,7 @@ func NewJournal(device string, master crypto.Key, stores []backend.Store, minCop
 		minCopy: minCopies,
 		loaded:  map[string]bool{},
 		packed:  map[string][]seqRange{},
+		writing: map[string]bool{},
 	}
 }
 
@@ -158,6 +166,7 @@ func (j *Journal) Append(ctx context.Context, ops []Op) error {
 	// same ops in a new segment; duplicates are dropped by op id.
 	j.seq++
 	j.loaded[name] = true
+	j.writing[name] = true
 	j.cachePut(name, sealed)
 	j.cmu.Lock()
 	j.appends++
@@ -185,7 +194,13 @@ func (j *Journal) Append(ctx context.Context, ops []Op) error {
 			results <- err
 		}(s)
 	}
-	go func() { wg.Wait(); cancel() }()
+	go func() {
+		wg.Wait()
+		cancel()
+		j.mu.Lock()
+		delete(j.writing, name)
+		j.mu.Unlock()
+	}()
 	ok, done := 0, 0
 	var errs []error
 	var straggle <-chan time.Time
@@ -224,8 +239,16 @@ const straggleWait = 300 * time.Millisecond
 const backgroundTimeout = 5 * time.Minute
 
 // findSeq recovers the last segment number of this device from storages
-// (a reinstalled device keeps its id and continues the numbering).
+// and the local copies (a reinstalled device keeps its id and continues
+// the numbering). Called with j.mu held.
 func (j *Journal) findSeq(ctx context.Context) error {
+	// Own segments in the local copies count too: storages that lost the
+	// journal must not make this device reuse a segment name.
+	for n := range j.loaded {
+		if dev, r, _, ok := parseName(n); ok && dev == j.device && r.to > j.seq {
+			j.seq = r.to
+		}
+	}
 	var mu sync.Mutex
 	reached := 0
 	backend.Each(j.stores, func(s backend.Store) {
@@ -288,7 +311,11 @@ func (j *Journal) Pull(ctx context.Context) ([]Op, error) {
 	var errs []error
 	counts := map[string]int{}
 	gen := j.appendGen()
-	for i, l := range j.listAll(ctx) {
+	ls := j.listAll(ctx)
+	j.mu.Lock()
+	j.lastList, j.lastGen = ls, gen
+	j.mu.Unlock()
+	for i, l := range ls {
 		s := j.stores[i]
 		if l.err != nil {
 			errs = append(errs, l.err)
@@ -434,23 +461,74 @@ func (j *Journal) cachePut(name string, sealed []byte) {
 	if j.CacheDir == "" {
 		return
 	}
+	// Written atomically: the local copy may be the last one of the safe.
 	p := j.cachePath(name)
-	if os.MkdirAll(filepath.Dir(p), 0o700) == nil {
-		_ = os.WriteFile(p, sealed, 0o600)
+	if os.MkdirAll(filepath.Dir(p), 0o700) != nil {
+		return
+	}
+	tmp, err := os.CreateTemp(filepath.Dir(p), ".tmp-*")
+	if err != nil {
+		return
+	}
+	defer os.Remove(tmp.Name())
+	_, err = tmp.Write(sealed)
+	if err == nil {
+		err = tmp.Sync()
+	}
+	if cerr := tmp.Close(); err == nil && cerr == nil {
+		_ = os.Rename(tmp.Name(), p)
 	}
 }
 
 // Replicate copies segments to storages that miss them (after an outage or
-// when a storage was added). It returns how many copies were made.
+// when a storage was added). It returns how many copies were made. Every
+// storage must be listed completely (Repair); Spread is the lenient form.
 func (j *Journal) Replicate(ctx context.Context) (int, error) {
-	defer j.setCounts(nil)              // copies change coverage: list again next time
-	has := map[string]map[string]bool{} // segment → store id set
-	for i, l := range j.listAll(ctx) {
+	defer j.setCounts(nil) // copies change coverage: list again next time
+	ls := j.listAll(ctx)
+	for i, l := range ls {
 		if l.err != nil {
 			return 0, l.err
 		}
 		if !l.complete {
 			return 0, fmt.Errorf("journal: %s could not be listed completely", j.stores[i].ID())
+		}
+	}
+	return j.fill(ctx, ls)
+}
+
+// Spread gives every reachable storage the journal objects it misses, from
+// the listing of the last Pull (no listing of its own). The journal holds
+// the whole password safe, so every storage keeps all of it, not shards.
+// Objects only this device still has (in its local copies) are uploaded
+// too: a vault whose storages all lost the journal gets it back from here.
+// It does nothing when this device wrote a segment since that listing.
+func (j *Journal) Spread(ctx context.Context) (int, error) {
+	j.mu.Lock()
+	ls, gen := j.lastList, j.lastGen
+	j.lastList = nil
+	j.mu.Unlock()
+	if ls == nil || j.appendGen() != gen {
+		return 0, nil
+	}
+	n, err := j.fill(ctx, ls)
+	if n > 0 {
+		j.setCounts(nil)
+	}
+	return n, err
+}
+
+// fill copies to each completely listed storage the packs and segments it
+// lacks: those other storages have and those in the local copies. Segments
+// a pack covers are left out (the owner removes them), and so are this
+// device's segments whose first writes are still running.
+func (j *Journal) fill(ctx context.Context, ls []listing) (int, error) {
+	j.fillMu.Lock()
+	defer j.fillMu.Unlock()
+	has := map[string]map[string]bool{} // name → ids of storages holding it
+	for i, l := range ls {
+		if l.err != nil {
+			continue
 		}
 		for _, n := range l.names {
 			if has[n] == nil {
@@ -459,49 +537,149 @@ func (j *Journal) Replicate(ctx context.Context) (int, error) {
 			has[n][j.stores[i].ID()] = true
 		}
 	}
-	var todo []string
-	for name, ids := range has {
-		if len(ids) < len(j.stores) {
-			todo = append(todo, name)
+	j.mu.Lock()
+	local := map[string]bool{}
+	if j.CacheDir != "" {
+		for n := range j.loaded {
+			local[n] = true
 		}
 	}
+	packs := map[string][]seqRange{}
+	for dev, rs := range j.packed {
+		packs[dev] = append(packs[dev], rs...)
+	}
+	writing := make(map[string]bool, len(j.writing))
+	for n := range j.writing {
+		writing[n] = true
+	}
+	j.mu.Unlock()
+	for n := range local {
+		if has[n] == nil {
+			has[n] = map[string]bool{}
+		}
+	}
+	for n := range has {
+		if dev, r, pack, ok := parseName(n); ok && pack {
+			packs[dev] = append(packs[dev], r)
+		}
+	}
+	type job struct {
+		name string
+		to   []backend.Store
+	}
+	var todo []job
+	for n, ids := range has {
+		dev, r, pack, ok := parseName(n)
+		if !ok || writing[n] {
+			continue
+		}
+		if !pack && slices.ContainsFunc(packs[dev], func(p seqRange) bool { return p.has(r.from) }) {
+			continue
+		}
+		var to []backend.Store
+		for i, l := range ls {
+			if l.err == nil && l.complete && !ids[j.stores[i].ID()] {
+				to = append(to, j.stores[i])
+			}
+		}
+		if len(to) > 0 {
+			todo = append(todo, job{n, to})
+		}
+	}
+	sort.Slice(todo, func(a, b int) bool { return todo[a].name < todo[b].name })
 	var mu sync.Mutex
 	copies := 0
 	var errs []error
 	backend.Limit(len(todo), readParallel, func(i int) {
-		name := todo[i]
-		ids := has[name]
-		var data []byte
-		var from []backend.Store
-		for _, s := range j.stores {
-			if ids[s.ID()] {
-				from = append(from, s)
-			}
-		}
-		for _, s := range backend.Fastest(from) {
-			if d, err := s.Get(ctx, name); err == nil {
-				data = d
-				break
-			}
-		}
+		name := todo[i].name
+		data := j.source(ctx, name, local[name], has[name])
 		if data == nil {
 			return
 		}
-		for _, s := range j.stores {
-			if ids[s.ID()] {
-				continue
-			}
+		backend.Each(todo[i].to, func(s backend.Store) {
 			err := backend.PutNew(ctx, s, name, data)
 			mu.Lock()
+			defer mu.Unlock()
 			if err != nil {
-				errs = append(errs, err)
+				errs = append(errs, fmt.Errorf("%s: %w", s.ID(), err))
 			} else {
 				copies++
 			}
-			mu.Unlock()
-		}
+		})
 	})
 	return copies, errors.Join(errs...)
+}
+
+// source returns the sealed bytes of a journal object, checked to open:
+// the local copy if there is one, else a storage's copy.
+func (j *Journal) source(ctx context.Context, name string, local bool, on map[string]bool) []byte {
+	if local {
+		if d := j.cacheGet(name); d != nil {
+			if _, err := j.decode(name, d); err == nil {
+				return d
+			}
+		}
+	}
+	var from []backend.Store
+	for _, s := range j.stores {
+		if on[s.ID()] {
+			from = append(from, s)
+		}
+	}
+	for _, s := range backend.Fastest(from) {
+		if d, err := s.Get(ctx, name); err == nil {
+			if _, err := j.decode(name, d); err == nil {
+				j.cachePut(name, d)
+				return d
+			}
+		}
+	}
+	return nil
+}
+
+// LoadCached returns the ops of every journal object in the local copies
+// (CacheDir) and marks them read, so the index is complete without any
+// storage: the password safe stays readable when every storage is gone.
+// A copy that does not open is skipped (Pull downloads it again).
+func (j *Journal) LoadCached() []Op {
+	if j.CacheDir == "" {
+		return nil
+	}
+	var names []string
+	root := filepath.Join(j.CacheDir, "j")
+	_ = filepath.WalkDir(root, func(p string, d os.DirEntry, err error) error {
+		if err != nil || d.IsDir() || strings.HasPrefix(d.Name(), ".") {
+			return nil
+		}
+		rel, err := filepath.Rel(j.CacheDir, p)
+		if err == nil {
+			names = append(names, filepath.ToSlash(rel))
+		}
+		return nil
+	})
+	sort.Strings(names)
+	var out []Op
+	j.mu.Lock()
+	defer j.mu.Unlock()
+	for _, n := range names {
+		dev, r, pack, ok := parseName(n)
+		if !ok || j.loaded[n] {
+			continue
+		}
+		ops, err := j.decode(n, j.cacheGet(n))
+		if err != nil {
+			continue
+		}
+		j.loaded[n] = true
+		if pack {
+			j.packed[dev] = append(j.packed[dev], r)
+			if dev == j.device && r.to > j.packTo {
+				j.packTo = r.to
+			}
+		}
+		out = append(out, ops...)
+	}
+	return out
 }
 
 // Counts returns how many journal segments each reachable storage covers

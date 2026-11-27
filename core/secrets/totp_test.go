@@ -110,6 +110,12 @@ func TestPrepareTOTP(t *testing.T) {
 	if err := Prepare(&m2, &d2); err != nil || m2 != m || !reflect.DeepEqual(d2, d) {
 		t.Fatalf("not idempotent: %+v %+v %v", m2, d2, err)
 	}
+	// A link with an issuer and no account; the key in lower case.
+	gm, gd := Meta{Kind: KindTOTP}, Data{TOTP: &TOTP{Secret: "otpauth://totp/Google%20DMARC:?secret=gq3hnkvibx3433txybrb3n4thk22iqu7&issuer=Google%20DMARC"}}
+	if err := Prepare(&gm, &gd); err != nil || gm.Title != "Google DMARC" || gm.Username != "" ||
+		*gd.TOTP != (TOTP{Secret: "GQ3HNKVIBX3433TXYBRB3N4THK22IQU7", Algorithm: "SHA1", Digits: 6, Period: 30}) {
+		t.Fatalf("%+v %+v %v", gm, gd.TOTP, err)
+	}
 	if err := Prepare(&Meta{Kind: KindTOTP, Title: "x"}, &Data{}); !errors.Is(err, ErrInvalid) {
 		t.Fatal("TOTP without a secret accepted")
 	}

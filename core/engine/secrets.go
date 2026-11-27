@@ -24,10 +24,31 @@ type SafeList struct {
 
 // Safe lists the safe's groups and entries. Only the meta part of each
 // entry is opened; passwords, notes and private keys stay sealed.
-func (e *Engine) Safe() SafeList {
-	k := e.secretKeys()
+func (e *Engine) Safe() SafeList { return e.view().Safe() }
+
+// OpenSecret returns one entry with its secret fields.
+func (e *Engine) OpenSecret(id string) (secrets.Entry, error) { return e.view().OpenSecret(id) }
+
+// TOTPCodes computes the current codes of every TOTP entry. Only the
+// codes leave the engine, never the secrets.
+func (e *Engine) TOTPCodes(now time.Time) []TOTPCode { return e.view().TOTPCodes(now) }
+
+func (e *Engine) view() safeView {
+	return safeView{idx: e.idx, keys: e.secretKeys(), kinds: &e.entryKinds}
+}
+
+// safeView reads the password safe of an index.
+type safeView struct {
+	idx   *index.Index
+	keys  secrets.Keys
+	kinds *entryKinds // nil: no cache
+}
+
+// Safe lists the safe's groups and entries without their secret fields.
+func (v safeView) Safe() SafeList {
+	k := v.keys
 	var out SafeList
-	for _, s := range e.idx.Secrets() {
+	for _, s := range v.idx.Secrets() {
 		if s.Group {
 			g, err := k.OpenGroup(s)
 			if err != nil {
@@ -42,6 +63,9 @@ func (e *Engine) Safe() SafeList {
 			out.Broken++
 			continue
 		}
+		if en.Kind == secrets.KindNeverSave {
+			continue // a browser's list of sites, not a secret
+		}
 		out.Entries = append(out.Entries, en)
 	}
 	sort.SliceStable(out.Groups, func(i, j int) bool {
@@ -54,26 +78,33 @@ func (e *Engine) Safe() SafeList {
 }
 
 // OpenSecret returns one entry with its secret fields.
-func (e *Engine) OpenSecret(id string) (secrets.Entry, error) {
-	s, ok := e.idx.Secret(id)
+func (v safeView) OpenSecret(id string) (secrets.Entry, error) {
+	s, ok := v.idx.Secret(id)
 	if !ok || s.Group {
 		return secrets.Entry{}, fmt.Errorf("%s: %w", id, ErrNotFound)
 	}
-	return e.secretKeys().OpenEntry(s, true)
+	en, err := v.keys.OpenEntry(s, true)
+	if err == nil && en.Kind == secrets.KindNeverSave {
+		return secrets.Entry{}, fmt.Errorf("%s: %w", id, ErrNotFound)
+	}
+	return en, err
 }
 
 // PutSecret creates (empty id) or replaces an entry. parent is the
 // version the caller edited ("" = the current one); if another device
 // changed the entry meanwhile, both versions are kept.
 func (e *Engine) PutSecret(ctx context.Context, id, parent string, m secrets.Meta, d secrets.Data) (secrets.Entry, error) {
-	if err := secrets.Prepare(&m, &d); err != nil {
-		return secrets.Entry{}, err
+	if m.Kind == secrets.KindNeverSave {
+		return secrets.Entry{}, fmt.Errorf("%w: unknown kind %q", secrets.ErrInvalid, m.Kind)
 	}
 	now := time.Now().UTC()
 	m.Updated = now
 	if id == "" {
 		id, parent = crypto.RandomID(12), ""
 		m.Created = now
+		if d.Password != "" {
+			m.PasswordChangedMs = now.UnixMilli()
+		}
 	} else {
 		cur, ok := e.idx.Secret(id)
 		if !ok && parent == "" {
@@ -83,8 +114,14 @@ func (e *Engine) PutSecret(ctx context.Context, id, parent string, m secrets.Met
 			return secrets.Entry{}, fmt.Errorf("secrets: %s is a group", id)
 		}
 		if ok {
-			if old, err := e.secretKeys().OpenEntry(cur, false); err == nil && !old.Created.IsZero() {
-				m.Created = old.Created
+			if old, err := e.secretKeys().OpenEntry(cur, true); err == nil {
+				if old.Kind == secrets.KindNeverSave {
+					return secrets.Entry{}, fmt.Errorf("%s: %w", id, ErrNotFound)
+				}
+				if !old.Created.IsZero() {
+					m.Created = old.Created
+				}
+				keepLoginFields(&m, &d, old, now)
 			}
 			if parent == "" {
 				parent = cur.VersionID
@@ -93,6 +130,9 @@ func (e *Engine) PutSecret(ctx context.Context, id, parent string, m secrets.Met
 		if m.Created.IsZero() {
 			m.Created = now
 		}
+	}
+	if err := secrets.Prepare(&m, &d); err != nil {
+		return secrets.Entry{}, err
 	}
 	ch, err := e.secretKeys().SealEntry(id, m, d)
 	if err != nil {
@@ -163,12 +203,11 @@ type TOTPCode struct {
 	Expires time.Time
 }
 
-// TOTPCodes computes the current codes of every TOTP entry. Only the
-// codes leave the engine, never the secrets.
-func (e *Engine) TOTPCodes(now time.Time) []TOTPCode {
-	k := e.secretKeys()
+// TOTPCodes computes the current codes of every TOTP entry.
+func (v safeView) TOTPCodes(now time.Time) []TOTPCode {
+	k := v.keys
 	var out []TOTPCode
-	for _, s := range e.idx.Secrets() {
+	for _, s := range v.idx.Secrets() {
 		if s.Group {
 			continue
 		}

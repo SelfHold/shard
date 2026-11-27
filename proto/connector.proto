@@ -1,0 +1,450 @@
+syntax = "proto3";
+
+// The CloudSync Connector API, version 1: what CloudSync offers to other
+// applications ("connected apps", e.g. MegaChat). An app keeps a few small
+// records (its settings file, its vault) in CloudSync; CloudSync stores them
+// encrypted in every storage and gives every device the same value.
+//
+// This file is the contract. Apps copy it as is and generate their own
+// client; see docs/CONNECTOR.md for the transport (unix socket / localhost
+// on desktops, a bound service on Android), pairing and the merge rules.
+// Only fields and methods are ever added to v1; nothing is renamed or
+// renumbered.
+package cloudsync.connector.v1;
+
+option go_package = "cloudsync/core/connector/pb";
+
+service Connector {
+  // --- no credentials needed ---------------------------------------------
+
+  // Hello says what is there: API version, whether the vault is open and
+  // whether this caller is paired. Call it first and after every reconnect.
+  rpc Hello(HelloRequest) returns (HelloReply);
+  // RequestPairing asks the user (in CloudSync) to let this app keep its
+  // data there. Show the returned code: the user sees the same one.
+  rpc RequestPairing(PairingRequest) returns (PairingTicket);
+  // AwaitPairing waits (up to wait_seconds, at most 60) for the user's
+  // answer. The token comes back exactly once, with APPROVED.
+  rpc AwaitPairing(AwaitPairingRequest) returns (PairingResult);
+
+  // --- paired apps only (bearer token on desktops, the calling package on
+  // Android); every call works on the caller's own app id only -----------
+
+  // Get returns one record. A record nobody wrote has no versions.
+  rpc Get(GetRequest) returns (Item);
+  // List returns every record of the app, without data.
+  rpc List(ListRequest) returns (ListReply);
+  // Put writes a record. base is the revision the new value was made from
+  // (from Get, Put or List; "" for a record that does not exist yet). If
+  // the record has another revision now, Put fails with ABORTED: read it
+  // again, merge, retry.
+  rpc Put(PutRequest) returns (Item);
+  // Delete removes a record, with the same base rule as Put.
+  rpc Delete(DeleteRequest) returns (Item);
+  // AppKey returns a 32-byte key of this app, the same on every device of
+  // the vault and never changing. An app may seal its local copy with it
+  // instead of asking the user for a password of its own.
+  rpc AppKey(AppKeyRequest) returns (AppKeyReply);
+  // Watch streams changes of the app's records (from any device) and of
+  // the vault state. It sends nothing at the start: call Get / List after
+  // it is open.
+  rpc Watch(WatchRequest) returns (stream Change);
+  // Unpair forgets this app's pairing on this device (the data stays).
+  rpc Unpair(UnpairRequest) returns (UnpairReply);
+
+  // --- scope "passwords" only (PERMISSION_DENIED without it): logins of
+  // CloudSync's own password store, the entries the user sees there ------
+
+  // ListLogins returns logins, by id, in pages of at most 500. data = true
+  // includes username, password, notes and extra; otherwise only what a
+  // list needs.
+  rpc ListLogins(ListLoginsRequest) returns (ListLoginsReply);
+  // GetLogins returns logins by id, with their secrets. Unknown ids are
+  // left out.
+  rpc GetLogins(GetLoginsRequest) returns (ListLoginsReply);
+  // PutLogin creates (id = "", base = "") or replaces a login. base is the
+  // revision it was made from; another revision now -> ABORTED.
+  rpc PutLogin(PutLoginRequest) returns (Login);
+  // DeleteLogin removes a login, with the same base rule.
+  rpc DeleteLogin(DeleteLoginRequest) returns (DeleteLoginReply);
+  // TouchLogin records a use (last_used_ms, times_used) without a new
+  // revision and without a base. Kept on this device only.
+  rpc TouchLogin(TouchLoginRequest) returns (TouchLoginReply);
+  // ListChanges returns the logins changed since cursor (from ListLogins
+  // or an earlier ListChanges): ids and revisions, no secrets.
+  rpc ListChanges(ListChangesRequest) returns (ListChangesReply);
+
+  // --- scope "ssh_keys" only (PERMISSION_DENIED without it): the SSH keys
+  // of CloudSync's password safe (entries of kind SSH). Read only ---------
+
+  // ListSshKeys returns every SSH key of the safe, by id, without secrets
+  // (no private_key, no passphrase).
+  rpc ListSshKeys(ListSshKeysRequest) returns (ListSshKeysReply);
+  // GetSshKeys returns keys by id with private_key and passphrase. Unknown
+  // ids are left out. Apps fetch a key when they connect and never store it.
+  rpc GetSshKeys(GetSshKeysRequest) returns (ListSshKeysReply);
+
+  // --- scope "servers" only (PERMISSION_DENIED without it): the user's
+  // servers, one list shared by every app with the scope (SSH Manager,
+  // DB Manager, ...), the same entries the user sees in CloudSync ----------
+
+  // ListServers returns servers, by id, in pages of at most 500. data =
+  // true includes password and extra.
+  rpc ListServers(ListServersRequest) returns (ListServersReply);
+  // GetServers returns servers by id, with their secrets. Unknown ids are
+  // left out.
+  rpc GetServers(GetServersRequest) returns (ListServersReply);
+  // PutServer creates (id = "", base = "") or replaces a server. base is
+  // the revision it was made from; another revision now -> ABORTED.
+  rpc PutServer(PutServerRequest) returns (Server);
+  // DeleteServer removes a server, with the same base rule.
+  rpc DeleteServer(DeleteServerRequest) returns (DeleteServerReply);
+  // ListServerChanges returns the servers changed since cursor (from
+  // ListServers or an earlier ListServerChanges): ids and revisions.
+  rpc ListServerChanges(ListChangesRequest) returns (ListChangesReply);
+}
+
+enum VaultState {
+  VAULT_STATE_UNSPECIFIED = 0;
+  NO_VAULT = 1; // CloudSync is not set up on this device
+  LOCKED = 2;   // the user has to unlock CloudSync
+  // Unlocked, but no storage answers yet (or too few are configured):
+  // Get and List read this device's own copy, Put and Delete fail with
+  // UNAVAILABLE.
+  OFFLINE = 3;
+  READY = 4;
+}
+
+message HelloRequest {
+  string app_id = 1; // optional: fills HelloReply.paired for this app
+}
+
+message HelloReply {
+  uint32 api_version = 1; // 1
+  string core_version = 2;
+  VaultState state = 3;
+  // The caller is paired (desktops: the request carries a valid token;
+  // Android: the calling package was approved for app_id).
+  bool paired = 4;
+  string app_id = 5;     // the app id of the pairing, when paired
+  string vault_id = 6;   // changes when another vault is opened
+  string device_name = 7;
+  repeated string scopes = 8; // granted to this pairing, e.g. "passwords"
+}
+
+message PairingRequest {
+  // Stable id of the app, the same on every platform and device: the data
+  // namespace. ^[a-z0-9][a-z0-9._-]{1,63}$, e.g. "megachat".
+  string app_id = 1;
+  string app_name = 2;    // shown to the user, e.g. "MegaChat"
+  string description = 3; // shown to the user, e.g. "MegaChat 1.4 on linux"
+  // Extra permissions, besides the app's own records: "passwords" (read
+  // and change the logins of the password store). Unknown scopes ->
+  // INVALID_ARGUMENT. The user may grant fewer than asked.
+  repeated string scopes = 4;
+}
+
+message PairingTicket {
+  string ticket = 1;          // secret: only the requester knows it
+  string code = 2;            // 6 digits, shown by the app and by CloudSync
+  int64 expires_unix_ms = 3;  // the request is dropped then (5 minutes)
+}
+
+message AwaitPairingRequest {
+  string ticket = 1;
+  uint32 wait_seconds = 2; // 0 = answer at once; at most 60
+}
+
+enum PairingStatus {
+  PAIRING_STATUS_UNSPECIFIED = 0;
+  PENDING = 1;
+  APPROVED = 2;
+  DENIED = 3;
+  EXPIRED = 4; // timed out, already answered, or unknown ticket
+}
+
+message PairingResult {
+  PairingStatus status = 1;
+  // Desktops: the bearer token for every later call; returned once. Keep
+  // it on this device only (it is per device, never put it in the synced
+  // data). Android: empty, the package itself is the credential.
+  string token = 2;
+  string app_id = 3;
+  repeated string scopes = 4; // what the user granted (APPROVED)
+}
+
+message Version {
+  string id = 1;          // id of the write that made it
+  bytes data = 2;         // as written by the app (empty in List)
+  int64 size = 3;
+  string device_name = 4; // the device that wrote it
+  int64 time_unix_ms = 5;
+}
+
+message Item {
+  string key = 1;
+  // Pass it as base to the next Put / Delete. Opaque; "" only for a key
+  // that was never written.
+  string revision = 2;
+  // The current value. Empty: the record does not exist (never written or
+  // deleted). More than one: devices wrote it concurrently (offline); the
+  // app merges them and Puts the result with this revision as base.
+  repeated Version versions = 3;
+}
+
+message GetRequest {
+  string key = 1;
+}
+
+message ListRequest {
+  string prefix = 1; // "" = all
+}
+
+message ListReply {
+  repeated Item items = 1; // only existing records; versions without data
+}
+
+message PutRequest {
+  // 1–200 bytes of [A-Za-z0-9._/-], e.g. "vault.mc", "settings/ui.json".
+  string key = 1;
+  bytes data = 2; // at most 256 KiB
+  string base = 3;
+}
+
+message DeleteRequest {
+  string key = 1;
+  string base = 2;
+}
+
+message AppKeyRequest {}
+
+message AppKeyReply {
+  bytes key = 1;    // 32 bytes
+  string key_id = 2; // short fingerprint, to tell keys apart
+}
+
+message WatchRequest {}
+
+message Change {
+  enum Kind {
+    KIND_UNSPECIFIED = 0;
+    RECORD = 1; // a record changed: key, revision (Get it)
+    STATE = 2;  // vault state changed: state (call Hello)
+    // The pairing was revoked in CloudSync: the stream ends after it.
+    UNPAIRED = 3;
+    // A login changed (scope "passwords"): key = login id, revision,
+    // deleted.
+    LOGIN = 4;
+    // The granted scopes changed (call Hello).
+    SCOPES = 5;
+    // An SSH key of the safe changed (scope "ssh_keys"): key = key id,
+    // revision, deleted.
+    SSH_KEY = 6;
+    // A server changed (scope "servers"): key = server id, revision,
+    // deleted.
+    SERVER = 7;
+  }
+  Kind kind = 1;
+  string key = 2;
+  string revision = 3;
+  bool deleted = 4; // RECORD: no versions left
+  VaultState state = 5;
+}
+
+message UnpairRequest {}
+
+message UnpairReply {}
+
+// --- password store (scope "passwords") ---------------------------------
+
+// A login: one entry of the password store with a website or an Android
+// app. Entries without one (notes, keys, ...) are not visible here.
+message Login {
+  string id = 1;       // chosen by CloudSync; "" in PutLogin = a new login
+  string revision = 2; // the base for PutLogin / DeleteLogin
+  // "https://example.com/" or "android://<hash>@<package>/". Several
+  // logins may share one (several accounts on a site).
+  string signon_realm = 3;
+  string url = 4;        // page of the form
+  string action_url = 5; // where the form posts
+  string username = 6;   // empty in ListLogins without data
+  string password = 7;   // empty in ListLogins without data
+  string username_element = 8;
+  string password_element = 9;
+  string display_name = 10;
+  string notes = 11;     // the entry's note in CloudSync; empty without data
+  string federation_origin = 12; // federated login, no password
+  // "Never save for this site": signon_realm only, no credentials. Not
+  // shown in CloudSync's own password list.
+  bool blocked = 13;
+  int64 created_ms = 14;
+  int64 modified_ms = 15;
+  int64 password_modified_ms = 16;
+  int64 last_used_ms = 17; // this device only (TouchLogin)
+  int64 times_used = 18;   // this device only (TouchLogin)
+  // Fields of the app CloudSync keeps but does not read; at most 16 KiB
+  // in all (keys + values). Empty without data.
+  map<string, bytes> extra = 19;
+  string device_name = 20; // device of the last change
+}
+
+message ListLoginsRequest {
+  string signon_realm = 1; // "" = all
+  bool data = 2;
+  string page_token = 3;   // next_page_token of the previous page
+}
+
+message ListLoginsReply {
+  repeated Login logins = 1;
+  string next_page_token = 2; // "" = last page
+  // Pass it to ListChanges to get what changed after this list.
+  string cursor = 3;
+}
+
+message GetLoginsRequest {
+  repeated string ids = 1; // at most 500
+}
+
+message PutLoginRequest {
+  Login login = 1; // id, revision, times and device_name are ignored
+  string base = 2;
+}
+
+message DeleteLoginRequest {
+  string id = 1;
+  string base = 2;
+}
+
+message DeleteLoginReply {}
+
+message TouchLoginRequest {
+  string id = 1;
+  int64 used_ms = 2; // 0 = now
+}
+
+message TouchLoginReply {}
+
+message LoginChange {
+  string id = 1;
+  string revision = 2;
+  bool deleted = 3;
+}
+
+message ListChangesRequest {
+  string cursor = 1;
+}
+
+message ListChangesReply {
+  repeated LoginChange changes = 1; // oldest change first
+  string cursor = 2;                // for the next ListChanges
+  // The cursor is too old or of another vault: list everything again
+  // (changes is empty).
+  bool reset = 3;
+}
+
+// --- SSH keys (scope "ssh_keys") -----------------------------------------
+
+// An SSH key: one entry of kind SSH of the password safe.
+message SshKey {
+  string id = 1;       // id of the safe entry
+  string revision = 2; // changes with every edit of the entry
+  string title = 3;
+  string key_type = 4;    // "ssh-ed25519", "ssh-rsa", "ecdsa-sha2-nistp256", ...
+  string fingerprint = 5; // "SHA256:..."
+  string public_key = 6;  // authorized_keys line
+  string comment = 7;     // comment of the public key line
+  // The private key is encrypted and needs a passphrase; has_passphrase
+  // says whether the safe keeps one (otherwise the app asks the user).
+  bool encrypted = 8;
+  bool has_passphrase = 9;
+  string group = 10; // name of the safe group, for display
+  int64 created_ms = 11;
+  int64 modified_ms = 12;
+  string device_name = 13; // device of the last change
+  // Secrets: only in GetSshKeys replies.
+  string private_key = 20; // OpenSSH or PEM
+  string passphrase = 21;
+}
+
+message ListSshKeysRequest {}
+
+message GetSshKeysRequest {
+  repeated string ids = 1; // at most 500
+}
+
+message ListSshKeysReply {
+  repeated SshKey keys = 1;
+}
+
+// --- servers (scope "servers") -------------------------------------------
+
+// A server: a machine the user reaches over SSH. One list for every app
+// with the scope; an app keeps its own data about a server (databases,
+// folders, ...) in its own records, keyed by the server id, or in extra.
+message Server {
+  string id = 1;       // chosen by CloudSync; "" in PutServer = a new one
+  string revision = 2; // the base for PutServer / DeleteServer
+  string name = 3;
+  string group = 4;    // folder in the server tree, "" = none; "a/b" nests
+  string host = 5;     // DNS name or IP
+  uint32 port = 6;     // 0 = 22
+  string user = 7;
+  enum Auth {
+    AUTH_UNSPECIFIED = 0;
+    PASSWORD = 1; // password below
+    SSH_KEY = 2;  // ssh_key_id: an SSH key of the safe (scope "ssh_keys")
+    AGENT = 3;    // the device's ssh-agent
+  }
+  Auth auth = 8;
+  string password = 9;    // PASSWORD; empty in ListServers without data
+  string ssh_key_id = 10; // SSH_KEY: SshKey.id
+  // Trusted host keys, authorized_keys format ("ssh-ed25519 AAAA..."). An
+  // app that trusts a new key on first connect writes it here.
+  repeated string host_keys = 11;
+  string jump_server_id = 12; // connect through this server ("" = direct)
+  string notes = 13;
+  repeated string tags = 14;
+  int64 created_ms = 15;
+  int64 modified_ms = 16;
+  string device_name = 17; // device of the last change
+  // Fields of the apps, CloudSync keeps but does not read. Keys are
+  // "<app id>.<name>"; an app changes only its own keys and keeps the
+  // others as they are. At most 16 KiB in all. Empty without data.
+  map<string, bytes> extra = 18;
+}
+
+message ListServersRequest {
+  bool data = 1;
+  string page_token = 2;
+}
+
+message ListServersReply {
+  repeated Server servers = 1;
+  string next_page_token = 2; // "" = last page
+  // Pass it to ListServerChanges to get what changed after this list.
+  string cursor = 3;
+}
+
+message GetServersRequest {
+  repeated string ids = 1; // at most 500
+}
+
+message PutServerRequest {
+  Server server = 1; // id, revision, times and device_name are ignored
+  string base = 2;
+}
+
+message DeleteServerRequest {
+  string id = 1;
+  string base = 2;
+}
+
+message DeleteServerReply {}
+
+// Android only: the bound service carries the messages above as bytes
+// (see docs/CONNECTOR.md). Every reply is wrapped in a CallReply.
+message CallReply {
+  int32 code = 1;      // a gRPC status code; 0 = OK
+  string message = 2;  // error text when code != 0
+  bytes payload = 3;   // the serialized reply message when code == 0
+}

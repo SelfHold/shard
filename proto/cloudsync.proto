@@ -57,7 +57,7 @@ service CloudSync {
   rpc Download(DownloadRequest) returns (Empty);
 
   // Keeping files on this device.
-  rpc Pin(PathRequest) returns (Empty);
+  rpc Pin(PathRequest) returns (Empty); // downloads in the background, see StatusReply.pinning
   rpc Unpin(PathRequest) returns (Empty);
 
   // Locks: who has a file open for writing.
@@ -92,6 +92,27 @@ service CloudSync {
   // Reads a TOTP secret / otpauth:// URI and pasted recovery codes, for
   // the editor; nothing is stored.
   rpc CheckTotp(CheckTotpRequest) returns (TotpPreview);
+  // Finds the otpauth://totp/ links in pasted text and expands Google
+  // Authenticator exports (otpauth-migration://); nothing is stored.
+  rpc ReadTotpLinks(TotpLinksRequest) returns (TotpLinksReply);
+  // Imports an export of another password manager: KeePass (.kdbx, XML,
+  // CSV), KeePassXC, Chrome / Edge / Brave / Opera, Firefox, Safari,
+  // Bitwarden (CSV, unencrypted JSON), 1Password, LastPass, Dashlane,
+  // Proton Pass, NordPass CSV. With dry_run only the preview is returned.
+  rpc ImportSecrets(SecretImportRequest) returns (SecretImportReply);
+
+  // Connected apps (docs/CONNECTOR.md): pairing requests waiting for the
+  // user, apps paired on this device, and the records apps keep in the
+  // vault (shared by all devices).
+  rpc ListApps(Empty) returns (AppsReply);
+  rpc DecidePairing(DecidePairingRequest) returns (Empty);
+  // Forgets a pairing on this device; the app's records stay.
+  rpc RevokeApp(IdRequest) returns (Empty);
+  // Sets the scopes of a pairing; only scopes it has can be kept (removing
+  // "passwords" takes the password store away without unpairing).
+  rpc SetAppScopes(SetAppScopesRequest) returns (Empty);
+  // Deletes every record of an app (id = app id) on all devices.
+  rpc DeleteAppData(IdRequest) returns (Empty);
 
   // Events for live UI updates.
   rpc Watch(Empty) returns (stream Event);
@@ -119,6 +140,9 @@ message State {
   // daemon (both come from one make run when built together).
   string core_version = 13;
   string core_build = 14;
+  // Unlocked, the storages are being connected in the background (ready
+  // and problem follow with a STATE_CHANGED event).
+  bool opening = 15;
 }
 
 message CreateVaultRequest {
@@ -265,6 +289,11 @@ message StatusReply {
   // new data goes to is full). Unset: no storage reports its space.
   // Storages that do not report are taken as unlimited.
   optional int64 writable_bytes = 13;
+  // Pinned files ("/" pinned: a reference device, which keeps a full copy).
+  int64 pinned_bytes = 14;         // their file data (each block counted once)
+  int64 pinned_missing_bytes = 15; // of it, not downloaded yet
+  bool pinning = 16;               // downloading now (in the background)
+  string pin_error = 17;           // why the last pass did not get everything
 }
 
 message PathRequest {
@@ -374,6 +403,7 @@ message Event {
     SYNC_DONE = 3;
     SYNC_ERROR = 4;
     SECRETS_CHANGED = 5; // password safe changed (this device; others: TREE_CHANGED)
+    APPS_CHANGED = 6;    // a pairing request came or was answered, a pairing changed
   }
   Kind kind = 1;
   string message = 2;
@@ -407,6 +437,9 @@ enum SecretKind {
   SECRET_SSH = 2;
   SECRET_WEB3 = 3;
   SECRET_TOTP = 4; // two-factor codes, with recovery codes
+  // A server reached over SSH (Connector API scope "servers"): url is
+  // host[:port], username the login user, password the SSH password.
+  SECRET_SERVER = 5;
 }
 
 enum Web3Network {
@@ -451,6 +484,28 @@ message SecretEntry {
   int32 totp_period = 28;
   // PutSecret: pasted text is parsed into codes (any element may hold many).
   repeated string recovery_codes = 29;
+  // SERVER: the fields besides url / username / password / notes. Not
+  // secret (listed); a PutSecret without it keeps the stored ones.
+  SecretServer server = 30;
+}
+
+enum ServerAuth {
+  SERVER_AUTH_UNSPECIFIED = 0;
+  SERVER_AUTH_PASSWORD = 1;
+  SERVER_AUTH_SSH_KEY = 2; // ssh_key_id: an SSH entry of the safe
+  SERVER_AUTH_AGENT = 3;   // the device's ssh-agent
+}
+
+message SecretServer {
+  string folder = 1; // "a/b" nests folders in the apps' server trees
+  ServerAuth auth = 2;
+  string ssh_key_id = 3;
+  repeated string host_keys = 4; // trusted host keys, authorized_keys format
+  string jump_server_id = 5;
+  repeated string tags = 6;
+  // Fields apps keep with the server (keys "app_id.name"): only their
+  // names, for display; the values stay with the entry.
+  repeated string extra_keys = 7;
 }
 
 message SecretGroup {
@@ -516,4 +571,129 @@ message TotpPreview {
   string code = 6; // current code, to compare with the site
   repeated string recovery_codes = 7;
   string error = 8; // of the secret; codes are parsed anyway
+}
+
+message TotpLinksRequest {
+  string text = 1;
+}
+
+message TotpLink {
+  string link = 1; // otpauth://totp/ link for PutSecret.totp_secret; empty on error
+  TotpPreview preview = 2; // preview.error: why it cannot be imported
+}
+
+// One part of a Google Authenticator export (large ones span several QR codes).
+message TotpBatch {
+  int32 id = 1;
+  int32 index = 2; // from 0
+  int32 size = 3;
+}
+
+message TotpLinksReply {
+  repeated TotpLink links = 1;
+  repeated TotpBatch batches = 2;
+}
+
+message SecretImportRequest {
+  bytes data = 1;        // the export file (at most 32 MiB)
+  string file_name = 2;  // helps to tell the format
+  string password = 3;   // of a .kdbx file
+  bytes key_file = 4;    // of a .kdbx file, optional
+  // Group for every entry; empty: keep_groups makes groups named like the
+  // folders of the export (or reuses groups of that name).
+  string group_id = 5;
+  bool keep_groups = 6;
+  bool dry_run = 7;
+}
+
+enum SecretImportStatus {
+  IMPORT_ADDED = 0;
+  IMPORT_DUPLICATE = 1; // the safe already has this entry: skipped
+  IMPORT_FAILED = 2;    // error says why
+}
+
+// One entry of the export, without its secrets.
+message SecretImportItem {
+  SecretKind kind = 1;
+  string title = 2;
+  string username = 3;
+  string url = 4;
+  string group = 5; // group name it goes to; empty = none
+  SecretImportStatus status = 6;
+  string error = 7;
+}
+
+message SecretImportReply {
+  // The file is encrypted: ask for its password (and key file), call again.
+  bool need_password = 1;
+  string format = 2; // e.g. "KeePass (KDBX 4)", "Chrome / Edge / Brave / Opera"
+  repeated SecretImportItem items = 3;
+  int32 added = 4;
+  int32 duplicates = 5;
+  int32 failed = 6;
+  repeated string new_groups = 7;
+}
+
+// --- connected apps ------------------------------------------------------
+
+message PairingRequestInfo {
+  string id = 1;
+  string app_id = 2;
+  string app_name = 3;
+  string description = 4;
+  string code = 5;        // the app shows the same digits
+  string platform = 6;    // "desktop" | "android"
+  string package = 7;     // android: the calling package
+  string cert = 8;        // android: SHA-256 of its signing certificate
+  int64 created_unix_ms = 9;
+  int64 expires_unix_ms = 10;
+  // This app id is already paired here (approving replaces that pairing
+  // when it is the same package / the desktop one).
+  bool already_paired = 11;
+  // Extra permissions asked for: "passwords" = read and change all website
+  // passwords, "ssh_keys" = read the SSH keys of the safe, "servers" =
+  // read and change the servers. Show them plainly; the user may allow
+  // fewer (records only at the least).
+  repeated string scopes = 12;
+}
+
+message AppPairing {
+  string id = 1;
+  string app_id = 2;
+  string app_name = 3;
+  string description = 4;
+  string platform = 5;
+  string package = 6;
+  string cert = 7;
+  int64 approved_unix_ms = 8;
+  int64 last_used_unix_ms = 9; // 0: not since CloudSync started
+  repeated string scopes = 10;  // granted, e.g. "passwords"
+  int64 secrets_read_unix_ms = 11; // last time it read passwords; 0 = never
+  int64 keys_read_unix_ms = 12;    // last time it read SSH private keys
+  int64 servers_read_unix_ms = 13; // last time it read server passwords
+}
+
+message AppDataInfo {
+  string app_id = 1;
+  int32 records = 2;
+  int64 bytes = 3;
+}
+
+message AppsReply {
+  repeated PairingRequestInfo requests = 1;
+  repeated AppPairing pairings = 2;
+  repeated AppDataInfo data = 3; // empty while the vault is locked
+}
+
+message DecidePairingRequest {
+  string id = 1; // PairingRequestInfo.id
+  bool approve = 2;
+  // Scopes granted (a subset of PairingRequestInfo.scopes); empty = the
+  // app's own records only.
+  repeated string scopes = 3;
+}
+
+message SetAppScopesRequest {
+  string id = 1; // AppPairing.id
+  repeated string scopes = 2;
 }

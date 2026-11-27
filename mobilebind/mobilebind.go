@@ -31,7 +31,8 @@ import (
 // Listener gets core events (implemented in Kotlin).
 type Listener interface {
 	// OnEvent: kind is 1 tree changed, 2 state changed, 3 sync done,
-	// 4 sync error (see Event.Kind in cloudsync.proto).
+	// 4 sync error, 5 safe changed, 6 connected apps changed (see
+	// Event.Kind in cloudsync.proto).
 	OnEvent(kind int, message string)
 }
 

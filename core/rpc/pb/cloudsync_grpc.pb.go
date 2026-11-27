@@ -65,6 +65,13 @@ const (
 	CloudSync_TotpCodes_FullMethodName         = "/cloudsync.v1.CloudSync/TotpCodes"
 	CloudSync_UseRecoveryCode_FullMethodName   = "/cloudsync.v1.CloudSync/UseRecoveryCode"
 	CloudSync_CheckTotp_FullMethodName         = "/cloudsync.v1.CloudSync/CheckTotp"
+	CloudSync_ReadTotpLinks_FullMethodName     = "/cloudsync.v1.CloudSync/ReadTotpLinks"
+	CloudSync_ImportSecrets_FullMethodName     = "/cloudsync.v1.CloudSync/ImportSecrets"
+	CloudSync_ListApps_FullMethodName          = "/cloudsync.v1.CloudSync/ListApps"
+	CloudSync_DecidePairing_FullMethodName     = "/cloudsync.v1.CloudSync/DecidePairing"
+	CloudSync_RevokeApp_FullMethodName         = "/cloudsync.v1.CloudSync/RevokeApp"
+	CloudSync_SetAppScopes_FullMethodName      = "/cloudsync.v1.CloudSync/SetAppScopes"
+	CloudSync_DeleteAppData_FullMethodName     = "/cloudsync.v1.CloudSync/DeleteAppData"
 	CloudSync_Watch_FullMethodName             = "/cloudsync.v1.CloudSync/Watch"
 )
 
@@ -154,6 +161,26 @@ type CloudSyncClient interface {
 	// Reads a TOTP secret / otpauth:// URI and pasted recovery codes, for
 	// the editor; nothing is stored.
 	CheckTotp(ctx context.Context, in *CheckTotpRequest, opts ...grpc.CallOption) (*TotpPreview, error)
+	// Finds the otpauth://totp/ links in pasted text and expands Google
+	// Authenticator exports (otpauth-migration://); nothing is stored.
+	ReadTotpLinks(ctx context.Context, in *TotpLinksRequest, opts ...grpc.CallOption) (*TotpLinksReply, error)
+	// Imports an export of another password manager: KeePass (.kdbx, XML,
+	// CSV), KeePassXC, Chrome / Edge / Brave / Opera, Firefox, Safari,
+	// Bitwarden (CSV, unencrypted JSON), 1Password, LastPass, Dashlane,
+	// Proton Pass, NordPass CSV. With dry_run only the preview is returned.
+	ImportSecrets(ctx context.Context, in *SecretImportRequest, opts ...grpc.CallOption) (*SecretImportReply, error)
+	// Connected apps (docs/CONNECTOR.md): pairing requests waiting for the
+	// user, apps paired on this device, and the records apps keep in the
+	// vault (shared by all devices).
+	ListApps(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*AppsReply, error)
+	DecidePairing(ctx context.Context, in *DecidePairingRequest, opts ...grpc.CallOption) (*Empty, error)
+	// Forgets a pairing on this device; the app's records stay.
+	RevokeApp(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Empty, error)
+	// Sets the scopes of a pairing; only scopes it has can be kept (removing
+	// "passwords" takes the password store away without unpairing).
+	SetAppScopes(ctx context.Context, in *SetAppScopesRequest, opts ...grpc.CallOption) (*Empty, error)
+	// Deletes every record of an app (id = app id) on all devices.
+	DeleteAppData(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Empty, error)
 	// Events for live UI updates.
 	Watch(ctx context.Context, in *Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Event], error)
 }
@@ -644,6 +671,76 @@ func (c *cloudSyncClient) CheckTotp(ctx context.Context, in *CheckTotpRequest, o
 	return out, nil
 }
 
+func (c *cloudSyncClient) ReadTotpLinks(ctx context.Context, in *TotpLinksRequest, opts ...grpc.CallOption) (*TotpLinksReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TotpLinksReply)
+	err := c.cc.Invoke(ctx, CloudSync_ReadTotpLinks_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cloudSyncClient) ImportSecrets(ctx context.Context, in *SecretImportRequest, opts ...grpc.CallOption) (*SecretImportReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SecretImportReply)
+	err := c.cc.Invoke(ctx, CloudSync_ImportSecrets_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cloudSyncClient) ListApps(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*AppsReply, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AppsReply)
+	err := c.cc.Invoke(ctx, CloudSync_ListApps_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cloudSyncClient) DecidePairing(ctx context.Context, in *DecidePairingRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, CloudSync_DecidePairing_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cloudSyncClient) RevokeApp(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, CloudSync_RevokeApp_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cloudSyncClient) SetAppScopes(ctx context.Context, in *SetAppScopesRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, CloudSync_SetAppScopes_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cloudSyncClient) DeleteAppData(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, CloudSync_DeleteAppData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *cloudSyncClient) Watch(ctx context.Context, in *Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Event], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &CloudSync_ServiceDesc.Streams[2], CloudSync_Watch_FullMethodName, cOpts...)
@@ -749,6 +846,26 @@ type CloudSyncServer interface {
 	// Reads a TOTP secret / otpauth:// URI and pasted recovery codes, for
 	// the editor; nothing is stored.
 	CheckTotp(context.Context, *CheckTotpRequest) (*TotpPreview, error)
+	// Finds the otpauth://totp/ links in pasted text and expands Google
+	// Authenticator exports (otpauth-migration://); nothing is stored.
+	ReadTotpLinks(context.Context, *TotpLinksRequest) (*TotpLinksReply, error)
+	// Imports an export of another password manager: KeePass (.kdbx, XML,
+	// CSV), KeePassXC, Chrome / Edge / Brave / Opera, Firefox, Safari,
+	// Bitwarden (CSV, unencrypted JSON), 1Password, LastPass, Dashlane,
+	// Proton Pass, NordPass CSV. With dry_run only the preview is returned.
+	ImportSecrets(context.Context, *SecretImportRequest) (*SecretImportReply, error)
+	// Connected apps (docs/CONNECTOR.md): pairing requests waiting for the
+	// user, apps paired on this device, and the records apps keep in the
+	// vault (shared by all devices).
+	ListApps(context.Context, *Empty) (*AppsReply, error)
+	DecidePairing(context.Context, *DecidePairingRequest) (*Empty, error)
+	// Forgets a pairing on this device; the app's records stay.
+	RevokeApp(context.Context, *IdRequest) (*Empty, error)
+	// Sets the scopes of a pairing; only scopes it has can be kept (removing
+	// "passwords" takes the password store away without unpairing).
+	SetAppScopes(context.Context, *SetAppScopesRequest) (*Empty, error)
+	// Deletes every record of an app (id = app id) on all devices.
+	DeleteAppData(context.Context, *IdRequest) (*Empty, error)
 	// Events for live UI updates.
 	Watch(*Empty, grpc.ServerStreamingServer[Event]) error
 	mustEmbedUnimplementedCloudSyncServer()
@@ -898,6 +1015,27 @@ func (UnimplementedCloudSyncServer) UseRecoveryCode(context.Context, *RecoveryCo
 }
 func (UnimplementedCloudSyncServer) CheckTotp(context.Context, *CheckTotpRequest) (*TotpPreview, error) {
 	return nil, status.Error(codes.Unimplemented, "method CheckTotp not implemented")
+}
+func (UnimplementedCloudSyncServer) ReadTotpLinks(context.Context, *TotpLinksRequest) (*TotpLinksReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method ReadTotpLinks not implemented")
+}
+func (UnimplementedCloudSyncServer) ImportSecrets(context.Context, *SecretImportRequest) (*SecretImportReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method ImportSecrets not implemented")
+}
+func (UnimplementedCloudSyncServer) ListApps(context.Context, *Empty) (*AppsReply, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListApps not implemented")
+}
+func (UnimplementedCloudSyncServer) DecidePairing(context.Context, *DecidePairingRequest) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method DecidePairing not implemented")
+}
+func (UnimplementedCloudSyncServer) RevokeApp(context.Context, *IdRequest) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method RevokeApp not implemented")
+}
+func (UnimplementedCloudSyncServer) SetAppScopes(context.Context, *SetAppScopesRequest) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetAppScopes not implemented")
+}
+func (UnimplementedCloudSyncServer) DeleteAppData(context.Context, *IdRequest) (*Empty, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteAppData not implemented")
 }
 func (UnimplementedCloudSyncServer) Watch(*Empty, grpc.ServerStreamingServer[Event]) error {
 	return status.Error(codes.Unimplemented, "method Watch not implemented")
@@ -1737,6 +1875,132 @@ func _CloudSync_CheckTotp_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CloudSync_ReadTotpLinks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TotpLinksRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CloudSyncServer).ReadTotpLinks(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CloudSync_ReadTotpLinks_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CloudSyncServer).ReadTotpLinks(ctx, req.(*TotpLinksRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CloudSync_ImportSecrets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SecretImportRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CloudSyncServer).ImportSecrets(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CloudSync_ImportSecrets_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CloudSyncServer).ImportSecrets(ctx, req.(*SecretImportRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CloudSync_ListApps_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CloudSyncServer).ListApps(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CloudSync_ListApps_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CloudSyncServer).ListApps(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CloudSync_DecidePairing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DecidePairingRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CloudSyncServer).DecidePairing(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CloudSync_DecidePairing_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CloudSyncServer).DecidePairing(ctx, req.(*DecidePairingRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CloudSync_RevokeApp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CloudSyncServer).RevokeApp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CloudSync_RevokeApp_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CloudSyncServer).RevokeApp(ctx, req.(*IdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CloudSync_SetAppScopes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetAppScopesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CloudSyncServer).SetAppScopes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CloudSync_SetAppScopes_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CloudSyncServer).SetAppScopes(ctx, req.(*SetAppScopesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CloudSync_DeleteAppData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CloudSyncServer).DeleteAppData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CloudSync_DeleteAppData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CloudSyncServer).DeleteAppData(ctx, req.(*IdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CloudSync_Watch_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(Empty)
 	if err := stream.RecvMsg(m); err != nil {
@@ -1930,6 +2194,34 @@ var CloudSync_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckTotp",
 			Handler:    _CloudSync_CheckTotp_Handler,
+		},
+		{
+			MethodName: "ReadTotpLinks",
+			Handler:    _CloudSync_ReadTotpLinks_Handler,
+		},
+		{
+			MethodName: "ImportSecrets",
+			Handler:    _CloudSync_ImportSecrets_Handler,
+		},
+		{
+			MethodName: "ListApps",
+			Handler:    _CloudSync_ListApps_Handler,
+		},
+		{
+			MethodName: "DecidePairing",
+			Handler:    _CloudSync_DecidePairing_Handler,
+		},
+		{
+			MethodName: "RevokeApp",
+			Handler:    _CloudSync_RevokeApp_Handler,
+		},
+		{
+			MethodName: "SetAppScopes",
+			Handler:    _CloudSync_SetAppScopes_Handler,
+		},
+		{
+			MethodName: "DeleteAppData",
+			Handler:    _CloudSync_DeleteAppData_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

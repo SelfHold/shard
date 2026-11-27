@@ -84,14 +84,23 @@ type Engine struct {
 	hashKey crypto.Key
 
 	mu      sync.Mutex // serializes commits
-	state   localState
-	pins    *pins
-	reload  atomic.Bool // the vault changed: storages must be reopened
-	dirLock *flock.Flock
+	appMu   sync.Mutex // app writes: base check + commit (apps.go)
+	loginMu sync.Mutex // API writes of logins and servers: base check + commit
+
+	entryKinds entryKinds
+	state      localState
+	pins       *pins
+	reload     atomic.Bool // the vault changed: storages must be reopened
+	dirLock    *flock.Flock
 
 	fetchMu  sync.Mutex
 	fetching map[string]*fetchCall // blob downloads in flight, by id
 	ahead    chan struct{}         // slots for read-ahead downloads
+
+	pinState pinStatus
+	pinWake  chan struct{} // asks pinLoop for a pass
+	pinStop  context.CancelFunc
+	pinDone  chan struct{}
 }
 
 type localState struct {
@@ -119,6 +128,7 @@ func Open(ctx context.Context, v *vault.Vault, opt Options) (*Engine, error) {
 	e := &Engine{
 		v: v, opt: opt, stores: map[string]backend.Store{}, openErrs: map[string]error{}, dirLock: dirLock,
 		fetching: map[string]*fetchCall{}, ahead: make(chan struct{}, readAheadParallel),
+		pinWake: make(chan struct{}, 1),
 	}
 	ok := false
 	defer func() {
@@ -158,7 +168,7 @@ func Open(ctx context.Context, v *vault.Vault, opt Options) (*Engine, error) {
 	}
 	// A newer vault in the storages (a storage added elsewhere) is adopted
 	// before anything is read, so shards on new storages are reachable.
-	if _ = e.syncVault(ctx); e.reload.Load() {
+	if _ = withinSync(ctx, e.syncVault); e.reload.Load() {
 		e.closeStores()
 		e.stores, e.storeList, e.openErrs = map[string]backend.Store{}, nil, map[string]error{}
 		e.cfg = v.Config()
@@ -186,6 +196,9 @@ func Open(ctx context.Context, v *vault.Vault, opt Options) (*Engine, error) {
 	e.locks = lock.NewManager(e.state.Device, e.device.Name, key, e.storeList)
 	e.locks.Run()
 	e.idx.Add(e.state.Pending...)
+	// The local journal copies first: the index (and the password safe in
+	// it) is complete even when no storage answers.
+	e.addOps(e.journal.LoadCached())
 	if e.cache, err = newCache(filepath.Join(opt.DataDir, "cache"), opt.CacheLimit); err != nil {
 		return nil, err
 	}
@@ -193,11 +206,14 @@ func Open(ctx context.Context, v *vault.Vault, opt Options) (*Engine, error) {
 		return nil, err
 	}
 	e.cache.keep = e.keepPinned
-	if _, err := e.pull(ctx); err != nil {
+	if err := withinSync(ctx, func(ctx context.Context) error { _, err := e.pull(ctx); return err }); err != nil {
 		// Offline start is fine: the local journal copies are used later.
 		e.openErrs["journal"] = err
 	}
-	_ = e.syncVault(ctx) // best effort: spreads config changes, marks storages as ours
+	_ = withinSync(ctx, e.syncVault) // best effort: spreads config changes, marks storages as ours
+	pinCtx, stop := context.WithCancel(context.Background())
+	e.pinStop, e.pinDone = stop, make(chan struct{})
+	go e.pinLoop(pinCtx, e.pinDone)
 	ok = true
 	return e, nil
 }
@@ -232,14 +248,21 @@ func (e *Engine) openStores(ctx context.Context) error {
 			return backend.OpenRclone(ctx, vaultID, b, e.saveParam)
 		}
 	}
-	for _, b := range e.cfg.Backends {
-		s, err := open(ctx, e.cfg.VaultID, backend.SharePacing(b, e.cfg.Backends))
-		if err != nil {
-			e.openErrs[b.ID] = err
-			e.opt.Log.Addf(eventlog.Error, "storage", b.ID, "%s: cannot open: %v", b.Name, err)
+	bs := e.cfg.Backends
+	opened := make([]backend.Store, len(bs))
+	errs := make([]error, len(bs))
+	backend.Limit(len(bs), len(bs), func(i int) {
+		opened[i], errs[i] = openWithin(ctx, StoreOpenTimeout, func(ctx context.Context) (backend.Store, error) {
+			return open(ctx, e.cfg.VaultID, backend.SharePacing(bs[i], bs))
+		})
+	})
+	for i, b := range bs {
+		if errs[i] != nil {
+			e.openErrs[b.ID] = errs[i]
+			e.opt.Log.Addf(eventlog.Error, "storage", b.ID, "%s: cannot open: %v", b.Name, errs[i])
 			continue
 		}
-		s = backend.Logged(backend.Measured(s, backend.DefaultParallel), b.Name, e.opt.Log)
+		s := backend.Logged(backend.Measured(opened[i], backend.DefaultParallel), b.Name, e.opt.Log)
 		e.stores[b.ID] = s
 		// A disabled storage is only a source of shards for reads and
 		// Repair: the journal, locks and vault copies leave it alone, so
@@ -252,6 +275,54 @@ func (e *Engine) openStores(ctx context.Context) error {
 		return errors.New("engine: no storage could be opened")
 	}
 	return nil
+}
+
+// StoreOpenTimeout and OpenSyncTimeout bound the network part of Open: a
+// storage that does not answer at all (a dead provider) is left out until
+// the next reopen instead of holding up the vault.
+var (
+	StoreOpenTimeout = 30 * time.Second
+	OpenSyncTimeout  = time.Minute
+)
+
+// openWithin runs open, giving up after d even if open ignores its context
+// (a store that comes back later is closed).
+func openWithin(ctx context.Context, d time.Duration, open func(context.Context) (backend.Store, error)) (backend.Store, error) {
+	ctx, cancel := context.WithTimeout(ctx, d)
+	type result struct {
+		s   backend.Store
+		err error
+	}
+	done := make(chan result, 1)
+	go func() {
+		s, err := open(ctx)
+		done <- result{s, err}
+	}()
+	select {
+	case r := <-done:
+		cancel()
+		return r.s, r.err
+	case <-ctx.Done():
+		go func() {
+			defer cancel()
+			if r := <-done; r.s != nil {
+				if c, ok := r.s.(interface{ Close() error }); ok {
+					_ = c.Close()
+				}
+			}
+		}()
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			return nil, fmt.Errorf("no answer in %s", d)
+		}
+		return nil, ctx.Err()
+	}
+}
+
+// withinSync runs fn with the network time limit of Open.
+func withinSync[T any](ctx context.Context, fn func(context.Context) T) T {
+	ctx, cancel := context.WithTimeout(ctx, OpenSyncTimeout)
+	defer cancel()
+	return fn(ctx)
 }
 
 // saveParam stores an option rclone changed (a refreshed OAuth token).
@@ -281,6 +352,8 @@ func (e *Engine) closeStores() {
 
 // Close releases locks and stops background work.
 func (e *Engine) Close(ctx context.Context) {
+	e.pinStop()
+	<-e.pinDone
 	e.locks.Close(ctx)
 	e.closeStores()
 	e.dirLock.Unlock()
@@ -303,10 +376,16 @@ func (e *Engine) Index() *index.Index { return e.idx }
 func (e *Engine) Config() *vault.Config { return e.cfg }
 
 // Sync pulls changes from other devices, pushes local ones that are not
-// uploaded yet, exchanges the vault copy and downloads pinned files.
+// uploaded yet, exchanges the vault copy and starts downloading pinned
+// files in the background (EnsurePinned waits for them).
 func (e *Engine) Sync(ctx context.Context) error {
 	var errs []error
 	if _, err := e.pull(ctx); err != nil {
+		errs = append(errs, err)
+	}
+	// Before flush: Spread uses the listing of this pull, which a new
+	// segment would make stale.
+	if _, err := e.journal.Spread(ctx); err != nil {
 		errs = append(errs, err)
 	}
 	if err := e.flush(ctx); err != nil {
@@ -317,15 +396,18 @@ func (e *Engine) Sync(ctx context.Context) error {
 	if err := e.syncVault(ctx); err != nil {
 		errs = append(errs, err)
 	}
-	if _, err := e.EnsurePinned(ctx); err != nil {
-		errs = append(errs, err)
-	}
+	e.wakePins()
 	return errors.Join(errs...)
 }
 
 // pull merges new journal segments and reports whether the tree changed.
 func (e *Engine) pull(ctx context.Context) (bool, error) {
 	ops, err := e.journal.Pull(ctx)
+	return e.addOps(ops), err
+}
+
+// addOps merges ops read from a journal into the index.
+func (e *Engine) addOps(ops []index.Op) bool {
 	e.mu.Lock()
 	for _, o := range ops {
 		if o.Device == e.state.Device && o.Seq > e.state.Seq {
@@ -333,8 +415,7 @@ func (e *Engine) pull(ctx context.Context) (bool, error) {
 		}
 	}
 	e.mu.Unlock()
-	changed := e.idx.Add(ops...)
-	return changed, err
+	return e.idx.Add(ops...)
 }
 
 func (e *Engine) flush(ctx context.Context) error {

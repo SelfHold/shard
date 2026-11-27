@@ -26,16 +26,22 @@ class SecretKind extends $pb.ProtobufEnum {
   static const SecretKind SECRET_TOTP =
       SecretKind._(4, _omitEnumNames ? '' : 'SECRET_TOTP');
 
+  /// A server reached over SSH (Connector API scope "servers"): url is
+  /// host[:port], username the login user, password the SSH password.
+  static const SecretKind SECRET_SERVER =
+      SecretKind._(5, _omitEnumNames ? '' : 'SECRET_SERVER');
+
   static const $core.List<SecretKind> values = <SecretKind>[
     SECRET_KIND_UNSPECIFIED,
     SECRET_PASSWORD,
     SECRET_SSH,
     SECRET_WEB3,
     SECRET_TOTP,
+    SECRET_SERVER,
   ];
 
   static final $core.List<SecretKind?> _byValue =
-      $pb.ProtobufEnum.$_initByValueList(values, 4);
+      $pb.ProtobufEnum.$_initByValueList(values, 5);
   static SecretKind? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
@@ -64,6 +70,53 @@ class Web3Network extends $pb.ProtobufEnum {
   const Web3Network._(super.value, super.name);
 }
 
+class ServerAuth extends $pb.ProtobufEnum {
+  static const ServerAuth SERVER_AUTH_UNSPECIFIED =
+      ServerAuth._(0, _omitEnumNames ? '' : 'SERVER_AUTH_UNSPECIFIED');
+  static const ServerAuth SERVER_AUTH_PASSWORD =
+      ServerAuth._(1, _omitEnumNames ? '' : 'SERVER_AUTH_PASSWORD');
+  static const ServerAuth SERVER_AUTH_SSH_KEY =
+      ServerAuth._(2, _omitEnumNames ? '' : 'SERVER_AUTH_SSH_KEY');
+  static const ServerAuth SERVER_AUTH_AGENT =
+      ServerAuth._(3, _omitEnumNames ? '' : 'SERVER_AUTH_AGENT');
+
+  static const $core.List<ServerAuth> values = <ServerAuth>[
+    SERVER_AUTH_UNSPECIFIED,
+    SERVER_AUTH_PASSWORD,
+    SERVER_AUTH_SSH_KEY,
+    SERVER_AUTH_AGENT,
+  ];
+
+  static final $core.List<ServerAuth?> _byValue =
+      $pb.ProtobufEnum.$_initByValueList(values, 3);
+  static ServerAuth? valueOf($core.int value) =>
+      value < 0 || value >= _byValue.length ? null : _byValue[value];
+
+  const ServerAuth._(super.value, super.name);
+}
+
+class SecretImportStatus extends $pb.ProtobufEnum {
+  static const SecretImportStatus IMPORT_ADDED =
+      SecretImportStatus._(0, _omitEnumNames ? '' : 'IMPORT_ADDED');
+  static const SecretImportStatus IMPORT_DUPLICATE =
+      SecretImportStatus._(1, _omitEnumNames ? '' : 'IMPORT_DUPLICATE');
+  static const SecretImportStatus IMPORT_FAILED =
+      SecretImportStatus._(2, _omitEnumNames ? '' : 'IMPORT_FAILED');
+
+  static const $core.List<SecretImportStatus> values = <SecretImportStatus>[
+    IMPORT_ADDED,
+    IMPORT_DUPLICATE,
+    IMPORT_FAILED,
+  ];
+
+  static final $core.List<SecretImportStatus?> _byValue =
+      $pb.ProtobufEnum.$_initByValueList(values, 2);
+  static SecretImportStatus? valueOf($core.int value) =>
+      value < 0 || value >= _byValue.length ? null : _byValue[value];
+
+  const SecretImportStatus._(super.value, super.name);
+}
+
 class Event_Kind extends $pb.ProtobufEnum {
   static const Event_Kind KIND_UNSPECIFIED =
       Event_Kind._(0, _omitEnumNames ? '' : 'KIND_UNSPECIFIED');
@@ -77,6 +130,8 @@ class Event_Kind extends $pb.ProtobufEnum {
       Event_Kind._(4, _omitEnumNames ? '' : 'SYNC_ERROR');
   static const Event_Kind SECRETS_CHANGED =
       Event_Kind._(5, _omitEnumNames ? '' : 'SECRETS_CHANGED');
+  static const Event_Kind APPS_CHANGED =
+      Event_Kind._(6, _omitEnumNames ? '' : 'APPS_CHANGED');
 
   static const $core.List<Event_Kind> values = <Event_Kind>[
     KIND_UNSPECIFIED,
@@ -85,10 +140,11 @@ class Event_Kind extends $pb.ProtobufEnum {
     SYNC_DONE,
     SYNC_ERROR,
     SECRETS_CHANGED,
+    APPS_CHANGED,
   ];
 
   static final $core.List<Event_Kind?> _byValue =
-      $pb.ProtobufEnum.$_initByValueList(values, 5);
+      $pb.ProtobufEnum.$_initByValueList(values, 6);
   static Event_Kind? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 

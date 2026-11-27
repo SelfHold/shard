@@ -33,6 +33,16 @@
             android:name=".CoreService"
             android:exported="false"
             android:foregroundServiceType="dataSync"/>
+        <!-- Connector API for other apps (docs/CONNECTOR.md). Any app may
+             bind: access is decided by the pairing the user approved for
+             the calling package and its signing certificate. -->
+        <service
+            android:name=".ConnectorService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="dev.cloudsync.connector.BIND"/>
+            </intent-filter>
+        </service>
         <provider
             android:name=".VaultProvider"
             android:authorities="${applicationId}.documents"

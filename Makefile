@@ -51,13 +51,18 @@ build-windows:
 	GOOS=windows GOARCH=amd64 go build -ldflags '$(GO_LDFLAGS)' -o $(BIN)/windows/ ./cmd/cs ./cmd/cloudsyncd
 
 # Go and Dart code from proto/cloudsync.proto (protoc-gen-go, -go-grpc and
-# "dart pub global activate protoc_plugin").
+# "dart pub global activate protoc_plugin"), Go code from proto/connector.proto
+# (the API for connected apps; apps generate their own clients from it).
 proto:
 	protoc -I proto \
 		--go_out=core/rpc/pb --go_opt=paths=source_relative \
 		--go-grpc_out=core/rpc/pb --go-grpc_opt=paths=source_relative \
 		proto/cloudsync.proto
 	protoc -I proto --plugin=protoc-gen-dart=$(PROTOC_DART) --dart_out=grpc:app/lib/data/rpc/gen proto/cloudsync.proto
+	protoc -I proto \
+		--go_out=core/connector/pb --go_opt=paths=source_relative \
+		--go-grpc_out=core/connector/pb --go-grpc_opt=paths=source_relative \
+		proto/connector.proto
 
 # The core for Android (gomobile, NDK from ~/Android/Sdk/ndk).
 aar:

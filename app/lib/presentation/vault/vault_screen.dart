@@ -15,6 +15,7 @@ import '../../core/theme/typography.dart';
 import '../../data/biometric.dart';
 import '../../data/rpc/core_client.dart';
 import '../../data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
+import '../apps/apps_card.dart';
 import '../common/hm.dart';
 import '../core/core_cubit.dart';
 import '../shell/app_shell.dart' show AppShell, BuildInfo, Section, StatusPills;
@@ -366,6 +367,7 @@ class _VaultScreenState extends State<VaultScreen> {
           ),
         ),
         _settings(s, gap),
+        const AppsCard(),
         HmCard(
           padding: const EdgeInsets.all(20),
           child: Column(

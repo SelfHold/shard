@@ -178,7 +178,7 @@ class _FilesScreenState extends State<FilesScreen> {
   Future<void> _pin(pb.Entry e) => _run(
     e.pinned
         ? tr('No longer kept on this device', 'Больше не хранится на устройстве')
-        : tr('Downloaded and pinned', 'Скачано и закреплено'),
+        : tr('Pinned: downloading in the background', 'Закреплено: скачивается в фоне'),
     () => e.pinned ? _core.api.unpin(pb.PathRequest(path: e.path)) : _core.api.pin(pb.PathRequest(path: e.path)),
   );
 

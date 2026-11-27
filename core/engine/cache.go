@@ -24,7 +24,16 @@ type cache struct {
 	memIdx map[string]*list.Element
 	memLen int64                  // bytes in mem
 	keep   func() map[string]bool // ids that must stay (pinned)
+	// floor: the size left after an eviction that could not get under
+	// limit (pinned blobs fill it, as on a reference device). The next
+	// eviction waits until evictSlack more bytes came in: each one walks
+	// the whole tree for the pinned set.
+	floor int64
 }
+
+// evictSlack is how much a cache full of pinned blobs grows before the
+// next eviction attempt.
+const evictSlack = 256 << 20
 
 type memItem struct {
 	id   string
@@ -105,7 +114,7 @@ func (c *cache) put(id string, d []byte, _ bool) {
 	}
 	c.mu.Lock()
 	c.size += int64(len(d))
-	over := c.size > c.limit
+	over := c.size > c.limit && (c.floor == 0 || c.size > c.floor+evictSlack)
 	c.mu.Unlock()
 	if over {
 		c.evict()
@@ -138,6 +147,12 @@ func (c *cache) evict() {
 	sort.Slice(items, func(i, j int) bool { return items[i].used.Before(items[j].used) })
 	c.mu.Lock()
 	defer c.mu.Unlock()
+	defer func() {
+		c.floor = 0
+		if c.size > c.limit {
+			c.floor = c.size
+		}
+	}()
 	for _, it := range items {
 		if c.size <= c.limit {
 			return
@@ -150,6 +165,17 @@ func (c *cache) evict() {
 				delete(c.memIdx, it.id)
 			}
 		}
+	}
+}
+
+// unpinned drops what pins no longer need down to the limit.
+func (c *cache) unpinned() {
+	c.mu.Lock()
+	c.floor = 0
+	over := c.size > c.limit
+	c.mu.Unlock()
+	if over {
+		go c.evict()
 	}
 }
 

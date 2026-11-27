@@ -228,7 +228,15 @@ class _StoragesScreenState extends State<StoragesScreen> {
           tr('Storages', 'Хранилища'),
           trailing: hm.mobile ? null : HmButton(tr('Add storage', 'Добавить хранилище'), variant: HmVariant.primary, icon: Icons.add, onPressed: _add),
         ),
-        if (!ready && core.unlocked)
+        if (!ready && core.unlocked && (core.state?.opening ?? false))
+          HmBanner(
+            tr(
+              'The vault is open. Connecting to the storages and syncing…',
+              'Vault открыт. Подключаемся к хранилищам и синхронизируем…',
+            ),
+            tone: HmTone.info,
+          )
+        else if (!ready && core.unlocked)
           HmBanner(
             enabled < k + m
                 ? tr(

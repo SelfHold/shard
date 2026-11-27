@@ -21,6 +21,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	"cloudsync/core/backend"
+	"cloudsync/core/connector"
 	"cloudsync/core/crypto"
 	"cloudsync/core/engine"
 	"cloudsync/core/eventlog"
@@ -68,22 +69,39 @@ type Service struct {
 	// storages can still be added, then the engine opens.
 	problem    string
 	deviceName string
+	// The password safe read from this device's own copies while the
+	// engine is not open (offlineOf: the vault it was read for).
+	offline   *engine.OfflineSafe
+	offlineOf *vault.Vault
+	// The engine is being opened in the background (storages may be slow or
+	// dead): opening is closed when that ends, cancelOpen stops it.
+	opening    chan struct{}
+	cancelOpen context.CancelFunc
 	reloadMu   sync.Mutex
 	stop       chan struct{}
 	stopped    chan struct{}
 
 	subMu sync.Mutex
 	subs  map[chan *pb.Event]struct{}
+
+	// Apps are the connected apps paired on this device (apps.go).
+	Apps *connector.Registry
+
+	connOnce sync.Once
+	conn     *connector.Server
 }
 
 // NewService returns a locked service for the vault file at vaultPath.
 func NewService(vaultPath, dataRoot, platform string) *Service {
-	return &Service{
+	s := &Service{
 		VaultPath: vaultPath, DataRoot: dataRoot, Platform: platform,
 		SyncEvery: 30 * time.Second,
 		Log:       eventlog.New(1000, nil),
 		subs:      map[chan *pb.Event]struct{}{},
+		Apps:      connector.NewRegistry(dataRoot),
 	}
+	s.Apps.OnChange = func() { s.publish(pb.Event_APPS_CHANGED, "") }
+	return s
 }
 
 // TokenAuth returns interceptors that require metadata "authorization:
@@ -99,6 +117,8 @@ func TokenAuth(token string) []grpc.ServerOption {
 		return status.Error(codes.Unauthenticated, "bad token")
 	}
 	return []grpc.ServerOption{
+		// Password manager exports come in one message (ImportSecrets).
+		grpc.MaxRecvMsgSize(secrets.MaxImport + 1<<20),
 		grpc.UnaryInterceptor(func(ctx context.Context, req any, _ *grpc.UnaryServerInfo, h grpc.UnaryHandler) (any, error) {
 			if err := check(ctx); err != nil {
 				return nil, err
@@ -154,6 +174,52 @@ func (s *Service) engine() (*engine.Engine, error) {
 	return s.e, nil
 }
 
+// dataDir is this device's data dir for v.
+func (s *Service) dataDir(v *vault.Vault) string {
+	return filepath.Join(s.DataRoot, "data-"+v.Config().VaultID[:8])
+}
+
+// safeReader reads the password safe.
+type safeReader interface {
+	Safe() engine.SafeList
+	OpenSecret(id string) (secrets.Entry, error)
+	TOTPCodes(now time.Time) []engine.TOTPCode
+}
+
+// safe returns the open engine or, while the vault is unlocked but the
+// engine is not open (opening, or too few storages), the safe from this
+// device's own copies: passwords and TOTP codes stay readable when every
+// storage is gone.
+func (s *Service) safe() (safeReader, error) {
+	s.mu.Lock()
+	e, v, o := s.e, s.v, s.offline
+	if o != nil && s.offlineOf != v {
+		o = nil
+	}
+	s.mu.Unlock()
+	switch {
+	case e != nil:
+		return e, nil
+	case v == nil:
+		return nil, status.Error(codes.FailedPrecondition, "vault is locked")
+	case o != nil:
+		return o, nil
+	}
+	o, err := engine.OpenOfflineSafe(v, s.dataDir(v))
+	if err != nil {
+		return nil, status.Error(codes.FailedPrecondition, "vault is not ready: "+err.Error())
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.e != nil {
+		return s.e, nil
+	}
+	if s.v == v && s.opening == nil {
+		s.offline, s.offlineOf = o, v // while opening, copies still change
+	}
+	return o, nil
+}
+
 func toStatus(err error) error {
 	var le *lock.LockedError
 	switch {
@@ -196,6 +262,7 @@ func (s *Service) state() *pb.State {
 		st.VaultId = s.v.Config().VaultID
 		st.DeviceName = s.deviceName
 		st.Problem = s.problem
+		st.Opening = s.opening != nil
 	}
 	if s.e != nil {
 		st.Ready = true
@@ -224,7 +291,7 @@ func (s *Service) CreateVault(ctx context.Context, r *pb.CreateVaultRequest) (*p
 	if err != nil {
 		return nil, toStatus(err)
 	}
-	return s.open(ctx, v, r.DeviceName)
+	return s.open(v, r.DeviceName), nil
 }
 
 func (s *Service) ImportVault(ctx context.Context, r *pb.ImportVaultRequest) (*pb.State, error) {
@@ -244,12 +311,15 @@ func (s *Service) ImportVault(ctx context.Context, r *pb.ImportVaultRequest) (*p
 	if err != nil {
 		return nil, toStatus(err)
 	}
-	return s.open(ctx, v, r.DeviceName)
+	return s.open(v, r.DeviceName), nil
 }
 
+// Unlock only opens the vault file: the reply comes right away and the
+// storages are connected in the background (State.opening, then a
+// STATE_CHANGED event), so a dead storage never holds up the app.
 func (s *Service) Unlock(ctx context.Context, r *pb.UnlockRequest) (*pb.State, error) {
 	s.mu.Lock()
-	if s.e != nil {
+	if s.e != nil || s.opening != nil {
 		defer s.mu.Unlock()
 		return s.state(), nil
 	}
@@ -265,32 +335,57 @@ func (s *Service) Unlock(ctx context.Context, r *pb.UnlockRequest) (*pb.State, e
 	if err != nil {
 		return nil, toStatus(err)
 	}
-	return s.open(ctx, v, r.DeviceName)
+	return s.open(v, r.DeviceName), nil
 }
 
 // OpenWith unlocks with an already opened vault (daemon started with a
-// password from the environment).
-func (s *Service) OpenWith(ctx context.Context, v *vault.Vault, deviceName string) error {
-	_, err := s.open(ctx, v, deviceName)
-	return err
+// password from the environment); the engine opens in the background.
+func (s *Service) OpenWith(_ context.Context, v *vault.Vault, deviceName string) error {
+	s.open(v, deviceName)
+	return nil
 }
 
-func (s *Service) open(ctx context.Context, v *vault.Vault, deviceName string) (*pb.State, error) {
+// open makes v the unlocked vault and starts opening the engine in the
+// background.
+func (s *Service) open(v *vault.Vault, deviceName string) *pb.State {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	if s.e != nil {
-		return s.state(), nil
+	if s.e != nil || s.opening != nil {
+		return s.state()
 	}
-	dir := filepath.Join(s.DataRoot, "data-"+v.Config().VaultID[:8])
-	s.v, s.deviceName = v, deviceName
-	e, err := engine.Open(ctx, v, engine.Options{DataDir: dir, DeviceName: deviceName, Platform: s.Platform, Log: s.Log})
+	s.v, s.deviceName, s.problem = v, deviceName, ""
+	ctx, cancel := context.WithCancel(context.Background())
+	done := make(chan struct{})
+	s.opening, s.cancelOpen = done, cancel
+	go s.start(ctx, cancel, done, v, deviceName)
+	s.publish(pb.Event_STATE_CHANGED, "")
+	return s.state()
+}
+
+// start opens the engine for open. Lock and reload cancel it (closeEngine)
+// and wait for it to end, so two engines never share the data dir.
+func (s *Service) start(ctx context.Context, cancel context.CancelFunc, done chan struct{}, v *vault.Vault, deviceName string) {
+	defer close(done)
+	defer cancel()
+	e, err := engine.Open(ctx, v, engine.Options{DataDir: s.dataDir(v), DeviceName: deviceName, Platform: s.Platform, Log: s.Log})
+	s.mu.Lock()
+	s.opening, s.cancelOpen = nil, nil
+	s.offline = nil       // the open may have added journal copies: read them again
+	if ctx.Err() != nil { // locked or reloading meanwhile
+		s.mu.Unlock()
+		if e != nil {
+			e.Close(context.Background())
+		}
+		return
+	}
+	defer s.mu.Unlock()
 	if err != nil {
 		// Unlocked but not ready: the app shows the problem and lets the
 		// user add storages; every vault change retries.
 		s.problem = err.Error()
 		s.Log.Add(eventlog.Warn, "vault", "", "not ready: "+err.Error())
 		s.publish(pb.Event_STATE_CHANGED, "")
-		return s.state(), nil
+		return
 	}
 	s.e, s.problem = e, ""
 	if s.Hooks.OnUnlock != nil {
@@ -308,7 +403,16 @@ func (s *Service) open(ctx context.Context, v *vault.Vault, deviceName string) (
 	s.stop, s.stopped = make(chan struct{}), make(chan struct{})
 	go s.loop(s.stop, s.stopped)
 	s.publish(pb.Event_STATE_CHANGED, "")
-	return s.state(), nil
+}
+
+// waitOpen waits for a background engine open to end.
+func (s *Service) waitOpen() {
+	s.mu.Lock()
+	done := s.opening
+	s.mu.Unlock()
+	if done != nil {
+		<-done
+	}
 }
 
 func (s *Service) LockVault(ctx context.Context, _ *pb.Empty) (*pb.State, error) {
@@ -320,7 +424,10 @@ func (s *Service) LockVault(ctx context.Context, _ *pb.Empty) (*pb.State, error)
 }
 
 // Close locks the vault (used on shutdown).
-func (s *Service) Close(ctx context.Context) { s.close(ctx) }
+func (s *Service) Close(ctx context.Context) {
+	s.close(ctx)
+	s.Connector().Flush() // use counters of logins
+}
 
 func (s *Service) close(ctx context.Context) { s.closeEngine(ctx, false) }
 
@@ -329,14 +436,20 @@ func (s *Service) close(ctx context.Context) { s.closeEngine(ctx, false) }
 func (s *Service) closeEngine(ctx context.Context, keepVault bool) {
 	s.mu.Lock()
 	stop, stopped := s.stop, s.stopped
+	cancelOpen, opening := s.cancelOpen, s.opening
 	s.stop = nil
 	s.mu.Unlock()
+	if cancelOpen != nil {
+		cancelOpen()
+		<-opening
+	}
 	if stop != nil {
 		close(stop)
 		<-stopped
 	}
 	s.mu.Lock()
 	defer s.mu.Unlock()
+	s.offline = nil
 	if s.e != nil {
 		if s.Hooks.OnLock != nil {
 			s.Hooks.OnLock()
@@ -404,10 +517,7 @@ func (s *Service) reload(ctx context.Context) {
 		name = e.Device().Name
 	}
 	s.closeEngine(ctx, true)
-	if _, err := s.open(ctx, v, name); err != nil {
-		s.Log.Add(eventlog.Error, "vault", "", "reopen: "+err.Error())
-		s.publish(pb.Event_SYNC_ERROR, "reopen: "+err.Error())
-	}
+	s.open(v, name)
 }
 
 func (s *Service) ChangePassword(_ context.Context, r *pb.ChangePasswordRequest) (*pb.Empty, error) {
@@ -675,12 +785,12 @@ func (s *Service) Status(ctx context.Context, _ *pb.Empty) (*pb.StatusReply, err
 	e, err := s.engine()
 	if err != nil {
 		s.mu.Lock()
-		v := s.v
+		v, opening := s.v, s.opening != nil
 		s.mu.Unlock()
 		if v == nil {
 			return nil, err
 		}
-		return configStatus(v.Config()), nil
+		return configStatus(v.Config(), opening), nil
 	}
 	st := e.Status(ctx)
 	out := &pb.StatusReply{
@@ -688,6 +798,8 @@ func (s *Service) Status(ctx context.Context, _ *pb.Empty) (*pb.StatusReply, err
 		Pending: int32(st.Pending), ReloadNeeded: st.ReloadNeeded, DomainRisk: st.DomainRisk,
 		CacheBytes: e.CacheBytes(), Pins: e.Pins(), DeviceId: e.DeviceID(),
 	}
+	pp := e.PinProgress()
+	out.PinnedBytes, out.PinnedMissingBytes, out.Pinning, out.PinError = pp.Bytes, pp.Missing, pp.Running, pp.Err
 	cfg := e.Config()
 	// Storages are listed from the vault, which may be newer than the
 	// engine (one just added or renamed): those the engine has not opened
@@ -738,8 +850,9 @@ func (s *Service) Status(ctx context.Context, _ *pb.Empty) (*pb.StatusReply, err
 	return out, nil
 }
 
-// configStatus describes a vault whose engine is not open.
-func configStatus(cfg *vault.Config) *pb.StatusReply {
+// configStatus describes a vault whose engine is not open; while it is
+// opening, the storages show as preparing.
+func configStatus(cfg *vault.Config, opening bool) *pb.StatusReply {
 	out := &pb.StatusReply{
 		DataShards: int32(cfg.DataShards), ParityShards: int32(cfg.ParityShards),
 		DomainRisk: engine.DomainRisk(cfg), VaultVersion: cfg.Version,
@@ -747,6 +860,9 @@ func configStatus(cfg *vault.Config) *pb.StatusReply {
 	for _, b := range cfg.Backends {
 		pbb := &pb.Backend{
 			Id: b.ID, Name: b.Name, Type: b.Type, Domain: b.FailureDomain(), Enabled: !b.Disabled, Error: "not checked",
+		}
+		if opening && !b.Disabled {
+			pbb.Preparing, pbb.Error = true, ""
 		}
 		backendInfo(cfg, pbb)
 		out.Backends = append(out.Backends, pbb)
@@ -878,12 +994,12 @@ func (s *Service) Download(ctx context.Context, r *pb.DownloadRequest) (*pb.Empt
 	return &pb.Empty{}, toStatus(e.Download(ctx, r.Path, r.LocalPath))
 }
 
-func (s *Service) Pin(ctx context.Context, r *pb.PathRequest) (*pb.Empty, error) {
+func (s *Service) Pin(_ context.Context, r *pb.PathRequest) (*pb.Empty, error) {
 	e, err := s.engine()
 	if err != nil {
 		return nil, err
 	}
-	err = e.Pin(ctx, r.Path)
+	err = e.PinLater(r.Path)
 	s.changed()
 	return &pb.Empty{}, toStatus(err)
 }

@@ -31,6 +31,11 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
+    // ICloudSyncConnector (ConnectorService, the Connector API for other apps).
+    buildFeatures {
+        aidl = true
+    }
+
     defaultConfig {
         applicationId = "dev.cloudsync.cloudsync"
         // openProxyFileDescriptor (streamed reads in the documents provider).

@@ -218,3 +218,11 @@ func base58Decode(s string) ([]byte, error) {
 	}
 	return append(make([]byte, zeros), n.Bytes()...), nil
 }
+
+// SSHKeyEncrypted reports whether a private key parses only with a
+// passphrase.
+func SSHKeyEncrypted(private string) bool {
+	_, err := ssh.ParseRawPrivateKey([]byte(strings.TrimSpace(private) + "\n"))
+	var missing *ssh.PassphraseMissingError
+	return errors.As(err, &missing)
+}

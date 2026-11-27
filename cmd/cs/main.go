@@ -56,6 +56,15 @@ Maintenance:
   cs gc [-grace 168h]                    remove data no file uses any more
   cs redundancy -k K -m M                change k/m for new files (then cs repair)
 
+Connected apps (through the running cloudsyncd, docs/CONNECTOR.md):
+  cs apps [ls]                           pairing requests, paired apps, their data
+  cs apps approve ID [SCOPE...]          allow a pairing request (compare the code);
+                                         grants only the scopes named: passwords, ssh_keys, servers
+  cs apps deny ID                        refuse a pairing request
+  cs apps scopes ID [SCOPE...]           keep only these scopes of a pairing
+  cs apps revoke ID                      forget a pairing on this device
+  cs apps rm-data APP                    delete an app's records on all devices
+
 Global flags (before the command):
   -vault FILE   vault file (default: user config dir/cloudsync/vault.cs)
   -data DIR     device state and cache (default: next to the vault)
@@ -99,6 +108,8 @@ func (a *app) run(ctx context.Context, cmd string, args []string) error {
 		return a.passwd()
 	case "backend":
 		return a.backend(ctx, args)
+	case "apps":
+		return a.apps(ctx, args)
 	}
 	e, err := a.engine(ctx)
 	if err != nil {
@@ -160,7 +171,11 @@ func (a *app) run(ctx context.Context, cmd string, args []string) error {
 		<-ctx.Done()
 		return l.Release(context.WithoutCancel(ctx))
 	case "sync":
-		return e.Sync(ctx)
+		if err := e.Sync(ctx); err != nil {
+			return err
+		}
+		_, err = e.EnsurePinned(ctx) // the process exits next: wait here
+		return err
 	case "repair":
 		fl := flag.NewFlagSet("repair", flag.ExitOnError)
 		rebalance := fl.Bool("rebalance", false, "also move shards to spread data over storages added later")

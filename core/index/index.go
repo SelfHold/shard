@@ -51,6 +51,8 @@ type Op struct {
 	Refs map[string]blob.Ref `json:"refs,omitempty"`
 	// Secret is the sealed safe record of an OpSecret (see secrets.go).
 	Secret *SecretChange `json:"secret,omitempty"`
+	// App is the sealed record of a connected app, for OpApp (apps.go).
+	App *AppChange `json:"app,omitempty"`
 }
 
 // ID identifies the op and the version it creates.
@@ -110,8 +112,9 @@ type Index struct {
 	order   []Op // sorted
 	entries map[string]*Entry
 	lamport uint64
-	over    map[string]override // blob id → newer location than the one in refs
-	secrets map[string]*Secret  // password safe records by id
+	over    map[string]override           // blob id → newer location than the one in refs
+	secrets map[string]*Secret            // password safe records by id
+	apps    map[string]map[string]appSlot // app id → key → heads
 }
 
 type override struct {
@@ -121,7 +124,7 @@ type override struct {
 
 // New returns an empty index.
 func New() *Index {
-	return &Index{ops: map[string]Op{}, entries: map[string]*Entry{}, over: map[string]override{}, secrets: map[string]*Secret{}}
+	return &Index{ops: map[string]Op{}, entries: map[string]*Entry{}, over: map[string]override{}, secrets: map[string]*Secret{}, apps: map[string]map[string]appSlot{}}
 }
 
 // Lamport returns the highest Lamport time seen.
@@ -181,6 +184,7 @@ func (x *Index) Add(ops ...Op) bool {
 	x.entries = map[string]*Entry{}
 	x.over = map[string]override{}
 	x.secrets = map[string]*Secret{}
+	x.apps = map[string]map[string]appSlot{}
 	for _, o := range x.order {
 		x.apply(o)
 	}
@@ -188,8 +192,12 @@ func (x *Index) Add(ops ...Op) bool {
 }
 
 func (x *Index) apply(o Op) {
-	if o.Kind == OpSecret {
+	switch o.Kind {
+	case OpSecret:
 		x.applySecret(o)
+		return
+	case OpApp:
+		x.applyApp(o)
 		return
 	}
 	cur := x.entries[o.Path]

@@ -393,6 +393,68 @@ class CloudSyncClient extends $grpc.Client {
     return $createUnaryCall(_$checkTotp, request, options: options);
   }
 
+  /// Finds the otpauth://totp/ links in pasted text and expands Google
+  /// Authenticator exports (otpauth-migration://); nothing is stored.
+  $grpc.ResponseFuture<$0.TotpLinksReply> readTotpLinks(
+    $0.TotpLinksRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$readTotpLinks, request, options: options);
+  }
+
+  /// Imports an export of another password manager: KeePass (.kdbx, XML,
+  /// CSV), KeePassXC, Chrome / Edge / Brave / Opera, Firefox, Safari,
+  /// Bitwarden (CSV, unencrypted JSON), 1Password, LastPass, Dashlane,
+  /// Proton Pass, NordPass CSV. With dry_run only the preview is returned.
+  $grpc.ResponseFuture<$0.SecretImportReply> importSecrets(
+    $0.SecretImportRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$importSecrets, request, options: options);
+  }
+
+  /// Connected apps (docs/CONNECTOR.md): pairing requests waiting for the
+  /// user, apps paired on this device, and the records apps keep in the
+  /// vault (shared by all devices).
+  $grpc.ResponseFuture<$0.AppsReply> listApps(
+    $0.Empty request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$listApps, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Empty> decidePairing(
+    $0.DecidePairingRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$decidePairing, request, options: options);
+  }
+
+  /// Forgets a pairing on this device; the app's records stay.
+  $grpc.ResponseFuture<$0.Empty> revokeApp(
+    $0.IdRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$revokeApp, request, options: options);
+  }
+
+  /// Sets the scopes of a pairing; only scopes it has can be kept (removing
+  /// "passwords" takes the password store away without unpairing).
+  $grpc.ResponseFuture<$0.Empty> setAppScopes(
+    $0.SetAppScopesRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$setAppScopes, request, options: options);
+  }
+
+  /// Deletes every record of an app (id = app id) on all devices.
+  $grpc.ResponseFuture<$0.Empty> deleteAppData(
+    $0.IdRequest request, {
+    $grpc.CallOptions? options,
+  }) {
+    return $createUnaryCall(_$deleteAppData, request, options: options);
+  }
+
   /// Events for live UI updates.
   $grpc.ResponseStream<$0.Event> watch(
     $0.Empty request, {
@@ -604,6 +666,38 @@ class CloudSyncClient extends $grpc.Client {
           '/cloudsync.v1.CloudSync/CheckTotp',
           ($0.CheckTotpRequest value) => value.writeToBuffer(),
           $0.TotpPreview.fromBuffer);
+  static final _$readTotpLinks =
+      $grpc.ClientMethod<$0.TotpLinksRequest, $0.TotpLinksReply>(
+          '/cloudsync.v1.CloudSync/ReadTotpLinks',
+          ($0.TotpLinksRequest value) => value.writeToBuffer(),
+          $0.TotpLinksReply.fromBuffer);
+  static final _$importSecrets =
+      $grpc.ClientMethod<$0.SecretImportRequest, $0.SecretImportReply>(
+          '/cloudsync.v1.CloudSync/ImportSecrets',
+          ($0.SecretImportRequest value) => value.writeToBuffer(),
+          $0.SecretImportReply.fromBuffer);
+  static final _$listApps = $grpc.ClientMethod<$0.Empty, $0.AppsReply>(
+      '/cloudsync.v1.CloudSync/ListApps',
+      ($0.Empty value) => value.writeToBuffer(),
+      $0.AppsReply.fromBuffer);
+  static final _$decidePairing =
+      $grpc.ClientMethod<$0.DecidePairingRequest, $0.Empty>(
+          '/cloudsync.v1.CloudSync/DecidePairing',
+          ($0.DecidePairingRequest value) => value.writeToBuffer(),
+          $0.Empty.fromBuffer);
+  static final _$revokeApp = $grpc.ClientMethod<$0.IdRequest, $0.Empty>(
+      '/cloudsync.v1.CloudSync/RevokeApp',
+      ($0.IdRequest value) => value.writeToBuffer(),
+      $0.Empty.fromBuffer);
+  static final _$setAppScopes =
+      $grpc.ClientMethod<$0.SetAppScopesRequest, $0.Empty>(
+          '/cloudsync.v1.CloudSync/SetAppScopes',
+          ($0.SetAppScopesRequest value) => value.writeToBuffer(),
+          $0.Empty.fromBuffer);
+  static final _$deleteAppData = $grpc.ClientMethod<$0.IdRequest, $0.Empty>(
+      '/cloudsync.v1.CloudSync/DeleteAppData',
+      ($0.IdRequest value) => value.writeToBuffer(),
+      $0.Empty.fromBuffer);
   static final _$watch = $grpc.ClientMethod<$0.Empty, $0.Event>(
       '/cloudsync.v1.CloudSync/Watch',
       ($0.Empty value) => value.writeToBuffer(),
@@ -946,6 +1040,59 @@ abstract class CloudSyncServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.CheckTotpRequest.fromBuffer(value),
         ($0.TotpPreview value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.TotpLinksRequest, $0.TotpLinksReply>(
+        'ReadTotpLinks',
+        readTotpLinks_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.TotpLinksRequest.fromBuffer(value),
+        ($0.TotpLinksReply value) => value.writeToBuffer()));
+    $addMethod(
+        $grpc.ServiceMethod<$0.SecretImportRequest, $0.SecretImportReply>(
+            'ImportSecrets',
+            importSecrets_Pre,
+            false,
+            false,
+            ($core.List<$core.int> value) =>
+                $0.SecretImportRequest.fromBuffer(value),
+            ($0.SecretImportReply value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.AppsReply>(
+        'ListApps',
+        listApps_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.AppsReply value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.DecidePairingRequest, $0.Empty>(
+        'DecidePairing',
+        decidePairing_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.DecidePairingRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.IdRequest, $0.Empty>(
+        'RevokeApp',
+        revokeApp_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.IdRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.SetAppScopesRequest, $0.Empty>(
+        'SetAppScopes',
+        setAppScopes_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) =>
+            $0.SetAppScopesRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.IdRequest, $0.Empty>(
+        'DeleteAppData',
+        deleteAppData_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.IdRequest.fromBuffer(value),
+        ($0.Empty value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.Empty, $0.Event>(
         'Watch',
         watch_Pre,
@@ -1312,6 +1459,62 @@ abstract class CloudSyncServiceBase extends $grpc.Service {
 
   $async.Future<$0.TotpPreview> checkTotp(
       $grpc.ServiceCall call, $0.CheckTotpRequest request);
+
+  $async.Future<$0.TotpLinksReply> readTotpLinks_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.TotpLinksRequest> $request) async {
+    return readTotpLinks($call, await $request);
+  }
+
+  $async.Future<$0.TotpLinksReply> readTotpLinks(
+      $grpc.ServiceCall call, $0.TotpLinksRequest request);
+
+  $async.Future<$0.SecretImportReply> importSecrets_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.SecretImportRequest> $request) async {
+    return importSecrets($call, await $request);
+  }
+
+  $async.Future<$0.SecretImportReply> importSecrets(
+      $grpc.ServiceCall call, $0.SecretImportRequest request);
+
+  $async.Future<$0.AppsReply> listApps_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async {
+    return listApps($call, await $request);
+  }
+
+  $async.Future<$0.AppsReply> listApps(
+      $grpc.ServiceCall call, $0.Empty request);
+
+  $async.Future<$0.Empty> decidePairing_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.DecidePairingRequest> $request) async {
+    return decidePairing($call, await $request);
+  }
+
+  $async.Future<$0.Empty> decidePairing(
+      $grpc.ServiceCall call, $0.DecidePairingRequest request);
+
+  $async.Future<$0.Empty> revokeApp_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.IdRequest> $request) async {
+    return revokeApp($call, await $request);
+  }
+
+  $async.Future<$0.Empty> revokeApp(
+      $grpc.ServiceCall call, $0.IdRequest request);
+
+  $async.Future<$0.Empty> setAppScopes_Pre($grpc.ServiceCall $call,
+      $async.Future<$0.SetAppScopesRequest> $request) async {
+    return setAppScopes($call, await $request);
+  }
+
+  $async.Future<$0.Empty> setAppScopes(
+      $grpc.ServiceCall call, $0.SetAppScopesRequest request);
+
+  $async.Future<$0.Empty> deleteAppData_Pre(
+      $grpc.ServiceCall $call, $async.Future<$0.IdRequest> $request) async {
+    return deleteAppData($call, await $request);
+  }
+
+  $async.Future<$0.Empty> deleteAppData(
+      $grpc.ServiceCall call, $0.IdRequest request);
 
   $async.Stream<$0.Event> watch_Pre(
       $grpc.ServiceCall $call, $async.Future<$0.Empty> $request) async* {

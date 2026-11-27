@@ -251,6 +251,9 @@ func TestPinsWorkOffline(t *testing.T) {
 	// A pinned dir also covers files added later.
 	a.PutFile(ctx, "/keep/new.txt", strings.NewReader("later"), time.Now())
 	b.Sync(ctx)
+	if _, err := b.EnsurePinned(ctx); err != nil {
+		t.Fatal(err)
+	}
 	w.offline(true, "mega1", "mega2", "gd", "s3")
 	if got := read(t, b, "/keep/new.txt"); string(got) != "later" {
 		t.Fatal(string(got))
@@ -260,6 +263,96 @@ func TestPinsWorkOffline(t *testing.T) {
 		if _, err := f.WriteTo(io.Discard); err == nil {
 			t.Fatal("unpinned file read with all storages down")
 		}
+	}
+}
+
+// waitPinned waits for the background download of pinned files.
+func waitPinned(t *testing.T, e *Engine) PinProgress {
+	t.Helper()
+	deadline := time.Now().Add(10 * time.Second)
+	for {
+		p := e.PinProgress()
+		if !p.Running && p.Missing == 0 && p.Bytes > 0 {
+			return p
+		}
+		if time.Now().After(deadline) {
+			t.Fatalf("pinned files not downloaded: %+v", p)
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+}
+
+func TestReferenceDevice(t *testing.T) {
+	ctx := context.Background()
+	w := newWorld(t)
+	a, b := w.device("laptop"), w.device("nas")
+	files := map[string][]byte{
+		"/docs/a.bin":   random(80<<10, 5),
+		"/photos/b.bin": random(60<<10, 6),
+		"/small.txt":    []byte("tiny"),
+	}
+	for p, d := range files {
+		if _, err := a.PutFile(ctx, p, bytes.NewReader(d), time.Now()); err != nil {
+			t.Fatal(err)
+		}
+	}
+	b.Sync(ctx)
+	// Pinning "/" returns at once; the download runs in the background.
+	if err := b.PinLater("/"); err != nil {
+		t.Fatal(err)
+	}
+	if !b.IsPinned("/photos/b.bin") {
+		t.Fatal("/ does not cover everything")
+	}
+	if p := waitPinned(t, b); p.Err != "" || p.Bytes < int64(80<<10+60<<10) {
+		t.Fatalf("%+v", p)
+	}
+	// Files added later on another device follow after a sync.
+	files["/later.bin"] = random(30<<10, 7)
+	a.PutFile(ctx, "/later.bin", bytes.NewReader(files["/later.bin"]), time.Now())
+	b.Sync(ctx)
+	for deadline := time.Now().Add(10 * time.Second); !b.IsLocal("/later.bin"); time.Sleep(10 * time.Millisecond) {
+		if time.Now().After(deadline) {
+			t.Fatalf("new file not downloaded: %+v", b.PinProgress())
+		}
+	}
+	waitPinned(t, b)
+	for p := range files {
+		if !b.IsLocal(p) {
+			t.Fatal("not local:", p)
+		}
+	}
+	w.offline(true, "mega1", "mega2", "gd", "s3")
+	for p, d := range files {
+		if got := read(t, b, p); !bytes.Equal(got, d) {
+			t.Fatal("wrong content offline:", p)
+		}
+	}
+}
+
+func TestCacheFullOfPinsEvictsRarely(t *testing.T) {
+	c := mustCache(t)
+	c.limit = 10
+	walks := 0
+	c.keep = func() map[string]bool {
+		walks++
+		return map[string]bool{"a": true, "b": true, "c": true}
+	}
+	c.put("a", make([]byte, 100), false)
+	c.put("b", make([]byte, 100), false)
+	c.put("c", make([]byte, 100), false)
+	if walks != 1 {
+		t.Fatal("evictions with nothing to drop:", walks)
+	}
+	// Unpinning lets the cache shrink again.
+	c.keep = func() map[string]bool { walks++; return nil }
+	c.unpinned()
+	deadline := time.Now().Add(5 * time.Second)
+	for c.Size() > c.limit {
+		if time.Now().After(deadline) {
+			t.Fatal("cache not shrunk after unpin:", c.Size())
+		}
+		time.Sleep(10 * time.Millisecond)
 	}
 }
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -257,8 +258,11 @@ Future<T?> pickOption<T>(
     transitionDuration: Duration.zero,
     pageBuilder: (ctx, _, _) {
       final screen = MediaQuery.sizeOf(ctx);
-      final below = screen.height - origin.dy - size.height - 8;
-      final up = below < 240 && origin.dy > below;
+      // Free room under and over the trigger (8 px gap + 8 px window margin).
+      final below = screen.height - origin.dy - size.height - 16;
+      final above = origin.dy - 16;
+      final up = below < 240 && above > below;
+      final maxHeight = math.min(screen.height * 0.6, math.max(up ? above : below, 120.0));
       final width = size.width.clamp(180.0, 320.0);
       return CallbackShortcuts(
         bindings: {const SingleActivator(LogicalKeyboardKey.escape): () => Navigator.pop(ctx)},
@@ -272,7 +276,7 @@ Future<T?> pickOption<T>(
               child: Material(
                 type: MaterialType.transparency,
                 child: Container(
-                  constraints: BoxConstraints(maxHeight: screen.height * 0.6),
+                  constraints: BoxConstraints(maxHeight: maxHeight),
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     color: HmColors.surface,

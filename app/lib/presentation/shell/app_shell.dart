@@ -11,6 +11,7 @@ import '../../core/settings/app_settings.dart';
 import '../../core/theme/colors.dart';
 import '../../core/theme/layout.dart';
 import '../../core/theme/typography.dart';
+import '../apps/apps_card.dart';
 import '../common/hm.dart';
 import '../core/core_cubit.dart';
 import '../files/files_screen.dart';
@@ -88,7 +89,11 @@ class _AppShellState extends State<AppShell> {
     }
   }
 
-  Section _shown(bool ready) => !ready && _section != Section.vault && _section != Section.log ? Section.storages : _section;
+  /// Sections usable before the engine opens. Secrets come from this
+  /// device's copy then (read only), so they work without any storage.
+  static bool _worksNotReady(Section s) => s == Section.vault || s == Section.log || s == Section.secrets;
+
+  Section _shown(bool ready) => !ready && !_worksNotReady(_section) ? Section.storages : _section;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +106,7 @@ class _AppShellState extends State<AppShell> {
       (_, false) => const UnlockScreen(),
       // Open but not working yet: storages must be added first (the log
       // tells why storages fail).
-      _ when !ready && _section != Section.vault && _section != Section.log => const StoragesScreen(),
+      _ when !ready && !_worksNotReady(_section) => const StoragesScreen(),
       _ => switch (_section) {
         Section.files => const FilesScreen(),
         Section.secrets => const SecretsScreen(),
@@ -115,7 +120,9 @@ class _AppShellState extends State<AppShell> {
       children: [
         const Positioned.fill(child: _GridBackground()),
         Positioned.fill(
-          child: KeyedSubtree(key: ValueKey(unlocked ? _section : 'locked'), child: page),
+          child: PairingPrompt(
+            child: KeyedSubtree(key: ValueKey(unlocked ? _section : 'locked'), child: page),
+          ),
         ),
       ],
     );
@@ -127,7 +134,7 @@ class _AppShellState extends State<AppShell> {
           bottom: false,
           child: Column(
             children: [
-              _MobileHeader(online: core.online),
+              _MobileHeader(online: core.online, syncing: core.opening),
               Expanded(child: body),
             ],
           ),
@@ -387,9 +394,12 @@ class _NavLinkState extends State<_NavLink> {
 
 /// Phone header (M4.1): logo and a live connection dot (App. D).
 class _MobileHeader extends StatelessWidget {
-  const _MobileHeader({required this.online});
+  const _MobileHeader({required this.online, required this.syncing});
 
   final bool online;
+
+  /// Connecting to the storages after unlock.
+  final bool syncing;
 
   @override
   Widget build(BuildContext context) => _TitleBar(
@@ -404,11 +414,17 @@ class _MobileHeader extends StatelessWidget {
         children: [
           Text('CloudSync', style: HmText.logo.copyWith(fontSize: 18)),
           const Spacer(),
-          HmDot(ok: online, label: online ? tr('Online', 'В сети') : tr('Offline', 'Не в сети')),
+          HmDot(
+            ok: online && !syncing,
+            label: syncing ? tr('Syncing', 'Синхронизация') : (online ? tr('Online', 'В сети') : tr('Offline', 'Не в сети')),
+          ),
           // On a narrow desktop window the window buttons take this place.
           if (!DesktopWindow.supported) ...[
             const SizedBox(width: 8),
-            Text(online ? tr('online', 'в сети') : tr('offline', 'не в сети'), style: HmText.footer),
+            Text(
+              syncing ? tr('syncing…', 'синхронизация…') : (online ? tr('online', 'в сети') : tr('offline', 'не в сети')),
+              style: HmText.footer,
+            ),
           ],
           if (DesktopWindow.supported) ...[const SizedBox(width: 8), const _WindowButtons()],
         ],
@@ -486,14 +502,17 @@ class StatusPills extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final online = core.online;
+    final syncing = core.conn == Conn.ready && core.opening;
     final why = core.conn != Conn.ready
         ? tr('no connection to the core', 'нет связи с ядром')
+        : syncing
+        ? tr('syncing…', 'синхронизация…')
         : (online ? tr('online', 'в сети') : tr('storages unreachable', 'хранилища недоступны'));
     return HmPill(
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          HmDot(ok: online),
+          HmDot(ok: online && !syncing),
           const SizedBox(width: 6),
           Text(why.toUpperCase()),
         ],

@@ -206,7 +206,12 @@ class _UnlockState extends State<_Unlock> {
     });
     final core = context.read<CoreCubit>();
     try {
-      final st = await core.api.unlock(pb.UnlockRequest(password: password, deviceName: _device.text.trim()));
+      // Only the vault file is opened here (the storages connect in the
+      // background), so a reply that does not come means the core is stuck.
+      final st = await core.api.unlock(
+        pb.UnlockRequest(password: password, deviceName: _device.text.trim()),
+        options: CallOptions(timeout: const Duration(minutes: 1)),
+      );
       if (!byFingerprint && mounted) await offerBiometric(context, password);
       core.adopt(st);
     } catch (e) {

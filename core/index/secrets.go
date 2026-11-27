@@ -29,6 +29,7 @@ type Secret struct {
 	Meta, Data []byte
 	VersionID  string // op id of the current content
 	Device     string
+	DeviceName string // of the op: shown, never looked up
 	Time       time.Time
 	ConflictOf string // set on a conflict copy
 }
@@ -54,7 +55,7 @@ func (x *Index) applySecret(o Op) {
 	}
 	s := &Secret{
 		ID: c.ID, SealedAs: c.ID, Group: c.Group, Meta: c.Meta, Data: c.Data,
-		VersionID: o.ID(), Device: o.Device, Time: o.Time,
+		VersionID: o.ID(), Device: o.Device, DeviceName: o.DeviceName, Time: o.Time,
 	}
 	if cur != nil && head != o.Parent {
 		s.ID = c.ID + "~" + o.ID()

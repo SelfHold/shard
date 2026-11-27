@@ -24,6 +24,7 @@ const SecretKind$json = {
     {'1': 'SECRET_SSH', '2': 2},
     {'1': 'SECRET_WEB3', '2': 3},
     {'1': 'SECRET_TOTP', '2': 4},
+    {'1': 'SECRET_SERVER', '2': 5},
   ],
 };
 
@@ -31,7 +32,7 @@ const SecretKind$json = {
 final $typed_data.Uint8List secretKindDescriptor = $convert.base64Decode(
     'CgpTZWNyZXRLaW5kEhsKF1NFQ1JFVF9LSU5EX1VOU1BFQ0lGSUVEEAASEwoPU0VDUkVUX1BBU1'
     'NXT1JEEAESDgoKU0VDUkVUX1NTSBACEg8KC1NFQ1JFVF9XRUIzEAMSDwoLU0VDUkVUX1RPVFAQ'
-    'BA==');
+    'BBIRCg1TRUNSRVRfU0VSVkVSEAU=');
 
 @$core.Deprecated('Use web3NetworkDescriptor instead')
 const Web3Network$json = {
@@ -47,6 +48,38 @@ const Web3Network$json = {
 final $typed_data.Uint8List web3NetworkDescriptor = $convert.base64Decode(
     'CgtXZWIzTmV0d29yaxIcChhXRUIzX05FVFdPUktfVU5TUEVDSUZJRUQQABIMCghXRUIzX0VWTR'
     'ABEg8KC1dFQjNfU09MQU5BEAI=');
+
+@$core.Deprecated('Use serverAuthDescriptor instead')
+const ServerAuth$json = {
+  '1': 'ServerAuth',
+  '2': [
+    {'1': 'SERVER_AUTH_UNSPECIFIED', '2': 0},
+    {'1': 'SERVER_AUTH_PASSWORD', '2': 1},
+    {'1': 'SERVER_AUTH_SSH_KEY', '2': 2},
+    {'1': 'SERVER_AUTH_AGENT', '2': 3},
+  ],
+};
+
+/// Descriptor for `ServerAuth`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List serverAuthDescriptor = $convert.base64Decode(
+    'CgpTZXJ2ZXJBdXRoEhsKF1NFUlZFUl9BVVRIX1VOU1BFQ0lGSUVEEAASGAoUU0VSVkVSX0FVVE'
+    'hfUEFTU1dPUkQQARIXChNTRVJWRVJfQVVUSF9TU0hfS0VZEAISFQoRU0VSVkVSX0FVVEhfQUdF'
+    'TlQQAw==');
+
+@$core.Deprecated('Use secretImportStatusDescriptor instead')
+const SecretImportStatus$json = {
+  '1': 'SecretImportStatus',
+  '2': [
+    {'1': 'IMPORT_ADDED', '2': 0},
+    {'1': 'IMPORT_DUPLICATE', '2': 1},
+    {'1': 'IMPORT_FAILED', '2': 2},
+  ],
+};
+
+/// Descriptor for `SecretImportStatus`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List secretImportStatusDescriptor = $convert.base64Decode(
+    'ChJTZWNyZXRJbXBvcnRTdGF0dXMSEAoMSU1QT1JUX0FEREVEEAASFAoQSU1QT1JUX0RVUExJQ0'
+    'FURRABEhEKDUlNUE9SVF9GQUlMRUQQAg==');
 
 @$core.Deprecated('Use emptyDescriptor instead')
 const Empty$json = {
@@ -75,6 +108,7 @@ const State$json = {
     {'1': 'can_mount', '3': 12, '4': 1, '5': 8, '10': 'canMount'},
     {'1': 'core_version', '3': 13, '4': 1, '5': 9, '10': 'coreVersion'},
     {'1': 'core_build', '3': 14, '4': 1, '5': 9, '10': 'coreBuild'},
+    {'1': 'opening', '3': 15, '4': 1, '5': 8, '10': 'opening'},
   ],
 };
 
@@ -87,7 +121,8 @@ final $typed_data.Uint8List stateDescriptor = $convert.base64Decode(
     'dBIaCghwbGF0Zm9ybRgIIAEoCVIIcGxhdGZvcm0SFAoFcmVhZHkYCSABKAhSBXJlYWR5EhgKB3'
     'Byb2JsZW0YCiABKAlSB3Byb2JsZW0SGwoJbW91bnRfZGlyGAsgASgJUghtb3VudERpchIbCglj'
     'YW5fbW91bnQYDCABKAhSCGNhbk1vdW50EiEKDGNvcmVfdmVyc2lvbhgNIAEoCVILY29yZVZlcn'
-    'Npb24SHQoKY29yZV9idWlsZBgOIAEoCVIJY29yZUJ1aWxk');
+    'Npb24SHQoKY29yZV9idWlsZBgOIAEoCVIJY29yZUJ1aWxkEhgKB29wZW5pbmcYDyABKAhSB29w'
+    'ZW5pbmc=');
 
 @$core.Deprecated('Use createVaultRequestDescriptor instead')
 const CreateVaultRequest$json = {
@@ -495,6 +530,16 @@ const StatusReply$json = {
       '10': 'writableBytes',
       '17': true
     },
+    {'1': 'pinned_bytes', '3': 14, '4': 1, '5': 3, '10': 'pinnedBytes'},
+    {
+      '1': 'pinned_missing_bytes',
+      '3': 15,
+      '4': 1,
+      '5': 3,
+      '10': 'pinnedMissingBytes'
+    },
+    {'1': 'pinning', '3': 16, '4': 1, '5': 8, '10': 'pinning'},
+    {'1': 'pin_error', '3': 17, '4': 1, '5': 9, '10': 'pinError'},
   ],
   '8': [
     {'1': '_writable_bytes'},
@@ -511,7 +556,10 @@ final $typed_data.Uint8List statusReplyDescriptor = $convert.base64Decode(
     'sSHwoLY2FjaGVfYnl0ZXMYCCABKANSCmNhY2hlQnl0ZXMSEgoEcGlucxgJIAMoCVIEcGlucxIb'
     'CglkZXZpY2VfaWQYCiABKAlSCGRldmljZUlkEiMKDXZhdWx0X3ZlcnNpb24YCyABKARSDHZhdW'
     'x0VmVyc2lvbhIfCgtmaWxlc19ieXRlcxgMIAEoA1IKZmlsZXNCeXRlcxIqCg53cml0YWJsZV9i'
-    'eXRlcxgNIAEoA0gAUg13cml0YWJsZUJ5dGVziAEBQhEKD193cml0YWJsZV9ieXRlcw==');
+    'eXRlcxgNIAEoA0gAUg13cml0YWJsZUJ5dGVziAEBEiEKDHBpbm5lZF9ieXRlcxgOIAEoA1ILcG'
+    'lubmVkQnl0ZXMSMAoUcGlubmVkX21pc3NpbmdfYnl0ZXMYDyABKANSEnBpbm5lZE1pc3NpbmdC'
+    'eXRlcxIYCgdwaW5uaW5nGBAgASgIUgdwaW5uaW5nEhsKCXBpbl9lcnJvchgRIAEoCVIIcGluRX'
+    'Jyb3JCEQoPX3dyaXRhYmxlX2J5dGVz');
 
 @$core.Deprecated('Use pathRequestDescriptor instead')
 const PathRequest$json = {
@@ -805,15 +853,16 @@ const Event_Kind$json = {
     {'1': 'SYNC_DONE', '2': 3},
     {'1': 'SYNC_ERROR', '2': 4},
     {'1': 'SECRETS_CHANGED', '2': 5},
+    {'1': 'APPS_CHANGED', '2': 6},
   ],
 };
 
 /// Descriptor for `Event`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List eventDescriptor = $convert.base64Decode(
     'CgVFdmVudBIsCgRraW5kGAEgASgOMhguY2xvdWRzeW5jLnYxLkV2ZW50LktpbmRSBGtpbmQSGA'
-    'oHbWVzc2FnZRgCIAEoCVIHbWVzc2FnZSJ1CgRLaW5kEhQKEEtJTkRfVU5TUEVDSUZJRUQQABIQ'
-    'CgxUUkVFX0NIQU5HRUQQARIRCg1TVEFURV9DSEFOR0VEEAISDQoJU1lOQ19ET05FEAMSDgoKU1'
-    'lOQ19FUlJPUhAEEhMKD1NFQ1JFVFNfQ0hBTkdFRBAF');
+    'oHbWVzc2FnZRgCIAEoCVIHbWVzc2FnZSKHAQoES2luZBIUChBLSU5EX1VOU1BFQ0lGSUVEEAAS'
+    'EAoMVFJFRV9DSEFOR0VEEAESEQoNU1RBVEVfQ0hBTkdFRBACEg0KCVNZTkNfRE9ORRADEg4KCl'
+    'NZTkNfRVJST1IQBBITCg9TRUNSRVRTX0NIQU5HRUQQBRIQCgxBUFBTX0NIQU5HRUQQBg==');
 
 @$core.Deprecated('Use logsRequestDescriptor instead')
 const LogsRequest$json = {
@@ -918,6 +967,14 @@ const SecretEntry$json = {
     {'1': 'totp_digits', '3': 27, '4': 1, '5': 5, '10': 'totpDigits'},
     {'1': 'totp_period', '3': 28, '4': 1, '5': 5, '10': 'totpPeriod'},
     {'1': 'recovery_codes', '3': 29, '4': 3, '5': 9, '10': 'recoveryCodes'},
+    {
+      '1': 'server',
+      '3': 30,
+      '4': 1,
+      '5': 11,
+      '6': '.cloudsync.v1.SecretServer',
+      '10': 'server'
+    },
   ],
 };
 
@@ -938,7 +995,37 @@ final $typed_data.Uint8List secretEntryDescriptor = $convert.base64Decode(
     'CgpwYXNzcGhyYXNlGBggASgJUgpwYXNzcGhyYXNlEh8KC3RvdHBfc2VjcmV0GBkgASgJUgp0b3'
     'RwU2VjcmV0EiUKDnRvdHBfYWxnb3JpdGhtGBogASgJUg10b3RwQWxnb3JpdGhtEh8KC3RvdHBf'
     'ZGlnaXRzGBsgASgFUgp0b3RwRGlnaXRzEh8KC3RvdHBfcGVyaW9kGBwgASgFUgp0b3RwUGVyaW'
-    '9kEiUKDnJlY292ZXJ5X2NvZGVzGB0gAygJUg1yZWNvdmVyeUNvZGVz');
+    '9kEiUKDnJlY292ZXJ5X2NvZGVzGB0gAygJUg1yZWNvdmVyeUNvZGVzEjIKBnNlcnZlchgeIAEo'
+    'CzIaLmNsb3Vkc3luYy52MS5TZWNyZXRTZXJ2ZXJSBnNlcnZlcg==');
+
+@$core.Deprecated('Use secretServerDescriptor instead')
+const SecretServer$json = {
+  '1': 'SecretServer',
+  '2': [
+    {'1': 'folder', '3': 1, '4': 1, '5': 9, '10': 'folder'},
+    {
+      '1': 'auth',
+      '3': 2,
+      '4': 1,
+      '5': 14,
+      '6': '.cloudsync.v1.ServerAuth',
+      '10': 'auth'
+    },
+    {'1': 'ssh_key_id', '3': 3, '4': 1, '5': 9, '10': 'sshKeyId'},
+    {'1': 'host_keys', '3': 4, '4': 3, '5': 9, '10': 'hostKeys'},
+    {'1': 'jump_server_id', '3': 5, '4': 1, '5': 9, '10': 'jumpServerId'},
+    {'1': 'tags', '3': 6, '4': 3, '5': 9, '10': 'tags'},
+    {'1': 'extra_keys', '3': 7, '4': 3, '5': 9, '10': 'extraKeys'},
+  ],
+};
+
+/// Descriptor for `SecretServer`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List secretServerDescriptor = $convert.base64Decode(
+    'CgxTZWNyZXRTZXJ2ZXISFgoGZm9sZGVyGAEgASgJUgZmb2xkZXISLAoEYXV0aBgCIAEoDjIYLm'
+    'Nsb3Vkc3luYy52MS5TZXJ2ZXJBdXRoUgRhdXRoEhwKCnNzaF9rZXlfaWQYAyABKAlSCHNzaEtl'
+    'eUlkEhsKCWhvc3Rfa2V5cxgEIAMoCVIIaG9zdEtleXMSJAoOanVtcF9zZXJ2ZXJfaWQYBSABKA'
+    'lSDGp1bXBTZXJ2ZXJJZBISCgR0YWdzGAYgAygJUgR0YWdzEh0KCmV4dHJhX2tleXMYByADKAlS'
+    'CWV4dHJhS2V5cw==');
 
 @$core.Deprecated('Use secretGroupDescriptor instead')
 const SecretGroup$json = {
@@ -1128,3 +1215,320 @@ final $typed_data.Uint8List totpPreviewDescriptor = $convert.base64Decode(
     'dhY2NvdW50EhwKCWFsZ29yaXRobRgDIAEoCVIJYWxnb3JpdGhtEhYKBmRpZ2l0cxgEIAEoBVIG'
     'ZGlnaXRzEhYKBnBlcmlvZBgFIAEoBVIGcGVyaW9kEhIKBGNvZGUYBiABKAlSBGNvZGUSJQoOcm'
     'Vjb3ZlcnlfY29kZXMYByADKAlSDXJlY292ZXJ5Q29kZXMSFAoFZXJyb3IYCCABKAlSBWVycm9y');
+
+@$core.Deprecated('Use totpLinksRequestDescriptor instead')
+const TotpLinksRequest$json = {
+  '1': 'TotpLinksRequest',
+  '2': [
+    {'1': 'text', '3': 1, '4': 1, '5': 9, '10': 'text'},
+  ],
+};
+
+/// Descriptor for `TotpLinksRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List totpLinksRequestDescriptor = $convert
+    .base64Decode('ChBUb3RwTGlua3NSZXF1ZXN0EhIKBHRleHQYASABKAlSBHRleHQ=');
+
+@$core.Deprecated('Use totpLinkDescriptor instead')
+const TotpLink$json = {
+  '1': 'TotpLink',
+  '2': [
+    {'1': 'link', '3': 1, '4': 1, '5': 9, '10': 'link'},
+    {
+      '1': 'preview',
+      '3': 2,
+      '4': 1,
+      '5': 11,
+      '6': '.cloudsync.v1.TotpPreview',
+      '10': 'preview'
+    },
+  ],
+};
+
+/// Descriptor for `TotpLink`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List totpLinkDescriptor = $convert.base64Decode(
+    'CghUb3RwTGluaxISCgRsaW5rGAEgASgJUgRsaW5rEjMKB3ByZXZpZXcYAiABKAsyGS5jbG91ZH'
+    'N5bmMudjEuVG90cFByZXZpZXdSB3ByZXZpZXc=');
+
+@$core.Deprecated('Use totpBatchDescriptor instead')
+const TotpBatch$json = {
+  '1': 'TotpBatch',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 5, '10': 'id'},
+    {'1': 'index', '3': 2, '4': 1, '5': 5, '10': 'index'},
+    {'1': 'size', '3': 3, '4': 1, '5': 5, '10': 'size'},
+  ],
+};
+
+/// Descriptor for `TotpBatch`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List totpBatchDescriptor = $convert.base64Decode(
+    'CglUb3RwQmF0Y2gSDgoCaWQYASABKAVSAmlkEhQKBWluZGV4GAIgASgFUgVpbmRleBISCgRzaX'
+    'plGAMgASgFUgRzaXpl');
+
+@$core.Deprecated('Use totpLinksReplyDescriptor instead')
+const TotpLinksReply$json = {
+  '1': 'TotpLinksReply',
+  '2': [
+    {
+      '1': 'links',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.cloudsync.v1.TotpLink',
+      '10': 'links'
+    },
+    {
+      '1': 'batches',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.cloudsync.v1.TotpBatch',
+      '10': 'batches'
+    },
+  ],
+};
+
+/// Descriptor for `TotpLinksReply`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List totpLinksReplyDescriptor = $convert.base64Decode(
+    'Cg5Ub3RwTGlua3NSZXBseRIsCgVsaW5rcxgBIAMoCzIWLmNsb3Vkc3luYy52MS5Ub3RwTGlua1'
+    'IFbGlua3MSMQoHYmF0Y2hlcxgCIAMoCzIXLmNsb3Vkc3luYy52MS5Ub3RwQmF0Y2hSB2JhdGNo'
+    'ZXM=');
+
+@$core.Deprecated('Use secretImportRequestDescriptor instead')
+const SecretImportRequest$json = {
+  '1': 'SecretImportRequest',
+  '2': [
+    {'1': 'data', '3': 1, '4': 1, '5': 12, '10': 'data'},
+    {'1': 'file_name', '3': 2, '4': 1, '5': 9, '10': 'fileName'},
+    {'1': 'password', '3': 3, '4': 1, '5': 9, '10': 'password'},
+    {'1': 'key_file', '3': 4, '4': 1, '5': 12, '10': 'keyFile'},
+    {'1': 'group_id', '3': 5, '4': 1, '5': 9, '10': 'groupId'},
+    {'1': 'keep_groups', '3': 6, '4': 1, '5': 8, '10': 'keepGroups'},
+    {'1': 'dry_run', '3': 7, '4': 1, '5': 8, '10': 'dryRun'},
+  ],
+};
+
+/// Descriptor for `SecretImportRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List secretImportRequestDescriptor = $convert.base64Decode(
+    'ChNTZWNyZXRJbXBvcnRSZXF1ZXN0EhIKBGRhdGEYASABKAxSBGRhdGESGwoJZmlsZV9uYW1lGA'
+    'IgASgJUghmaWxlTmFtZRIaCghwYXNzd29yZBgDIAEoCVIIcGFzc3dvcmQSGQoIa2V5X2ZpbGUY'
+    'BCABKAxSB2tleUZpbGUSGQoIZ3JvdXBfaWQYBSABKAlSB2dyb3VwSWQSHwoLa2VlcF9ncm91cH'
+    'MYBiABKAhSCmtlZXBHcm91cHMSFwoHZHJ5X3J1bhgHIAEoCFIGZHJ5UnVu');
+
+@$core.Deprecated('Use secretImportItemDescriptor instead')
+const SecretImportItem$json = {
+  '1': 'SecretImportItem',
+  '2': [
+    {
+      '1': 'kind',
+      '3': 1,
+      '4': 1,
+      '5': 14,
+      '6': '.cloudsync.v1.SecretKind',
+      '10': 'kind'
+    },
+    {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
+    {'1': 'username', '3': 3, '4': 1, '5': 9, '10': 'username'},
+    {'1': 'url', '3': 4, '4': 1, '5': 9, '10': 'url'},
+    {'1': 'group', '3': 5, '4': 1, '5': 9, '10': 'group'},
+    {
+      '1': 'status',
+      '3': 6,
+      '4': 1,
+      '5': 14,
+      '6': '.cloudsync.v1.SecretImportStatus',
+      '10': 'status'
+    },
+    {'1': 'error', '3': 7, '4': 1, '5': 9, '10': 'error'},
+  ],
+};
+
+/// Descriptor for `SecretImportItem`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List secretImportItemDescriptor = $convert.base64Decode(
+    'ChBTZWNyZXRJbXBvcnRJdGVtEiwKBGtpbmQYASABKA4yGC5jbG91ZHN5bmMudjEuU2VjcmV0S2'
+    'luZFIEa2luZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSGgoIdXNlcm5hbWUYAyABKAlSCHVzZXJu'
+    'YW1lEhAKA3VybBgEIAEoCVIDdXJsEhQKBWdyb3VwGAUgASgJUgVncm91cBI4CgZzdGF0dXMYBi'
+    'ABKA4yIC5jbG91ZHN5bmMudjEuU2VjcmV0SW1wb3J0U3RhdHVzUgZzdGF0dXMSFAoFZXJyb3IY'
+    'ByABKAlSBWVycm9y');
+
+@$core.Deprecated('Use secretImportReplyDescriptor instead')
+const SecretImportReply$json = {
+  '1': 'SecretImportReply',
+  '2': [
+    {'1': 'need_password', '3': 1, '4': 1, '5': 8, '10': 'needPassword'},
+    {'1': 'format', '3': 2, '4': 1, '5': 9, '10': 'format'},
+    {
+      '1': 'items',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.cloudsync.v1.SecretImportItem',
+      '10': 'items'
+    },
+    {'1': 'added', '3': 4, '4': 1, '5': 5, '10': 'added'},
+    {'1': 'duplicates', '3': 5, '4': 1, '5': 5, '10': 'duplicates'},
+    {'1': 'failed', '3': 6, '4': 1, '5': 5, '10': 'failed'},
+    {'1': 'new_groups', '3': 7, '4': 3, '5': 9, '10': 'newGroups'},
+  ],
+};
+
+/// Descriptor for `SecretImportReply`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List secretImportReplyDescriptor = $convert.base64Decode(
+    'ChFTZWNyZXRJbXBvcnRSZXBseRIjCg1uZWVkX3Bhc3N3b3JkGAEgASgIUgxuZWVkUGFzc3dvcm'
+    'QSFgoGZm9ybWF0GAIgASgJUgZmb3JtYXQSNAoFaXRlbXMYAyADKAsyHi5jbG91ZHN5bmMudjEu'
+    'U2VjcmV0SW1wb3J0SXRlbVIFaXRlbXMSFAoFYWRkZWQYBCABKAVSBWFkZGVkEh4KCmR1cGxpY2'
+    'F0ZXMYBSABKAVSCmR1cGxpY2F0ZXMSFgoGZmFpbGVkGAYgASgFUgZmYWlsZWQSHQoKbmV3X2dy'
+    'b3VwcxgHIAMoCVIJbmV3R3JvdXBz');
+
+@$core.Deprecated('Use pairingRequestInfoDescriptor instead')
+const PairingRequestInfo$json = {
+  '1': 'PairingRequestInfo',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'app_id', '3': 2, '4': 1, '5': 9, '10': 'appId'},
+    {'1': 'app_name', '3': 3, '4': 1, '5': 9, '10': 'appName'},
+    {'1': 'description', '3': 4, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'code', '3': 5, '4': 1, '5': 9, '10': 'code'},
+    {'1': 'platform', '3': 6, '4': 1, '5': 9, '10': 'platform'},
+    {'1': 'package', '3': 7, '4': 1, '5': 9, '10': 'package'},
+    {'1': 'cert', '3': 8, '4': 1, '5': 9, '10': 'cert'},
+    {'1': 'created_unix_ms', '3': 9, '4': 1, '5': 3, '10': 'createdUnixMs'},
+    {'1': 'expires_unix_ms', '3': 10, '4': 1, '5': 3, '10': 'expiresUnixMs'},
+    {'1': 'already_paired', '3': 11, '4': 1, '5': 8, '10': 'alreadyPaired'},
+    {'1': 'scopes', '3': 12, '4': 3, '5': 9, '10': 'scopes'},
+  ],
+};
+
+/// Descriptor for `PairingRequestInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List pairingRequestInfoDescriptor = $convert.base64Decode(
+    'ChJQYWlyaW5nUmVxdWVzdEluZm8SDgoCaWQYASABKAlSAmlkEhUKBmFwcF9pZBgCIAEoCVIFYX'
+    'BwSWQSGQoIYXBwX25hbWUYAyABKAlSB2FwcE5hbWUSIAoLZGVzY3JpcHRpb24YBCABKAlSC2Rl'
+    'c2NyaXB0aW9uEhIKBGNvZGUYBSABKAlSBGNvZGUSGgoIcGxhdGZvcm0YBiABKAlSCHBsYXRmb3'
+    'JtEhgKB3BhY2thZ2UYByABKAlSB3BhY2thZ2USEgoEY2VydBgIIAEoCVIEY2VydBImCg9jcmVh'
+    'dGVkX3VuaXhfbXMYCSABKANSDWNyZWF0ZWRVbml4TXMSJgoPZXhwaXJlc191bml4X21zGAogAS'
+    'gDUg1leHBpcmVzVW5peE1zEiUKDmFscmVhZHlfcGFpcmVkGAsgASgIUg1hbHJlYWR5UGFpcmVk'
+    'EhYKBnNjb3BlcxgMIAMoCVIGc2NvcGVz');
+
+@$core.Deprecated('Use appPairingDescriptor instead')
+const AppPairing$json = {
+  '1': 'AppPairing',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'app_id', '3': 2, '4': 1, '5': 9, '10': 'appId'},
+    {'1': 'app_name', '3': 3, '4': 1, '5': 9, '10': 'appName'},
+    {'1': 'description', '3': 4, '4': 1, '5': 9, '10': 'description'},
+    {'1': 'platform', '3': 5, '4': 1, '5': 9, '10': 'platform'},
+    {'1': 'package', '3': 6, '4': 1, '5': 9, '10': 'package'},
+    {'1': 'cert', '3': 7, '4': 1, '5': 9, '10': 'cert'},
+    {'1': 'approved_unix_ms', '3': 8, '4': 1, '5': 3, '10': 'approvedUnixMs'},
+    {'1': 'last_used_unix_ms', '3': 9, '4': 1, '5': 3, '10': 'lastUsedUnixMs'},
+    {'1': 'scopes', '3': 10, '4': 3, '5': 9, '10': 'scopes'},
+    {
+      '1': 'secrets_read_unix_ms',
+      '3': 11,
+      '4': 1,
+      '5': 3,
+      '10': 'secretsReadUnixMs'
+    },
+    {'1': 'keys_read_unix_ms', '3': 12, '4': 1, '5': 3, '10': 'keysReadUnixMs'},
+    {
+      '1': 'servers_read_unix_ms',
+      '3': 13,
+      '4': 1,
+      '5': 3,
+      '10': 'serversReadUnixMs'
+    },
+  ],
+};
+
+/// Descriptor for `AppPairing`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List appPairingDescriptor = $convert.base64Decode(
+    'CgpBcHBQYWlyaW5nEg4KAmlkGAEgASgJUgJpZBIVCgZhcHBfaWQYAiABKAlSBWFwcElkEhkKCG'
+    'FwcF9uYW1lGAMgASgJUgdhcHBOYW1lEiAKC2Rlc2NyaXB0aW9uGAQgASgJUgtkZXNjcmlwdGlv'
+    'bhIaCghwbGF0Zm9ybRgFIAEoCVIIcGxhdGZvcm0SGAoHcGFja2FnZRgGIAEoCVIHcGFja2FnZR'
+    'ISCgRjZXJ0GAcgASgJUgRjZXJ0EigKEGFwcHJvdmVkX3VuaXhfbXMYCCABKANSDmFwcHJvdmVk'
+    'VW5peE1zEikKEWxhc3RfdXNlZF91bml4X21zGAkgASgDUg5sYXN0VXNlZFVuaXhNcxIWCgZzY2'
+    '9wZXMYCiADKAlSBnNjb3BlcxIvChRzZWNyZXRzX3JlYWRfdW5peF9tcxgLIAEoA1IRc2VjcmV0'
+    'c1JlYWRVbml4TXMSKQoRa2V5c19yZWFkX3VuaXhfbXMYDCABKANSDmtleXNSZWFkVW5peE1zEi'
+    '8KFHNlcnZlcnNfcmVhZF91bml4X21zGA0gASgDUhFzZXJ2ZXJzUmVhZFVuaXhNcw==');
+
+@$core.Deprecated('Use appDataInfoDescriptor instead')
+const AppDataInfo$json = {
+  '1': 'AppDataInfo',
+  '2': [
+    {'1': 'app_id', '3': 1, '4': 1, '5': 9, '10': 'appId'},
+    {'1': 'records', '3': 2, '4': 1, '5': 5, '10': 'records'},
+    {'1': 'bytes', '3': 3, '4': 1, '5': 3, '10': 'bytes'},
+  ],
+};
+
+/// Descriptor for `AppDataInfo`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List appDataInfoDescriptor = $convert.base64Decode(
+    'CgtBcHBEYXRhSW5mbxIVCgZhcHBfaWQYASABKAlSBWFwcElkEhgKB3JlY29yZHMYAiABKAVSB3'
+    'JlY29yZHMSFAoFYnl0ZXMYAyABKANSBWJ5dGVz');
+
+@$core.Deprecated('Use appsReplyDescriptor instead')
+const AppsReply$json = {
+  '1': 'AppsReply',
+  '2': [
+    {
+      '1': 'requests',
+      '3': 1,
+      '4': 3,
+      '5': 11,
+      '6': '.cloudsync.v1.PairingRequestInfo',
+      '10': 'requests'
+    },
+    {
+      '1': 'pairings',
+      '3': 2,
+      '4': 3,
+      '5': 11,
+      '6': '.cloudsync.v1.AppPairing',
+      '10': 'pairings'
+    },
+    {
+      '1': 'data',
+      '3': 3,
+      '4': 3,
+      '5': 11,
+      '6': '.cloudsync.v1.AppDataInfo',
+      '10': 'data'
+    },
+  ],
+};
+
+/// Descriptor for `AppsReply`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List appsReplyDescriptor = $convert.base64Decode(
+    'CglBcHBzUmVwbHkSPAoIcmVxdWVzdHMYASADKAsyIC5jbG91ZHN5bmMudjEuUGFpcmluZ1JlcX'
+    'Vlc3RJbmZvUghyZXF1ZXN0cxI0CghwYWlyaW5ncxgCIAMoCzIYLmNsb3Vkc3luYy52MS5BcHBQ'
+    'YWlyaW5nUghwYWlyaW5ncxItCgRkYXRhGAMgAygLMhkuY2xvdWRzeW5jLnYxLkFwcERhdGFJbm'
+    'ZvUgRkYXRh');
+
+@$core.Deprecated('Use decidePairingRequestDescriptor instead')
+const DecidePairingRequest$json = {
+  '1': 'DecidePairingRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'approve', '3': 2, '4': 1, '5': 8, '10': 'approve'},
+    {'1': 'scopes', '3': 3, '4': 3, '5': 9, '10': 'scopes'},
+  ],
+};
+
+/// Descriptor for `DecidePairingRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List decidePairingRequestDescriptor = $convert.base64Decode(
+    'ChREZWNpZGVQYWlyaW5nUmVxdWVzdBIOCgJpZBgBIAEoCVICaWQSGAoHYXBwcm92ZRgCIAEoCF'
+    'IHYXBwcm92ZRIWCgZzY29wZXMYAyADKAlSBnNjb3Blcw==');
+
+@$core.Deprecated('Use setAppScopesRequestDescriptor instead')
+const SetAppScopesRequest$json = {
+  '1': 'SetAppScopesRequest',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    {'1': 'scopes', '3': 2, '4': 3, '5': 9, '10': 'scopes'},
+  ],
+};
+
+/// Descriptor for `SetAppScopesRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List setAppScopesRequestDescriptor = $convert.base64Decode(
+    'ChNTZXRBcHBTY29wZXNSZXF1ZXN0Eg4KAmlkGAEgASgJUgJpZBIWCgZzY29wZXMYAiADKAlSBn'
+    'Njb3Blcw==');

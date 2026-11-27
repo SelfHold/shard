@@ -78,6 +78,7 @@ extension SecretKindText on pb.SecretKind {
     pb.SecretKind.SECRET_SSH => tr('SSH key', 'SSH-ключ'),
     pb.SecretKind.SECRET_WEB3 => tr('Web3 key', 'Web3-ключ'),
     pb.SecretKind.SECRET_TOTP => tr('2FA code', '2FA-код'),
+    pb.SecretKind.SECRET_SERVER => tr('Server', 'Сервер'),
     _ => tr('Password', 'Пароль'),
   };
 }
@@ -88,3 +89,6 @@ extension Web3NetworkText on pb.Web3Network {
     _ => 'Ethereum / EVM',
   };
 }
+
+/// "user@host:port" of a server entry (url is host[:port]).
+String sshTarget(pb.SecretEntry e) => e.username.isEmpty ? e.url : '${e.username}@${e.url}';

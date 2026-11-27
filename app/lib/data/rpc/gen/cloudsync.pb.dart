@@ -76,6 +76,7 @@ class State extends $pb.GeneratedMessage {
     $core.bool? canMount,
     $core.String? coreVersion,
     $core.String? coreBuild,
+    $core.bool? opening,
   }) {
     final result = State._();
     if (vaultExists != null) result.vaultExists = vaultExists;
@@ -92,6 +93,7 @@ class State extends $pb.GeneratedMessage {
     if (canMount != null) result.canMount = canMount;
     if (coreVersion != null) result.coreVersion = coreVersion;
     if (coreBuild != null) result.coreBuild = coreBuild;
+    if (opening != null) result.opening = opening;
     return result;
   }
 
@@ -122,6 +124,7 @@ class State extends $pb.GeneratedMessage {
     ..aOB(12, _omitFieldNames ? '' : 'canMount')
     ..aOS(13, _omitFieldNames ? '' : 'coreVersion')
     ..aOS(14, _omitFieldNames ? '' : 'coreBuild')
+    ..aOB(15, _omitFieldNames ? '' : 'opening')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -274,6 +277,17 @@ class State extends $pb.GeneratedMessage {
   $core.bool hasCoreBuild() => $_has(13);
   @$pb.TagNumber(14)
   void clearCoreBuild() => $_clearField(14);
+
+  /// Unlocked, the storages are being connected in the background (ready
+  /// and problem follow with a STATE_CHANGED event).
+  @$pb.TagNumber(15)
+  $core.bool get opening => $_getBF(14);
+  @$pb.TagNumber(15)
+  set opening($core.bool value) => $_setBool(14, value);
+  @$pb.TagNumber(15)
+  $core.bool hasOpening() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearOpening() => $_clearField(15);
 }
 
 class CreateVaultRequest extends $pb.GeneratedMessage {
@@ -1882,6 +1896,10 @@ class StatusReply extends $pb.GeneratedMessage {
     $fixnum.Int64? vaultVersion,
     $fixnum.Int64? filesBytes,
     $fixnum.Int64? writableBytes,
+    $fixnum.Int64? pinnedBytes,
+    $fixnum.Int64? pinnedMissingBytes,
+    $core.bool? pinning,
+    $core.String? pinError,
   }) {
     final result = StatusReply._();
     if (dataShards != null) result.dataShards = dataShards;
@@ -1897,6 +1915,11 @@ class StatusReply extends $pb.GeneratedMessage {
     if (vaultVersion != null) result.vaultVersion = vaultVersion;
     if (filesBytes != null) result.filesBytes = filesBytes;
     if (writableBytes != null) result.writableBytes = writableBytes;
+    if (pinnedBytes != null) result.pinnedBytes = pinnedBytes;
+    if (pinnedMissingBytes != null)
+      result.pinnedMissingBytes = pinnedMissingBytes;
+    if (pinning != null) result.pinning = pinning;
+    if (pinError != null) result.pinError = pinError;
     return result;
   }
 
@@ -1930,6 +1953,10 @@ class StatusReply extends $pb.GeneratedMessage {
         defaultOrMaker: $fixnum.Int64.ZERO)
     ..aInt64(12, _omitFieldNames ? '' : 'filesBytes')
     ..aInt64(13, _omitFieldNames ? '' : 'writableBytes')
+    ..aInt64(14, _omitFieldNames ? '' : 'pinnedBytes')
+    ..aInt64(15, _omitFieldNames ? '' : 'pinnedMissingBytes')
+    ..aOB(16, _omitFieldNames ? '' : 'pinning')
+    ..aOS(17, _omitFieldNames ? '' : 'pinError')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -2055,6 +2082,43 @@ class StatusReply extends $pb.GeneratedMessage {
   $core.bool hasWritableBytes() => $_has(12);
   @$pb.TagNumber(13)
   void clearWritableBytes() => $_clearField(13);
+
+  /// Pinned files ("/" pinned: a reference device, which keeps a full copy).
+  @$pb.TagNumber(14)
+  $fixnum.Int64 get pinnedBytes => $_getI64(13);
+  @$pb.TagNumber(14)
+  set pinnedBytes($fixnum.Int64 value) => $_setInt64(13, value);
+  @$pb.TagNumber(14)
+  $core.bool hasPinnedBytes() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearPinnedBytes() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $fixnum.Int64 get pinnedMissingBytes => $_getI64(14);
+  @$pb.TagNumber(15)
+  set pinnedMissingBytes($fixnum.Int64 value) => $_setInt64(14, value);
+  @$pb.TagNumber(15)
+  $core.bool hasPinnedMissingBytes() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearPinnedMissingBytes() => $_clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.bool get pinning => $_getBF(15);
+  @$pb.TagNumber(16)
+  set pinning($core.bool value) => $_setBool(15, value);
+  @$pb.TagNumber(16)
+  $core.bool hasPinning() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearPinning() => $_clearField(16);
+
+  @$pb.TagNumber(17)
+  $core.String get pinError => $_getSZ(16);
+  @$pb.TagNumber(17)
+  set pinError($core.String value) => $_setString(16, value);
+  @$pb.TagNumber(17)
+  $core.bool hasPinError() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearPinError() => $_clearField(17);
 }
 
 class PathRequest extends $pb.GeneratedMessage {
@@ -3688,6 +3752,7 @@ class SecretEntry extends $pb.GeneratedMessage {
     $core.int? totpDigits,
     $core.int? totpPeriod,
     $core.Iterable<$core.String>? recoveryCodes,
+    SecretServer? server,
   }) {
     final result = SecretEntry._();
     if (id != null) result.id = id;
@@ -3718,6 +3783,7 @@ class SecretEntry extends $pb.GeneratedMessage {
     if (totpDigits != null) result.totpDigits = totpDigits;
     if (totpPeriod != null) result.totpPeriod = totpPeriod;
     if (recoveryCodes != null) result.recoveryCodes.addAll(recoveryCodes);
+    if (server != null) result.server = server;
     return result;
   }
 
@@ -3764,6 +3830,8 @@ class SecretEntry extends $pb.GeneratedMessage {
     ..aI(27, _omitFieldNames ? '' : 'totpDigits')
     ..aI(28, _omitFieldNames ? '' : 'totpPeriod')
     ..pPS(29, _omitFieldNames ? '' : 'recoveryCodes')
+    ..aOM<SecretServer>(30, _omitFieldNames ? '' : 'server',
+        subBuilder: SecretServer.$_createMessage)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -4040,6 +4108,133 @@ class SecretEntry extends $pb.GeneratedMessage {
   /// PutSecret: pasted text is parsed into codes (any element may hold many).
   @$pb.TagNumber(29)
   $pb.PbList<$core.String> get recoveryCodes => $_getList(27);
+
+  /// SERVER: the fields besides url / username / password / notes. Not
+  /// secret (listed); a PutSecret without it keeps the stored ones.
+  @$pb.TagNumber(30)
+  SecretServer get server => $_getN(28);
+  @$pb.TagNumber(30)
+  set server(SecretServer value) => $_setField(30, value);
+  @$pb.TagNumber(30)
+  $core.bool hasServer() => $_has(28);
+  @$pb.TagNumber(30)
+  void clearServer() => $_clearField(30);
+  @$pb.TagNumber(30)
+  SecretServer ensureServer() => $_ensure(28);
+}
+
+class SecretServer extends $pb.GeneratedMessage {
+  factory SecretServer({
+    $core.String? folder,
+    ServerAuth? auth,
+    $core.String? sshKeyId,
+    $core.Iterable<$core.String>? hostKeys,
+    $core.String? jumpServerId,
+    $core.Iterable<$core.String>? tags,
+    $core.Iterable<$core.String>? extraKeys,
+  }) {
+    final result = SecretServer._();
+    if (folder != null) result.folder = folder;
+    if (auth != null) result.auth = auth;
+    if (sshKeyId != null) result.sshKeyId = sshKeyId;
+    if (hostKeys != null) result.hostKeys.addAll(hostKeys);
+    if (jumpServerId != null) result.jumpServerId = jumpServerId;
+    if (tags != null) result.tags.addAll(tags);
+    if (extraKeys != null) result.extraKeys.addAll(extraKeys);
+    return result;
+  }
+
+  SecretServer._();
+
+  factory SecretServer.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SecretServer()..mergeFromBuffer(data, registry);
+  factory SecretServer.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SecretServer()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SecretServer',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: SecretServer.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'folder')
+    ..aE<ServerAuth>(2, _omitFieldNames ? '' : 'auth',
+        enumValues: ServerAuth.values)
+    ..aOS(3, _omitFieldNames ? '' : 'sshKeyId')
+    ..pPS(4, _omitFieldNames ? '' : 'hostKeys')
+    ..aOS(5, _omitFieldNames ? '' : 'jumpServerId')
+    ..pPS(6, _omitFieldNames ? '' : 'tags')
+    ..pPS(7, _omitFieldNames ? '' : 'extraKeys')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SecretServer clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SecretServer copyWith(void Function(SecretServer) updates) =>
+      super.copyWith((message) => updates(message as SecretServer))
+          as SecretServer;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SecretServer() / SecretServer.new instead')
+  static SecretServer create() => SecretServer._();
+  static $pb.GeneratedMessage $_createMessage() => SecretServer._();
+  @$core.override
+  SecretServer createEmptyInstance() => SecretServer._();
+  @$core.pragma('dart2js:noInline')
+  static SecretServer getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SecretServer>(
+          SecretServer.$_createMessage);
+  static SecretServer? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get folder => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set folder($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasFolder() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearFolder() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  ServerAuth get auth => $_getN(1);
+  @$pb.TagNumber(2)
+  set auth(ServerAuth value) => $_setField(2, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAuth() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAuth() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get sshKeyId => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set sshKeyId($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasSshKeyId() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearSshKeyId() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $pb.PbList<$core.String> get hostKeys => $_getList(3);
+
+  @$pb.TagNumber(5)
+  $core.String get jumpServerId => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set jumpServerId($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasJumpServerId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearJumpServerId() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $pb.PbList<$core.String> get tags => $_getList(5);
+
+  /// Fields apps keep with the server (keys "app_id.name"): only their
+  /// names, for display; the values stay with the entry.
+  @$pb.TagNumber(7)
+  $pb.PbList<$core.String> get extraKeys => $_getList(6);
 }
 
 class SecretGroup extends $pb.GeneratedMessage {
@@ -4880,6 +5075,1326 @@ class TotpPreview extends $pb.GeneratedMessage {
   $core.bool hasError() => $_has(7);
   @$pb.TagNumber(8)
   void clearError() => $_clearField(8);
+}
+
+class TotpLinksRequest extends $pb.GeneratedMessage {
+  factory TotpLinksRequest({
+    $core.String? text,
+  }) {
+    final result = TotpLinksRequest._();
+    if (text != null) result.text = text;
+    return result;
+  }
+
+  TotpLinksRequest._();
+
+  factory TotpLinksRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TotpLinksRequest()..mergeFromBuffer(data, registry);
+  factory TotpLinksRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TotpLinksRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TotpLinksRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: TotpLinksRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'text')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TotpLinksRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TotpLinksRequest copyWith(void Function(TotpLinksRequest) updates) =>
+      super.copyWith((message) => updates(message as TotpLinksRequest))
+          as TotpLinksRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TotpLinksRequest() / TotpLinksRequest.new instead')
+  static TotpLinksRequest create() => TotpLinksRequest._();
+  static $pb.GeneratedMessage $_createMessage() => TotpLinksRequest._();
+  @$core.override
+  TotpLinksRequest createEmptyInstance() => TotpLinksRequest._();
+  @$core.pragma('dart2js:noInline')
+  static TotpLinksRequest getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TotpLinksRequest>(
+          TotpLinksRequest.$_createMessage);
+  static TotpLinksRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get text => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set text($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasText() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearText() => $_clearField(1);
+}
+
+class TotpLink extends $pb.GeneratedMessage {
+  factory TotpLink({
+    $core.String? link,
+    TotpPreview? preview,
+  }) {
+    final result = TotpLink._();
+    if (link != null) result.link = link;
+    if (preview != null) result.preview = preview;
+    return result;
+  }
+
+  TotpLink._();
+
+  factory TotpLink.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TotpLink()..mergeFromBuffer(data, registry);
+  factory TotpLink.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TotpLink()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TotpLink',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: TotpLink.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'link')
+    ..aOM<TotpPreview>(2, _omitFieldNames ? '' : 'preview',
+        subBuilder: TotpPreview.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TotpLink clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TotpLink copyWith(void Function(TotpLink) updates) =>
+      super.copyWith((message) => updates(message as TotpLink)) as TotpLink;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TotpLink() / TotpLink.new instead')
+  static TotpLink create() => TotpLink._();
+  static $pb.GeneratedMessage $_createMessage() => TotpLink._();
+  @$core.override
+  TotpLink createEmptyInstance() => TotpLink._();
+  @$core.pragma('dart2js:noInline')
+  static TotpLink getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TotpLink>(TotpLink.$_createMessage);
+  static TotpLink? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get link => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set link($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasLink() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearLink() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  TotpPreview get preview => $_getN(1);
+  @$pb.TagNumber(2)
+  set preview(TotpPreview value) => $_setField(2, value);
+  @$pb.TagNumber(2)
+  $core.bool hasPreview() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPreview() => $_clearField(2);
+  @$pb.TagNumber(2)
+  TotpPreview ensurePreview() => $_ensure(1);
+}
+
+/// One part of a Google Authenticator export (large ones span several QR codes).
+class TotpBatch extends $pb.GeneratedMessage {
+  factory TotpBatch({
+    $core.int? id,
+    $core.int? index,
+    $core.int? size,
+  }) {
+    final result = TotpBatch._();
+    if (id != null) result.id = id;
+    if (index != null) result.index = index;
+    if (size != null) result.size = size;
+    return result;
+  }
+
+  TotpBatch._();
+
+  factory TotpBatch.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TotpBatch()..mergeFromBuffer(data, registry);
+  factory TotpBatch.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TotpBatch()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TotpBatch',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: TotpBatch.$_createMessage)
+    ..aI(1, _omitFieldNames ? '' : 'id')
+    ..aI(2, _omitFieldNames ? '' : 'index')
+    ..aI(3, _omitFieldNames ? '' : 'size')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TotpBatch clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TotpBatch copyWith(void Function(TotpBatch) updates) =>
+      super.copyWith((message) => updates(message as TotpBatch)) as TotpBatch;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TotpBatch() / TotpBatch.new instead')
+  static TotpBatch create() => TotpBatch._();
+  static $pb.GeneratedMessage $_createMessage() => TotpBatch._();
+  @$core.override
+  TotpBatch createEmptyInstance() => TotpBatch._();
+  @$core.pragma('dart2js:noInline')
+  static TotpBatch getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<TotpBatch>(TotpBatch.$_createMessage);
+  static TotpBatch? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get id => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set id($core.int value) => $_setSignedInt32(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get index => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set index($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasIndex() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearIndex() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.int get size => $_getIZ(2);
+  @$pb.TagNumber(3)
+  set size($core.int value) => $_setSignedInt32(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasSize() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearSize() => $_clearField(3);
+}
+
+class TotpLinksReply extends $pb.GeneratedMessage {
+  factory TotpLinksReply({
+    $core.Iterable<TotpLink>? links,
+    $core.Iterable<TotpBatch>? batches,
+  }) {
+    final result = TotpLinksReply._();
+    if (links != null) result.links.addAll(links);
+    if (batches != null) result.batches.addAll(batches);
+    return result;
+  }
+
+  TotpLinksReply._();
+
+  factory TotpLinksReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TotpLinksReply()..mergeFromBuffer(data, registry);
+  factory TotpLinksReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      TotpLinksReply()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'TotpLinksReply',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: TotpLinksReply.$_createMessage)
+    ..pPM<TotpLink>(1, _omitFieldNames ? '' : 'links',
+        subBuilder: TotpLink.$_createMessage)
+    ..pPM<TotpBatch>(2, _omitFieldNames ? '' : 'batches',
+        subBuilder: TotpBatch.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TotpLinksReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  TotpLinksReply copyWith(void Function(TotpLinksReply) updates) =>
+      super.copyWith((message) => updates(message as TotpLinksReply))
+          as TotpLinksReply;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use TotpLinksReply() / TotpLinksReply.new instead')
+  static TotpLinksReply create() => TotpLinksReply._();
+  static $pb.GeneratedMessage $_createMessage() => TotpLinksReply._();
+  @$core.override
+  TotpLinksReply createEmptyInstance() => TotpLinksReply._();
+  @$core.pragma('dart2js:noInline')
+  static TotpLinksReply getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TotpLinksReply>(
+          TotpLinksReply.$_createMessage);
+  static TotpLinksReply? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<TotpLink> get links => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<TotpBatch> get batches => $_getList(1);
+}
+
+class SecretImportRequest extends $pb.GeneratedMessage {
+  factory SecretImportRequest({
+    $core.List<$core.int>? data,
+    $core.String? fileName,
+    $core.String? password,
+    $core.List<$core.int>? keyFile,
+    $core.String? groupId,
+    $core.bool? keepGroups,
+    $core.bool? dryRun,
+  }) {
+    final result = SecretImportRequest._();
+    if (data != null) result.data = data;
+    if (fileName != null) result.fileName = fileName;
+    if (password != null) result.password = password;
+    if (keyFile != null) result.keyFile = keyFile;
+    if (groupId != null) result.groupId = groupId;
+    if (keepGroups != null) result.keepGroups = keepGroups;
+    if (dryRun != null) result.dryRun = dryRun;
+    return result;
+  }
+
+  SecretImportRequest._();
+
+  factory SecretImportRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SecretImportRequest()..mergeFromBuffer(data, registry);
+  factory SecretImportRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SecretImportRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SecretImportRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: SecretImportRequest.$_createMessage)
+    ..a<$core.List<$core.int>>(
+        1, _omitFieldNames ? '' : 'data', $pb.PbFieldType.OY)
+    ..aOS(2, _omitFieldNames ? '' : 'fileName')
+    ..aOS(3, _omitFieldNames ? '' : 'password')
+    ..a<$core.List<$core.int>>(
+        4, _omitFieldNames ? '' : 'keyFile', $pb.PbFieldType.OY)
+    ..aOS(5, _omitFieldNames ? '' : 'groupId')
+    ..aOB(6, _omitFieldNames ? '' : 'keepGroups')
+    ..aOB(7, _omitFieldNames ? '' : 'dryRun')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SecretImportRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SecretImportRequest copyWith(void Function(SecretImportRequest) updates) =>
+      super.copyWith((message) => updates(message as SecretImportRequest))
+          as SecretImportRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core
+      .Deprecated('Use SecretImportRequest() / SecretImportRequest.new instead')
+  static SecretImportRequest create() => SecretImportRequest._();
+  static $pb.GeneratedMessage $_createMessage() => SecretImportRequest._();
+  @$core.override
+  SecretImportRequest createEmptyInstance() => SecretImportRequest._();
+  @$core.pragma('dart2js:noInline')
+  static SecretImportRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SecretImportRequest>(
+          SecretImportRequest.$_createMessage);
+  static SecretImportRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$core.int> get data => $_getN(0);
+  @$pb.TagNumber(1)
+  set data($core.List<$core.int> value) => $_setBytes(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasData() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearData() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get fileName => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set fileName($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasFileName() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearFileName() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get password => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set password($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasPassword() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearPassword() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.List<$core.int> get keyFile => $_getN(3);
+  @$pb.TagNumber(4)
+  set keyFile($core.List<$core.int> value) => $_setBytes(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasKeyFile() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearKeyFile() => $_clearField(4);
+
+  /// Group for every entry; empty: keep_groups makes groups named like the
+  /// folders of the export (or reuses groups of that name).
+  @$pb.TagNumber(5)
+  $core.String get groupId => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set groupId($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasGroupId() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearGroupId() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.bool get keepGroups => $_getBF(5);
+  @$pb.TagNumber(6)
+  set keepGroups($core.bool value) => $_setBool(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasKeepGroups() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearKeepGroups() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.bool get dryRun => $_getBF(6);
+  @$pb.TagNumber(7)
+  set dryRun($core.bool value) => $_setBool(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasDryRun() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearDryRun() => $_clearField(7);
+}
+
+/// One entry of the export, without its secrets.
+class SecretImportItem extends $pb.GeneratedMessage {
+  factory SecretImportItem({
+    SecretKind? kind,
+    $core.String? title,
+    $core.String? username,
+    $core.String? url,
+    $core.String? group,
+    SecretImportStatus? status,
+    $core.String? error,
+  }) {
+    final result = SecretImportItem._();
+    if (kind != null) result.kind = kind;
+    if (title != null) result.title = title;
+    if (username != null) result.username = username;
+    if (url != null) result.url = url;
+    if (group != null) result.group = group;
+    if (status != null) result.status = status;
+    if (error != null) result.error = error;
+    return result;
+  }
+
+  SecretImportItem._();
+
+  factory SecretImportItem.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SecretImportItem()..mergeFromBuffer(data, registry);
+  factory SecretImportItem.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SecretImportItem()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SecretImportItem',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: SecretImportItem.$_createMessage)
+    ..aE<SecretKind>(1, _omitFieldNames ? '' : 'kind',
+        enumValues: SecretKind.values)
+    ..aOS(2, _omitFieldNames ? '' : 'title')
+    ..aOS(3, _omitFieldNames ? '' : 'username')
+    ..aOS(4, _omitFieldNames ? '' : 'url')
+    ..aOS(5, _omitFieldNames ? '' : 'group')
+    ..aE<SecretImportStatus>(6, _omitFieldNames ? '' : 'status',
+        enumValues: SecretImportStatus.values)
+    ..aOS(7, _omitFieldNames ? '' : 'error')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SecretImportItem clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SecretImportItem copyWith(void Function(SecretImportItem) updates) =>
+      super.copyWith((message) => updates(message as SecretImportItem))
+          as SecretImportItem;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SecretImportItem() / SecretImportItem.new instead')
+  static SecretImportItem create() => SecretImportItem._();
+  static $pb.GeneratedMessage $_createMessage() => SecretImportItem._();
+  @$core.override
+  SecretImportItem createEmptyInstance() => SecretImportItem._();
+  @$core.pragma('dart2js:noInline')
+  static SecretImportItem getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SecretImportItem>(
+          SecretImportItem.$_createMessage);
+  static SecretImportItem? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  SecretKind get kind => $_getN(0);
+  @$pb.TagNumber(1)
+  set kind(SecretKind value) => $_setField(1, value);
+  @$pb.TagNumber(1)
+  $core.bool hasKind() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearKind() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get title => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set title($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasTitle() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTitle() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get username => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set username($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasUsername() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearUsername() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get url => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set url($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasUrl() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearUrl() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get group => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set group($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasGroup() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearGroup() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  SecretImportStatus get status => $_getN(5);
+  @$pb.TagNumber(6)
+  set status(SecretImportStatus value) => $_setField(6, value);
+  @$pb.TagNumber(6)
+  $core.bool hasStatus() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearStatus() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get error => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set error($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasError() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearError() => $_clearField(7);
+}
+
+class SecretImportReply extends $pb.GeneratedMessage {
+  factory SecretImportReply({
+    $core.bool? needPassword,
+    $core.String? format,
+    $core.Iterable<SecretImportItem>? items,
+    $core.int? added,
+    $core.int? duplicates,
+    $core.int? failed,
+    $core.Iterable<$core.String>? newGroups,
+  }) {
+    final result = SecretImportReply._();
+    if (needPassword != null) result.needPassword = needPassword;
+    if (format != null) result.format = format;
+    if (items != null) result.items.addAll(items);
+    if (added != null) result.added = added;
+    if (duplicates != null) result.duplicates = duplicates;
+    if (failed != null) result.failed = failed;
+    if (newGroups != null) result.newGroups.addAll(newGroups);
+    return result;
+  }
+
+  SecretImportReply._();
+
+  factory SecretImportReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SecretImportReply()..mergeFromBuffer(data, registry);
+  factory SecretImportReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SecretImportReply()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SecretImportReply',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: SecretImportReply.$_createMessage)
+    ..aOB(1, _omitFieldNames ? '' : 'needPassword')
+    ..aOS(2, _omitFieldNames ? '' : 'format')
+    ..pPM<SecretImportItem>(3, _omitFieldNames ? '' : 'items',
+        subBuilder: SecretImportItem.$_createMessage)
+    ..aI(4, _omitFieldNames ? '' : 'added')
+    ..aI(5, _omitFieldNames ? '' : 'duplicates')
+    ..aI(6, _omitFieldNames ? '' : 'failed')
+    ..pPS(7, _omitFieldNames ? '' : 'newGroups')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SecretImportReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SecretImportReply copyWith(void Function(SecretImportReply) updates) =>
+      super.copyWith((message) => updates(message as SecretImportReply))
+          as SecretImportReply;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use SecretImportReply() / SecretImportReply.new instead')
+  static SecretImportReply create() => SecretImportReply._();
+  static $pb.GeneratedMessage $_createMessage() => SecretImportReply._();
+  @$core.override
+  SecretImportReply createEmptyInstance() => SecretImportReply._();
+  @$core.pragma('dart2js:noInline')
+  static SecretImportReply getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<SecretImportReply>(
+          SecretImportReply.$_createMessage);
+  static SecretImportReply? _defaultInstance;
+
+  /// The file is encrypted: ask for its password (and key file), call again.
+  @$pb.TagNumber(1)
+  $core.bool get needPassword => $_getBF(0);
+  @$pb.TagNumber(1)
+  set needPassword($core.bool value) => $_setBool(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasNeedPassword() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearNeedPassword() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get format => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set format($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasFormat() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearFormat() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $pb.PbList<SecretImportItem> get items => $_getList(2);
+
+  @$pb.TagNumber(4)
+  $core.int get added => $_getIZ(3);
+  @$pb.TagNumber(4)
+  set added($core.int value) => $_setSignedInt32(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasAdded() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearAdded() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.int get duplicates => $_getIZ(4);
+  @$pb.TagNumber(5)
+  set duplicates($core.int value) => $_setSignedInt32(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasDuplicates() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearDuplicates() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.int get failed => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set failed($core.int value) => $_setSignedInt32(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasFailed() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearFailed() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $pb.PbList<$core.String> get newGroups => $_getList(6);
+}
+
+class PairingRequestInfo extends $pb.GeneratedMessage {
+  factory PairingRequestInfo({
+    $core.String? id,
+    $core.String? appId,
+    $core.String? appName,
+    $core.String? description,
+    $core.String? code,
+    $core.String? platform,
+    $core.String? package,
+    $core.String? cert,
+    $fixnum.Int64? createdUnixMs,
+    $fixnum.Int64? expiresUnixMs,
+    $core.bool? alreadyPaired,
+    $core.Iterable<$core.String>? scopes,
+  }) {
+    final result = PairingRequestInfo._();
+    if (id != null) result.id = id;
+    if (appId != null) result.appId = appId;
+    if (appName != null) result.appName = appName;
+    if (description != null) result.description = description;
+    if (code != null) result.code = code;
+    if (platform != null) result.platform = platform;
+    if (package != null) result.package = package;
+    if (cert != null) result.cert = cert;
+    if (createdUnixMs != null) result.createdUnixMs = createdUnixMs;
+    if (expiresUnixMs != null) result.expiresUnixMs = expiresUnixMs;
+    if (alreadyPaired != null) result.alreadyPaired = alreadyPaired;
+    if (scopes != null) result.scopes.addAll(scopes);
+    return result;
+  }
+
+  PairingRequestInfo._();
+
+  factory PairingRequestInfo.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PairingRequestInfo()..mergeFromBuffer(data, registry);
+  factory PairingRequestInfo.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      PairingRequestInfo()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'PairingRequestInfo',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: PairingRequestInfo.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'appId')
+    ..aOS(3, _omitFieldNames ? '' : 'appName')
+    ..aOS(4, _omitFieldNames ? '' : 'description')
+    ..aOS(5, _omitFieldNames ? '' : 'code')
+    ..aOS(6, _omitFieldNames ? '' : 'platform')
+    ..aOS(7, _omitFieldNames ? '' : 'package')
+    ..aOS(8, _omitFieldNames ? '' : 'cert')
+    ..aInt64(9, _omitFieldNames ? '' : 'createdUnixMs')
+    ..aInt64(10, _omitFieldNames ? '' : 'expiresUnixMs')
+    ..aOB(11, _omitFieldNames ? '' : 'alreadyPaired')
+    ..pPS(12, _omitFieldNames ? '' : 'scopes')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PairingRequestInfo clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  PairingRequestInfo copyWith(void Function(PairingRequestInfo) updates) =>
+      super.copyWith((message) => updates(message as PairingRequestInfo))
+          as PairingRequestInfo;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use PairingRequestInfo() / PairingRequestInfo.new instead')
+  static PairingRequestInfo create() => PairingRequestInfo._();
+  static $pb.GeneratedMessage $_createMessage() => PairingRequestInfo._();
+  @$core.override
+  PairingRequestInfo createEmptyInstance() => PairingRequestInfo._();
+  @$core.pragma('dart2js:noInline')
+  static PairingRequestInfo getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<PairingRequestInfo>(
+          PairingRequestInfo.$_createMessage);
+  static PairingRequestInfo? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get appId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set appId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAppId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAppId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get appName => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set appName($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasAppName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAppName() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get description => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set description($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasDescription() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearDescription() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get code => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set code($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasCode() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearCode() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get platform => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set platform($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasPlatform() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearPlatform() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get package => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set package($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasPackage() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearPackage() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $core.String get cert => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set cert($core.String value) => $_setString(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasCert() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearCert() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $fixnum.Int64 get createdUnixMs => $_getI64(8);
+  @$pb.TagNumber(9)
+  set createdUnixMs($fixnum.Int64 value) => $_setInt64(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasCreatedUnixMs() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearCreatedUnixMs() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $fixnum.Int64 get expiresUnixMs => $_getI64(9);
+  @$pb.TagNumber(10)
+  set expiresUnixMs($fixnum.Int64 value) => $_setInt64(9, value);
+  @$pb.TagNumber(10)
+  $core.bool hasExpiresUnixMs() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearExpiresUnixMs() => $_clearField(10);
+
+  /// This app id is already paired here (approving replaces that pairing
+  /// when it is the same package / the desktop one).
+  @$pb.TagNumber(11)
+  $core.bool get alreadyPaired => $_getBF(10);
+  @$pb.TagNumber(11)
+  set alreadyPaired($core.bool value) => $_setBool(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasAlreadyPaired() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearAlreadyPaired() => $_clearField(11);
+
+  /// Extra permissions asked for: "passwords" = read and change all website
+  /// passwords, "ssh_keys" = read the SSH keys of the safe, "servers" =
+  /// read and change the servers. Show them plainly; the user may allow
+  /// fewer (records only at the least).
+  @$pb.TagNumber(12)
+  $pb.PbList<$core.String> get scopes => $_getList(11);
+}
+
+class AppPairing extends $pb.GeneratedMessage {
+  factory AppPairing({
+    $core.String? id,
+    $core.String? appId,
+    $core.String? appName,
+    $core.String? description,
+    $core.String? platform,
+    $core.String? package,
+    $core.String? cert,
+    $fixnum.Int64? approvedUnixMs,
+    $fixnum.Int64? lastUsedUnixMs,
+    $core.Iterable<$core.String>? scopes,
+    $fixnum.Int64? secretsReadUnixMs,
+    $fixnum.Int64? keysReadUnixMs,
+    $fixnum.Int64? serversReadUnixMs,
+  }) {
+    final result = AppPairing._();
+    if (id != null) result.id = id;
+    if (appId != null) result.appId = appId;
+    if (appName != null) result.appName = appName;
+    if (description != null) result.description = description;
+    if (platform != null) result.platform = platform;
+    if (package != null) result.package = package;
+    if (cert != null) result.cert = cert;
+    if (approvedUnixMs != null) result.approvedUnixMs = approvedUnixMs;
+    if (lastUsedUnixMs != null) result.lastUsedUnixMs = lastUsedUnixMs;
+    if (scopes != null) result.scopes.addAll(scopes);
+    if (secretsReadUnixMs != null) result.secretsReadUnixMs = secretsReadUnixMs;
+    if (keysReadUnixMs != null) result.keysReadUnixMs = keysReadUnixMs;
+    if (serversReadUnixMs != null) result.serversReadUnixMs = serversReadUnixMs;
+    return result;
+  }
+
+  AppPairing._();
+
+  factory AppPairing.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      AppPairing()..mergeFromBuffer(data, registry);
+  factory AppPairing.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      AppPairing()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'AppPairing',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: AppPairing.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOS(2, _omitFieldNames ? '' : 'appId')
+    ..aOS(3, _omitFieldNames ? '' : 'appName')
+    ..aOS(4, _omitFieldNames ? '' : 'description')
+    ..aOS(5, _omitFieldNames ? '' : 'platform')
+    ..aOS(6, _omitFieldNames ? '' : 'package')
+    ..aOS(7, _omitFieldNames ? '' : 'cert')
+    ..aInt64(8, _omitFieldNames ? '' : 'approvedUnixMs')
+    ..aInt64(9, _omitFieldNames ? '' : 'lastUsedUnixMs')
+    ..pPS(10, _omitFieldNames ? '' : 'scopes')
+    ..aInt64(11, _omitFieldNames ? '' : 'secretsReadUnixMs')
+    ..aInt64(12, _omitFieldNames ? '' : 'keysReadUnixMs')
+    ..aInt64(13, _omitFieldNames ? '' : 'serversReadUnixMs')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AppPairing clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AppPairing copyWith(void Function(AppPairing) updates) =>
+      super.copyWith((message) => updates(message as AppPairing)) as AppPairing;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use AppPairing() / AppPairing.new instead')
+  static AppPairing create() => AppPairing._();
+  static $pb.GeneratedMessage $_createMessage() => AppPairing._();
+  @$core.override
+  AppPairing createEmptyInstance() => AppPairing._();
+  @$core.pragma('dart2js:noInline')
+  static AppPairing getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<AppPairing>(AppPairing.$_createMessage);
+  static AppPairing? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get appId => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set appId($core.String value) => $_setString(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasAppId() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearAppId() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get appName => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set appName($core.String value) => $_setString(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasAppName() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearAppName() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get description => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set description($core.String value) => $_setString(3, value);
+  @$pb.TagNumber(4)
+  $core.bool hasDescription() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearDescription() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get platform => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set platform($core.String value) => $_setString(4, value);
+  @$pb.TagNumber(5)
+  $core.bool hasPlatform() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearPlatform() => $_clearField(5);
+
+  @$pb.TagNumber(6)
+  $core.String get package => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set package($core.String value) => $_setString(5, value);
+  @$pb.TagNumber(6)
+  $core.bool hasPackage() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearPackage() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get cert => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set cert($core.String value) => $_setString(6, value);
+  @$pb.TagNumber(7)
+  $core.bool hasCert() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearCert() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $fixnum.Int64 get approvedUnixMs => $_getI64(7);
+  @$pb.TagNumber(8)
+  set approvedUnixMs($fixnum.Int64 value) => $_setInt64(7, value);
+  @$pb.TagNumber(8)
+  $core.bool hasApprovedUnixMs() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearApprovedUnixMs() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $fixnum.Int64 get lastUsedUnixMs => $_getI64(8);
+  @$pb.TagNumber(9)
+  set lastUsedUnixMs($fixnum.Int64 value) => $_setInt64(8, value);
+  @$pb.TagNumber(9)
+  $core.bool hasLastUsedUnixMs() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearLastUsedUnixMs() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $pb.PbList<$core.String> get scopes => $_getList(9);
+
+  @$pb.TagNumber(11)
+  $fixnum.Int64 get secretsReadUnixMs => $_getI64(10);
+  @$pb.TagNumber(11)
+  set secretsReadUnixMs($fixnum.Int64 value) => $_setInt64(10, value);
+  @$pb.TagNumber(11)
+  $core.bool hasSecretsReadUnixMs() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearSecretsReadUnixMs() => $_clearField(11);
+
+  @$pb.TagNumber(12)
+  $fixnum.Int64 get keysReadUnixMs => $_getI64(11);
+  @$pb.TagNumber(12)
+  set keysReadUnixMs($fixnum.Int64 value) => $_setInt64(11, value);
+  @$pb.TagNumber(12)
+  $core.bool hasKeysReadUnixMs() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearKeysReadUnixMs() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $fixnum.Int64 get serversReadUnixMs => $_getI64(12);
+  @$pb.TagNumber(13)
+  set serversReadUnixMs($fixnum.Int64 value) => $_setInt64(12, value);
+  @$pb.TagNumber(13)
+  $core.bool hasServersReadUnixMs() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearServersReadUnixMs() => $_clearField(13);
+}
+
+class AppDataInfo extends $pb.GeneratedMessage {
+  factory AppDataInfo({
+    $core.String? appId,
+    $core.int? records,
+    $fixnum.Int64? bytes,
+  }) {
+    final result = AppDataInfo._();
+    if (appId != null) result.appId = appId;
+    if (records != null) result.records = records;
+    if (bytes != null) result.bytes = bytes;
+    return result;
+  }
+
+  AppDataInfo._();
+
+  factory AppDataInfo.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      AppDataInfo()..mergeFromBuffer(data, registry);
+  factory AppDataInfo.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      AppDataInfo()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'AppDataInfo',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: AppDataInfo.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'appId')
+    ..aI(2, _omitFieldNames ? '' : 'records')
+    ..aInt64(3, _omitFieldNames ? '' : 'bytes')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AppDataInfo clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AppDataInfo copyWith(void Function(AppDataInfo) updates) =>
+      super.copyWith((message) => updates(message as AppDataInfo))
+          as AppDataInfo;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use AppDataInfo() / AppDataInfo.new instead')
+  static AppDataInfo create() => AppDataInfo._();
+  static $pb.GeneratedMessage $_createMessage() => AppDataInfo._();
+  @$core.override
+  AppDataInfo createEmptyInstance() => AppDataInfo._();
+  @$core.pragma('dart2js:noInline')
+  static AppDataInfo getDefault() =>
+      _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<AppDataInfo>(
+          AppDataInfo.$_createMessage);
+  static AppDataInfo? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get appId => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set appId($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasAppId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearAppId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.int get records => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set records($core.int value) => $_setSignedInt32(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasRecords() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearRecords() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $fixnum.Int64 get bytes => $_getI64(2);
+  @$pb.TagNumber(3)
+  set bytes($fixnum.Int64 value) => $_setInt64(2, value);
+  @$pb.TagNumber(3)
+  $core.bool hasBytes() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearBytes() => $_clearField(3);
+}
+
+class AppsReply extends $pb.GeneratedMessage {
+  factory AppsReply({
+    $core.Iterable<PairingRequestInfo>? requests,
+    $core.Iterable<AppPairing>? pairings,
+    $core.Iterable<AppDataInfo>? data,
+  }) {
+    final result = AppsReply._();
+    if (requests != null) result.requests.addAll(requests);
+    if (pairings != null) result.pairings.addAll(pairings);
+    if (data != null) result.data.addAll(data);
+    return result;
+  }
+
+  AppsReply._();
+
+  factory AppsReply.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      AppsReply()..mergeFromBuffer(data, registry);
+  factory AppsReply.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      AppsReply()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'AppsReply',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: AppsReply.$_createMessage)
+    ..pPM<PairingRequestInfo>(1, _omitFieldNames ? '' : 'requests',
+        subBuilder: PairingRequestInfo.$_createMessage)
+    ..pPM<AppPairing>(2, _omitFieldNames ? '' : 'pairings',
+        subBuilder: AppPairing.$_createMessage)
+    ..pPM<AppDataInfo>(3, _omitFieldNames ? '' : 'data',
+        subBuilder: AppDataInfo.$_createMessage)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AppsReply clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  AppsReply copyWith(void Function(AppsReply) updates) =>
+      super.copyWith((message) => updates(message as AppsReply)) as AppsReply;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated('Use AppsReply() / AppsReply.new instead')
+  static AppsReply create() => AppsReply._();
+  static $pb.GeneratedMessage $_createMessage() => AppsReply._();
+  @$core.override
+  AppsReply createEmptyInstance() => AppsReply._();
+  @$core.pragma('dart2js:noInline')
+  static AppsReply getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<AppsReply>(AppsReply.$_createMessage);
+  static AppsReply? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<PairingRequestInfo> get requests => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<AppPairing> get pairings => $_getList(1);
+
+  @$pb.TagNumber(3)
+  $pb.PbList<AppDataInfo> get data => $_getList(2);
+}
+
+class DecidePairingRequest extends $pb.GeneratedMessage {
+  factory DecidePairingRequest({
+    $core.String? id,
+    $core.bool? approve,
+    $core.Iterable<$core.String>? scopes,
+  }) {
+    final result = DecidePairingRequest._();
+    if (id != null) result.id = id;
+    if (approve != null) result.approve = approve;
+    if (scopes != null) result.scopes.addAll(scopes);
+    return result;
+  }
+
+  DecidePairingRequest._();
+
+  factory DecidePairingRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      DecidePairingRequest()..mergeFromBuffer(data, registry);
+  factory DecidePairingRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      DecidePairingRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'DecidePairingRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: DecidePairingRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..aOB(2, _omitFieldNames ? '' : 'approve')
+    ..pPS(3, _omitFieldNames ? '' : 'scopes')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DecidePairingRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  DecidePairingRequest copyWith(void Function(DecidePairingRequest) updates) =>
+      super.copyWith((message) => updates(message as DecidePairingRequest))
+          as DecidePairingRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core.Deprecated(
+      'Use DecidePairingRequest() / DecidePairingRequest.new instead')
+  static DecidePairingRequest create() => DecidePairingRequest._();
+  static $pb.GeneratedMessage $_createMessage() => DecidePairingRequest._();
+  @$core.override
+  DecidePairingRequest createEmptyInstance() => DecidePairingRequest._();
+  @$core.pragma('dart2js:noInline')
+  static DecidePairingRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<DecidePairingRequest>(
+          DecidePairingRequest.$_createMessage);
+  static DecidePairingRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get approve => $_getBF(1);
+  @$pb.TagNumber(2)
+  set approve($core.bool value) => $_setBool(1, value);
+  @$pb.TagNumber(2)
+  $core.bool hasApprove() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearApprove() => $_clearField(2);
+
+  /// Scopes granted (a subset of PairingRequestInfo.scopes); empty = the
+  /// app's own records only.
+  @$pb.TagNumber(3)
+  $pb.PbList<$core.String> get scopes => $_getList(2);
+}
+
+class SetAppScopesRequest extends $pb.GeneratedMessage {
+  factory SetAppScopesRequest({
+    $core.String? id,
+    $core.Iterable<$core.String>? scopes,
+  }) {
+    final result = SetAppScopesRequest._();
+    if (id != null) result.id = id;
+    if (scopes != null) result.scopes.addAll(scopes);
+    return result;
+  }
+
+  SetAppScopesRequest._();
+
+  factory SetAppScopesRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SetAppScopesRequest()..mergeFromBuffer(data, registry);
+  factory SetAppScopesRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      SetAppScopesRequest()..mergeFromJson(json, registry);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(
+      _omitMessageNames ? '' : 'SetAppScopesRequest',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      createEmptyInstance: SetAppScopesRequest.$_createMessage)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
+    ..pPS(2, _omitFieldNames ? '' : 'scopes')
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetAppScopesRequest clone() => deepCopy();
+  @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
+  SetAppScopesRequest copyWith(void Function(SetAppScopesRequest) updates) =>
+      super.copyWith((message) => updates(message as SetAppScopesRequest))
+          as SetAppScopesRequest;
+
+  @$core.override
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  @$core
+      .Deprecated('Use SetAppScopesRequest() / SetAppScopesRequest.new instead')
+  static SetAppScopesRequest create() => SetAppScopesRequest._();
+  static $pb.GeneratedMessage $_createMessage() => SetAppScopesRequest._();
+  @$core.override
+  SetAppScopesRequest createEmptyInstance() => SetAppScopesRequest._();
+  @$core.pragma('dart2js:noInline')
+  static SetAppScopesRequest getDefault() => _defaultInstance ??=
+      $pb.GeneratedMessage.$_defaultFor<SetAppScopesRequest>(
+          SetAppScopesRequest.$_createMessage);
+  static SetAppScopesRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get id => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set id($core.String value) => $_setString(0, value);
+  @$pb.TagNumber(1)
+  $core.bool hasId() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearId() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $pb.PbList<$core.String> get scopes => $_getList(1);
 }
 
 const $core.bool _omitFieldNames =

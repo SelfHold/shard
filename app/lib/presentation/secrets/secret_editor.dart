@@ -19,13 +19,15 @@ import 'secrets_screen.dart' show GroupAvatar;
 import 'totp.dart' show formatTotp;
 
 /// Kinds of the password list; the 2FA list has only [pb.SecretKind.SECRET_TOTP].
-const passwordKinds = [pb.SecretKind.SECRET_PASSWORD, pb.SecretKind.SECRET_SSH, pb.SecretKind.SECRET_WEB3];
+const passwordKinds = [pb.SecretKind.SECRET_PASSWORD, pb.SecretKind.SECRET_SSH, pb.SecretKind.SECRET_WEB3, pb.SecretKind.SECRET_SERVER];
 
 /// Creates an entry, or edits an opened one ([entry] with its secrets).
-/// Returns the saved entry (without secrets), or null.
+/// Returns the saved entry (without secrets), or null. [entries] (the
+/// safe's list) offer the SSH keys and jump servers of a server.
 Future<pb.SecretEntry?> showSecretEditor(
   BuildContext context, {
   required List<pb.SecretGroup> groups,
+  List<pb.SecretEntry> entries = const [],
   pb.SecretEntry? entry,
   String initialGroup = '',
   List<pb.SecretKind> kinds = passwordKinds,
@@ -37,7 +39,8 @@ Future<pb.SecretEntry?> showSecretEditor(
     title: entry == null ? tr('New entry', 'Новая запись') : tr('Edit entry', 'Изменить запись'),
     size: HmModalSize.lg,
     dismissible: false,
-    body: (_) => _Editor(key: form, groups: groups, entry: entry, initialGroup: initialGroup, kinds: kinds, saving: saving),
+    body: (_) =>
+        _Editor(key: form, groups: groups, entries: entries, entry: entry, initialGroup: initialGroup, kinds: kinds, saving: saving),
     actions: (ctx) => [
       HmButton(tr('Cancel', 'Отмена'), variant: HmVariant.neutral, expand: Hm.of(ctx).mobile, onPressed: () => Navigator.pop(ctx)),
       ValueListenableBuilder(
@@ -61,6 +64,7 @@ class _Editor extends StatefulWidget {
   const _Editor({
     super.key,
     required this.groups,
+    required this.entries,
     required this.entry,
     required this.initialGroup,
     required this.kinds,
@@ -68,6 +72,7 @@ class _Editor extends StatefulWidget {
   });
 
   final List<pb.SecretGroup> groups;
+  final List<pb.SecretEntry> entries;
   final pb.SecretEntry? entry;
   final String initialGroup;
   final List<pb.SecretKind> kinds;
@@ -91,6 +96,14 @@ class _EditorState extends State<_Editor> {
   final _comment = TextEditingController();
   final _totpSecret = TextEditingController();
   final _recovery = TextEditingController();
+  // Server.
+  final _folder = TextEditingController();
+  final _tags = TextEditingController();
+  final _hostKeys = TextEditingController();
+  pb.ServerAuth _auth = pb.ServerAuth.SERVER_AUTH_PASSWORD;
+  String _sshKeyId = '';
+  String _jumpId = '';
+  String? _hostError;
   String _algorithm = 'SHA1';
   int _digits = 6;
   int _period = 30;
@@ -110,6 +123,7 @@ class _EditorState extends State<_Editor> {
 
   bool get _isKey => _kind == pb.SecretKind.SECRET_SSH || _kind == pb.SecretKind.SECRET_WEB3;
   bool get _isTotp => _kind == pb.SecretKind.SECRET_TOTP;
+  bool get _isServer => _kind == pb.SecretKind.SECRET_SERVER;
   bool get _isUri => _totpSecret.text.trim().toLowerCase().startsWith('otpauth:');
 
   @override
@@ -136,6 +150,15 @@ class _EditorState extends State<_Editor> {
       if (e.totpAlgorithm.isNotEmpty) _algorithm = e.totpAlgorithm;
       if (e.totpDigits > 0) _digits = e.totpDigits;
       if (e.totpPeriod > 0) _period = e.totpPeriod;
+      if (e.hasServer()) {
+        final sv = e.server;
+        _folder.text = sv.folder;
+        _tags.text = sv.tags.join(', ');
+        _hostKeys.text = sv.hostKeys.join('\n');
+        if (sv.auth != pb.ServerAuth.SERVER_AUTH_UNSPECIFIED) _auth = sv.auth;
+        _sshKeyId = sv.sshKeyId;
+        _jumpId = sv.jumpServerId;
+      }
       if (_isKey) _derive();
       if (_isTotp) _check();
     }
@@ -145,7 +168,10 @@ class _EditorState extends State<_Editor> {
   void dispose() {
     _deriveTimer?.cancel();
     _checkTimer?.cancel();
-    for (final c in [_title, _username, _password, _url, _notes, _privateKey, _passphrase, _comment, _totpSecret, _recovery]) {
+    for (final c in [
+      _title, _username, _password, _url, _notes, _privateKey, _passphrase, _comment, _totpSecret, _recovery, //
+      _folder, _tags, _hostKeys,
+    ]) {
       c.clear();
       c.dispose();
     }
@@ -231,9 +257,12 @@ class _EditorState extends State<_Editor> {
 
   Future<pb.SecretEntry?> save() async {
     setState(() {
-      _titleError = _title.text.trim().isEmpty ? tr('Enter a title', 'Введите название') : null;
+      // A server without a title is named after its host.
+      _titleError = _title.text.trim().isEmpty && !_isServer ? tr('Enter a title', 'Введите название') : null;
+      _hostError = _isServer && _url.text.trim().isEmpty ? tr('Enter the host', 'Введите хост') : null;
       _saveError = null;
     });
+    if (_hostError != null) return null;
     if (_isTotp && _totpSecret.text.trim().isEmpty) {
       setState(() => _totpError = tr('Paste the secret key or the otpauth:// link', 'Вставьте секретный ключ или ссылку otpauth://'));
       return null;
@@ -249,10 +278,10 @@ class _EditorState extends State<_Editor> {
       kind: _kind,
       title: _title.text.trim(),
       groupId: _group,
-      username: _kind == pb.SecretKind.SECRET_PASSWORD || _isTotp ? _username.text.trim() : '',
+      username: _kind == pb.SecretKind.SECRET_PASSWORD || _isTotp || _isServer ? _username.text.trim() : '',
       url: _url.text.trim(),
       notes: _notes.text,
-      password: _kind == pb.SecretKind.SECRET_PASSWORD ? _password.text : '',
+      password: _kind == pb.SecretKind.SECRET_PASSWORD || (_isServer && _auth == pb.ServerAuth.SERVER_AUTH_PASSWORD) ? _password.text : '',
       privateKey: _isKey ? _privateKey.text.trim() : '',
       passphrase: _kind == pb.SecretKind.SECRET_SSH ? _passphrase.text : '',
       comment: _kind == pb.SecretKind.SECRET_SSH ? _comment.text.trim() : '',
@@ -262,6 +291,16 @@ class _EditorState extends State<_Editor> {
       totpDigits: _isTotp ? _digits : null,
       totpPeriod: _isTotp ? _period : null,
       recoveryCodes: _isTotp && _recovery.text.trim().isNotEmpty ? [_recovery.text] : null,
+      server: _isServer
+          ? pb.SecretServer(
+              folder: _folder.text.trim(),
+              auth: _auth,
+              sshKeyId: _auth == pb.ServerAuth.SERVER_AUTH_SSH_KEY ? _sshKeyId : '',
+              jumpServerId: _jumpId,
+              tags: _tags.text.split(',').map((t) => t.trim()).where((t) => t.isNotEmpty),
+              hostKeys: _hostKeys.text.split('\n').map((k) => k.trim()).where((k) => k.isNotEmpty),
+            )
+          : null,
     );
     widget.saving.value = true;
     try {
@@ -275,6 +314,85 @@ class _EditorState extends State<_Editor> {
       req.clear();
       widget.saving.value = false;
     }
+  }
+
+  List<Widget> _serverFields(Widget gap) {
+    final keys = {for (final k in widget.entries.where((x) => x.kind == pb.SecretKind.SECRET_SSH)) k.id: k.title};
+    final servers = {
+      for (final x in widget.entries.where((x) => x.kind == pb.SecretKind.SECRET_SERVER && x.id != widget.entry?.id)) x.id: x.title,
+    };
+    // An id the list does not have (deleted, or not loaded) stays as it is.
+    if (_sshKeyId.isNotEmpty && !keys.containsKey(_sshKeyId)) keys[_sshKeyId] = tr('(missing key)', '(ключа нет)');
+    if (_jumpId.isNotEmpty && !servers.containsKey(_jumpId)) servers[_jumpId] = tr('(missing server)', '(сервера нет)');
+    return [
+      HmTextField(
+        label: tr('Host', 'Хост'),
+        required: true,
+        controller: _url,
+        identifier: true,
+        error: _hostError,
+        placeholder: 'db.example.com:22',
+        hint: tr('Name or IP, with :port when it is not 22', 'Имя или IP, с :порт, если он не 22'),
+      ),
+      gap,
+      HmTextField(label: tr('User', 'Пользователь'), controller: _username, identifier: true, placeholder: 'root'),
+      gap,
+      HmSegmented<pb.ServerAuth>(
+        options: {
+          pb.ServerAuth.SERVER_AUTH_PASSWORD: tr('Password', 'Пароль'),
+          pb.ServerAuth.SERVER_AUTH_SSH_KEY: tr('SSH key', 'SSH-ключ'),
+          pb.ServerAuth.SERVER_AUTH_AGENT: 'ssh-agent',
+        },
+        value: _auth,
+        onChanged: (a) => setState(() => _auth = a),
+      ),
+      gap,
+      if (_auth == pb.ServerAuth.SERVER_AUTH_PASSWORD) ...[
+        HmTextField(label: tr('Password', 'Пароль'), controller: _password, password: true),
+        gap,
+      ],
+      if (_auth == pb.ServerAuth.SERVER_AUTH_SSH_KEY) ...[
+        HmSelect<String>(
+          label: tr('SSH key', 'SSH-ключ'),
+          options: {'': tr('Ask when connecting', 'Спросить при подключении'), ...keys},
+          value: _sshKeyId,
+          onChanged: (v) => setState(() => _sshKeyId = v),
+        ),
+        gap,
+      ],
+      HmSelect<String>(
+        label: tr('Connect through', 'Подключаться через'),
+        options: {'': tr('Directly', 'Напрямую'), ...servers},
+        value: _jumpId,
+        onChanged: (v) => setState(() => _jumpId = v),
+      ),
+      gap,
+      HmTextField(
+        label: tr('Folder', 'Папка'),
+        controller: _folder,
+        placeholder: 'prod/eu',
+        hint: tr('Shown as folders in SSH Manager and DB Manager; "/" nests', 'Папки в SSH Manager и DB Manager; «/» — вложенность'),
+      ),
+      gap,
+      HmTextField(
+        label: tr('Tags', 'Теги'),
+        controller: _tags,
+        placeholder: 'postgres, prod',
+        hint: tr('Separated by commas', 'Через запятую'),
+      ),
+      gap,
+      HmTextField(
+        label: tr('Trusted host keys', 'Доверенные ключи хоста'),
+        controller: _hostKeys,
+        identifier: true,
+        lines: 3,
+        hint: tr(
+          'One per line, as in known_hosts without the host name. Apps add the key they trusted on first connect.',
+          'По одному в строке, как в known_hosts без имени хоста. Приложения добавляют ключ, которому доверились при первом подключении.',
+        ),
+      ),
+      gap,
+    ];
   }
 
   List<Widget> _totpFields(Widget gap) {
@@ -409,7 +527,7 @@ class _EditorState extends State<_Editor> {
         ],
         HmTextField(
           label: tr('Title', 'Название'),
-          required: true,
+          required: !_isServer,
           autofocus: widget.entry == null,
           controller: _title,
           error: _titleError,
@@ -498,6 +616,7 @@ class _EditorState extends State<_Editor> {
           HmTextField(label: tr('Host / URL', 'Хост / URL'), controller: _url, identifier: true),
           gap,
         ],
+        if (_isServer) ..._serverFields(gap),
         if (_isTotp) ..._totpFields(gap),
         if (_isKey && d != null) ...[_Derived(kind: _kind, key: ValueKey(d.publicKey), derived: d), gap],
         HmTextField(

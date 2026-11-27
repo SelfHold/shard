@@ -26,6 +26,8 @@ object Core {
         val token = Mobilebind.start(dir.absolutePath, app.cacheDir.absolutePath, socket)
         Mobilebind.setListener(object : Listener {
             override fun onEvent(kind: Long, message: String?) {
+                // A pairing request of another app came or was answered.
+                if (kind == 6L || kind == 2L) ConnectorService.updateNotice(app)
                 // Tree or state changed: the system file picker refreshes.
                 if (kind == 1L || kind == 2L) {
                     val r = app.contentResolver

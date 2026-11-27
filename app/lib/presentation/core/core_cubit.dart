@@ -18,6 +18,7 @@ class CoreState extends Equatable {
     this.error,
     this.treeRev = 0,
     this.secretsRev = 0,
+    this.appsRev = 0,
     this.syncOk = true,
     this.syncError,
     this.lastSync,
@@ -30,6 +31,7 @@ class CoreState extends Equatable {
   final String? error; // connection error
   final int treeRev; // bumps when files changed anywhere
   final int secretsRev; // bumps when the password safe changed here
+  final int appsRev; // bumps when connected apps or pairing requests changed
   final bool syncOk;
   final String? syncError;
   final DateTime? lastSync;
@@ -38,6 +40,9 @@ class CoreState extends Equatable {
   final bool stopped;
 
   bool get unlocked => state?.unlocked ?? false;
+
+  /// Unlocked, the core is still connecting to the storages.
+  bool get opening => unlocked && (state?.opening ?? false);
 
   /// Online: the core answers and the last sync reached the storages.
   bool get online => conn == Conn.ready && syncOk;
@@ -49,6 +54,7 @@ class CoreState extends Equatable {
     String? error,
     int? treeRev,
     int? secretsRev,
+    int? appsRev,
     bool? syncOk,
     String? syncError,
     DateTime? lastSync,
@@ -62,6 +68,7 @@ class CoreState extends Equatable {
     error: clearError ? null : error ?? this.error,
     treeRev: treeRev ?? this.treeRev,
     secretsRev: secretsRev ?? this.secretsRev,
+    appsRev: appsRev ?? this.appsRev,
     syncOk: syncOk ?? this.syncOk,
     syncError: syncOk == true ? null : syncError ?? this.syncError,
     lastSync: lastSync ?? this.lastSync,
@@ -69,7 +76,7 @@ class CoreState extends Equatable {
   );
 
   @override
-  List<Object?> get props => [conn, state, status, error, treeRev, secretsRev, syncOk, syncError, lastSync, stopped];
+  List<Object?> get props => [conn, state, status, error, treeRev, secretsRev, appsRev, syncOk, syncError, lastSync, stopped];
 }
 
 /// The connection to the core and what every screen needs to know.
@@ -112,6 +119,8 @@ class CoreCubit extends Cubit<CoreState> {
                 emit(state.copyWith(treeRev: state.treeRev + 1));
               case pb.Event_Kind.SECRETS_CHANGED:
                 emit(state.copyWith(secretsRev: state.secretsRev + 1));
+              case pb.Event_Kind.APPS_CHANGED:
+                emit(state.copyWith(appsRev: state.appsRev + 1));
               case pb.Event_Kind.STATE_CHANGED:
                 unawaited(refreshState());
               case pb.Event_Kind.SYNC_DONE:

@@ -5,6 +5,10 @@
 // The app finds the daemon through endpoint.json in the config dir:
 // {"address": "unix:///run/user/1000/cloudsync.sock", "token": "..."}.
 // The file is readable only by the user; every call must carry the token.
+//
+// Other apps (docs/CONNECTOR.md) reach the Connector API on a socket of its
+// own, found through connector.json in the same dir ({"address": ...}, no
+// secret): it serves only app records, to apps the user paired.
 package main
 
 import (
@@ -28,6 +32,8 @@ import (
 	"github.com/winfsp/cgofuse/fuse"
 	"google.golang.org/grpc"
 
+	"cloudsync/core/connector"
+	cpb "cloudsync/core/connector/pb"
 	"cloudsync/core/crypto"
 	"cloudsync/core/engine"
 	"cloudsync/core/eventlog"
@@ -46,6 +52,8 @@ func main() {
 	mountDir := flag.String("mount", filepath.Join(home, "CloudSync"), "where to show the vault (empty: do not mount)")
 	listen := flag.String("listen", defaultListen(base), "unix:PATH or tcp:HOST:PORT")
 	endpoint := flag.String("endpoint", filepath.Join(base, "endpoint.json"), "where to write address and token for the app")
+	connListen := flag.String("connector-listen", connector.DefaultListen(base), "Connector API for other apps: unix:PATH or tcp:HOST:PORT (empty: off)")
+	connEndpoint := flag.String("connector-endpoint", filepath.Join(base, "connector.json"), "where to write the Connector API address")
 	device := flag.String("device", "", "device name (default: hostname)")
 	logFile := flag.String("log", filepath.Join(base, "cloudsyncd.log"), "log file (empty: stderr only)")
 	flag.Parse()
@@ -93,6 +101,25 @@ func main() {
 	srv := grpc.NewServer(rpc.TokenAuth(token)...)
 	pb.RegisterCloudSyncServer(srv, svc)
 
+	var conn *grpc.Server
+	if *connListen != "" {
+		clis, err := listenOn(*connListen)
+		if err != nil {
+			logger.Fatal(err)
+		}
+		conn = grpc.NewServer()
+		cpb.RegisterConnectorServer(conn, svc.Connector())
+		if err := connector.WriteEndpoint(*connEndpoint, address(clis)); err != nil {
+			logger.Fatal(err)
+		}
+		go func() {
+			logger.Printf("connector on %s", clis.Addr())
+			if err := conn.Serve(clis); err != nil {
+				logger.Print(err)
+			}
+		}()
+	}
+
 	if pw := os.Getenv("CS_PASSWORD"); pw != "" {
 		os.Unsetenv("CS_PASSWORD")
 		v, err := vault.Open(*vaultPath, []byte(pw))
@@ -123,6 +150,13 @@ func main() {
 		srv.Stop()
 	}
 	os.Remove(*endpoint)
+	if conn != nil {
+		conn.Stop() // app Watch streams end; apps reconnect to the next run
+		os.Remove(*connEndpoint)
+		if p, ok := strings.CutPrefix(*connListen, "unix:"); ok {
+			os.Remove(p)
+		}
+	}
 }
 
 func defaultListen(base string) string {
@@ -162,12 +196,17 @@ func listenOn(addr string) (net.Listener, error) {
 	return nil, fmt.Errorf("bad listen address %q", addr)
 }
 
-func writeEndpoint(path string, lis net.Listener, token string) error {
+// address is a listener's address as endpoint files carry it.
+func address(lis net.Listener) string {
 	addr := lis.Addr().String()
 	if lis.Addr().Network() == "unix" {
 		addr = "unix://" + addr
 	}
-	data, _ := json.MarshalIndent(map[string]string{"address": addr, "token": token}, "", "  ")
+	return addr
+}
+
+func writeEndpoint(path string, lis net.Listener, token string) error {
+	data, _ := json.MarshalIndent(map[string]string{"address": address(lis), "token": token}, "", "  ")
 	if err := os.MkdirAll(filepath.Dir(path), 0o700); err != nil {
 		return err
 	}

@@ -32,7 +32,27 @@ const (
 	KindSSH      Kind = "ssh"
 	KindWeb3     Kind = "web3"
 	KindTOTP     Kind = "totp" // two-factor codes and recovery codes
+	// KindNeverSave is a site a browser must not offer to save a password
+	// for (Connector API, "blocked"): a URL only, no secret. It is not
+	// shown in CloudSync's own lists.
+	KindNeverSave Kind = "never-save"
+	// KindServer is a server reached over SSH (Connector API, scope
+	// "servers"): URL is host[:port], Username the login user, Password
+	// the SSH password; the rest is in Meta.Server.
+	KindServer Kind = "server"
 )
+
+// LoginMeta is what a browser keeps of a website login besides the
+// username and URL (Connector API). CloudSync shows none of it; it stays
+// when the entry is edited in CloudSync.
+type LoginMeta struct {
+	Realm            string `json:"realm,omitempty"` // signon realm; "" = origin of Meta.URL
+	ActionURL        string `json:"action_url,omitempty"`
+	UsernameElement  string `json:"username_element,omitempty"`
+	PasswordElement  string `json:"password_element,omitempty"`
+	DisplayName      string `json:"display_name,omitempty"`
+	FederationOrigin string `json:"federation_origin,omitempty"`
+}
 
 // Meta is the part of an entry shown in lists.
 type Meta struct {
@@ -53,6 +73,10 @@ type Meta struct {
 	RecoveryLeft int       `json:"recovery_left,omitempty"`
 	Created      time.Time `json:"created"`
 	Updated      time.Time `json:"updated"`
+	// When the password last changed (unix ms; 0 = not known).
+	PasswordChangedMs int64       `json:"password_changed_ms,omitempty"`
+	Login             *LoginMeta  `json:"login,omitempty"`
+	Server            *ServerMeta `json:"server,omitempty"` // KindServer
 }
 
 // Data is the secret part, opened only on demand.
@@ -64,7 +88,13 @@ type Data struct {
 	TOTP       *TOTP  `json:"totp,omitempty"`
 	// Recovery codes not used yet; a used one is removed (UseRecoveryCode).
 	RecoveryCodes []string `json:"recovery_codes,omitempty"`
+	// Fields of a connected app (a browser) kept with a login, not read
+	// by CloudSync; at most MaxExtra bytes of keys and values.
+	Extra map[string][]byte `json:"extra,omitempty"`
 }
+
+// MaxExtra is the size limit of Data.Extra (keys + values).
+const MaxExtra = 16 << 10
 
 // Entry is one record of the safe.
 type Entry struct {
@@ -196,6 +226,31 @@ func Prepare(m *Meta, d *Data) error {
 	} else if err := prepareTOTP(m, d); err != nil {
 		return err
 	}
+	if m.Kind == KindNeverSave {
+		// A site, never a secret.
+		*d = Data{}
+		m.Username, m.Comment, m.Group, m.PasswordChangedMs = "", "", "", 0
+		if strings.TrimSpace(m.URL) == "" && (m.Login == nil || m.Login.Realm == "") {
+			return invalid("a site is needed")
+		}
+		if m.Login != nil {
+			m.Login = &LoginMeta{Realm: m.Login.Realm}
+		}
+	}
+	if m.Kind != KindPassword && m.Kind != KindNeverSave {
+		m.Login = nil
+	}
+	if m.Kind != KindServer {
+		m.Server = nil
+	} else if err := prepareServer(m, d); err != nil {
+		return err
+	}
+	if m.Kind != KindPassword && m.Kind != KindServer {
+		d.Extra = nil
+	}
+	if err := checkLogin(m.Login, d.Extra); err != nil {
+		return err
+	}
 	m.Title = strings.TrimSpace(m.Title)
 	if m.Title == "" {
 		return invalid("a title is needed")
@@ -210,7 +265,7 @@ func Prepare(m *Meta, d *Data) error {
 	}
 	m.KeyType, m.PublicKey, m.Fingerprint, m.Address = "", "", "", ""
 	switch m.Kind {
-	case KindPassword, KindTOTP:
+	case KindPassword, KindTOTP, KindNeverSave, KindServer:
 		m.Network = ""
 	case KindSSH:
 		m.Network = ""
@@ -233,6 +288,29 @@ func Prepare(m *Meta, d *Data) error {
 	}
 	return nil
 }
+
+func checkLogin(l *LoginMeta, extra map[string][]byte) error {
+	if l != nil {
+		for _, s := range []string{l.Realm, l.ActionURL, l.UsernameElement, l.PasswordElement, l.DisplayName, l.FederationOrigin} {
+			if len(s) > maxURL {
+				return invalid("a login field is too long")
+			}
+		}
+	}
+	n := 0
+	for k, v := range extra {
+		if k == "" || len(k) > 256 {
+			return invalid("an extra field needs a name of 1–256 bytes")
+		}
+		n += len(k) + len(v)
+	}
+	if n > MaxExtra {
+		return invalidf("extra fields are larger than %d KiB", MaxExtra>>10)
+	}
+	return nil
+}
+
+const maxURL = 4 << 10
 
 func prepareTOTP(m *Meta, d *Data) error {
 	if d.TOTP == nil {

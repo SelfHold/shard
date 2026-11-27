@@ -26,6 +26,11 @@ func TestSetupFlow(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	if !st.Unlocked || st.Ready {
+		t.Fatalf("created: %+v", st)
+	}
+	s.waitOpen()
+	st, _ = s.GetState(ctx, &pb.Empty{})
 	if !st.Unlocked || st.Ready || st.Problem == "" {
 		t.Fatalf("new vault without storages: %+v", st)
 	}
@@ -40,6 +45,16 @@ func TestSetupFlow(t *testing.T) {
 	}
 	if _, err := s.List(ctx, &pb.PathRequest{Path: "/"}); err == nil {
 		t.Fatal("listing works without an engine")
+	}
+	// The safe is read from this device's copies even without an engine.
+	if rep, err := s.ListSecrets(ctx, &pb.Empty{}); err != nil || len(rep.Entries) != 0 {
+		t.Fatalf("safe while not ready: %v %v", rep, err)
+	}
+	if _, err := s.TotpCodes(ctx, &pb.Empty{}); err != nil {
+		t.Fatalf("totp codes while not ready: %v", err)
+	}
+	if _, err := s.PutSecret(ctx, &pb.SecretEntry{Title: "x", Password: "y"}); status.Code(err) != codes.FailedPrecondition {
+		t.Fatalf("edit while not ready: %v", err)
 	}
 	for i := 0; i < 3; i++ {
 		p := filepath.Join(dir, "store", string(rune('a'+i)))
@@ -128,9 +143,16 @@ func TestSetupFlow(t *testing.T) {
 	if st.Unlocked {
 		t.Fatal("still unlocked")
 	}
+	if _, err := s.Unlock(ctx, &pb.UnlockRequest{Password: "nope", DeviceName: "laptop"}); status.Code(err) != codes.PermissionDenied {
+		t.Fatalf("unlock with a wrong password: %v", err)
+	}
 	st, err = s.Unlock(ctx, &pb.UnlockRequest{Password: "pw", DeviceName: "laptop"})
-	if err != nil || !st.Ready {
+	if err != nil || !st.Unlocked {
 		t.Fatalf("unlock: %v %v", st, err)
+	}
+	s.waitOpen()
+	if st, _ = s.GetState(ctx, &pb.Empty{}); !st.Ready {
+		t.Fatalf("not ready after unlock: %+v", st)
 	}
 	if ls, err := s.List(ctx, &pb.PathRequest{Path: "/docs"}); err != nil || len(ls.Entries) != 1 {
 		t.Fatalf("after unlock: %v %v", ls, err)
@@ -151,6 +173,7 @@ func waitReload(t *testing.T, s *Service) {
 	time.Sleep(50 * time.Millisecond) // let the reload goroutine take the lock
 	s.reloadMu.Lock()
 	s.reloadMu.Unlock()
+	s.waitOpen()
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.v == nil {

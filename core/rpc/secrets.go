@@ -2,11 +2,14 @@ package rpc
 
 import (
 	"context"
+	"errors"
+	"sort"
 	"time"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	"cloudsync/core/engine"
 	"cloudsync/core/rpc/pb"
 	"cloudsync/core/secrets"
 )
@@ -16,6 +19,45 @@ var kindToPB = map[secrets.Kind]pb.SecretKind{
 	secrets.KindSSH:      pb.SecretKind_SECRET_SSH,
 	secrets.KindWeb3:     pb.SecretKind_SECRET_WEB3,
 	secrets.KindTOTP:     pb.SecretKind_SECRET_TOTP,
+	secrets.KindServer:   pb.SecretKind_SECRET_SERVER,
+}
+
+var serverAuthToPB = map[secrets.ServerAuth]pb.ServerAuth{
+	secrets.AuthPassword: pb.ServerAuth_SERVER_AUTH_PASSWORD,
+	secrets.AuthSSHKey:   pb.ServerAuth_SERVER_AUTH_SSH_KEY,
+	secrets.AuthAgent:    pb.ServerAuth_SERVER_AUTH_AGENT,
+}
+
+func serverAuthFromPB(a pb.ServerAuth) secrets.ServerAuth {
+	for s, p := range serverAuthToPB {
+		if p == a {
+			return s
+		}
+	}
+	return secrets.AuthUnspecified
+}
+
+func serverToPB(sv *secrets.ServerMeta, d *secrets.Data) *pb.SecretServer {
+	if sv == nil {
+		return nil
+	}
+	out := &pb.SecretServer{Folder: sv.Folder, Auth: serverAuthToPB[sv.Auth], SshKeyId: sv.SSHKeyID,
+		HostKeys: sv.HostKeys, JumpServerId: sv.JumpServerID, Tags: sv.Tags}
+	if d != nil {
+		for k := range d.Extra {
+			out.ExtraKeys = append(out.ExtraKeys, k)
+		}
+		sort.Strings(out.ExtraKeys)
+	}
+	return out
+}
+
+func serverFromPB(sv *pb.SecretServer) *secrets.ServerMeta {
+	if sv == nil {
+		return nil // PutSecret keeps the stored fields
+	}
+	return &secrets.ServerMeta{Folder: sv.Folder, Auth: serverAuthFromPB(sv.Auth), SSHKeyID: sv.SshKeyId,
+		HostKeys: sv.HostKeys, JumpServerID: sv.JumpServerId, Tags: sv.Tags}
 }
 
 func kindFromPB(k pb.SecretKind) secrets.Kind {
@@ -50,7 +92,7 @@ func secretToPB(e secrets.Entry) *pb.SecretEntry {
 		Username: e.Username, Url: e.URL, Comment: e.Comment, Network: networkToPB(e.Network),
 		KeyType: e.KeyType, PublicKey: e.PublicKey, Fingerprint: e.Fingerprint, Address: e.Address,
 		CreatedUnix: e.Created.Unix(), UpdatedUnix: e.Updated.Unix(), Device: e.Device, ConflictOf: e.ConflictOf,
-		RecoveryLeft: int32(e.RecoveryLeft),
+		RecoveryLeft: int32(e.RecoveryLeft), Server: serverToPB(e.Server, e.Data),
 	}
 	if e.Data != nil {
 		out.Opened = true
@@ -70,7 +112,7 @@ func groupToPB(g secrets.Group) *pb.SecretGroup {
 func (s *Service) secretsChanged() { s.publish(pb.Event_SECRETS_CHANGED, "") }
 
 func (s *Service) ListSecrets(context.Context, *pb.Empty) (*pb.SecretsReply, error) {
-	e, err := s.engine()
+	e, err := s.safe()
 	if err != nil {
 		return nil, err
 	}
@@ -86,7 +128,7 @@ func (s *Service) ListSecrets(context.Context, *pb.Empty) (*pb.SecretsReply, err
 }
 
 func (s *Service) GetSecret(_ context.Context, r *pb.IdRequest) (*pb.SecretEntry, error) {
-	e, err := s.engine()
+	e, err := s.safe()
 	if err != nil {
 		return nil, err
 	}
@@ -108,6 +150,9 @@ func (s *Service) PutSecret(ctx context.Context, r *pb.SecretEntry) (*pb.SecretE
 	}
 	if m.Kind == secrets.KindWeb3 {
 		m.Network = networkFromPB(r.Network)
+	}
+	if m.Kind == secrets.KindServer {
+		m.Server = serverFromPB(r.Server)
 	}
 	d := secrets.Data{Password: r.Password, Notes: r.Notes, PrivateKey: r.PrivateKey, Passphrase: r.Passphrase}
 	if m.Kind == secrets.KindTOTP {
@@ -175,7 +220,7 @@ func (s *Service) DeriveKey(_ context.Context, r *pb.DeriveKeyRequest) (*pb.Deri
 }
 
 func (s *Service) TotpCodes(context.Context, *pb.Empty) (*pb.TotpCodesReply, error) {
-	e, err := s.engine()
+	e, err := s.safe()
 	if err != nil {
 		return nil, err
 	}
@@ -205,16 +250,78 @@ func (s *Service) UseRecoveryCode(ctx context.Context, r *pb.RecoveryCodeRequest
 // CheckTotp needs no open vault: it only computes.
 func (s *Service) CheckTotp(_ context.Context, r *pb.CheckTotpRequest) (*pb.TotpPreview, error) {
 	out := &pb.TotpPreview{RecoveryCodes: secrets.ParseRecoveryCodes(r.RecoveryText)}
-	if r.Secret == "" {
-		return out, nil
+	if r.Secret != "" {
+		previewTOTP(out, r.Secret, secrets.TOTP{Algorithm: r.Algorithm, Digits: int(r.Digits), Period: int(r.Period)})
 	}
-	t, info, err := secrets.ParseTOTP(r.Secret, secrets.TOTP{Algorithm: r.Algorithm, Digits: int(r.Digits), Period: int(r.Period)})
+	return out, nil
+}
+
+func previewTOTP(out *pb.TotpPreview, secret string, def secrets.TOTP) {
+	t, info, err := secrets.ParseTOTP(secret, def)
 	if err != nil {
 		out.Error = err.Error()
-		return out, nil
+		return
 	}
 	out.Issuer, out.Account = info.Issuer, info.Account
 	out.Algorithm, out.Digits, out.Period = t.Algorithm, int32(t.Digits), int32(t.Period)
 	out.Code, _ = t.Code(time.Now())
+}
+
+// ReadTotpLinks needs no open vault: it only computes.
+func (s *Service) ReadTotpLinks(_ context.Context, r *pb.TotpLinksRequest) (*pb.TotpLinksReply, error) {
+	links, batches := secrets.ReadTOTPLinks(r.Text)
+	out := &pb.TotpLinksReply{}
+	for _, l := range links {
+		p := &pb.TotpPreview{}
+		if l.Error != nil {
+			p.Error, p.Issuer = l.Error.Error(), l.Name
+		} else {
+			previewTOTP(p, l.Link, secrets.TOTP{})
+		}
+		link := l.Link
+		if p.Error != "" {
+			link = ""
+		}
+		out.Links = append(out.Links, &pb.TotpLink{Link: link, Preview: p})
+	}
+	for _, b := range batches {
+		out.Batches = append(out.Batches, &pb.TotpBatch{Id: int32(b.ID), Index: int32(b.Index), Size: int32(b.Size)})
+	}
+	return out, nil
+}
+
+func (s *Service) ImportSecrets(ctx context.Context, r *pb.SecretImportRequest) (*pb.SecretImportReply, error) {
+	e, err := s.engine()
+	if err != nil {
+		return nil, err
+	}
+	imp, err := secrets.ImportFile(r.FileName, r.Data, r.Password, r.KeyFile)
+	if errors.Is(err, secrets.ErrImportPassword) {
+		return &pb.SecretImportReply{NeedPassword: true, Format: "KeePass (KDBX)"}, nil
+	}
+	if err != nil {
+		return nil, toStatus(err)
+	}
+	rep, err := e.ImportSecrets(ctx, imp.Items, engine.ImportOptions{Group: r.GroupId, KeepGroups: r.KeepGroups, DryRun: r.DryRun})
+	if err != nil {
+		return nil, toStatus(err)
+	}
+	out := &pb.SecretImportReply{
+		Format: imp.Format, Added: int32(rep.Added), Duplicates: int32(rep.Duplicate), Failed: int32(rep.Failed),
+		NewGroups: rep.NewGroups,
+	}
+	for i, it := range imp.Items {
+		item := &pb.SecretImportItem{
+			Kind: kindToPB[it.Kind], Title: it.Title, Username: it.Username, Url: it.URL, Group: rep.Group[i],
+			Status: pb.SecretImportStatus(rep.Status[i]),
+		}
+		if it.Error != nil {
+			item.Error = it.Error.Error()
+		}
+		out.Items = append(out.Items, item)
+	}
+	if !r.DryRun && rep.Added > 0 {
+		s.secretsChanged()
+	}
 	return out, nil
 }

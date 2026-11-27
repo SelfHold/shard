@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fixnum/fixnum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,6 +36,9 @@ class _MaintenanceScreenState extends State<MaintenanceScreen> {
   // may already be gone and context.read would throw.
   late final CoreCubit _core;
 
+  // Refreshes the status while pinned files download in the background.
+  Timer? _pinPoll;
+
   @override
   void initState() {
     super.initState();
@@ -42,10 +47,14 @@ class _MaintenanceScreenState extends State<MaintenanceScreen> {
     _k.text = '${st?.dataShards ?? 2}';
     _m.text = '${st?.parityShards ?? 1}';
     _core.refreshStatus();
+    _pinPoll = Timer.periodic(const Duration(seconds: 3), (_) {
+      if (_core.state.status?.pinning ?? false) _core.refreshStatus();
+    });
   }
 
   @override
   void dispose() {
+    _pinPoll?.cancel();
     _k.dispose();
     _m.dispose();
     super.dispose();
@@ -63,12 +72,30 @@ class _MaintenanceScreenState extends State<MaintenanceScreen> {
     }
   }
 
-  Future<void> _keepAll(bool on) async {
+  /// Reference device: "/" is pinned, so every file is kept here.
+  Future<void> _reference(bool on) async {
+    if (!on) {
+      final ok = await confirm(
+        context,
+        title: tr('Stop being a reference device?', 'Перестать быть опорным устройством?'),
+        message: tr(
+          'Files stay on the storages. This device keeps only what is pinned separately and a cache of recently opened files; '
+              'the rest of the local copy is freed.',
+          'Файлы остаются в хранилищах. На устройстве останется только закреплённое отдельно и кэш недавно открытых файлов; '
+              'остальная локальная копия будет освобождена.',
+        ),
+        action: tr('Turn off', 'Выключить'),
+      );
+      if (!ok) return;
+    }
     setState(() => _pinning = true);
     try {
       if (on) {
         await _core.api.pin(pb.PathRequest(path: '/'));
-        Toasts.success(tr('All files downloaded and will be kept here', 'Все файлы скачаны и будут храниться здесь'));
+        Toasts.success(
+          tr('This is now a reference device', 'Теперь это опорное устройство'),
+          tr('All files are being downloaded in the background.', 'Все файлы скачиваются в фоне.'),
+        );
       } else {
         await _core.api.unpin(pb.PathRequest(path: '/'));
       }
@@ -147,6 +174,35 @@ class _MaintenanceScreenState extends State<MaintenanceScreen> {
     }
   }
 
+  List<Widget> _referenceProgress(pb.StatusReply st) {
+    final total = st.pinnedBytes.toInt(), missing = st.pinnedMissingBytes.toInt();
+    final have = total - missing;
+    final done = missing == 0 && !st.pinning;
+    return [
+      const SizedBox(height: 12),
+      if (!done && total > 0) ...[HmProgress(value: have / total), const SizedBox(height: 8)],
+      Text(
+        done
+            ? tr('All files are on this device (${formatSize(total)}).', 'Все файлы на этом устройстве (${formatSize(total)}).')
+            : tr(
+                '${st.pinning ? 'Downloading' : 'Waiting to download'}: ${formatSize(have)} of ${formatSize(total)} here.',
+                '${st.pinning ? 'Скачивание' : 'Ожидает скачивания'}: здесь ${formatSize(have)} из ${formatSize(total)}.',
+              ),
+        style: HmText.small.copyWith(height: 1.5),
+      ),
+      if (st.pinError.isNotEmpty && !st.pinning) ...[
+        const SizedBox(height: 8),
+        HmBanner(
+          tr(
+            'Not everything could be downloaded: ${st.pinError}. Retried on the next sync.',
+            'Скачать удалось не всё: ${st.pinError}. Повтор при следующей синхронизации.',
+          ),
+          tone: HmTone.error,
+        ),
+      ],
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final hm = Hm.of(context);
@@ -201,14 +257,19 @@ class _MaintenanceScreenState extends State<MaintenanceScreen> {
               ),
               const SizedBox(height: 16),
               HmToggleRow(
-                label: tr('Keep all files on this device', 'Держать все файлы на этом устройстве'),
+                label: tr('Reference device', 'Опорное устройство'),
                 hint: tr(
-                  'Full copy: files are available offline. Otherwise they are downloaded when opened.',
-                  'Полная копия: файлы доступны без сети. Иначе скачиваются при открытии.',
+                  'Keeps a full copy of every file, including new ones from other devices: files open offline and '
+                      'lost pieces can be rebuilt from here. Needs disk space for the whole vault'
+                      '${(st?.filesBytes ?? Int64.ZERO) > 0 ? ' (${formatSize(st!.filesBytes.toInt())})' : ''}.',
+                  'Хранит полную копию всех файлов, включая новые с других устройств: файлы открываются без сети, '
+                      'а потерянные части можно восстановить отсюда. Нужно место на диске под всё хранилище'
+                      '${(st?.filesBytes ?? Int64.ZERO) > 0 ? ' (${formatSize(st!.filesBytes.toInt())})' : ''}.',
                 ),
                 value: keepAll,
-                onChanged: _pinning ? null : _keepAll,
+                onChanged: _pinning ? null : _reference,
               ),
+              if (keepAll && st != null) ..._referenceProgress(st),
             ],
           ),
         ),
@@ -267,7 +328,11 @@ class _MaintenanceScreenState extends State<MaintenanceScreen> {
                     HmStatCard(label: tr('Checked', 'Проверено'), value: '${_repair!.blobs}'),
                     HmStatCard(label: tr('Fixed', 'Исправлено'), value: '${_repair!.repaired + _repair!.reencoded}', accent: HmAccent.ok),
                     HmStatCard(label: tr('Moved', 'Перенесено'), value: '${_repair!.moved}', accent: HmAccent.active),
-                    HmStatCard(label: tr('Failed', 'Не удалось'), value: '${_repair!.failed}', accent: _repair!.failed > 0 ? HmAccent.error : HmAccent.ok),
+                    HmStatCard(
+                      label: tr('Failed', 'Не удалось'),
+                      value: '${_repair!.failed}',
+                      accent: _repair!.failed > 0 ? HmAccent.error : HmAccent.ok,
+                    ),
                   ],
                 ),
                 if (_repair!.damaged.isNotEmpty) ...[
@@ -406,12 +471,20 @@ class _MaintenanceScreenState extends State<MaintenanceScreen> {
               cell: (d) => Row(
                 children: [
                   Flexible(child: Text(d.name, overflow: TextOverflow.ellipsis)),
-                  if (d.id == st?.deviceId) ...[const SizedBox(width: 8), HmBadge(tr('this device', 'это устройство'), tone: HmTone.accent)],
+                  if (d.id == st?.deviceId) ...[
+                    const SizedBox(width: 8),
+                    HmBadge(tr('this device', 'это устройство'), tone: HmTone.accent),
+                  ],
                 ],
               ),
             ),
             HmColumn(label: tr('Platform', 'Платформа'), sortKey: (d) => d.platform, cell: (d) => Text(platformName(d.platform))),
-            HmColumn(label: tr('Added', 'Подключено'), flex: 2, sortKey: (d) => d.addedUnix.toInt(), cell: (d) => Text(formatDate(d.addedUnix))),
+            HmColumn(
+              label: tr('Added', 'Подключено'),
+              flex: 2,
+              sortKey: (d) => d.addedUnix.toInt(),
+              cell: (d) => Text(formatDate(d.addedUnix)),
+            ),
             HmColumn(
               label: 'ID',
               mobile: false,

@@ -33,6 +33,8 @@ Everything is encrypted and decrypted on your devices only.
   Concurrent offline edits become conflict copies, never lost edits.
 - **Password safe** with passwords, SSH keys, web3 keys (Ethereum/EVM, Solana) and
   2FA (TOTP) codes with recovery codes, synced the same way as files.
+- **Connected apps.** Other apps (such as MegaChat) can keep their settings in the
+  vault: the same on every device, in every storage, without a password of their own.
 
 ## How it works
 
@@ -54,7 +56,8 @@ file → FastCDC chunks (~4 MB; small files are packed together)
   deterministic fold of all operations (Lamport clocks). Concurrent edits of one file
   give a conflict copy, not data loss.
 - **Files on demand.** Pins (`cs pin`) keep files or folders on the device; `pin /`
-  keeps a full local copy.
+  keeps a full local copy — a *reference device* (a switch in Maintenance). The app
+  pins in the background (progress in `Status`); `cs pin` and `cs sync` wait for it.
 - **Locks.** Opening a file for writing puts a lease into every storage. A device owns
   the file when a majority of storages hold no other lease besides its own. While a file
   is open on one device, other devices can open it read-only. A lease expires unless
@@ -87,7 +90,35 @@ file → FastCDC chunks (~4 MB; small files are packed together)
   sealed part. The core computes the current codes (`TotpCodes`); the secret never goes
   into the list. Recovery codes are pasted as is (numbering, columns, headers and notes
   of the file are dropped); a used code is removed from the record (`UseRecoveryCode`) on
-  every device.
+  every device. "Import from link" takes `otpauth://totp/…` links (several at once) and
+  Google Authenticator exports (`otpauth-migration://`, every part of the export; the core
+  expands them in `ReadTotpLinks`); HOTP is not supported.
+- **Import from other password managers** ("Import" in the safe, `ImportSecrets`): a
+  KeePass database (`.kdbx` 3/4 with password and optional key file; the recycle bin is
+  skipped), KeePass XML, Bitwarden unencrypted JSON, and CSV exports of KeePass,
+  KeePassXC, Chrome / Edge / Brave / Opera, Firefox, Safari / Apple Passwords, Bitwarden,
+  1Password, LastPass, Dashlane, Proton Pass, NordPass or any CSV with name / URL and
+  password columns. The core reads the file (nothing is written for the preview), keeps
+  folders as groups (or puts everything in one group), moves extra fields into the notes,
+  makes a separate 2FA record from a TOTP field, and skips entries the safe already has,
+  so importing a file twice adds nothing. All records go in one commit.
+
+- **Connected apps** ([docs/CONNECTOR.md](docs/CONNECTOR.md), `proto/connector.proto`).
+  An app pairs with CloudSync once per device: it shows a 6-digit code, the user sees
+  the same code in CloudSync ("Connect an app?", Vault → Connected apps, or
+  `cs apps approve`) and allows it. Then the app keeps small records (≤ 256 KiB, e.g.
+  its settings file) in the vault. A record is an `app` operation in the device
+  journals, sealed with a key of the app. Writes carry the revision they were made
+  from, and a stale one is refused. Writes made concurrently on offline devices
+  are all kept as versions of the record until the app merges them, so nothing
+  is lost. The app also gets a key of its own (`AppKey`, the same on every device),
+  so it can protect its local copy without a password of its own. A paired app sees
+  only its own records: not files, passwords or storages, unless the user grants it
+  the `passwords` scope (a browser: the website logins of the safe, § 12 of
+  CONNECTOR.md; Vault → Connected apps shows and takes it away). Desktops serve the API
+  on a separate socket found through `connector.json`; on Android it is the bound
+  service `ConnectorService` (the caller is identified by its package and signing
+  certificate).
 
 ## Repository layout
 
@@ -105,6 +136,7 @@ file → FastCDC chunks (~4 MB; small files are packed together)
 | `core/engine` | all of the above together: files, cache, pins, sync, repair |
 | `core/mount` | FUSE (Linux) / WinFsp (Windows) |
 | `core/rpc` | gRPC service for the app (`proto/cloudsync.proto`) |
+| `core/connector` | Connector API for other apps (`proto/connector.proto`, [docs/CONNECTOR.md](docs/CONNECTOR.md)): pairing, app records |
 | `cmd/cs` | CLI |
 | `cmd/cloudsyncd` | desktop daemon: gRPC + mount + background sync |
 | `mobilebind` | core for Android (`gomobile bind` → AAR) |

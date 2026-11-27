@@ -7,6 +7,7 @@ require (
 	github.com/gofrs/flock v0.13.1
 	github.com/klauspost/reedsolomon v1.14.2
 	github.com/rclone/rclone v1.76.0
+	github.com/tobischo/gokeepasslib/v3 v3.7.1
 	github.com/winfsp/cgofuse v1.6.1-0.20260531120352-2fa812d1bdc7
 	golang.org/x/crypto v0.58.0
 	golang.org/x/mobile v0.0.0-20261011034528-197770444867
@@ -102,6 +103,7 @@ require (
 	github.com/t3rm1n4l/go-mega v0.0.0-20260717075258-c6acd6a5bd04 // indirect
 	github.com/tklauser/go-sysconf v0.4.0 // indirect
 	github.com/tklauser/numcpus v0.12.0 // indirect
+	github.com/tobischo/argon2 v0.2.0 // indirect
 	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
