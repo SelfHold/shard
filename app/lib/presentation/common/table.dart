@@ -9,7 +9,7 @@ import 'page.dart';
 import 'surfaces.dart';
 import '../../core/i18n.dart';
 
-/// A column of [HmTable] (§ 9.5).
+/// A column of [HmTable].
 class HmColumn<T> {
   const HmColumn({
     required this.label,
@@ -29,7 +29,7 @@ class HmColumn<T> {
   final double? width; // fixed width
   final Comparable<Object?> Function(T)? sortKey;
 
-  /// Shown as a field on phone cards (M8.2: hide what does not fit).
+  /// Shown as a field on phone cards (hide what does not fit).
   final bool mobile;
 
   /// On phone cards, the field is left out for items where this is false
@@ -37,8 +37,8 @@ class HmColumn<T> {
   final bool Function(T)? cardIf;
 }
 
-/// The data table (§ 9): a container with a controls bar, a grid of rows
-/// and pagination on desktops; row cards with a sort bar on phones (M9).
+/// The data table: a container with a controls bar, a grid of rows
+/// and pagination on desktops; row cards with a sort bar on phones.
 class HmTable<T> extends StatefulWidget {
   const HmTable({
     super.key,
@@ -66,7 +66,7 @@ class HmTable<T> extends StatefulWidget {
   final IconData? emptyIcon;
   final Widget? emptyAction;
   final void Function(T)? onTap;
-  final HmStatus? Function(T)? rowStatus; // ok / error stripe only (§ 9.8)
+  final HmStatus? Function(T)? rowStatus; // ok / error stripe only
   final List<Widget> Function(T)? actions;
   final Widget? search; // leftmost in the controls bar
   final List<Widget> controls; // page actions, left of refresh
@@ -168,7 +168,7 @@ class _HmTableState<T> extends State<HmTable<T>> {
         if (c.sortKey != null) i,
     ];
     if (hm.mobile) {
-      // Search row, sort row (with refresh), then the actions on their own row (M11).
+      // Search row, sort row (with refresh), then the actions on their own row.
       final refresh = widget.onRefresh == null
           ? null
           : HmIconButton(icon: Icons.refresh, label: tr('Refresh', 'Обновить'), onPressed: widget.onRefresh);
@@ -191,7 +191,7 @@ class _HmTableState<T> extends State<HmTable<T>> {
     );
   }
 
-  // Phones sort with a select and a direction toggle (M9.1).
+  // Phones sort with a select and a direction toggle.
   Widget _sortBar(List<int> sortable, Widget? refresh) => Row(
     children: [
       Expanded(
@@ -375,7 +375,7 @@ class _HeaderLabel<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final label = Text(column.label.toUpperCase(), style: HmText.th, maxLines: 1, overflow: TextOverflow.ellipsis);
     if (onTap == null) return label;
-    // Dual arrows: the active direction at 1.0, the other at 0.4 (§ 9.5).
+    // Dual arrows: the active direction at 1.0, the other at 0.4.
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(

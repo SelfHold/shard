@@ -69,7 +69,7 @@ class _CloudSyncAppState extends State<CloudSyncApp> {
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       home: home,
       // Toasts are mounted after the navigator, so they stay above
-      // modals and sheets (§ 2.4) and above the tab bar on phones (M15).
+      // modals and sheets and above the tab bar on phones.
       builder: (context, child) {
         final app = Stack(
           children: [

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 import 'typography.dart';
 
-/// Material defaults with every elevation zeroed (MOBILITY App. D). Dark
+/// Material defaults with every elevation zeroed. Dark
 /// only: there is no light palette.
 abstract final class AppTheme {
   static ThemeData get dark {

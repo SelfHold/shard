@@ -30,7 +30,7 @@ body:
     attributes:
       label: Platform
       multiple: true
-      options: [Linux, Windows, Android, CLI only]
+      options: [Linux, Android, CLI only]
     validations:
       required: true
   - type: input

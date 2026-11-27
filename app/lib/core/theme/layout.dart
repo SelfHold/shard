@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-/// Layout constants (DESIGN_MANIFEST.md § 2.5, MOBILITY M2.3). One
+/// Layout constants. One
 /// breakpoint: below 768 px of width the phone layout is used, whatever
 /// the device (a narrow desktop window gets it too).
 class Hm {

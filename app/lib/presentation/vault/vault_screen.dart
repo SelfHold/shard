@@ -20,8 +20,8 @@ import '../common/hm.dart';
 import '../core/core_cubit.dart';
 import '../shell/app_shell.dart' show AppShell, BuildInfo, Section, StatusPills;
 
-/// The vault and this device: the "profile" of the app (§ 4.6). On phones
-/// it also carries the status block of the footer (App. D).
+/// The vault and this device: the "profile" of the app. On phones
+/// it also carries the status block of the footer.
 class VaultScreen extends StatefulWidget {
   const VaultScreen({super.key, required this.onLock});
 
@@ -436,7 +436,7 @@ class _VaultScreenState extends State<VaultScreen> {
           ),
         ),
         if (hm.mobile) ...[
-          // The footer's slots live here on phones (M6, App. D).
+          // The footer's slots live here on phones.
           HmCard(
             padding: const EdgeInsets.all(16),
             child: Column(

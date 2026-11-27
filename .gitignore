@@ -2,7 +2,10 @@
 /builds/
 *.test
 *.out
+*.log
 /vault.cs
-# The health-monitor starter moved out of app/ (kept for reference, not part of the project).
 /starter-backup/
+
+# Local assistant notes and settings: never published.
 CLAUDE.md
+.claude/

@@ -1,16 +1,25 @@
-# CloudSync
+# Shard
 
 **English** · [Русский](README.ru.md)
 
-[![CI](https://github.com/Namikko-chad/cloud-storage/actions/workflows/ci.yml/badge.svg)](https://github.com/Namikko-chad/cloud-storage/actions/workflows/ci.yml)
+[![CI](https://github.com/SelfHold/shard/actions/workflows/ci.yml/badge.svg)](https://github.com/SelfHold/shard/actions/workflows/ci.yml)
 [![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/Namikko-chad/cloud-storage?include_prereleases)](https://github.com/Namikko-chad/cloud-storage/releases)
 
-File sync between Linux, Windows and Android with no server in the middle. Your data
+File sync between Linux and Android devices with no server in the middle. Your data
 is spread over several cloud storages you already have (Google Drive, Mega, S3, WebDAV,
 Dropbox, OneDrive, Yandex Disk and anything else rclone supports, including several
 accounts of the same type) with Reed-Solomon k+m redundancy (m=1 works like RAID 5).
-Everything is encrypted and decrypted on your devices only.
+Everything is encrypted and decrypted on your devices only. Shard also keeps a
+password safe, and other [SelfHold](https://github.com/SelfHold) apps sync their
+settings through it.
+
+Shard was formerly called CloudSync; some identifiers still use the old name (the Go
+module `cloudsync`, the binaries `cloudsyncd`, the vault file `vault.cs`, the config
+directory `cloudsync/`, the Android package `dev.cloudsync.cloudsync`).
+
+**Status:** an early, personal project. There are no published releases yet, and
+before 1.0 the on-storage format and the APIs may change. Build it from source (see
+below).
 
 <p align="center">
   <img src="app/shots/unlock-desktop.png" alt="Desktop app" height="320">
@@ -28,13 +37,43 @@ Everything is encrypted and decrypted on your devices only.
   per storage. Any m storages can disappear; `repair` rebuilds what is missing.
 - **Files on demand.** The full listing is always there; content is downloaded on read,
   only the chunks you need. Pin files or folders to keep them offline.
-- **Mounted folder** on Linux (FUSE) and Windows (WinFsp); system file picker on Android.
+- **Mounted folder** on Linux (FUSE); system file picker on Android.
 - **Write locks** across devices, so a file open on one device is read-only on others.
   Concurrent offline edits become conflict copies, never lost edits.
-- **Password safe** with passwords, SSH keys, web3 keys (Ethereum/EVM, Solana) and
-  2FA (TOTP) codes with recovery codes, synced the same way as files.
-- **Connected apps.** Other apps (such as MegaChat) can keep their settings in the
+- **Password safe** with passwords, SSH keys, web3 keys (Ethereum/EVM, Solana),
+  servers and 2FA (TOTP) codes with recovery codes, synced the same way as files.
+  Imports from KeePass, Bitwarden, browsers and other password managers.
+- **Connected apps.** Other apps (such as Parley) can keep their settings in the
   vault: the same on every device, in every storage, without a password of their own.
+
+## Platforms
+
+- **Linux** (desktop app, daemon, CLI) and **Android** (app with the core inside) are
+  the targets.
+- **macOS and iOS** are planned; the platform specifics are kept behind small seams
+  (`mobilebind`, the data-dir lookup, the Kotlin glue) so they can be added later.
+- **Windows is not a target.** Some Windows code paths and build targets remain in the
+  tree, but Windows builds are not maintained or tested.
+
+## Security model in brief
+
+- One password opens the vault (`vault.cs`, Argon2id). It holds the master key; every
+  other key (content, object names, journals, the safe, connected apps) is derived
+  from it.
+- Storages only ever see ciphertext under HMAC names: no file names, no sizes of single
+  files, no record fields. Payloads are sealed with XChaCha20-Poly1305.
+- On the device, the safe and the journals stay sealed on disk too; logs and RPC
+  errors carry no tokens, passwords or keys. File content you open or pin is kept
+  decrypted in the device's cache (as with any synced folder), so protect the device
+  itself with disk encryption.
+- Keys and storage credentials live only in the Go core; the Flutter UI gets a
+  secret only when the user opens it. On desktops the app talks to the local daemon
+  over a user-only socket with a bearer token; on Android the core runs inside the app.
+- Connected apps reach only their own records, plus the parts of the safe the user
+  grants them explicitly (scopes), per device and revocable.
+
+See [SECURITY.md](SECURITY.md) for reporting vulnerabilities and
+[Current limitations](#current-limitations) for what the model does not cover.
 
 ## How it works
 
@@ -104,8 +143,8 @@ file → FastCDC chunks (~4 MB; small files are packed together)
   so importing a file twice adds nothing. All records go in one commit.
 
 - **Connected apps** ([docs/CONNECTOR.md](docs/CONNECTOR.md), `proto/connector.proto`).
-  An app pairs with CloudSync once per device: it shows a 6-digit code, the user sees
-  the same code in CloudSync ("Connect an app?", Vault → Connected apps, or
+  An app pairs with Shard once per device: it shows a 6-digit code, the user sees
+  the same code in Shard ("Connect an app?", Vault → Connected apps, or
   `cs apps approve`) and allows it. Then the app keeps small records (≤ 256 KiB, e.g.
   its settings file) in the vault. A record is an `app` operation in the device
   journals, sealed with a key of the app. Writes carry the revision they were made
@@ -114,11 +153,12 @@ file → FastCDC chunks (~4 MB; small files are packed together)
   is lost. The app also gets a key of its own (`AppKey`, the same on every device),
   so it can protect its local copy without a password of its own. A paired app sees
   only its own records: not files, passwords or storages, unless the user grants it
-  the `passwords` scope (a browser: the website logins of the safe, § 12 of
-  CONNECTOR.md; Vault → Connected apps shows and takes it away). Desktops serve the API
-  on a separate socket found through `connector.json`; on Android it is the bound
-  service `ConnectorService` (the caller is identified by its package and signing
-  certificate).
+  a scope: `passwords` (a browser: the website logins of the safe), `ssh_keys` (read
+  only) or `servers` (one server list shared by the SSH and database apps); see
+  § 12–14 of CONNECTOR.md. Vault → Connected apps shows each scope and takes it away
+  on its own. Desktops serve the API on a separate socket found through
+  `connector.json`; on Android it is the bound service `ConnectorService` (the caller
+  is identified by its package and signing certificate).
 
 ## Repository layout
 
@@ -134,46 +174,49 @@ file → FastCDC chunks (~4 MB; small files are packed together)
 | `core/lock` | quorum lease locks |
 | `core/secrets` | password safe: record sealing, SSH and web3 public key derivation, TOTP, recovery code parsing |
 | `core/engine` | all of the above together: files, cache, pins, sync, repair |
-| `core/mount` | FUSE (Linux) / WinFsp (Windows) |
+| `core/mount` | FUSE mount (Linux) |
 | `core/rpc` | gRPC service for the app (`proto/cloudsync.proto`) |
 | `core/connector` | Connector API for other apps (`proto/connector.proto`, [docs/CONNECTOR.md](docs/CONNECTOR.md)): pairing, app records |
 | `cmd/cs` | CLI |
 | `cmd/cloudsyncd` | desktop daemon: gRPC + mount + background sync |
 | `mobilebind` | core for Android (`gomobile bind` → AAR) |
-| `app/` | Flutter app for Linux, Windows and Android |
-| `app/lib/presentation/common` | widgets following `DESIGN_MANIFEST.md` (+ `_MOBILITY` for width < 768) |
+| `app/` | Flutter app for Linux and Android |
+| `app/lib/presentation/common` | the app's widget kit: design tokens, dark-only palette, phone layout below 768 px |
 
-## Install
+## Build from source
 
-Prebuilt binaries are attached to [GitHub Releases](https://github.com/Namikko-chad/cloud-storage/releases):
+There are no prebuilt releases yet. Every build output lands in `builds/`.
 
-- **Linux:** `cs` (CLI), `cloudsyncd` (daemon) and the desktop app bundle. Needs
-  `libfuse.so.2` (package `fuse2` / `libfuse2`).
-- **Windows:** `cs.exe`, `cloudsyncd.exe`. Needs [WinFsp](https://winfsp.dev/).
-- **Android:** APK for arm64 phones (Android 8.0+).
+Requirements:
 
-## Build and test
-
-Requirements: Go (version from `go.mod`), a C compiler and FUSE headers for the Linux
-mount, Flutter for the app, `protoc` for `make proto`, gomobile and the Android NDK for
-`make aar`.
+- **Go** (the version in `go.mod`) and a C compiler; FUSE headers and `libfuse.so.2`
+  (package `fuse2` / `libfuse2`) for the Linux mount, or `libfuse3.so.3` with
+  `FUSE_TAGS=-tags=fuse3`.
+- **Flutter** (stable; CI uses the version in `.github/workflows/ci.yml`) for the app.
+  On Linux also the GTK 3 development files, `clang`, `cmake`, `ninja`, `pkg-config`
+  and `libayatana-appindicator3` (tray icon).
+- **Android:** the Android SDK and NDK (found in `~/Android/Sdk/ndk`, or pass `NDK=`),
+  JDK 17, and `gomobile` / `gobind` (`go install golang.org/x/mobile/cmd/gomobile
+  golang.org/x/mobile/cmd/gobind && gomobile init`).
+- `protoc` with `protoc-gen-go`, `protoc-gen-go-grpc` and the Dart plugin
+  (`dart pub global activate protoc_plugin`), only to regenerate code (`make proto`).
 
 ```bash
-make test          # go test ./core/...
-make race          # the same with -race
 make build         # builds/cs, builds/cloudsyncd (Linux, FUSE 2)
 make build FUSE_TAGS=-tags=fuse3   # if libfuse3.so.3 is available
-make build-windows # builds/windows/*.exe (users need WinFsp)
-make proto         # regenerate Go and Dart code from proto
-make aar           # core for Android (gomobile, NDK in ~/Android/Sdk/ndk)
+make build-linux   # desktop app in builds/linux (cloudsyncd next to it)
+make aar           # the Go core for Android (gomobile AAR)
+make build-apk     # Android APKs (arm64, x86_64) in builds/android; builds the AAR first
+make app-run       # build cloudsyncd and run the app in development mode
+make proto         # regenerate Go and Dart code from proto/
+make vet test      # go vet + Go core tests (tests capped at 1 GB RAM)
+make race          # the same with the race detector
 make app-test      # flutter analyze + flutter test
-make build-linux   # Linux app in builds/linux (cloudsyncd next to it)
-make build-apk     # Android APKs in builds/android (builds the AAR first)
-make app-run       # run the app in development mode
 ```
 
-The Windows app is built on Windows: `flutter build windows` in `app/`, then put
-`cloudsyncd.exe` from `make build-windows` next to it. WinFsp is required.
+A release APK is signed with the key given in `app/android/key.properties` or in the
+`CS_KEYSTORE`, `CS_KEYSTORE_PASSWORD`, `CS_KEY_ALIAS`, `CS_KEY_PASSWORD` environment
+variables; without them it is signed with the debug key.
 
 ## Quick start (CLI)
 
@@ -220,14 +263,15 @@ to another account is refused.
 
 One Flutter app on every platform, the same core underneath:
 
-- **Linux, Windows.** The app is a client of the `cloudsyncd` daemon. It reads the
+- **Linux.** The app is a client of the `cloudsyncd` daemon. It reads the
   address and token from `<config dir>/cloudsync/endpoint.json`. If the daemon is not
   running, the app starts it: it looks next to its own binary, in `$CLOUDSYNCD` or in
-  `PATH`. After unlocking, the daemon mounts the vault at `~/CloudSync`. "Open" in the app
-  opens the file in that folder, so edits are saved and the file is locked meanwhile.
-  Closing a file does not wait for the upload: the file is first written to an on-disk
-  queue, then uploaded in the background and read from the local copy until then. If the
-  daemon dies before the upload finishes, it continues on the next start.
+  `PATH`. After unlocking, the daemon mounts the vault at `~/CloudSync` (`-mount`
+  changes it). "Open" in the app opens the file in that folder, so edits are saved and
+  the file is locked meanwhile. Closing a file does not wait for the upload: the file
+  is first written to an on-disk queue, then uploaded in the background and read from
+  the local copy until then. If the daemon dies before the upload finishes, it
+  continues on the next start.
 - **Android.** The core runs inside the app: AAR from `make aar`, a foreground service,
   gRPC over a unix socket in the app's private folder. The vault is visible in the system
   file picker (DocumentsProvider). Reads are streamed, only the needed parts are
@@ -241,6 +285,8 @@ One Flutter app on every platform, the same core underneath:
   Dropbox, disable, remove); maintenance (sync, "keep everything on device", verify and
   repair, k/m change, cleanup, devices); vault (change password, export the vault file
   for a new device, lock).
+- **Language:** the UI starts in English whatever the system locale is; Russian can be
+  chosen on the Vault screen. The choice is kept per device and is never synced.
 - **A new vault** opens right away but works only with k+m storages. Until then the app
   shows the storages screen.
 - **Browser sign-in** (OAuth): the core starts an rclone server on `127.0.0.1:53682` and
@@ -265,17 +311,36 @@ Screenshots of every screen at 1440 and 390 px against a running daemon:
   grows (kilobytes per thousands of edits).
 - Browser sign-in works only where the browser is on the same device. In the CLI,
   OAuth storages need a ready `token` from `rclone authorize`.
-- Windows has not been tested live: the Go part cross-compiles, the Flutter build must be
-  done on Windows.
 - Android has no mounted folder: files are visible through the system file picker
   (DocumentsProvider) and in the app itself.
 
+## SelfHold apps and the Connector
+
+Shard is part of [SelfHold](https://github.com/SelfHold), a set of independent,
+self-hosted apps. Each app works on its own; Shard is the optional sync layer they
+share through the **Connector API** ([docs/CONNECTOR.md](docs/CONNECTOR.md), the
+canonical published contract):
+
+- [Parley](https://github.com/SelfHold/parley) (formerly MegaChat): chat and mail
+  client; keeps its settings vault in Shard.
+- [Postern](https://github.com/SelfHold/postern) (formerly SSH Manager) and
+  [Cellar](https://github.com/SelfHold/cellar) (formerly DB Manager): SSH and database
+  tools; share one server list and the safe's SSH keys through Shard.
+- [Enclave](https://github.com/SelfHold/enclave): a personal Chromium build; reads and
+  saves website logins in Shard's safe.
+- [Bezel](https://github.com/SelfHold/bezel): the matching GTK / GNOME Shell theme.
+
+The repositories share no code: each consumer carries a byte-for-byte copy of
+`proto/connector.proto`, whose owner is this repository. Version 1 only gains fields
+and methods, so apps keep working against an older Shard.
+
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Security issues: [SECURITY.md](SECURITY.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the invariants in
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Security issues: [SECURITY.md](SECURITY.md).
 Changes are listed in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
-CloudSync is licensed under the [GNU General Public License v3.0](LICENSE). The fonts
+Shard is licensed under the [GNU General Public License v3.0](LICENSE). The fonts
 in `app/assets/fonts` are under the SIL Open Font License (`OFL-*.txt` next to them).

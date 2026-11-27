@@ -4,12 +4,12 @@ import '../../core/theme/colors.dart';
 import '../../core/theme/layout.dart';
 import '../../core/theme/typography.dart';
 
-/// Button variants (§ 7.3). One `primary` per view; destructive is `red`;
+/// Button variants. One `primary` per view; destructive is `red`;
 /// cancel is `neutral`.
 enum HmVariant { primary, cyan, green, purple, red, neutral }
 
-/// The one button of the app (§ 7). Heights are fixed: 30/24 px on
-/// desktops, 44/36 on phones (M7). Hover (desktop) or press (touch) adds
+/// The one button of the app. Heights are fixed: 30/24 px on
+/// desktops, 44/36 on phones. Hover (desktop) or press (touch) adds
 /// +0.10 alpha.
 class HmButton extends StatefulWidget {
   const HmButton(
@@ -30,7 +30,7 @@ class HmButton extends StatefulWidget {
   final IconData? icon;
   final bool loading;
 
-  /// Full width: only for form and sheet footers on phones (M7).
+  /// Full width: only for form and sheet footers on phones.
   final bool expand;
 
   @override
@@ -97,7 +97,7 @@ class _HmButtonState extends State<HmButton> {
                 border: Border.all(color: border ?? Colors.transparent),
               ),
               child: widget.loading
-                  // The label keeps the width; the spinner sits over it (§ 7.4).
+                  // The label keeps the width; the spinner sits over it.
                   ? Stack(
                       alignment: Alignment.center,
                       children: [
@@ -117,7 +117,7 @@ class _HmButtonState extends State<HmButton> {
   }
 }
 
-/// Square icon button for toolbars (§ 9.3): 30 px, 44 px on phones (M7).
+/// Square icon button for toolbars: 30 px, 44 px on phones.
 /// [label] is both the tooltip and the screen reader name.
 class HmIconButton extends StatefulWidget {
   const HmIconButton({super.key, required this.icon, required this.label, this.onPressed, this.color});
@@ -168,11 +168,11 @@ class _HmIconButtonState extends State<HmIconButton> {
   }
 }
 
-/// Row action kinds (§ 7.6).
+/// Row action kinds.
 enum HmAction { edit, success, warning, delete, neutral }
 
-/// Dense bordered icon button inside table rows (§ 7.6); 44 px target on
-/// phones (M7).
+/// Dense bordered icon button inside table rows; 44 px target on
+/// phones.
 class HmActionButton extends StatefulWidget {
   const HmActionButton({super.key, required this.icon, required this.label, required this.onPressed, this.kind = HmAction.edit});
 
@@ -229,7 +229,7 @@ class _HmActionButtonState extends State<HmActionButton> {
   }
 }
 
-/// The spinner (§ 17.1). Sized by its parent; colour from the caller.
+/// The spinner. Sized by its parent; colour from the caller.
 class HmSpinner extends StatelessWidget {
   const HmSpinner({super.key, this.color = HmColors.accent});
 

@@ -4,7 +4,7 @@ import '../../core/theme/colors.dart';
 import '../../core/theme/layout.dart';
 import '../../core/theme/typography.dart';
 
-/// Accent stripes (§ 8.2).
+/// Accent stripes.
 enum HmAccent { ok, error, total, active, paused, uptime }
 
 List<Color> _gradient(HmAccent a) => switch (a) {
@@ -16,7 +16,7 @@ List<Color> _gradient(HmAccent a) => switch (a) {
   HmAccent.uptime => const [HmColors.purple, HmColors.accent],
 };
 
-/// Left status bar colours (§ 8.3).
+/// Left status bar colours.
 enum HmStatus { ok, error, paused, warning }
 
 Color statusColor(HmStatus s) => switch (s) {
@@ -26,7 +26,7 @@ Color statusColor(HmStatus s) => switch (s) {
   HmStatus.warning => HmColors.warning,
 };
 
-/// Card (§ 8.1): surface, 12 px radius, no shadow, padding by the caller.
+/// Card: surface, 12 px radius, no shadow, padding by the caller.
 /// [recessed] steps it down to bg when it sits inside another surface.
 class HmCard extends StatelessWidget {
   const HmCard({super.key, required this.child, this.padding, this.accent, this.status, this.recessed = false});
@@ -39,7 +39,7 @@ class HmCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    assert(accent == null || status == null, 'pick one channel (§ 8.6)');
+    assert(accent == null || status == null, 'pick one channel');
     Widget body = Padding(padding: padding ?? EdgeInsets.zero, child: child);
     if (status != null) {
       body = Stack(
@@ -72,7 +72,7 @@ class HmCard extends StatelessWidget {
   }
 }
 
-/// KPI card (§ 8.4): label above a single-token value.
+/// KPI card: label above a single-token value.
 class HmStatCard extends StatelessWidget {
   const HmStatCard({super.key, required this.label, required this.value, this.accent, this.valueColor});
 
@@ -105,8 +105,8 @@ class HmStatCard extends StatelessWidget {
   }
 }
 
-/// Row of stat cards: equal-flex on desktops (§ 8.4), a horizontally
-/// scrolling strip on phones (M8.1).
+/// Row of stat cards: equal-flex on desktops, a horizontally
+/// scrolling strip on phones.
 class HmStatCards extends StatelessWidget {
   const HmStatCards({super.key, required this.children});
 
@@ -140,7 +140,7 @@ class HmStatCards extends StatelessWidget {
   }
 }
 
-/// Section title with the trailing rule (§ 18.1).
+/// Section title with the trailing rule.
 class HmSectionTitle extends StatelessWidget {
   const HmSectionTitle(this.text, {super.key});
 
@@ -159,7 +159,7 @@ class HmSectionTitle extends StatelessWidget {
   );
 }
 
-/// The one page title (§ 3.3).
+/// The one page title.
 class HmPageTitle extends StatelessWidget {
   const HmPageTitle(this.text, {super.key, this.trailing});
 
@@ -191,7 +191,7 @@ enum HmTone { ok, error, warning, info, neutral, accent }
   };
 }
 
-/// One-word state (§ 12.1): alpha 0.15, the neutral one has no border.
+/// One-word state: alpha 0.15, the neutral one has no border.
 class HmBadge extends StatelessWidget {
   const HmBadge(this.text, {super.key, this.tone = HmTone.neutral, this.icon});
 
@@ -220,7 +220,7 @@ class HmBadge extends StatelessWidget {
   }
 }
 
-/// `key: value` chip (§ 12.4).
+/// `key: value` chip.
 class HmPill extends StatelessWidget {
   const HmPill({super.key, required this.child, this.tone});
 
@@ -246,7 +246,7 @@ class HmPill extends StatelessWidget {
   }
 }
 
-/// Live/dead dot (§ 12.2): the only glowing element; pulses, error faster.
+/// Live/dead dot: the only glowing element; pulses, error faster.
 class HmDot extends StatefulWidget {
   const HmDot({super.key, required this.ok, this.label});
 
@@ -300,7 +300,7 @@ class _HmDotState extends State<HmDot> with SingleTickerProviderStateMixin {
   }
 }
 
-/// Page-level message (§ 19.2).
+/// Page-level message.
 class HmBanner extends StatelessWidget {
   const HmBanner(this.text, {super.key, this.tone = HmTone.info, this.action});
 
@@ -339,7 +339,7 @@ class HmBanner extends StatelessWidget {
   }
 }
 
-/// "Nothing here" (§ 19.1): one line, optional icon and one CTA.
+/// "Nothing here": one line, optional icon and one CTA.
 class HmEmptyState extends StatelessWidget {
   const HmEmptyState(this.text, {super.key, this.icon, this.action});
 
@@ -368,7 +368,7 @@ class HmEmptyState extends StatelessWidget {
   }
 }
 
-/// Known-percent progress (§ 17.3): 3 px, track is the border colour.
+/// Known-percent progress: 3 px, track is the border colour.
 class HmProgress extends StatelessWidget {
   const HmProgress({super.key, required this.value, this.color = HmColors.accent});
 
@@ -382,7 +382,7 @@ class HmProgress extends StatelessWidget {
   );
 }
 
-/// A centred spinner for a loading surface (§ 9.6).
+/// A centred spinner for a loading surface.
 class HmLoading extends StatelessWidget {
   const HmLoading({super.key});
 
@@ -395,7 +395,7 @@ class HmLoading extends StatelessWidget {
   }
 }
 
-/// Label: value line for details (sub-label style, § 18.3 h4).
+/// Label: value line for details (sub-label style).
 class HmField extends StatelessWidget {
   const HmField(this.label, this.value, {super.key, this.mono = true});
 

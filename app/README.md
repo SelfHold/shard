@@ -1,4 +1,5 @@
-# CloudSync app
+# Shard app
 
-Flutter client for Linux, Windows and Android. Build, run and architecture: see
-[../README.md](../README.md) and [../CLAUDE.md](../CLAUDE.md).
+Flutter client of Shard (formerly CloudSync) for Linux and Android. Build, run and
+architecture: see [../README.md](../README.md) and
+[../docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md).

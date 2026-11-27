@@ -2,9 +2,9 @@ import 'package:flutter/widgets.dart';
 
 import 'colors.dart';
 
-/// Type scale (DESIGN_MANIFEST.md § 3.2). Both families are bundled
+/// Type scale. Both families are bundled
 /// variable fonts; the weight goes to the `wght` axis. Syne has no
-/// Cyrillic, so Cyrillic display text falls back to JetBrains Mono (§ 3.1).
+/// Cyrillic, so Cyrillic display text falls back to JetBrains Mono.
 abstract final class HmText {
   static const mono = 'JetBrains Mono';
   static const display = 'Syne';
@@ -31,7 +31,7 @@ abstract final class HmText {
 
   static FontWeight _weight(int w) => FontWeight.values[((w ~/ 100) - 1).clamp(0, 8)];
 
-  // Rows of § 3.2.
+  // One row per text style.
   static TextStyle get pageTitle => syne(22, weight: 800, spacing: -0.5);
   static TextStyle get logo => syne(22, weight: 800, spacing: -0.5);
   static TextStyle get statValue => syne(20, weight: 800);

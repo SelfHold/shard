@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// Design tokens (DESIGN_MANIFEST.md § 1). Widgets take colours from here
-/// only; tints use [HmColors.tint] with the opacity scale of § 1.3.
+/// Design tokens. Widgets take colours from here
+/// only; tints use [HmColors.tint] with the opacity scale.
 abstract final class HmColors {
   static const Color bg = Color(0xFF080C10);
   static const Color surface = Color(0xFF0D1117);
@@ -21,10 +21,10 @@ abstract final class HmColors {
   /// Text on the solid accent (primary button, active page).
   static const Color onAccent = Color(0xFF0A0E17);
 
-  /// The viewport bezel (§ 5.3) — the one colour outside the token system.
+  /// The viewport bezel — the one colour outside the token system.
   static const Color bezel = Color(0xFF000000);
 
-  /// Opacity scale (§ 1.3).
+  /// Opacity scale.
   static const double subtle = 0.03;
   static const double resting = 0.10;
   static const double hover = 0.20; // resting + 0.10

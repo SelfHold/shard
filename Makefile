@@ -13,15 +13,20 @@ GO_LDFLAGS := -X cloudsync/core/rpc.Version=$(VERSION) -X cloudsync/core/rpc.Bui
 NDK ?= $(lastword $(sort $(wildcard $(HOME)/Android/Sdk/ndk/*)))
 PROTOC_DART := $(HOME)/.pub-cache/bin/protoc-gen-dart
 
+# Test runs are capped at 1 GB and run one at a time. CI runners have no
+# systemd user session, so the cap is skipped there (GitHub sets CI=true).
+CAP := $(if $(CI),,systemd-run --user --scope -p MemoryMax=1G -p MemorySwapMax=0 --quiet)
+GOTEST := $(CAP) env GOMAXPROCS=2 go test -p 1
+
 all: vet test build
 
 # --- Go core -------------------------------------------------------------
 
 test:
-	go test ./core/...
+	$(GOTEST) ./core/...
 
 race:
-	go test -race ./core/...
+	$(GOTEST) -race ./core/...
 
 vet:
 	go vet ./...

@@ -1,17 +1,23 @@
-# CloudSync Connector API — integration guide for apps
+# Shard Connector API — integration guide for apps
 
-**API version 1.** This file is self-contained: copy it into an app's repository
-and build the integration from it. The contract files are at the end
+Shard was formerly called CloudSync. Identifiers in the contract still use the
+old name and will not change: the daemon `cloudsyncd`, the config directory
+`cloudsync/`, the Android package `dev.cloudsync.cloudsync`, the AIDL package
+`dev.cloudsync.connector` and `ICloudSyncConnector`.
+
+**API version 1.** This file is self-contained: build an app's integration from it
+(apps link to it instead of keeping a copy). The contract files are at the end
 ([Appendix A](#appendix-a-connectorproto), [Appendix B](#appendix-b-aidl-android)).
-Their canonical copies live in the CloudSync repository (`proto/connector.proto`,
+Their canonical copies live in the Shard repository
+(<https://github.com/SelfHold/shard>) (`proto/connector.proto`,
 `app/android/app/src/main/aidl/dev/cloudsync/connector/*.aidl`). They must
 match those copies byte for byte.
 
 ## 1. What it gives an app
 
-An app that holds its settings in a file (MegaChat: `vault.mc`) can add a
-**"Sync via CloudSync"** switch. With the switch on, the app gives the file to
-CloudSync, and CloudSync:
+An app that holds its settings in a file (Parley: `vault.mc`) can add a
+**"Sync via Shard"** switch. With the switch on, the app gives the file to
+Shard, and Shard:
 
 - stores it encrypted in **every storage** of the user's vault, with a copy on
   every device;
@@ -20,10 +26,10 @@ CloudSync, and CloudSync:
 - **never loses a write**. Writes made at the same time on two offline devices
   are both kept, and the app merges them (§ 6);
 - protects the file with **the vault's own password**. The app can drop its own
-  password, because CloudSync hands it a stable per-app key (`AppKey`, § 8).
+  password, because Shard hands it a stable per-app key (`AppKey`, § 8).
 
-The app must keep working **without CloudSync**. Sync is optional, and the
-app's existing standalone mode stays as it is. CloudSync is a separate
+The app must keep working **without Shard**. Sync is optional, and the
+app's existing standalone mode stays as it is. Shard is a separate
 program: it may be missing, stopped or locked at any moment.
 
 What an app can reach: **only its own records**. A paired app cannot see the
@@ -31,9 +37,9 @@ user's files, passwords, storages or other apps' records. The exceptions are
 **scopes** the user allows explicitly:
 
 - `passwords` (§ 12): a browser reads and changes the website logins of
-  CloudSync's own password store;
+  Shard's own password store;
 - `ssh_keys` (§ 13): an SSH client reads the SSH keys of the password store;
-- `servers` (§ 14): apps that connect to servers (SSH Manager, DB Manager)
+- `servers` (§ 14): apps that connect to servers (Postern, Cellar)
   share one list of the user's servers.
 
 ## 2. Concepts
@@ -41,28 +47,27 @@ user's files, passwords, storages or other apps' records. The exceptions are
 | Term | Meaning |
 |---|---|
 | **App id** | Stable name of the app and of its data, the same on every platform and device: `^[a-z0-9][a-z0-9._-]{1,63}$`, e.g. `megachat`. Never change it: other ids see other data. |
-| **Pairing** | The user's permission for this app **on this device**. It is made once per device and the user can revoke it in CloudSync. |
+| **Pairing** | The user's permission for this app **on this device**. It is made once per device and the user can revoke it in Shard. |
 | **Record** | A named value of the app: key `^[A-Za-z0-9._/-]{1,200}$` (no `..`), value up to **256 KiB**, at most **256 records** per app. Every write keeps the whole value in the vault's journals forever, so records suit settings and vault files. They are not for message caches or media. |
 | **Revision** | Opaque string naming the record's current state. Pass it as `base` to the next `Put`/`Delete` (compare-and-swap). `""` means the record was never written. |
 | **Versions** | The current values of a record: none (absent or deleted), one (normal), or several (concurrent writes; the app must merge them). |
 | **Vault state** | `NO_VAULT`, `LOCKED`, `OFFLINE` (unlocked, no storage reachable: reads work from the device copy, writes fail), `READY`. |
 
-CloudSync stores a record as an operation in its per-device journals, sealed
+Shard stores a record as an operation in its per-device journals, sealed
 with a key derived from the vault master key and the app id. Storages see only
 ciphertext.
 
-## 3. Finding CloudSync and talking to it
+## 3. Finding Shard and talking to it
 
-### 3.1 Desktop (Linux, Windows, macOS)
+### 3.1 Desktop (Linux; macOS planned)
 
-CloudSync's daemon `cloudsyncd` serves the Connector API on a socket of its
+Shard's daemon `cloudsyncd` serves the Connector API on a socket of its
 own and writes its address into **`connector.json`**:
 
 | OS | Path |
 |---|---|
 | Linux | `$XDG_CONFIG_HOME/cloudsync/connector.json` (default `~/.config/cloudsync/connector.json`) |
-| Windows | `%AppData%\cloudsync\connector.json` |
-| macOS | `~/Library/Application Support/cloudsync/connector.json` |
+| macOS (planned) | `~/Library/Application Support/cloudsync/connector.json` |
 
 (Go: `os.UserConfigDir()` + `cloudsync/connector.json`.)
 
@@ -71,11 +76,11 @@ own and writes its address into **`connector.json`**:
 ```
 
 - `address` is either `unix:///absolute/path` (Linux, macOS) or `host:port` on
-  `127.0.0.1` (Windows). It is plain gRPC (HTTP/2) without TLS. Dial the unix
-  socket directly (Go: `grpc.NewClient("passthrough:///unix", grpc.WithContextDialer(...))`,
+  `127.0.0.1` (only on Windows, whose builds are not maintained). It is plain
+  gRPC (HTTP/2) without TLS. Dial the unix socket directly (Go: `grpc.NewClient("passthrough:///unix", grpc.WithContextDialer(...))`,
   or the `unix:` scheme of your gRPC library).
 - The file exists only while the daemon runs. A file that is missing, or an
-  address that refuses connections, means "CloudSync is not running": stay in
+  address that refuses connections, means "Shard is not running": stay in
   standalone mode and look again later (a file watcher or a retry every 30–60 s).
 - The file holds no secret. Authentication is the per-app **bearer token**
   from pairing, sent on every call except `Hello`, `RequestPairing` and
@@ -86,7 +91,7 @@ own and writes its address into **`connector.json`**:
 
 ### 3.2 Android
 
-CloudSync (package **`dev.cloudsync.cloudsync`**) exports a bound service.
+Shard (package **`dev.cloudsync.cloudsync`**) exports a bound service.
 
 1. Copy the two AIDL files from [Appendix B](#appendix-b-aidl-android) into
    `src/main/aidl/dev/cloudsync/connector/`, keeping the package name, and
@@ -103,7 +108,7 @@ CloudSync (package **`dev.cloudsync.cloudsync`**) exports a bound service.
    context.bindService(i, conn, Context.BIND_AUTO_CREATE)
    // onServiceConnected: val api = ICloudSyncConnector.Stub.asInterface(binder)
    ```
-   If `bindService` returns `false`, CloudSync is not installed: stay standalone.
+   If `bindService` returns `false`, Shard is not installed: stay standalone.
 4. Call methods as `api.call("Get", GetRequest.toByteArray())`. The reply is
    always a serialized **`CallReply`**: `code` 0 means OK and `payload` holds
    the reply message; otherwise `code` is a gRPC status code (§ 9) and
@@ -111,14 +116,14 @@ CloudSync (package **`dev.cloudsync.cloudsync`**) exports a bound service.
    call it on the main thread.
 5. `api.watch(watcher)` streams serialized `Change` messages to
    `IConnectorWatcher.onChange`, then one `onEnd(CallReply)`. Stop it with
-   `api.unwatch(handle)`. CloudSync stops it by itself when your process dies.
-6. There is **no token on Android**. CloudSync identifies the caller through
+   `api.unwatch(handle)`. Shard stops it by itself when your process dies.
+6. There is **no token on Android**. Shard identifies the caller through
    Binder (calling package + SHA-256 of its signing certificate). The same
    package signed with another key is another app and has to pair again.
    `AwaitPairing` answers `APPROVED` with an empty token.
-7. To let the user unlock CloudSync or answer a request, open it with
+7. To let the user unlock Shard or answer a request, open it with
    `packageManager.getLaunchIntentForPackage("dev.cloudsync.cloudsync")`.
-   CloudSync also posts a notification when a pairing request is waiting.
+   Shard also posts a notification when a pairing request is waiting.
 
 Generate message classes from `connector.proto` (e.g. protobuf-javalite, or
 Wire). Only messages are needed on Android. The `service` block is for the
@@ -130,8 +135,8 @@ Call `Hello{app_id}` first, after every reconnect, and after a `STATE` change.
 
 | `state` | Meaning for the app |
 |---|---|
-| `NO_VAULT` | CloudSync is installed but not set up. Stay standalone. |
-| `LOCKED` | Ask the user to unlock CloudSync (on Android, offer to open it). Get/Put fail with `FAILED_PRECONDITION`. |
+| `NO_VAULT` | Shard is installed but not set up. Stay standalone. |
+| `LOCKED` | Ask the user to unlock Shard (on Android, offer to open it). Get/Put fail with `FAILED_PRECONDITION`. |
 | `OFFLINE` | Unlocked, but no storage answers yet. `Get`/`List`/`AppKey` work from this device's copy, `Put`/`Delete` fail with `UNAVAILABLE`. Queue writes and retry. |
 | `READY` | Everything works. |
 
@@ -142,18 +147,18 @@ never merge data across vault ids.
 ## 5. Pairing
 
 ```
-app                                   CloudSync                           user
+app                                   Shard                           user
  │ RequestPairing{app_id,name,desc} ──▶│ keeps the request (5 min)         │
  │◀── PairingTicket{ticket, code}      │── dialog / notification ─────────▶│
- │ shows "Code 123 456 — confirm in CloudSync"                             │
+ │ shows "Code 123 456 — confirm in Shard"                             │
  │ AwaitPairing{ticket, wait 60} ─────▶│◀──── Allow (same code?) ──────────│
  │◀── PairingResult{APPROVED, token}   │                                   │
 ```
 
 1. `RequestPairing{app_id, app_name, description}`. Put the app name, version
-   and platform in `description` (e.g. `"MegaChat 1.4 on linux"`).
-2. Show `code` (6 digits, e.g. as `123 456`) and say "Confirm in CloudSync".
-   CloudSync shows the same code to the user, so the user can tell that the
+   and platform in `description` (e.g. `"Parley 1.4 on linux"`).
+2. Show `code` (6 digits, e.g. as `123 456`) and say "Confirm in Shard".
+   Shard shows the same code to the user, so the user can tell that the
    request is really yours.
 3. Loop `AwaitPairing{ticket, wait_seconds: 60}` while it returns `PENDING`.
    - `APPROVED`: on desktops, store `token` **on this device only**: the OS
@@ -164,7 +169,7 @@ app                                   CloudSync                           user
    - `EXPIRED`: the request timed out (5 min), was replaced by a newer request
      of the same app, or was already answered. Offer to try again.
 4. A later `UNAUTHENTICATED` from any call, or a `Change{UNPAIRED}`, means the
-   pairing is gone (revoked in CloudSync, or CloudSync data reset). Switch sync
+   pairing is gone (revoked in Shard, or Shard data reset). Switch sync
    off, keep the local file, and offer to pair again.
 
 Pairing again replaces the app's old pairing on that device. `Unpair` removes
@@ -176,17 +181,17 @@ records:
 
 | Scope | Gives | Dialog / notification |
 |---|---|---|
-| `passwords` | the website logins of the password store (§ 12) | "*Bezel wants to read and change all your website passwords*" |
-| `ssh_keys` | the SSH keys of the password store, read only (§ 13) | "*DB Manager wants to use your SSH keys*" |
-| `servers` | the user's servers, read and write (§ 14) | "*DB Manager wants to read and change your servers*" |
+| `passwords` | the website logins of the password store (§ 12) | "*Enclave wants to read and change all your website passwords*" |
+| `ssh_keys` | the SSH keys of the password store, read only (§ 13) | "*Cellar wants to use your SSH keys*" |
+| `servers` | the user's servers, read and write (§ 14) | "*Cellar wants to read and change your servers*" |
 
-An unknown scope gives `INVALID_ARGUMENT`. CloudSync says each one plainly in
+An unknown scope gives `INVALID_ARGUMENT`. Shard says each one plainly in
 the dialog and the Android notification, and the user may allow **fewer
 scopes than asked** (records only at the least). `PairingResult.scopes`
 and `HelloReply.scopes` say what was granted. To ask for a scope later, call
 `RequestPairing` again with the larger set: the existing pairing (and token)
 stays valid while the request waits and is replaced when the user approves.
-The user can take a scope away in CloudSync without unpairing: the app gets
+The user can take a scope away in Shard without unpairing: the app gets
 `Change{SCOPES}` and should call `Hello`.
 
 ## 6. Reading and writing records
@@ -213,7 +218,7 @@ Put{key, data: new, base: item.revision}
 ### 6.2 Several versions: the app merges
 
 `Item.versions` has more than one entry when devices wrote the record from the
-same revision (typically offline). CloudSync cannot merge them because it does
+same revision (typically offline). Shard cannot merge them because it does
 not understand the content. The app must:
 
 1. Decode every version.
@@ -251,20 +256,20 @@ apply changes as they come:
   `servers` only, § 14).
 - `SCOPES`: the granted scopes changed: call `Hello`.
 
-The stream also ends when CloudSync stops or locks the connection. Reconnect
+The stream also ends when Shard stops or locks the connection. Reconnect
 with backoff, call `Hello`, then `List` to catch up. Changes are not queued
 while you are disconnected.
 
 ## 7. Recommended integration: one settings file
 
-The usual case: the app has a file `F` (MegaChat: `vault.mc`), and `F`
+The usual case: the app has a file `F` (Parley: `vault.mc`), and `F`
 becomes record `key = "vault.mc"`.
 
 Keep **local sync state** per device, outside `F`: `enabled`, `token`
 (desktop), `vault_id`, `base` (the revision `F` was last synced at) and
 `synced_hash` (hash of `F` at that moment).
 
-**Switching sync on** ("Sync via CloudSync" button, shown when CloudSync is
+**Switching sync on** ("Sync via Shard" button, shown when Shard is
 found and `state` is not `NO_VAULT`):
 
 1. Pair (§ 5) if not paired.
@@ -279,7 +284,7 @@ found and `state` is not `NO_VAULT`):
 **Running:**
 
 - The local `F` stays the working copy. The app reads and writes it as before,
-  so it works when CloudSync is gone.
+  so it works when Shard is gone.
 - Local change (`hash(F) != synced_hash`) → `Put{F, bytes, base}`.
   `ABORTED` → Get, merge, Put. `UNAVAILABLE`/`FAILED_PRECONDITION` → keep it
   pending and retry on the next `STATE` change.
@@ -292,7 +297,7 @@ found and `state` is not `NO_VAULT`):
 
 **Switching sync off:** keep `F`, call `Unpair`, clear the local sync state.
 The record stays in the vault for the other devices. Deleting it is a separate
-action ("Remove synced settings from CloudSync": `Delete`).
+action ("Remove synced settings from Shard": `Delete`).
 
 **`vault_id` changed:** the user opened another vault. Stop syncing and ask
 whether to switch sync on for the new vault (as above).
@@ -305,18 +310,18 @@ the vault and never change (HKDF of the vault master key and the app id).
 
 So the app does not need a password of its own while sync is on:
 
-- **Synced copy.** The record is already encrypted by CloudSync. The app may
+- **Synced copy.** The record is already encrypted by Shard. The app may
   store its plain settings there, or its own file sealed with `AppKey`.
   Sealing with `AppKey` keeps every copy, local and synced, in one format.
 - **Local copy.** Seal `F` with `AppKey` (e.g. XChaCha20-Poly1305 with an AD
-  of your choice). To open it when CloudSync is not running, keep `AppKey` in
+  of your choice). To open it when Shard is not running, keep `AppKey` in
   the OS keychain (desktop) or wrapped by the Android Keystore. Without such a
-  cache the app needs CloudSync unlocked to start.
+  cache the app needs Shard unlocked to start.
 - **Migration from a password-protected file.** When sync is switched on, the
   user enters the old password once. The app re-seals `F` with `AppKey` and
-  marks that the file is now "protected by CloudSync". Switching sync off must
+  marks that the file is now "protected by Shard". Switching sync off must
   offer to set a password again before the app forgets `AppKey`.
-- **Other devices** get `F` from CloudSync and open it with the same `AppKey`,
+- **Other devices** get `F` from Shard and open it with the same `AppKey`,
   without a password.
 
 Never log or upload `AppKey`. It is as sensitive as the data it opens.
@@ -329,20 +334,20 @@ Never log or upload `AppKey`. It is as sensitive as the data it opens.
 | `PERMISSION_DENIED` (7) | a password-store, SSH-key or server call without its scope (`passwords`, `ssh_keys`, `servers`) | ask for the scope (§ 5) or stop using it |
 | `NOT_FOUND` (5) | `PutLogin`/`DeleteLogin`/`TouchLogin` of an id that is not a login; `PutServer`/`DeleteServer` of an id that is not a server | list again |
 | `ABORTED` (10) | `base` is not the current revision | Get, merge, retry |
-| `FAILED_PRECONDITION` (9) | CloudSync is locked | wait for `STATE`; offer to open CloudSync |
+| `FAILED_PRECONDITION` (9) | Shard is locked | wait for `STATE`; offer to open Shard |
 | `UNAVAILABLE` (14) | unlocked but offline (no storage yet), or the core is not running (Android) | keep writes pending, retry |
 | `INVALID_ARGUMENT` (3) | bad app id / key / scope, value > 256 KiB, > 256 records, a login without a site, `extra` > 16 KiB, > 500 ids, a server without a host, a port > 65535, a host key not in authorized_keys format | a bug in the app |
 | `RESOURCE_EXHAUSTED` (8) | too many pairing requests waiting; 10 000 logins or 10 000 servers reached | try later / tell the user |
-| `UNIMPLEMENTED` (12) | method unknown to this CloudSync | CloudSync too old: tell the user |
+| `UNIMPLEMENTED` (12) | method unknown to this Shard | Shard too old: tell the user |
 
 A transport error (connection refused, socket gone, `DeadObjectException`)
-means CloudSync stopped: fall back to standalone and reconnect later.
+means Shard stopped: fall back to standalone and reconnect later.
 
 ## 10. Security notes
 
-- Desktop: the connector socket is readable only by the user (unix) or bound to
-  `127.0.0.1` (Windows). Any local process may *ask* for pairing, so the user
-  compares the code before allowing. The app's token is stored by CloudSync
+- Desktop: the connector socket is readable only by the user (unix sockets; on
+  unmaintained Windows builds it is bound to `127.0.0.1`). Any local process
+  may *ask* for pairing, so the user compares the code before allowing. The app's token is stored by Shard
   only as SHA-256.
 - Android: the caller is identified by Binder, never by data the caller sends.
 - An app sees only records under its own app id. File, storage and vault calls
@@ -354,24 +359,24 @@ means CloudSync stopped: fall back to standalone and reconnect later.
 
 ## 11. Compatibility
 
-- Devices with an older CloudSync without the connector still sync and keep
+- Devices with an older Shard without the connector still sync and keep
   app records (they carry the journal operations without reading them).
-  A CloudSync without the connector writes no `connector.json` and has no
-  `ConnectorService`: to the app it looks like "CloudSync is not installed or
+  A Shard without the connector writes no `connector.json` and has no
+  `ConnectorService`: to the app it looks like "Shard is not installed or
   not running".
-- The password-store calls (§ 12) came later in v1: an older CloudSync answers
+- The password-store calls (§ 12) came later in v1: an older Shard answers
   them `UNIMPLEMENTED` and ignores `PairingRequest.scopes` (`PairingResult.scopes`
-  stays empty). Check `HelloReply.scopes` before using them. A CloudSync of an
+  stays empty). Check `HelloReply.scopes` before using them. A Shard of an
   older version on another device of the vault shows "never save" sites as
   plain password entries without a password.
 - The SSH-key and server calls (§ 13, § 14) came later still: an older
-  CloudSync answers them `UNIMPLEMENTED` and leaves `ssh_keys` / `servers` out
-  of `PairingResult.scopes` (a CloudSync that knows `passwords` but not these
+  Shard answers them `UNIMPLEMENTED` and leaves `ssh_keys` / `servers` out
+  of `PairingResult.scopes` (a Shard that knows `passwords` but not these
   refuses the request with `INVALID_ARGUMENT`; ask again without them). Keep
   servers in the app's own records then, and offer only keys the user pastes
   or loads from a file. When the scope appears later (`Change{SCOPES}`,
   `Hello`), offer to move the app's own servers into the shared list
-  (`PutServer` each, then drop the record). A CloudSync of an older version on
+  (`PutServer` each, then drop the record). A Shard of an older version on
   another device of the vault lists servers as entries it cannot edit.
 - v1 only gains fields and methods. Unknown fields must be ignored (protobuf
   does this by default). Unknown enum values should be treated as the
@@ -381,8 +386,8 @@ means CloudSync stopped: fall back to standalone and reconnect later.
 
 A browser needs the user's logins: it fills them on sites, saves new ones and
 updates changed passwords. With the `passwords` scope it works on the logins
-of **CloudSync's own password store**, the same entries the user sees in
-CloudSync, not on a copy in its records. The first client is the Bezel browser
+of **Shard's own password store**, the same entries the user sees in
+Shard, not on a copy in its records. The first client is the Enclave browser
 (app id `bezel`).
 
 ### 12.1 What a login is
@@ -394,30 +399,30 @@ without a URL) are never visible as logins; SSH keys have their own scope
 
 | Field | Meaning |
 |---|---|
-| `id` | stable id of the entry; chosen by CloudSync (`""` in `PutLogin` = new) |
+| `id` | stable id of the entry; chosen by Shard (`""` in `PutLogin` = new) |
 | `revision` | the `base` for `PutLogin`/`DeleteLogin`, like a record's revision |
 | `signon_realm` | `https://example.com/`, or `android://<hash>@<package>/` |
 | `url`, `action_url` | page of the form; where it posts |
 | `username`, `password` | the secret itself |
 | `username_element`, `password_element` | form field names (for filling) |
-| `display_name`, `notes` | free text; `notes` is the entry's note in CloudSync |
+| `display_name`, `notes` | free text; `notes` is the entry's note in Shard |
 | `federation_origin` | federated login (`https://accounts.google.com`), no password |
 | `blocked` | "never save for this site": `signon_realm` only, no credentials |
-| `created_ms`, `modified_ms`, `password_modified_ms` | kept by CloudSync; `created_ms` of a new login is taken from the app (moving an existing store), the others are set on write |
+| `created_ms`, `modified_ms`, `password_modified_ms` | kept by Shard; `created_ms` of a new login is taken from the app (moving an existing store), the others are set on write |
 | `last_used_ms`, `times_used` | this device only (§ 12.4) |
-| `extra` | fields of the app CloudSync keeps but does not read; at most 16 KiB (keys + values) |
+| `extra` | fields of the app Shard keeps but does not read; at most 16 KiB (keys + values) |
 | `device_name` | device of the last change |
 
 - Several logins may share a `signon_realm` (several accounts on one site).
-- An entry the user made in CloudSync with only a URL, username and password
+- An entry the user made in Shard with only a URL, username and password
   is a login with `url = signon_realm = origin of the URL` (`mail.example.com/x`
   → `https://mail.example.com/`). Its `display_name` is the entry's title.
 - A login written by the app gets the title `display_name`, or the site's
-  host. If the user edits the entry in CloudSync, the fields CloudSync does not
+  host. If the user edits the entry in Shard, the fields Shard does not
   show (`action_url`, form fields, `extra`) stay; if they move it to another
   site, the form fields are dropped and the realm follows the new URL.
 - `blocked` entries are a list of sites of a separate kind: they are visible
-  to every app with the scope, never in CloudSync's own password list, and
+  to every app with the scope, never in Shard's own password list, and
   carry no username or password.
 - At most 10 000 logins per vault: creating more gives `RESOURCE_EXHAUSTED`.
 
@@ -445,7 +450,7 @@ The browser keeps its login DB as the offline cache:
 2. Open `Watch`; on `LOGIN` (or periodically, and after every reconnect) call
    `ListChanges{cursor}`, `GetLogins` the changed ids, drop the deleted ones,
    keep the new `cursor`.
-3. On `reset`, go back to step 1. Cursors are kept by the CloudSync of this
+3. On `reset`, go back to step 1. Cursors are kept by the Shard of this
    device (they survive restarts); a lost or foreign cursor only costs a full
    list.
 
@@ -458,25 +463,25 @@ reapply the user's change and retry with the new revision.
 - **States** as for records: `LOCKED` → `FAILED_PRECONDITION`; `OFFLINE` →
   reads come from this device's copy, writes (`PutLogin`, `DeleteLogin`) fail
   with `UNAVAILABLE`.
-- **Concurrent writes.** CloudSync merges password-store entries between
+- **Concurrent writes.** Shard merges password-store entries between
   devices; the API shows the result, never several versions of one login.
-  When two devices changed the same entry offline, CloudSync keeps both: the
+  When two devices changed the same entry offline, Shard keeps both: the
   second is a separate login with its own id (`<id>~<op id>`).
 - **History.** Only the current value is returned.
 - **Use counters.** `TouchLogin` writes nothing to the vault: `last_used_ms`
-  and `times_used` are kept by CloudSync on this device only and are not
+  and `times_used` are kept by Shard on this device only and are not
   replicated (another device reports its own).
 - **Security.** The scope is granted per device and per app; the token is the
-  same, and CloudSync checks the scope on every call. Secrets are never
-  written to CloudSync's logs. CloudSync's UI shows which apps have the scope
+  same, and Shard checks the scope on every call. Secrets are never
+  written to Shard's logs. Shard's UI shows which apps have the scope
   and when each last read passwords, and lets the user take it away.
 
 ## 13. SSH keys (scope `ssh_keys`)
 
 An SSH client needs the user's keys: the user picks one of them when
 connecting to a server. With the `ssh_keys` scope an app **reads** (never
-writes) the entries of kind SSH of CloudSync's password store. First clients:
-DB Manager (`dbmanager`) and SSH Manager (`sshmanager`).
+writes) the entries of kind SSH of Shard's password store. First clients:
+Cellar (`dbmanager`) and Postern (`sshmanager`).
 
 | Method | Does |
 |---|---|
@@ -488,8 +493,8 @@ On Android: `ICloudSyncConnector.call("ListSshKeys" / "GetSshKeys", ...)`.
 | Field | Meaning |
 |---|---|
 | `id`, `revision` | the safe entry's id; changes with every edit |
-| `title`, `group` | as in CloudSync (`group` = the group's name, for display) |
-| `key_type`, `fingerprint`, `public_key`, `comment` | derived by CloudSync from the private key: `ssh-ed25519`, `SHA256:…`, the authorized_keys line |
+| `title`, `group` | as in Shard (`group` = the group's name, for display) |
+| `key_type`, `fingerprint`, `public_key`, `comment` | derived by Shard from the private key: `ssh-ed25519`, `SHA256:…`, the authorized_keys line |
 | `encrypted` | the private key parses only with a passphrase |
 | `has_passphrase` | the safe keeps that passphrase; otherwise ask the user for it |
 | `created_ms`, `modified_ms`, `device_name` | as for logins |
@@ -505,17 +510,17 @@ On Android: `ICloudSyncConnector.call("ListSshKeys" / "GetSshKeys", ...)`.
   second is a separate key with its own id (`<id>~<op id>`), as for logins.
 - **States.** `LOCKED` → `FAILED_PRECONDITION`; `OFFLINE` → reads work from
   this device's copy.
-- **Security.** `GetSshKeys` is a secret read: CloudSync records which app read
+- **Security.** `GetSshKeys` is a secret read: Shard records which app read
   keys and when (never which key or its content) and shows it in Vault →
   Connected apps, where the user can take the scope away (`Change{SCOPES}`).
 
 ## 14. Servers (scope `servers`)
 
-The user's servers live in CloudSync, not in each app: a server added in SSH
-Manager shows up in DB Manager and the other way round. They are entries of
+The user's servers live in Shard, not in each app: a server added in
+Postern shows up in Cellar and the other way round. They are entries of
 kind *server* of the password store, so the user sees and edits them in
-CloudSync next to the SSH keys they use. An app keeps its own data about a
-server (DB Manager: its databases and connections) in its own records, keyed
+Shard next to the SSH keys they use. An app keeps its own data about a
+server (Cellar: its databases and connections) in its own records, keyed
 by the server id, or in `Server.extra`.
 
 | Method | Does |
@@ -531,9 +536,9 @@ On Android: `"ListServers"`, `"GetServers"`, `"PutServer"`, `"DeleteServer"`,
 
 | Field | Meaning |
 |---|---|
-| `id`, `revision` | chosen by CloudSync; the `base` for `PutServer` / `DeleteServer` |
-| `name` | the entry's title in CloudSync (empty → the host) |
-| `group` | folder in the server tree, `"a/b"` nests; CloudSync trims it (`"/a//b/"` → `"a/b"`). It is not the password store's group |
+| `id`, `revision` | chosen by Shard; the `base` for `PutServer` / `DeleteServer` |
+| `name` | the entry's title in Shard (empty → the host) |
+| `group` | folder in the server tree, `"a/b"` nests; Shard trims it (`"/a//b/"` → `"a/b"`). It is not the password store's group |
 | `host`, `port` | DNS name or IP (an IPv6 address without brackets); `port` 0 = 22. A port goes in `port`, never in `host` |
 | `user` | login user |
 | `auth` | `PASSWORD` (`password`), `SSH_KEY` (`ssh_key_id`), `AGENT` (the device's ssh-agent) |
@@ -552,13 +557,13 @@ Rules:
 
 - **States and errors** as for logins (§ 12.4): `LOCKED` → `FAILED_PRECONDITION`;
   `OFFLINE` → reads from this device's copy, writes `UNAVAILABLE`; a stale
-  `base` → `ABORTED`. CloudSync merges concurrent edits between devices and
+  `base` → `ABORTED`. Shard merges concurrent edits between devices and
   keeps a conflict copy (`<id>~<op id>`) when two devices changed the same
   server offline. Only the current value is returned.
 - **`extra` is shared.** `PutServer` replaces the whole server, `extra`
   included: start from a server read **with data** and change only your own
-  keys. CloudSync keeps `extra` as it is, and so must other apps. Editing a
-  server in CloudSync keeps `extra` and every field its editor does not show.
+  keys. Shard keeps `extra` as it is, and so must other apps. Editing a
+  server in Shard keeps `extra` and every field its editor does not show.
 - **Keys.** An `ssh_key_id` that points to a key the app cannot read (no
   `ssh_keys` scope, key deleted) is not an error: ask the user for another way
   to log in.
@@ -568,10 +573,10 @@ Rules:
 - **Security.** Reading passwords (`ListServers{data}`, `GetServers`) is a
   secret read, recorded and shown like a password read.
 
-## Appendix: MegaChat specifics
+## Appendix: Parley specifics
 
-These notes target the MegaChat code base (`core/vault`, `core/rpc`,
-`core/embed`, Flutter `settings`).
+These notes target the Parley code base (formerly MegaChat): `core/vault`,
+`core/rpc`, `core/embed`, Flutter `settings`.
 
 - App id `megachat`, record key `vault.mc` (the bytes of the vault file). The
   per-device sync state (token, `base`, `synced_hash`, `vault_id`) goes into
@@ -583,22 +588,22 @@ These notes target the MegaChat code base (`core/vault`, `core/rpc`,
   (`Removed []struct{ID string; At time.Time}`, an optional JSON field that
   older builds ignore). The merged config gets `max(Version)+1`.
 - `VaultID` and `MasterKey` are the same on every device that got the file
-  from CloudSync, so the cache keyed by `VaultID` keeps working.
+  from Shard, so the cache keyed by `VaultID` keeps working.
 - Two versions sealed with different passwords (a password change on one
   device while another was offline): if one does not open with the current
   key, ask for the other password before merging, or let the user choose a
   version.
-- Without CloudSync, everything stays as today: `vault.mc` with a password,
+- Without Shard, everything stays as today: `vault.mc` with a password,
   the remembered key in the keychain, `SetVaultPath`.
-- With "Protected by CloudSync" (§ 8), `vault.mc` is sealed with `AppKey`
+- With "Protected by Shard" (§ 8), `vault.mc` is sealed with `AppKey`
   instead of the Argon2id password key. Keep the file header so the two modes
   can be told apart (e.g. a new magic `MCVAULT\x02` = sealed with `AppKey`,
   `key_id` in the header).
 
 ## Appendix A: `connector.proto`
 
-Canonical: `proto/connector.proto` in the CloudSync repository. Go users:
-`option go_package` points into CloudSync's module. Override it when generating
+Canonical: `proto/connector.proto` in the Shard repository. Go users:
+`option go_package` points into Shard's Go module (`cloudsync`). Override it when generating
 your own client (`--go_opt=Mconnector.proto=yourmodule/cloudsyncpb`).
 
 ```proto
@@ -1057,7 +1062,7 @@ message CallReply {
 ## Appendix B: AIDL (Android)
 
 Canonical: `app/android/app/src/main/aidl/dev/cloudsync/connector/` in the
-CloudSync repository. Put both files into `src/main/aidl/dev/cloudsync/connector/`.
+Shard repository. Put both files into `src/main/aidl/dev/cloudsync/connector/`.
 
 `ICloudSyncConnector.aidl`:
 

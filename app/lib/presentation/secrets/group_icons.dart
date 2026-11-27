@@ -31,10 +31,10 @@ class GroupPresetCategory {
   String get label => tr(en, ru);
 }
 
-/// Colours a preset may take: the status tokens (§ 1.2).
+/// Colours a preset may take: the status tokens.
 const groupIconColors = [HmColors.accent, HmColors.active, HmColors.ok, HmColors.warning, HmColors.error, HmColors.purple, HmColors.muted];
 
-/// Purple glyphs use the lighter shade for contrast (§ 1.2).
+/// Purple glyphs use the lighter shade for contrast.
 Color _glyph(Color c) => c == HmColors.purple ? HmColors.purpleLight : c;
 
 const _a = HmColors.accent, _b = HmColors.active, _g = HmColors.ok, _y = HmColors.warning;
@@ -186,7 +186,7 @@ Future<Uint8List> renderGroupIcon(IconData icon, Color color, {int side = 128}) 
   canvas.drawRect(rect, Paint()..color = HmColors.surface);
   canvas.drawRRect(rrect, Paint()..color = HmColors.tint(color, HmColors.badge));
 
-  // Grid overlay (§ 2.2), 4 cells across.
+  // Grid overlay, 4 cells across.
   canvas.save();
   canvas.clipRRect(rrect);
   final grid = Paint()

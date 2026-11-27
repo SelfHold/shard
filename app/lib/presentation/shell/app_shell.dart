@@ -44,14 +44,14 @@ extension on Section {
   };
 }
 
-/// The page shell (§ 2, § 4–6; MOBILITY M2, M4, M6): picks the section and
+/// The page shell: picks the section and
 /// lays out header, canvas and footer or tab bar.
 class AppShell extends StatefulWidget {
   const AppShell({super.key, this.initial = Section.files});
 
   final Section initial;
 
-  /// Phone tabs (M4.2: at most five): the log opens from the Vault screen.
+  /// Phone tabs (at most five): the log opens from the Vault screen.
   static const mobileTabs = [Section.files, Section.secrets, Section.storages, Section.maintenance, Section.vault];
 
   /// Opens a section.
@@ -160,7 +160,7 @@ class _AppShellState extends State<AppShell> {
     return Scaffold(
       backgroundColor: HmColors.bezel,
       body: Container(
-        margin: const EdgeInsets.all(8), // viewport bezel (§ 5.3)
+        margin: const EdgeInsets.all(8), // viewport bezel
         color: HmColors.bg,
         child: Column(
           children: [
@@ -183,7 +183,7 @@ class _GridBackground extends StatelessWidget {
   );
 }
 
-/// Fixed 40 px cyan grid at 3 % (§ 2.2); it does not scroll with content.
+/// Fixed 40 px cyan grid at 3 %; it does not scroll with content.
 class _GridPainter extends CustomPainter {
   const _GridPainter();
 
@@ -210,7 +210,7 @@ const _headerGradient = LinearGradient(
   colors: [Color(0x0A00D4FF), Color(0x0000D4FF)], // accent @ 4 % → 0
 );
 
-/// Desktop header (§ 4): logo, nav links, then the identity anchors —
+/// Desktop header: logo, nav links, then the identity anchors —
 /// "Vault" (the profile of this app) and "Lock" (its sign-out).
 class _Header extends StatelessWidget {
   const _Header({required this.section, required this.onGo, required this.onLock});
@@ -392,7 +392,7 @@ class _NavLinkState extends State<_NavLink> {
   }
 }
 
-/// Phone header (M4.1): logo and a live connection dot (App. D).
+/// Phone header: logo and a live connection dot.
 class _MobileHeader extends StatelessWidget {
   const _MobileHeader({required this.online, required this.syncing});
 
@@ -433,7 +433,7 @@ class _MobileHeader extends StatelessWidget {
   );
 }
 
-/// Desktop status bar (§ 6): version and build, online and env pills.
+/// Desktop status bar: version and build, online and env pills.
 class _Footer extends StatelessWidget {
   const _Footer({required this.core});
 
@@ -493,7 +493,7 @@ class BuildInfo extends StatelessWidget {
   }
 }
 
-/// The online pill (§ 6.3); also shown on the phone's Vault screen (App. D).
+/// The online pill; also shown on the phone's Vault screen.
 class StatusPills extends StatelessWidget {
   const StatusPills({super.key, required this.core});
 

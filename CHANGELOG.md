@@ -8,6 +8,18 @@ Before 1.0.0 the on-storage format and the gRPC API may change between minor ver
 
 ## [Unreleased]
 
+### Changed
+
+- The project is now called **Shard** (formerly CloudSync) and lives at
+  <https://github.com/SelfHold/shard>. Identifiers that are stored on devices or
+  published (Go module `cloudsync`, `cloudsyncd`, `vault.cs`, the Android package, the
+  AIDL names) keep the old name.
+- Android notifications and the file picker root follow the language chosen in the
+  app (English by default) instead of the system locale.
+- Documentation for the public repository: English README with a Russian translation,
+  `docs/ARCHITECTURE.md` with the invariants, updated CONTRIBUTING and SECURITY.
+  Windows is no longer documented as a platform (its builds are not maintained).
+
 ### Added
 
 - **Connected apps** (Connector API v1, `proto/connector.proto`, `docs/CONNECTOR.md`):
@@ -20,15 +32,15 @@ Before 1.0.0 the on-storage format and the gRPC API may change between minor ver
 - **Password store in the Connector API** (`docs/CONNECTOR.md` § 12): a pairing scope
   `passwords` (asked in `PairingRequest.scopes`, shown plainly in the pairing dialog and
   the Android notification, grantable as "records only" or "all", revocable without
-  unpairing → `Change{SCOPES}`). With it an app (the Bezel browser) lists, reads and
+  unpairing → `Change{SCOPES}`). With it an app (the Enclave browser) lists, reads and
   writes the website logins of the safe (`ListLogins`, `GetLogins`, `PutLogin` /
   `DeleteLogin` with compare-and-swap, `ListChanges` with a per-device cursor,
   `Change{LOGIN}`); `TouchLogin` keeps use counters on the device only. Browser fields
-  (form fields, `extra` ≤ 16 KiB) stay when the entry is edited in CloudSync; "never
+  (form fields, `extra` ≤ 16 KiB) stay when the entry is edited in Shard; "never
   save" sites are a hidden entry kind. Vault → Connected apps shows which apps have the
   scope and when they last read passwords. `cs apps approve ID passwords`, `cs apps scopes`.
 - **SSH keys and servers in the Connector API** (`docs/CONNECTOR.md` § 13–14), for
-  SSH Manager and DB Manager. Scope `ssh_keys`: `ListSshKeys` (no secrets) and
+  Postern and Cellar. Scope `ssh_keys`: `ListSshKeys` (no secrets) and
   `GetSshKeys` (private key + passphrase, logged as a secret read), `Change{SSH_KEY}`;
   read only. Scope `servers`: one server list shared by every app (`ListServers`,
   `GetServers`, `PutServer` / `DeleteServer` with compare-and-swap, `ListServerChanges`
@@ -42,7 +54,7 @@ Before 1.0.0 the on-storage format and the gRPC API may change between minor ver
 
 ## [0.1.0] - 2026-11-13
 
-First public release.
+First version (not published as a release).
 
 ### Added
 
@@ -79,5 +91,4 @@ First public release.
 - **Android:** in-process core (gomobile AAR), foreground sync service and a
   DocumentsProvider that exposes the vault in the system file picker with streamed reads.
 
-[Unreleased]: https://github.com/Namikko-chad/cloud-storage/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/Namikko-chad/cloud-storage/releases/tag/v0.1.0
+[Unreleased]: https://github.com/SelfHold/shard/commits/main

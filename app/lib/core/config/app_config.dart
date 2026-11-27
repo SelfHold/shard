@@ -1,4 +1,4 @@
-/// Build-time identifiers (--dart-define). Never hard-coded (§ 6.3).
+/// Build-time identifiers (--dart-define). Never hard-coded.
 abstract final class AppConfig {
   static const version = String.fromEnvironment('APP_VERSION', defaultValue: '0.1.0');
   static const buildSha = String.fromEnvironment('BUILD_SHA', defaultValue: 'dev');

@@ -46,7 +46,7 @@ class VaultProvider : DocumentsProvider() {
             add(Root.COLUMN_ROOT_ID, "vault")
             add(Root.COLUMN_DOCUMENT_ID, "/")
             add(Root.COLUMN_TITLE, "CloudSync")
-            add(Root.COLUMN_SUMMARY, context!!.getString(if (unlocked) R.string.vault_root_unlocked else R.string.vault_root_locked))
+            add(Root.COLUMN_SUMMARY, AppLanguage.localized(context!!).getString(if (unlocked) R.string.vault_root_unlocked else R.string.vault_root_locked))
             add(Root.COLUMN_ICON, R.mipmap.ic_launcher)
             add(Root.COLUMN_FLAGS, if (unlocked) Root.FLAG_SUPPORTS_CREATE or Root.FLAG_SUPPORTS_IS_CHILD else 0)
         }

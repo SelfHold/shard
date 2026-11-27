@@ -16,11 +16,11 @@ InputDecoration _decoration(BuildContext context, {String? hint, bool error = fa
   return InputDecoration(
     isDense: true,
     filled: true,
-    // Inside a card or modal the field recesses to bg; on the page it is surface (§ 1.1).
+    // Inside a card or modal the field recesses to bg; on the page it is surface.
     fillColor: onPage ? HmColors.surface : HmColors.bg,
     hintText: hint,
     hintStyle: HmText.jb(hm.inputFont, color: HmColors.muted),
-    // One control height (§ 10.7.4): 36 px, 48 on phones.
+    // One control height: 36 px, 48 on phones.
     contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: (hm.control - 2 - hm.inputFont * 1.25) / 2),
     border: ring(HmColors.border),
     enabledBorder: ring(error ? HmColors.error : HmColors.border),
@@ -30,7 +30,7 @@ InputDecoration _decoration(BuildContext context, {String? hint, bool error = fa
   );
 }
 
-/// Field wrapper (§ 10.1): uppercase top label, red `*` when required,
+/// Field wrapper: uppercase top label, red `*` when required,
 /// one-line error below.
 class HmFormField extends StatelessWidget {
   const HmFormField({super.key, required this.label, required this.child, this.required = false, this.error, this.hint});
@@ -77,7 +77,7 @@ class HmFormField extends StatelessWidget {
   );
 }
 
-/// Text field with its label (§ 10.4).
+/// Text field with its label.
 class HmTextField extends StatefulWidget {
   const HmTextField({
     super.key,
@@ -109,7 +109,7 @@ class HmTextField extends StatefulWidget {
   final ValueChanged<String>? onSubmitted;
   final ValueChanged<String>? onChanged;
 
-  /// Hostnames, tokens, keys: no autocorrect or capitals (M10).
+  /// Hostnames, tokens, keys: no autocorrect or capitals.
   final bool identifier;
   final List<TextInputFormatter>? formatters;
 
@@ -169,8 +169,8 @@ class _HmTextFieldState extends State<HmTextField> {
   }
 }
 
-/// Search field of a controls bar (§ 11.1): 220×30 on desktops, full width
-/// and 48 px on phones (M11).
+/// Search field of a controls bar: 220×30 on desktops, full width
+/// and 48 px on phones.
 class HmSearchField extends StatelessWidget {
   const HmSearchField({super.key, required this.controller, this.onChanged, this.onSubmitted, this.placeholder});
 
@@ -199,8 +199,8 @@ class HmSearchField extends StatelessWidget {
   }
 }
 
-/// Settings switch with its label (§ 13.1–13.2): label left, switch right,
-/// the whole row is the target (48 px on phones, M13).
+/// Settings switch with its label: label left, switch right,
+/// the whole row is the target (48 px on phones).
 class HmToggleRow extends StatelessWidget {
   const HmToggleRow({super.key, required this.label, required this.value, required this.onChanged, this.hint});
 
@@ -277,7 +277,7 @@ class _Switch extends StatelessWidget {
   );
 }
 
-/// Checkbox row, committed on submit (§ 13.6).
+/// Checkbox row, committed on submit.
 class HmCheckRow extends StatelessWidget {
   const HmCheckRow({super.key, required this.label, required this.value, required this.onChanged});
 
@@ -322,7 +322,7 @@ class HmCheckRow extends StatelessWidget {
   }
 }
 
-/// One of a few short options, all visible (§ 13.5); full width on phones.
+/// One of a few short options, all visible; full width on phones.
 class HmSegmented<T> extends StatelessWidget {
   const HmSegmented({super.key, required this.options, required this.value, required this.onChanged});
 
@@ -387,9 +387,9 @@ class _Segment extends StatelessWidget {
   );
 }
 
-/// Select (§ 10.6): a pixel twin of the text field. Opens a dropdown panel
-/// on desktops and a picker sheet on phones (App. D), with a search field
-/// from 8 options on (§ 16.4).
+/// Select: a pixel twin of the text field. Opens a dropdown panel
+/// on desktops and a picker sheet on phones, with a search field
+/// from 8 options on.
 class HmSelect<T> extends StatelessWidget {
   const HmSelect({
     super.key,

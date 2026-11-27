@@ -1,5 +1,5 @@
-/// The component library (DESIGN_MANIFEST.md): every screen is built from
-/// these widgets only.
+/// The component library (design tokens, dark-only palette, phone layout
+/// below 768 px): every screen is built from these widgets only.
 library;
 
 export 'buttons.dart';

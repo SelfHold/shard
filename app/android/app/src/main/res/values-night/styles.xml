@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Dark only (MOBILITY App. D): launch and normal window are hm-bg.
+    <!-- Dark only: launch and normal window are hm-bg.
          AppCompat: the fingerprint dialog (BiometricPrompt) on Android 8 needs it. -->
     <style name="LaunchTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/launch_background</item>

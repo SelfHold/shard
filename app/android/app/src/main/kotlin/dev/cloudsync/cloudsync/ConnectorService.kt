@@ -101,9 +101,10 @@ class ConnectorService : Service() {
                 nm.cancel(NOTICE_ID)
                 return
             }
+            val strings = AppLanguage.localized(context)
             nm.createNotificationChannel(
-                NotificationChannel(CHANNEL, context.getString(R.string.apps_channel_name), NotificationManager.IMPORTANCE_HIGH).apply {
-                    description = context.getString(R.string.apps_channel_description)
+                NotificationChannel(CHANNEL, strings.getString(R.string.apps_channel_name), NotificationManager.IMPORTANCE_HIGH).apply {
+                    description = strings.getString(R.string.apps_channel_description)
                 },
             )
             val open = PendingIntent.getActivity(
@@ -117,10 +118,10 @@ class ConnectorService : Service() {
                 "ssh_keys" to R.string.apps_notice_ssh_keys_title,
                 "servers" to R.string.apps_notice_servers_title,
             ).mapNotNull { (scope, res) ->
-                Mobilebind.scopePairing(scope).takeIf { it.isNotEmpty() }?.let { context.getString(res, it) }
+                Mobilebind.scopePairing(scope).takeIf { it.isNotEmpty() }?.let { strings.getString(res, it) }
             }
-            val title = asks.firstOrNull() ?: context.getString(R.string.apps_notice_title)
-            val text = (asks.drop(1) + context.getString(R.string.apps_notice_text)).joinToString("\n")
+            val title = asks.firstOrNull() ?: strings.getString(R.string.apps_notice_title)
+            val text = (asks.drop(1) + strings.getString(R.string.apps_notice_text)).joinToString("\n")
             nm.notify(
                 NOTICE_ID,
                 Notification.Builder(context, CHANNEL)

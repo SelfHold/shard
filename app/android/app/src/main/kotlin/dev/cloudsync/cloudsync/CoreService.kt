@@ -21,9 +21,10 @@ class CoreService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Core.start(this)
         val nm = getSystemService(NotificationManager::class.java)
+        val res = AppLanguage.localized(this)
         nm.createNotificationChannel(
-            NotificationChannel(CHANNEL, getString(R.string.sync_channel_name), NotificationManager.IMPORTANCE_MIN).apply {
-                description = getString(R.string.sync_channel_description)
+            NotificationChannel(CHANNEL, res.getString(R.string.sync_channel_name), NotificationManager.IMPORTANCE_MIN).apply {
+                description = res.getString(R.string.sync_channel_description)
             },
         )
         val open = PendingIntent.getActivity(
@@ -32,7 +33,7 @@ class CoreService : Service() {
         )
         val n = Notification.Builder(this, CHANNEL)
             .setContentTitle("CloudSync")
-            .setContentText(getString(R.string.sync_notification_text))
+            .setContentText(res.getString(R.string.sync_notification_text))
             .setSmallIcon(R.drawable.ic_stat_sync)
             .setContentIntent(open)
             .setOngoing(true)
