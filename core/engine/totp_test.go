@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 func TestSafeTOTP(t *testing.T) {

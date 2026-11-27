@@ -9,13 +9,13 @@ import '../../core/i18n.dart';
 import '../../core/theme/colors.dart';
 import '../../core/theme/typography.dart';
 import '../../data/rpc/core_client.dart';
-import '../../data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
+import '../../data/rpc/gen/shard.pbgrpc.dart' as pb;
 import '../common/hm.dart';
 import '../core/core_cubit.dart';
 
 /// Recent core events: why storages fail, sync and mount errors. The core
 /// keeps the last 1000 (repeats folded); the daemon also writes them to
-/// cloudsyncd.log next to the vault.
+/// shardd.log next to the vault.
 class LogScreen extends StatefulWidget {
   const LogScreen({super.key, this.backendId});
 
@@ -134,9 +134,9 @@ class _LogScreenState extends State<LogScreen> {
         Text(
           tr(
             'What the core did and what failed: a storage that drops out shows its errors here. Repeats are folded into one line (×N). '
-                'The daemon also writes cloudsyncd.log in its config folder.',
+                'The daemon also writes shardd.log in its config folder.',
             'Что делало ядро и что не удалось: здесь видно, почему отваливается хранилище. Повторы сворачиваются в одну строку (×N). '
-                'Демон также пишет cloudsyncd.log в своей папке настроек.',
+                'Демон также пишет shardd.log в своей папке настроек.',
           ),
           style: HmText.small.copyWith(height: 1.5),
         ),

@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"cloudsync/core/crypto"
-	"cloudsync/core/index"
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 // ImportOptions says where imported entries go.

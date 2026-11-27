@@ -21,7 +21,7 @@ func newVault(t *testing.T) (*Vault, string) {
 		{ID: "a", Name: "Mega 1", Type: "mega", Params: map[string]string{"user": "one@x"}},
 		{ID: "b", Name: "Mega 2", Type: "mega", Params: map[string]string{"user": "two@x"}},
 	}
-	path := filepath.Join(t.TempDir(), "vault.cs")
+	path := filepath.Join(t.TempDir(), "vault.shard")
 	v, err := Create(path, []byte("secret"), c, fastKDF)
 	if err != nil {
 		t.Fatal(err)
@@ -104,13 +104,13 @@ func TestMergeAndPassword(t *testing.T) {
 func TestMergeConcurrentChanges(t *testing.T) {
 	dir := t.TempDir()
 	c, _ := New(2, 1)
-	a, err := Create(filepath.Join(dir, "a.cs"), []byte("pw"), c, fastKDF)
+	a, err := Create(filepath.Join(dir, "a.shard"), []byte("pw"), c, fastKDF)
 	if err != nil {
 		t.Fatal(err)
 	}
 	data, _ := a.Encode()
-	os.WriteFile(filepath.Join(dir, "b.cs"), data, 0o600)
-	b, _ := Open(filepath.Join(dir, "b.cs"), []byte("pw"))
+	os.WriteFile(filepath.Join(dir, "b.shard"), data, 0o600)
+	b, _ := Open(filepath.Join(dir, "b.shard"), []byte("pw"))
 
 	// Both change the same version at once.
 	a.Update(func(c *Config) error {

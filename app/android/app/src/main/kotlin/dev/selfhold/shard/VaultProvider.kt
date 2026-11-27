@@ -1,4 +1,4 @@
-package dev.cloudsync.cloudsync
+package dev.selfhold.shard
 
 import android.content.Context
 import android.database.Cursor
@@ -15,7 +15,7 @@ import android.provider.DocumentsProvider
 import android.system.ErrnoException
 import android.system.OsConstants
 import android.webkit.MimeTypeMap
-import dev.cloudsync.mobilebind.Mobilebind
+import dev.selfhold.shard.mobilebind.Mobilebind
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
@@ -45,7 +45,7 @@ class VaultProvider : DocumentsProvider() {
         c.newRow().apply {
             add(Root.COLUMN_ROOT_ID, "vault")
             add(Root.COLUMN_DOCUMENT_ID, "/")
-            add(Root.COLUMN_TITLE, "CloudSync")
+            add(Root.COLUMN_TITLE, "Shard")
             add(Root.COLUMN_SUMMARY, AppLanguage.localized(context!!).getString(if (unlocked) R.string.vault_root_unlocked else R.string.vault_root_locked))
             add(Root.COLUMN_ICON, R.mipmap.ic_launcher)
             add(Root.COLUMN_FLAGS, if (unlocked) Root.FLAG_SUPPORTS_CREATE or Root.FLAG_SUPPORTS_IS_CHILD else 0)
@@ -58,7 +58,7 @@ class VaultProvider : DocumentsProvider() {
         ensureCore()
         val c = MatrixCursor(projection ?: DOC_COLUMNS)
         if (documentId == "/" && !Mobilebind.unlocked()) {
-            addRow(c, JSONObject().put("path", "/").put("name", "CloudSync").put("dir", true))
+            addRow(c, JSONObject().put("path", "/").put("name", "Shard").put("dir", true))
             return c
         }
         addRow(c, JSONObject(call { Mobilebind.stat(documentId) }))

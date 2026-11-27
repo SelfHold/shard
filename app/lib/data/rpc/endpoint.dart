@@ -24,7 +24,7 @@ abstract class CoreLauncher {
 /// Android: the core runs inside the app (gomobile AAR) in a foreground
 /// service; Kotlin starts it and hands over the socket path and token.
 class AndroidLauncher implements CoreLauncher {
-  static const _ch = MethodChannel('dev.cloudsync/core');
+  static const _ch = MethodChannel('dev.selfhold.shard/core');
 
   @override
   Future<Endpoint> endpoint({bool start = true}) async {
@@ -37,15 +37,15 @@ class AndroidLauncher implements CoreLauncher {
   }
 }
 
-/// Desktop: the core is the cloudsyncd daemon. It writes its address and
-/// token to `<config dir>/cloudsync/endpoint.json`; when it is not running
-/// the app starts it (from next to the app binary, $CLOUDSYNCD or PATH).
+/// Desktop: the core is the shardd daemon. It writes its address and
+/// token to `<config dir>/selfhold/shard/endpoint.json`; when it is not running
+/// the app starts it (from next to the app binary, $SHARDD or PATH).
 class DesktopLauncher implements CoreLauncher {
   static String get configDir {
-    if (Platform.isWindows) return p.join(Platform.environment['APPDATA'] ?? '.', 'cloudsync');
+    if (Platform.isWindows) return p.join(Platform.environment['APPDATA'] ?? '.', 'selfhold', 'shard');
     final xdg = Platform.environment['XDG_CONFIG_HOME'];
     final home = Platform.environment['HOME'] ?? '.';
-    return p.join(xdg != null && xdg.isNotEmpty ? xdg : p.join(home, '.config'), 'cloudsync');
+    return p.join(xdg != null && xdg.isNotEmpty ? xdg : p.join(home, '.config'), 'selfhold', 'shard');
   }
 
   File get _file => File(p.join(configDir, 'endpoint.json'));
@@ -54,7 +54,7 @@ class DesktopLauncher implements CoreLauncher {
   Future<Endpoint> endpoint({bool start = true}) async {
     final e = await _read();
     if (e != null && await _reachable(e)) return e;
-    if (!start) throw const SocketException('cloudsyncd is not running');
+    if (!start) throw const SocketException('shardd is not running');
     final before = await _modified();
     await _spawn();
     final deadline = DateTime.now().add(const Duration(seconds: 15));
@@ -65,7 +65,7 @@ class DesktopLauncher implements CoreLauncher {
       final e = await _read();
       if (e != null && await _reachable(e)) return e;
     }
-    throw const SocketException('cloudsyncd did not start (see its log)');
+    throw const SocketException('shardd did not start (see its log)');
   }
 
   Future<DateTime?> _modified() async => await _file.exists() ? (await _file.stat()).modified : null;
@@ -99,9 +99,9 @@ class DesktopLauncher implements CoreLauncher {
   }
 
   Future<void> _spawn() async {
-    final name = Platform.isWindows ? 'cloudsyncd.exe' : 'cloudsyncd';
+    final name = Platform.isWindows ? 'shardd.exe' : 'shardd';
     final candidates = [
-      Platform.environment['CLOUDSYNCD'],
+      Platform.environment['SHARDD'],
       p.join(p.dirname(Platform.resolvedExecutable), name),
       p.join(p.dirname(Platform.resolvedExecutable), 'lib', name),
     ];

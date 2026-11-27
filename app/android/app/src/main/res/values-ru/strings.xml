@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="sync_channel_name">Синхронизация</string>
-    <string name="sync_channel_description">CloudSync синхронизирует файлы в фоне</string>
+    <string name="sync_channel_description">Shard синхронизирует файлы в фоне</string>
     <string name="sync_notification_text">Синхронизация файлов</string>
     <string name="vault_root_unlocked">Зашифрованное хранилище</string>
     <string name="vault_root_locked">Разблокируйте vault в приложении</string>
     <string name="apps_channel_name">Подключённые приложения</string>
-    <string name="apps_channel_description">Приложение просит хранить свои данные в CloudSync</string>
+    <string name="apps_channel_description">Приложение просит хранить свои данные в Shard</string>
     <string name="apps_notice_title">Приложение запрашивает доступ</string>
-    <string name="apps_notice_text">Откройте CloudSync, чтобы разрешить или отклонить</string>
+    <string name="apps_notice_text">Откройте Shard, чтобы разрешить или отклонить</string>
     <string name="apps_notice_passwords_title">%1$s хочет читать и менять все ваши пароли от сайтов</string>
     <string name="apps_notice_ssh_keys_title">%1$s хочет использовать ваши SSH-ключи</string>
     <string name="apps_notice_servers_title">%1$s хочет читать и менять ваши серверы</string>

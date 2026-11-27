@@ -15,8 +15,8 @@ import (
 	"sync"
 	"time"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/crypto"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/crypto"
 )
 
 // Journal reads and writes journal segments. Segment j/<device>/<seq> holds

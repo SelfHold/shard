@@ -1,6 +1,6 @@
 // This is a generated file - do not edit.
 //
-// Generated from cloudsync.proto.
+// Generated from shard.proto.
 
 // @dart = 3.3
 
@@ -242,7 +242,7 @@ const BackendType$json = {
       '3': 4,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.BackendOption',
+      '6': '.selfhold.shard.v1.BackendOption',
       '10': 'options'
     },
   ],
@@ -251,8 +251,8 @@ const BackendType$json = {
 /// Descriptor for `BackendType`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List backendTypeDescriptor = $convert.base64Decode(
     'CgtCYWNrZW5kVHlwZRISCgRuYW1lGAEgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGAIgASgJUg'
-    'tkZXNjcmlwdGlvbhIUCgVvYXV0aBgDIAEoCFIFb2F1dGgSNQoHb3B0aW9ucxgEIAMoCzIbLmNs'
-    'b3Vkc3luYy52MS5CYWNrZW5kT3B0aW9uUgdvcHRpb25z');
+    'tkZXNjcmlwdGlvbhIUCgVvYXV0aBgDIAEoCFIFb2F1dGgSOgoHb3B0aW9ucxgEIAMoCzIgLnNl'
+    'bGZob2xkLnNoYXJkLnYxLkJhY2tlbmRPcHRpb25SB29wdGlvbnM=');
 
 @$core.Deprecated('Use backendTypesReplyDescriptor instead')
 const BackendTypesReply$json = {
@@ -263,7 +263,7 @@ const BackendTypesReply$json = {
       '3': 1,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.BackendType',
+      '6': '.selfhold.shard.v1.BackendType',
       '10': 'types'
     },
   ],
@@ -271,8 +271,8 @@ const BackendTypesReply$json = {
 
 /// Descriptor for `BackendTypesReply`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List backendTypesReplyDescriptor = $convert.base64Decode(
-    'ChFCYWNrZW5kVHlwZXNSZXBseRIvCgV0eXBlcxgBIAMoCzIZLmNsb3Vkc3luYy52MS5CYWNrZW'
-    '5kVHlwZVIFdHlwZXM=');
+    'ChFCYWNrZW5kVHlwZXNSZXBseRI0CgV0eXBlcxgBIAMoCzIeLnNlbGZob2xkLnNoYXJkLnYxLk'
+    'JhY2tlbmRUeXBlUgV0eXBlcw==');
 
 @$core.Deprecated('Use addBackendRequestDescriptor instead')
 const AddBackendRequest$json = {
@@ -287,7 +287,7 @@ const AddBackendRequest$json = {
       '3': 5,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.AddBackendRequest.ParamsEntry',
+      '6': '.selfhold.shard.v1.AddBackendRequest.ParamsEntry',
       '10': 'params'
     },
     {'1': 'account', '3': 6, '4': 1, '5': 9, '10': 'account'},
@@ -308,10 +308,10 @@ const AddBackendRequest_ParamsEntry$json = {
 /// Descriptor for `AddBackendRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List addBackendRequestDescriptor = $convert.base64Decode(
     'ChFBZGRCYWNrZW5kUmVxdWVzdBISCgRuYW1lGAEgASgJUgRuYW1lEhIKBHR5cGUYAiABKAlSBH'
-    'R5cGUSFgoGZG9tYWluGAMgASgJUgZkb21haW4SEgoEcm9vdBgEIAEoCVIEcm9vdBJDCgZwYXJh'
-    'bXMYBSADKAsyKy5jbG91ZHN5bmMudjEuQWRkQmFja2VuZFJlcXVlc3QuUGFyYW1zRW50cnlSBn'
-    'BhcmFtcxIYCgdhY2NvdW50GAYgASgJUgdhY2NvdW50GjkKC1BhcmFtc0VudHJ5EhAKA2tleRgB'
-    'IAEoCVIDa2V5EhQKBXZhbHVlGAIgASgJUgV2YWx1ZToCOAE=');
+    'R5cGUSFgoGZG9tYWluGAMgASgJUgZkb21haW4SEgoEcm9vdBgEIAEoCVIEcm9vdBJICgZwYXJh'
+    'bXMYBSADKAsyMC5zZWxmaG9sZC5zaGFyZC52MS5BZGRCYWNrZW5kUmVxdWVzdC5QYXJhbXNFbn'
+    'RyeVIGcGFyYW1zEhgKB2FjY291bnQYBiABKAlSB2FjY291bnQaOQoLUGFyYW1zRW50cnkSEAoD'
+    'a2V5GAEgASgJUgNrZXkSFAoFdmFsdWUYAiABKAlSBXZhbHVlOgI4AQ==');
 
 @$core.Deprecated('Use idRequestDescriptor instead')
 const IdRequest$json = {
@@ -349,7 +349,7 @@ const AuthorizeRequest$json = {
       '3': 2,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.AuthorizeRequest.ParamsEntry',
+      '6': '.selfhold.shard.v1.AuthorizeRequest.ParamsEntry',
       '10': 'params'
     },
   ],
@@ -368,9 +368,10 @@ const AuthorizeRequest_ParamsEntry$json = {
 
 /// Descriptor for `AuthorizeRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List authorizeRequestDescriptor = $convert.base64Decode(
-    'ChBBdXRob3JpemVSZXF1ZXN0EhIKBHR5cGUYASABKAlSBHR5cGUSQgoGcGFyYW1zGAIgAygLMi'
-    'ouY2xvdWRzeW5jLnYxLkF1dGhvcml6ZVJlcXVlc3QuUGFyYW1zRW50cnlSBnBhcmFtcxo5CgtQ'
-    'YXJhbXNFbnRyeRIQCgNrZXkYASABKAlSA2tleRIUCgV2YWx1ZRgCIAEoCVIFdmFsdWU6AjgB');
+    'ChBBdXRob3JpemVSZXF1ZXN0EhIKBHR5cGUYASABKAlSBHR5cGUSRwoGcGFyYW1zGAIgAygLMi'
+    '8uc2VsZmhvbGQuc2hhcmQudjEuQXV0aG9yaXplUmVxdWVzdC5QYXJhbXNFbnRyeVIGcGFyYW1z'
+    'GjkKC1BhcmFtc0VudHJ5EhAKA2tleRgBIAEoCVIDa2V5EhQKBXZhbHVlGAIgASgJUgV2YWx1ZT'
+    'oCOAE=');
 
 @$core.Deprecated('Use authorizeReplyDescriptor instead')
 const AuthorizeReply$json = {
@@ -502,7 +503,7 @@ const StatusReply$json = {
       '3': 3,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.Backend',
+      '6': '.selfhold.shard.v1.Backend',
       '10': 'backends'
     },
     {
@@ -510,7 +511,7 @@ const StatusReply$json = {
       '3': 4,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.Device',
+      '6': '.selfhold.shard.v1.Device',
       '10': 'devices'
     },
     {'1': 'pending', '3': 5, '4': 1, '5': 5, '10': 'pending'},
@@ -549,17 +550,17 @@ const StatusReply$json = {
 /// Descriptor for `StatusReply`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List statusReplyDescriptor = $convert.base64Decode(
     'CgtTdGF0dXNSZXBseRIfCgtkYXRhX3NoYXJkcxgBIAEoBVIKZGF0YVNoYXJkcxIjCg1wYXJpdH'
-    'lfc2hhcmRzGAIgASgFUgxwYXJpdHlTaGFyZHMSMQoIYmFja2VuZHMYAyADKAsyFS5jbG91ZHN5'
-    'bmMudjEuQmFja2VuZFIIYmFja2VuZHMSLgoHZGV2aWNlcxgEIAMoCzIULmNsb3Vkc3luYy52MS'
-    '5EZXZpY2VSB2RldmljZXMSGAoHcGVuZGluZxgFIAEoBVIHcGVuZGluZxIjCg1yZWxvYWRfbmVl'
-    'ZGVkGAYgASgIUgxyZWxvYWROZWVkZWQSHwoLZG9tYWluX3Jpc2sYByABKAhSCmRvbWFpblJpc2'
-    'sSHwoLY2FjaGVfYnl0ZXMYCCABKANSCmNhY2hlQnl0ZXMSEgoEcGlucxgJIAMoCVIEcGlucxIb'
-    'CglkZXZpY2VfaWQYCiABKAlSCGRldmljZUlkEiMKDXZhdWx0X3ZlcnNpb24YCyABKARSDHZhdW'
-    'x0VmVyc2lvbhIfCgtmaWxlc19ieXRlcxgMIAEoA1IKZmlsZXNCeXRlcxIqCg53cml0YWJsZV9i'
-    'eXRlcxgNIAEoA0gAUg13cml0YWJsZUJ5dGVziAEBEiEKDHBpbm5lZF9ieXRlcxgOIAEoA1ILcG'
-    'lubmVkQnl0ZXMSMAoUcGlubmVkX21pc3NpbmdfYnl0ZXMYDyABKANSEnBpbm5lZE1pc3NpbmdC'
-    'eXRlcxIYCgdwaW5uaW5nGBAgASgIUgdwaW5uaW5nEhsKCXBpbl9lcnJvchgRIAEoCVIIcGluRX'
-    'Jyb3JCEQoPX3dyaXRhYmxlX2J5dGVz');
+    'lfc2hhcmRzGAIgASgFUgxwYXJpdHlTaGFyZHMSNgoIYmFja2VuZHMYAyADKAsyGi5zZWxmaG9s'
+    'ZC5zaGFyZC52MS5CYWNrZW5kUghiYWNrZW5kcxIzCgdkZXZpY2VzGAQgAygLMhkuc2VsZmhvbG'
+    'Quc2hhcmQudjEuRGV2aWNlUgdkZXZpY2VzEhgKB3BlbmRpbmcYBSABKAVSB3BlbmRpbmcSIwoN'
+    'cmVsb2FkX25lZWRlZBgGIAEoCFIMcmVsb2FkTmVlZGVkEh8KC2RvbWFpbl9yaXNrGAcgASgIUg'
+    'pkb21haW5SaXNrEh8KC2NhY2hlX2J5dGVzGAggASgDUgpjYWNoZUJ5dGVzEhIKBHBpbnMYCSAD'
+    'KAlSBHBpbnMSGwoJZGV2aWNlX2lkGAogASgJUghkZXZpY2VJZBIjCg12YXVsdF92ZXJzaW9uGA'
+    'sgASgEUgx2YXVsdFZlcnNpb24SHwoLZmlsZXNfYnl0ZXMYDCABKANSCmZpbGVzQnl0ZXMSKgoO'
+    'd3JpdGFibGVfYnl0ZXMYDSABKANIAFINd3JpdGFibGVCeXRlc4gBARIhCgxwaW5uZWRfYnl0ZX'
+    'MYDiABKANSC3Bpbm5lZEJ5dGVzEjAKFHBpbm5lZF9taXNzaW5nX2J5dGVzGA8gASgDUhJwaW5u'
+    'ZWRNaXNzaW5nQnl0ZXMSGAoHcGlubmluZxgQIAEoCFIHcGlubmluZxIbCglwaW5fZXJyb3IYES'
+    'ABKAlSCHBpbkVycm9yQhEKD193cml0YWJsZV9ieXRlcw==');
 
 @$core.Deprecated('Use pathRequestDescriptor instead')
 const PathRequest$json = {
@@ -631,7 +632,7 @@ const ListReply$json = {
       '3': 1,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.Entry',
+      '6': '.selfhold.shard.v1.Entry',
       '10': 'entries'
     },
   ],
@@ -639,8 +640,8 @@ const ListReply$json = {
 
 /// Descriptor for `ListReply`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List listReplyDescriptor = $convert.base64Decode(
-    'CglMaXN0UmVwbHkSLQoHZW50cmllcxgBIAMoCzITLmNsb3Vkc3luYy52MS5FbnRyeVIHZW50cm'
-    'llcw==');
+    'CglMaXN0UmVwbHkSMgoHZW50cmllcxgBIAMoCzIYLnNlbGZob2xkLnNoYXJkLnYxLkVudHJ5Ug'
+    'dlbnRyaWVz');
 
 @$core.Deprecated('Use removeRequestDescriptor instead')
 const RemoveRequest$json = {
@@ -738,7 +739,7 @@ const LocksReply$json = {
       '3': 1,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.LockInfo',
+      '6': '.selfhold.shard.v1.LockInfo',
       '10': 'locks'
     },
   ],
@@ -746,8 +747,8 @@ const LocksReply$json = {
 
 /// Descriptor for `LocksReply`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List locksReplyDescriptor = $convert.base64Decode(
-    'CgpMb2Nrc1JlcGx5EiwKBWxvY2tzGAEgAygLMhYuY2xvdWRzeW5jLnYxLkxvY2tJbmZvUgVsb2'
-    'Nrcw==');
+    'CgpMb2Nrc1JlcGx5EjEKBWxvY2tzGAEgAygLMhsuc2VsZmhvbGQuc2hhcmQudjEuTG9ja0luZm'
+    '9SBWxvY2tz');
 
 @$core.Deprecated('Use repairRequestDescriptor instead')
 const RepairRequest$json = {
@@ -835,7 +836,7 @@ const Event$json = {
       '3': 1,
       '4': 1,
       '5': 14,
-      '6': '.cloudsync.v1.Event.Kind',
+      '6': '.selfhold.shard.v1.Event.Kind',
       '10': 'kind'
     },
     {'1': 'message', '3': 2, '4': 1, '5': 9, '10': 'message'},
@@ -859,10 +860,10 @@ const Event_Kind$json = {
 
 /// Descriptor for `Event`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List eventDescriptor = $convert.base64Decode(
-    'CgVFdmVudBIsCgRraW5kGAEgASgOMhguY2xvdWRzeW5jLnYxLkV2ZW50LktpbmRSBGtpbmQSGA'
-    'oHbWVzc2FnZRgCIAEoCVIHbWVzc2FnZSKHAQoES2luZBIUChBLSU5EX1VOU1BFQ0lGSUVEEAAS'
-    'EAoMVFJFRV9DSEFOR0VEEAESEQoNU1RBVEVfQ0hBTkdFRBACEg0KCVNZTkNfRE9ORRADEg4KCl'
-    'NZTkNfRVJST1IQBBITCg9TRUNSRVRTX0NIQU5HRUQQBRIQCgxBUFBTX0NIQU5HRUQQBg==');
+    'CgVFdmVudBIxCgRraW5kGAEgASgOMh0uc2VsZmhvbGQuc2hhcmQudjEuRXZlbnQuS2luZFIEa2'
+    'luZBIYCgdtZXNzYWdlGAIgASgJUgdtZXNzYWdlIocBCgRLaW5kEhQKEEtJTkRfVU5TUEVDSUZJ'
+    'RUQQABIQCgxUUkVFX0NIQU5HRUQQARIRCg1TVEFURV9DSEFOR0VEEAISDQoJU1lOQ19ET05FEA'
+    'MSDgoKU1lOQ19FUlJPUhAEEhMKD1NFQ1JFVFNfQ0hBTkdFRBAFEhAKDEFQUFNfQ0hBTkdFRBAG');
 
 @$core.Deprecated('Use logsRequestDescriptor instead')
 const LogsRequest$json = {
@@ -910,7 +911,7 @@ const LogsReply$json = {
       '3': 1,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.LogEntry',
+      '6': '.selfhold.shard.v1.LogEntry',
       '10': 'entries'
     },
   ],
@@ -918,8 +919,8 @@ const LogsReply$json = {
 
 /// Descriptor for `LogsReply`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List logsReplyDescriptor = $convert.base64Decode(
-    'CglMb2dzUmVwbHkSMAoHZW50cmllcxgBIAMoCzIWLmNsb3Vkc3luYy52MS5Mb2dFbnRyeVIHZW'
-    '50cmllcw==');
+    'CglMb2dzUmVwbHkSNQoHZW50cmllcxgBIAMoCzIbLnNlbGZob2xkLnNoYXJkLnYxLkxvZ0VudH'
+    'J5UgdlbnRyaWVz');
 
 @$core.Deprecated('Use secretEntryDescriptor instead')
 const SecretEntry$json = {
@@ -932,7 +933,7 @@ const SecretEntry$json = {
       '3': 3,
       '4': 1,
       '5': 14,
-      '6': '.cloudsync.v1.SecretKind',
+      '6': '.selfhold.shard.v1.SecretKind',
       '10': 'kind'
     },
     {'1': 'title', '3': 4, '4': 1, '5': 9, '10': 'title'},
@@ -945,7 +946,7 @@ const SecretEntry$json = {
       '3': 9,
       '4': 1,
       '5': 14,
-      '6': '.cloudsync.v1.Web3Network',
+      '6': '.selfhold.shard.v1.Web3Network',
       '10': 'network'
     },
     {'1': 'key_type', '3': 10, '4': 1, '5': 9, '10': 'keyType'},
@@ -972,7 +973,7 @@ const SecretEntry$json = {
       '3': 30,
       '4': 1,
       '5': 11,
-      '6': '.cloudsync.v1.SecretServer',
+      '6': '.selfhold.shard.v1.SecretServer',
       '10': 'server'
     },
   ],
@@ -981,22 +982,22 @@ const SecretEntry$json = {
 /// Descriptor for `SecretEntry`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List secretEntryDescriptor = $convert.base64Decode(
     'CgtTZWNyZXRFbnRyeRIOCgJpZBgBIAEoCVICaWQSGAoHdmVyc2lvbhgCIAEoCVIHdmVyc2lvbh'
-    'IsCgRraW5kGAMgASgOMhguY2xvdWRzeW5jLnYxLlNlY3JldEtpbmRSBGtpbmQSFAoFdGl0bGUY'
-    'BCABKAlSBXRpdGxlEhkKCGdyb3VwX2lkGAUgASgJUgdncm91cElkEhoKCHVzZXJuYW1lGAYgAS'
-    'gJUgh1c2VybmFtZRIQCgN1cmwYByABKAlSA3VybBIYCgdjb21tZW50GAggASgJUgdjb21tZW50'
-    'EjMKB25ldHdvcmsYCSABKA4yGS5jbG91ZHN5bmMudjEuV2ViM05ldHdvcmtSB25ldHdvcmsSGQ'
-    'oIa2V5X3R5cGUYCiABKAlSB2tleVR5cGUSHQoKcHVibGljX2tleRgLIAEoCVIJcHVibGljS2V5'
-    'EiAKC2ZpbmdlcnByaW50GAwgASgJUgtmaW5nZXJwcmludBIYCgdhZGRyZXNzGA0gASgJUgdhZG'
-    'RyZXNzEiEKDGNyZWF0ZWRfdW5peBgOIAEoA1ILY3JlYXRlZFVuaXgSIQoMdXBkYXRlZF91bml4'
-    'GA8gASgDUgt1cGRhdGVkVW5peBIWCgZkZXZpY2UYECABKAlSBmRldmljZRIfCgtjb25mbGljdF'
-    '9vZhgRIAEoCVIKY29uZmxpY3RPZhIjCg1yZWNvdmVyeV9sZWZ0GBIgASgFUgxyZWNvdmVyeUxl'
-    'ZnQSFgoGb3BlbmVkGBQgASgIUgZvcGVuZWQSGgoIcGFzc3dvcmQYFSABKAlSCHBhc3N3b3JkEh'
-    'QKBW5vdGVzGBYgASgJUgVub3RlcxIfCgtwcml2YXRlX2tleRgXIAEoCVIKcHJpdmF0ZUtleRIe'
-    'CgpwYXNzcGhyYXNlGBggASgJUgpwYXNzcGhyYXNlEh8KC3RvdHBfc2VjcmV0GBkgASgJUgp0b3'
-    'RwU2VjcmV0EiUKDnRvdHBfYWxnb3JpdGhtGBogASgJUg10b3RwQWxnb3JpdGhtEh8KC3RvdHBf'
-    'ZGlnaXRzGBsgASgFUgp0b3RwRGlnaXRzEh8KC3RvdHBfcGVyaW9kGBwgASgFUgp0b3RwUGVyaW'
-    '9kEiUKDnJlY292ZXJ5X2NvZGVzGB0gAygJUg1yZWNvdmVyeUNvZGVzEjIKBnNlcnZlchgeIAEo'
-    'CzIaLmNsb3Vkc3luYy52MS5TZWNyZXRTZXJ2ZXJSBnNlcnZlcg==');
+    'IxCgRraW5kGAMgASgOMh0uc2VsZmhvbGQuc2hhcmQudjEuU2VjcmV0S2luZFIEa2luZBIUCgV0'
+    'aXRsZRgEIAEoCVIFdGl0bGUSGQoIZ3JvdXBfaWQYBSABKAlSB2dyb3VwSWQSGgoIdXNlcm5hbW'
+    'UYBiABKAlSCHVzZXJuYW1lEhAKA3VybBgHIAEoCVIDdXJsEhgKB2NvbW1lbnQYCCABKAlSB2Nv'
+    'bW1lbnQSOAoHbmV0d29yaxgJIAEoDjIeLnNlbGZob2xkLnNoYXJkLnYxLldlYjNOZXR3b3JrUg'
+    'duZXR3b3JrEhkKCGtleV90eXBlGAogASgJUgdrZXlUeXBlEh0KCnB1YmxpY19rZXkYCyABKAlS'
+    'CXB1YmxpY0tleRIgCgtmaW5nZXJwcmludBgMIAEoCVILZmluZ2VycHJpbnQSGAoHYWRkcmVzcx'
+    'gNIAEoCVIHYWRkcmVzcxIhCgxjcmVhdGVkX3VuaXgYDiABKANSC2NyZWF0ZWRVbml4EiEKDHVw'
+    'ZGF0ZWRfdW5peBgPIAEoA1ILdXBkYXRlZFVuaXgSFgoGZGV2aWNlGBAgASgJUgZkZXZpY2USHw'
+    'oLY29uZmxpY3Rfb2YYESABKAlSCmNvbmZsaWN0T2YSIwoNcmVjb3ZlcnlfbGVmdBgSIAEoBVIM'
+    'cmVjb3ZlcnlMZWZ0EhYKBm9wZW5lZBgUIAEoCFIGb3BlbmVkEhoKCHBhc3N3b3JkGBUgASgJUg'
+    'hwYXNzd29yZBIUCgVub3RlcxgWIAEoCVIFbm90ZXMSHwoLcHJpdmF0ZV9rZXkYFyABKAlSCnBy'
+    'aXZhdGVLZXkSHgoKcGFzc3BocmFzZRgYIAEoCVIKcGFzc3BocmFzZRIfCgt0b3RwX3NlY3JldB'
+    'gZIAEoCVIKdG90cFNlY3JldBIlCg50b3RwX2FsZ29yaXRobRgaIAEoCVINdG90cEFsZ29yaXRo'
+    'bRIfCgt0b3RwX2RpZ2l0cxgbIAEoBVIKdG90cERpZ2l0cxIfCgt0b3RwX3BlcmlvZBgcIAEoBV'
+    'IKdG90cFBlcmlvZBIlCg5yZWNvdmVyeV9jb2RlcxgdIAMoCVINcmVjb3ZlcnlDb2RlcxI3CgZz'
+    'ZXJ2ZXIYHiABKAsyHy5zZWxmaG9sZC5zaGFyZC52MS5TZWNyZXRTZXJ2ZXJSBnNlcnZlcg==');
 
 @$core.Deprecated('Use secretServerDescriptor instead')
 const SecretServer$json = {
@@ -1008,7 +1009,7 @@ const SecretServer$json = {
       '3': 2,
       '4': 1,
       '5': 14,
-      '6': '.cloudsync.v1.ServerAuth',
+      '6': '.selfhold.shard.v1.ServerAuth',
       '10': 'auth'
     },
     {'1': 'ssh_key_id', '3': 3, '4': 1, '5': 9, '10': 'sshKeyId'},
@@ -1021,11 +1022,11 @@ const SecretServer$json = {
 
 /// Descriptor for `SecretServer`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List secretServerDescriptor = $convert.base64Decode(
-    'CgxTZWNyZXRTZXJ2ZXISFgoGZm9sZGVyGAEgASgJUgZmb2xkZXISLAoEYXV0aBgCIAEoDjIYLm'
-    'Nsb3Vkc3luYy52MS5TZXJ2ZXJBdXRoUgRhdXRoEhwKCnNzaF9rZXlfaWQYAyABKAlSCHNzaEtl'
-    'eUlkEhsKCWhvc3Rfa2V5cxgEIAMoCVIIaG9zdEtleXMSJAoOanVtcF9zZXJ2ZXJfaWQYBSABKA'
-    'lSDGp1bXBTZXJ2ZXJJZBISCgR0YWdzGAYgAygJUgR0YWdzEh0KCmV4dHJhX2tleXMYByADKAlS'
-    'CWV4dHJhS2V5cw==');
+    'CgxTZWNyZXRTZXJ2ZXISFgoGZm9sZGVyGAEgASgJUgZmb2xkZXISMQoEYXV0aBgCIAEoDjIdLn'
+    'NlbGZob2xkLnNoYXJkLnYxLlNlcnZlckF1dGhSBGF1dGgSHAoKc3NoX2tleV9pZBgDIAEoCVII'
+    'c3NoS2V5SWQSGwoJaG9zdF9rZXlzGAQgAygJUghob3N0S2V5cxIkCg5qdW1wX3NlcnZlcl9pZB'
+    'gFIAEoCVIManVtcFNlcnZlcklkEhIKBHRhZ3MYBiADKAlSBHRhZ3MSHQoKZXh0cmFfa2V5cxgH'
+    'IAMoCVIJZXh0cmFLZXlz');
 
 @$core.Deprecated('Use secretGroupDescriptor instead')
 const SecretGroup$json = {
@@ -1052,7 +1053,7 @@ const SecretsReply$json = {
       '3': 1,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.SecretGroup',
+      '6': '.selfhold.shard.v1.SecretGroup',
       '10': 'groups'
     },
     {
@@ -1060,7 +1061,7 @@ const SecretsReply$json = {
       '3': 2,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.SecretEntry',
+      '6': '.selfhold.shard.v1.SecretEntry',
       '10': 'entries'
     },
     {'1': 'broken', '3': 3, '4': 1, '5': 5, '10': 'broken'},
@@ -1069,9 +1070,9 @@ const SecretsReply$json = {
 
 /// Descriptor for `SecretsReply`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List secretsReplyDescriptor = $convert.base64Decode(
-    'CgxTZWNyZXRzUmVwbHkSMQoGZ3JvdXBzGAEgAygLMhkuY2xvdWRzeW5jLnYxLlNlY3JldEdyb3'
-    'VwUgZncm91cHMSMwoHZW50cmllcxgCIAMoCzIZLmNsb3Vkc3luYy52MS5TZWNyZXRFbnRyeVIH'
-    'ZW50cmllcxIWCgZicm9rZW4YAyABKAVSBmJyb2tlbg==');
+    'CgxTZWNyZXRzUmVwbHkSNgoGZ3JvdXBzGAEgAygLMh4uc2VsZmhvbGQuc2hhcmQudjEuU2Vjcm'
+    'V0R3JvdXBSBmdyb3VwcxI4CgdlbnRyaWVzGAIgAygLMh4uc2VsZmhvbGQuc2hhcmQudjEuU2Vj'
+    'cmV0RW50cnlSB2VudHJpZXMSFgoGYnJva2VuGAMgASgFUgZicm9rZW4=');
 
 @$core.Deprecated('Use deriveKeyRequestDescriptor instead')
 const DeriveKeyRequest$json = {
@@ -1082,7 +1083,7 @@ const DeriveKeyRequest$json = {
       '3': 1,
       '4': 1,
       '5': 14,
-      '6': '.cloudsync.v1.SecretKind',
+      '6': '.selfhold.shard.v1.SecretKind',
       '10': 'kind'
     },
     {
@@ -1090,7 +1091,7 @@ const DeriveKeyRequest$json = {
       '3': 2,
       '4': 1,
       '5': 14,
-      '6': '.cloudsync.v1.Web3Network',
+      '6': '.selfhold.shard.v1.Web3Network',
       '10': 'network'
     },
     {'1': 'private_key', '3': 3, '4': 1, '5': 9, '10': 'privateKey'},
@@ -1101,10 +1102,10 @@ const DeriveKeyRequest$json = {
 
 /// Descriptor for `DeriveKeyRequest`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List deriveKeyRequestDescriptor = $convert.base64Decode(
-    'ChBEZXJpdmVLZXlSZXF1ZXN0EiwKBGtpbmQYASABKA4yGC5jbG91ZHN5bmMudjEuU2VjcmV0S2'
-    'luZFIEa2luZBIzCgduZXR3b3JrGAIgASgOMhkuY2xvdWRzeW5jLnYxLldlYjNOZXR3b3JrUgdu'
-    'ZXR3b3JrEh8KC3ByaXZhdGVfa2V5GAMgASgJUgpwcml2YXRlS2V5Eh4KCnBhc3NwaHJhc2UYBC'
-    'ABKAlSCnBhc3NwaHJhc2USGAoHY29tbWVudBgFIAEoCVIHY29tbWVudA==');
+    'ChBEZXJpdmVLZXlSZXF1ZXN0EjEKBGtpbmQYASABKA4yHS5zZWxmaG9sZC5zaGFyZC52MS5TZW'
+    'NyZXRLaW5kUgRraW5kEjgKB25ldHdvcmsYAiABKA4yHi5zZWxmaG9sZC5zaGFyZC52MS5XZWIz'
+    'TmV0d29ya1IHbmV0d29yaxIfCgtwcml2YXRlX2tleRgDIAEoCVIKcHJpdmF0ZUtleRIeCgpwYX'
+    'NzcGhyYXNlGAQgASgJUgpwYXNzcGhyYXNlEhgKB2NvbW1lbnQYBSABKAlSB2NvbW1lbnQ=');
 
 @$core.Deprecated('Use derivedKeyDescriptor instead')
 const DerivedKey$json = {
@@ -1150,7 +1151,7 @@ const TotpCodesReply$json = {
       '3': 1,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.TotpCode',
+      '6': '.selfhold.shard.v1.TotpCode',
       '10': 'codes'
     },
     {'1': 'now_unix', '3': 2, '4': 1, '5': 3, '10': 'nowUnix'},
@@ -1159,8 +1160,8 @@ const TotpCodesReply$json = {
 
 /// Descriptor for `TotpCodesReply`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List totpCodesReplyDescriptor = $convert.base64Decode(
-    'Cg5Ub3RwQ29kZXNSZXBseRIsCgVjb2RlcxgBIAMoCzIWLmNsb3Vkc3luYy52MS5Ub3RwQ29kZV'
-    'IFY29kZXMSGQoIbm93X3VuaXgYAiABKANSB25vd1VuaXg=');
+    'Cg5Ub3RwQ29kZXNSZXBseRIxCgVjb2RlcxgBIAMoCzIbLnNlbGZob2xkLnNoYXJkLnYxLlRvdH'
+    'BDb2RlUgVjb2RlcxIZCghub3dfdW5peBgCIAEoA1IHbm93VW5peA==');
 
 @$core.Deprecated('Use recoveryCodeRequestDescriptor instead')
 const RecoveryCodeRequest$json = {
@@ -1238,7 +1239,7 @@ const TotpLink$json = {
       '3': 2,
       '4': 1,
       '5': 11,
-      '6': '.cloudsync.v1.TotpPreview',
+      '6': '.selfhold.shard.v1.TotpPreview',
       '10': 'preview'
     },
   ],
@@ -1246,8 +1247,8 @@ const TotpLink$json = {
 
 /// Descriptor for `TotpLink`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List totpLinkDescriptor = $convert.base64Decode(
-    'CghUb3RwTGluaxISCgRsaW5rGAEgASgJUgRsaW5rEjMKB3ByZXZpZXcYAiABKAsyGS5jbG91ZH'
-    'N5bmMudjEuVG90cFByZXZpZXdSB3ByZXZpZXc=');
+    'CghUb3RwTGluaxISCgRsaW5rGAEgASgJUgRsaW5rEjgKB3ByZXZpZXcYAiABKAsyHi5zZWxmaG'
+    '9sZC5zaGFyZC52MS5Ub3RwUHJldmlld1IHcHJldmlldw==');
 
 @$core.Deprecated('Use totpBatchDescriptor instead')
 const TotpBatch$json = {
@@ -1273,7 +1274,7 @@ const TotpLinksReply$json = {
       '3': 1,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.TotpLink',
+      '6': '.selfhold.shard.v1.TotpLink',
       '10': 'links'
     },
     {
@@ -1281,7 +1282,7 @@ const TotpLinksReply$json = {
       '3': 2,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.TotpBatch',
+      '6': '.selfhold.shard.v1.TotpBatch',
       '10': 'batches'
     },
   ],
@@ -1289,9 +1290,9 @@ const TotpLinksReply$json = {
 
 /// Descriptor for `TotpLinksReply`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List totpLinksReplyDescriptor = $convert.base64Decode(
-    'Cg5Ub3RwTGlua3NSZXBseRIsCgVsaW5rcxgBIAMoCzIWLmNsb3Vkc3luYy52MS5Ub3RwTGlua1'
-    'IFbGlua3MSMQoHYmF0Y2hlcxgCIAMoCzIXLmNsb3Vkc3luYy52MS5Ub3RwQmF0Y2hSB2JhdGNo'
-    'ZXM=');
+    'Cg5Ub3RwTGlua3NSZXBseRIxCgVsaW5rcxgBIAMoCzIbLnNlbGZob2xkLnNoYXJkLnYxLlRvdH'
+    'BMaW5rUgVsaW5rcxI2CgdiYXRjaGVzGAIgAygLMhwuc2VsZmhvbGQuc2hhcmQudjEuVG90cEJh'
+    'dGNoUgdiYXRjaGVz');
 
 @$core.Deprecated('Use secretImportRequestDescriptor instead')
 const SecretImportRequest$json = {
@@ -1323,7 +1324,7 @@ const SecretImportItem$json = {
       '3': 1,
       '4': 1,
       '5': 14,
-      '6': '.cloudsync.v1.SecretKind',
+      '6': '.selfhold.shard.v1.SecretKind',
       '10': 'kind'
     },
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
@@ -1335,7 +1336,7 @@ const SecretImportItem$json = {
       '3': 6,
       '4': 1,
       '5': 14,
-      '6': '.cloudsync.v1.SecretImportStatus',
+      '6': '.selfhold.shard.v1.SecretImportStatus',
       '10': 'status'
     },
     {'1': 'error', '3': 7, '4': 1, '5': 9, '10': 'error'},
@@ -1344,11 +1345,11 @@ const SecretImportItem$json = {
 
 /// Descriptor for `SecretImportItem`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List secretImportItemDescriptor = $convert.base64Decode(
-    'ChBTZWNyZXRJbXBvcnRJdGVtEiwKBGtpbmQYASABKA4yGC5jbG91ZHN5bmMudjEuU2VjcmV0S2'
-    'luZFIEa2luZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSGgoIdXNlcm5hbWUYAyABKAlSCHVzZXJu'
-    'YW1lEhAKA3VybBgEIAEoCVIDdXJsEhQKBWdyb3VwGAUgASgJUgVncm91cBI4CgZzdGF0dXMYBi'
-    'ABKA4yIC5jbG91ZHN5bmMudjEuU2VjcmV0SW1wb3J0U3RhdHVzUgZzdGF0dXMSFAoFZXJyb3IY'
-    'ByABKAlSBWVycm9y');
+    'ChBTZWNyZXRJbXBvcnRJdGVtEjEKBGtpbmQYASABKA4yHS5zZWxmaG9sZC5zaGFyZC52MS5TZW'
+    'NyZXRLaW5kUgRraW5kEhQKBXRpdGxlGAIgASgJUgV0aXRsZRIaCgh1c2VybmFtZRgDIAEoCVII'
+    'dXNlcm5hbWUSEAoDdXJsGAQgASgJUgN1cmwSFAoFZ3JvdXAYBSABKAlSBWdyb3VwEj0KBnN0YX'
+    'R1cxgGIAEoDjIlLnNlbGZob2xkLnNoYXJkLnYxLlNlY3JldEltcG9ydFN0YXR1c1IGc3RhdHVz'
+    'EhQKBWVycm9yGAcgASgJUgVlcnJvcg==');
 
 @$core.Deprecated('Use secretImportReplyDescriptor instead')
 const SecretImportReply$json = {
@@ -1361,7 +1362,7 @@ const SecretImportReply$json = {
       '3': 3,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.SecretImportItem',
+      '6': '.selfhold.shard.v1.SecretImportItem',
       '10': 'items'
     },
     {'1': 'added', '3': 4, '4': 1, '5': 5, '10': 'added'},
@@ -1374,10 +1375,10 @@ const SecretImportReply$json = {
 /// Descriptor for `SecretImportReply`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List secretImportReplyDescriptor = $convert.base64Decode(
     'ChFTZWNyZXRJbXBvcnRSZXBseRIjCg1uZWVkX3Bhc3N3b3JkGAEgASgIUgxuZWVkUGFzc3dvcm'
-    'QSFgoGZm9ybWF0GAIgASgJUgZmb3JtYXQSNAoFaXRlbXMYAyADKAsyHi5jbG91ZHN5bmMudjEu'
-    'U2VjcmV0SW1wb3J0SXRlbVIFaXRlbXMSFAoFYWRkZWQYBCABKAVSBWFkZGVkEh4KCmR1cGxpY2'
-    'F0ZXMYBSABKAVSCmR1cGxpY2F0ZXMSFgoGZmFpbGVkGAYgASgFUgZmYWlsZWQSHQoKbmV3X2dy'
-    'b3VwcxgHIAMoCVIJbmV3R3JvdXBz');
+    'QSFgoGZm9ybWF0GAIgASgJUgZmb3JtYXQSOQoFaXRlbXMYAyADKAsyIy5zZWxmaG9sZC5zaGFy'
+    'ZC52MS5TZWNyZXRJbXBvcnRJdGVtUgVpdGVtcxIUCgVhZGRlZBgEIAEoBVIFYWRkZWQSHgoKZH'
+    'VwbGljYXRlcxgFIAEoBVIKZHVwbGljYXRlcxIWCgZmYWlsZWQYBiABKAVSBmZhaWxlZBIdCgpu'
+    'ZXdfZ3JvdXBzGAcgAygJUgluZXdHcm91cHM=');
 
 @$core.Deprecated('Use pairingRequestInfoDescriptor instead')
 const PairingRequestInfo$json = {
@@ -1475,7 +1476,7 @@ const AppsReply$json = {
       '3': 1,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.PairingRequestInfo',
+      '6': '.selfhold.shard.v1.PairingRequestInfo',
       '10': 'requests'
     },
     {
@@ -1483,7 +1484,7 @@ const AppsReply$json = {
       '3': 2,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.AppPairing',
+      '6': '.selfhold.shard.v1.AppPairing',
       '10': 'pairings'
     },
     {
@@ -1491,7 +1492,7 @@ const AppsReply$json = {
       '3': 3,
       '4': 3,
       '5': 11,
-      '6': '.cloudsync.v1.AppDataInfo',
+      '6': '.selfhold.shard.v1.AppDataInfo',
       '10': 'data'
     },
   ],
@@ -1499,10 +1500,10 @@ const AppsReply$json = {
 
 /// Descriptor for `AppsReply`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List appsReplyDescriptor = $convert.base64Decode(
-    'CglBcHBzUmVwbHkSPAoIcmVxdWVzdHMYASADKAsyIC5jbG91ZHN5bmMudjEuUGFpcmluZ1JlcX'
-    'Vlc3RJbmZvUghyZXF1ZXN0cxI0CghwYWlyaW5ncxgCIAMoCzIYLmNsb3Vkc3luYy52MS5BcHBQ'
-    'YWlyaW5nUghwYWlyaW5ncxItCgRkYXRhGAMgAygLMhkuY2xvdWRzeW5jLnYxLkFwcERhdGFJbm'
-    'ZvUgRkYXRh');
+    'CglBcHBzUmVwbHkSQQoIcmVxdWVzdHMYASADKAsyJS5zZWxmaG9sZC5zaGFyZC52MS5QYWlyaW'
+    '5nUmVxdWVzdEluZm9SCHJlcXVlc3RzEjkKCHBhaXJpbmdzGAIgAygLMh0uc2VsZmhvbGQuc2hh'
+    'cmQudjEuQXBwUGFpcmluZ1IIcGFpcmluZ3MSMgoEZGF0YRgDIAMoCzIeLnNlbGZob2xkLnNoYX'
+    'JkLnYxLkFwcERhdGFJbmZvUgRkYXRh');
 
 @$core.Deprecated('Use decidePairingRequestDescriptor instead')
 const DecidePairingRequest$json = {

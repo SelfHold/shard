@@ -9,7 +9,7 @@ VERSION := 0.1.0
 STAMP := $(shell date +%m%d.%H%M%S)
 BUILD_ID := $(SHA)-$(STAMP)
 DEFINES := --dart-define=APP_VERSION=$(VERSION) --dart-define=BUILD_SHA=$(SHA) --dart-define=BUILD_ID=$(BUILD_ID) --dart-define=ENV=$(or $(ENV),dev)
-GO_LDFLAGS := -X cloudsync/core/rpc.Version=$(VERSION) -X cloudsync/core/rpc.Build=$(BUILD_ID)
+GO_LDFLAGS := -X github.com/SelfHold/shard/core/rpc.Version=$(VERSION) -X github.com/SelfHold/shard/core/rpc.Build=$(BUILD_ID)
 NDK ?= $(lastword $(sort $(wildcard $(HOME)/Android/Sdk/ndk/*)))
 PROTOC_DART := $(HOME)/.pub-cache/bin/protoc-gen-dart
 
@@ -34,7 +34,7 @@ vet:
 # Linux build links FUSE 2 (libfuse.so.2). Use FUSE_TAGS=-tags=fuse3 on
 # systems where libfuse3.so.3 exists.
 build:
-	go build $(FUSE_TAGS) -ldflags '$(GO_LDFLAGS)' -o $(BIN)/ ./cmd/cs ./cmd/cloudsyncd
+	go build $(FUSE_TAGS) -ldflags '$(GO_LDFLAGS)' -o $(BIN)/ ./cmd/shard ./cmd/shardd
 
 # APKs only for arm64 (phones) and x86_64 (emulators): the Go core is built for these.
 build-apk: aar app-deps
@@ -43,27 +43,27 @@ build-apk: aar app-deps
 	cp app/build/app/outputs/flutter-apk/*-release.apk $(BIN)/android/
 	@ls -lh $(BIN)/android/*.apk
 
-# Desktop app; cloudsyncd is put next to it, the app starts it when needed.
+# Desktop app; shardd is put next to it, the app starts it when needed.
 build-linux: build app-deps
 	cd app && flutter build linux --release $(DEFINES)
-	cp $(BIN)/cloudsyncd app/build/linux/x64/release/bundle/
+	cp $(BIN)/shardd app/build/linux/x64/release/bundle/
 	rm -rf $(BIN)/linux && mkdir -p $(BIN)/linux
 	cp -r app/build/linux/x64/release/bundle/. $(BIN)/linux/
-	@echo "app: $(BIN)/linux/cloudsync"
+	@echo "app: $(BIN)/linux/shard"
 
 # Windows needs no cgo: cgofuse talks to WinFsp directly.
 build-windows:
-	GOOS=windows GOARCH=amd64 go build -ldflags '$(GO_LDFLAGS)' -o $(BIN)/windows/ ./cmd/cs ./cmd/cloudsyncd
+	GOOS=windows GOARCH=amd64 go build -ldflags '$(GO_LDFLAGS)' -o $(BIN)/windows/ ./cmd/shard ./cmd/shardd
 
-# Go and Dart code from proto/cloudsync.proto (protoc-gen-go, -go-grpc and
+# Go and Dart code from proto/shard.proto (protoc-gen-go, -go-grpc and
 # "dart pub global activate protoc_plugin"), Go code from proto/connector.proto
 # (the API for connected apps; apps generate their own clients from it).
 proto:
 	protoc -I proto \
 		--go_out=core/rpc/pb --go_opt=paths=source_relative \
 		--go-grpc_out=core/rpc/pb --go-grpc_opt=paths=source_relative \
-		proto/cloudsync.proto
-	protoc -I proto --plugin=protoc-gen-dart=$(PROTOC_DART) --dart_out=grpc:app/lib/data/rpc/gen proto/cloudsync.proto
+		proto/shard.proto
+	protoc -I proto --plugin=protoc-gen-dart=$(PROTOC_DART) --dart_out=grpc:app/lib/data/rpc/gen proto/shard.proto
 	protoc -I proto \
 		--go_out=core/connector/pb --go_opt=paths=source_relative \
 		--go-grpc_out=core/connector/pb --go-grpc_opt=paths=source_relative \
@@ -72,7 +72,7 @@ proto:
 # The core for Android (gomobile, NDK from ~/Android/Sdk/ndk).
 aar:
 	ANDROID_NDK_HOME=$(NDK) gomobile bind -target=android/arm64,android/amd64 -androidapi 26 \
-		-javapkg dev.cloudsync -ldflags='-s -w $(GO_LDFLAGS)' -o app/android/app/libs/cloudsync.aar ./mobilebind
+		-javapkg dev.selfhold.shard -ldflags='-s -w $(GO_LDFLAGS)' -o app/android/app/libs/shard.aar ./mobilebind
 
 # --- Flutter app ---------------------------------------------------------
 
@@ -83,7 +83,7 @@ app-test: app-deps
 	cd app && flutter analyze && flutter test
 
 app-run: build app-deps
-	cd app && CLOUDSYNCD=$(CURDIR)/$(BIN)/cloudsyncd flutter run $(DEFINES)
+	cd app && SHARDD=$(CURDIR)/$(BIN)/shardd flutter run $(DEFINES)
 
 clean:
-	rm -rf $(BIN) app/build app/android/app/libs/cloudsync.aar app/android/app/libs/cloudsync-sources.jar
+	rm -rf $(BIN) app/build app/android/app/libs/shard.aar app/android/app/libs/shard-sources.jar

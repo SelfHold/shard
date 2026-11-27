@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/crypto"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/crypto"
 )
 
 type clock struct {

@@ -10,10 +10,10 @@ import (
 	"strings"
 	"sync"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/blob"
-	"cloudsync/core/eventlog"
-	"cloudsync/core/index"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/blob"
+	"github.com/SelfHold/shard/core/eventlog"
+	"github.com/SelfHold/shard/core/index"
 )
 
 // pins are the paths this device keeps fully local. A pinned directory

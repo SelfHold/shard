@@ -7,9 +7,9 @@ import (
 	"io"
 	"sync"
 
-	"cloudsync/core/blob"
-	"cloudsync/core/chunker"
-	"cloudsync/core/index"
+	"github.com/SelfHold/shard/core/blob"
+	"github.com/SelfHold/shard/core/chunker"
+	"github.com/SelfHold/shard/core/index"
 )
 
 // uploadParallel is how many blobs upload at the same time. Each one

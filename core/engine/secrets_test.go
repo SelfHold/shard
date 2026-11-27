@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 func TestSafeSync(t *testing.T) {

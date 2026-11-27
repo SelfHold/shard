@@ -1,5 +1,5 @@
-import 'package:cloudsync/presentation/secrets/group_icons.dart';
-import 'package:cloudsync/presentation/secrets/secret_util.dart';
+import 'package:shard/presentation/secrets/group_icons.dart';
+import 'package:shard/presentation/secrets/secret_util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

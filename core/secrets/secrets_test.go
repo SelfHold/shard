@@ -10,8 +10,8 @@ import (
 
 	"golang.org/x/crypto/ssh"
 
-	"cloudsync/core/crypto"
-	"cloudsync/core/index"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/index"
 )
 
 func TestEVMAddress(t *testing.T) {

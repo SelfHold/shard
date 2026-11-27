@@ -1,4 +1,4 @@
-module cloudsync
+module github.com/SelfHold/shard
 
 go 1.27.1
 

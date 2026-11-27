@@ -13,7 +13,7 @@ import '../../core/theme/layout.dart';
 import '../../core/theme/typography.dart';
 import '../../data/biometric.dart';
 import '../../data/rpc/core_client.dart';
-import '../../data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
+import '../../data/rpc/gen/shard.pbgrpc.dart' as pb;
 import '../common/hm.dart';
 import '../core/core_cubit.dart';
 
@@ -95,8 +95,8 @@ class _NoCore extends StatelessWidget {
     final hint = Platform.isAndroid
         ? tr('The core runs inside the app; try again.', 'Ядро работает внутри приложения; попробуйте ещё раз.')
         : tr(
-            'The app starts cloudsyncd itself. It must be next to the app, in PATH or in \$CLOUDSYNCD.',
-            'Приложение запускает cloudsyncd само. Он должен лежать рядом с приложением, в PATH или в \$CLOUDSYNCD.',
+            'The app starts shardd itself. It must be next to the app, in PATH or in \$SHARDD.',
+            'Приложение запускает shardd само. Он должен лежать рядом с приложением, в PATH или в \$SHARDD.',
           );
     return HmCard(
       accent: core.stopped ? HmAccent.active : HmAccent.error,
@@ -401,7 +401,7 @@ class _SetupState extends State<_Setup> {
               label: tr('Vault file', 'Файл vault'),
               required: true,
               error: _errors['file'],
-              hint: tr('Copy vault.cs from another device (Vault → Export)', 'Скопируйте vault.cs с другого устройства (Vault → Экспорт)'),
+              hint: tr('Copy vault.shard from another device (Vault → Export)', 'Скопируйте vault.shard с другого устройства (Vault → Экспорт)'),
               child: Row(
                 children: [
                   Expanded(

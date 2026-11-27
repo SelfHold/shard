@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 // AccountFromParams returns who a storage signs in as when its options say

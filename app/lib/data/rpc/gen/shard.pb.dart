@@ -1,6 +1,6 @@
 // This is a generated file - do not edit.
 //
-// Generated from cloudsync.proto.
+// Generated from shard.proto.
 
 // @dart = 3.3
 
@@ -15,11 +15,11 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'cloudsync.pbenum.dart';
+import 'shard.pbenum.dart';
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
-export 'cloudsync.pbenum.dart';
+export 'shard.pbenum.dart';
 
 class Empty extends $pb.GeneratedMessage {
   factory Empty() => Empty._();
@@ -35,7 +35,8 @@ class Empty extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Empty',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: Empty.$_createMessage)
     ..hasRequiredFields = false;
 
@@ -108,7 +109,8 @@ class State extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'State',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: State.$_createMessage)
     ..aOB(1, _omitFieldNames ? '' : 'vaultExists')
     ..aOB(2, _omitFieldNames ? '' : 'unlocked')
@@ -316,7 +318,8 @@ class CreateVaultRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CreateVaultRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: CreateVaultRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'password')
     ..aI(2, _omitFieldNames ? '' : 'dataShards')
@@ -407,7 +410,8 @@ class ImportVaultRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ImportVaultRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: ImportVaultRequest.$_createMessage)
     ..a<$core.List<$core.int>>(
         1, _omitFieldNames ? '' : 'vault', $pb.PbFieldType.OY)
@@ -487,7 +491,8 @@ class UnlockRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'UnlockRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: UnlockRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'password')
     ..aOS(2, _omitFieldNames ? '' : 'deviceName')
@@ -556,7 +561,8 @@ class ChangePasswordRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ChangePasswordRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: ChangePasswordRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'oldPassword')
     ..aOS(2, _omitFieldNames ? '' : 'newPassword')
@@ -625,7 +631,8 @@ class CheckPasswordRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CheckPasswordRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: CheckPasswordRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'password')
     ..hasRequiredFields = false;
@@ -683,7 +690,8 @@ class VaultFile extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'VaultFile',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: VaultFile.$_createMessage)
     ..a<$core.List<$core.int>>(
         1, _omitFieldNames ? '' : 'vault', $pb.PbFieldType.OY)
@@ -751,7 +759,8 @@ class BackendOption extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'BackendOption',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: BackendOption.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'name')
     ..aOS(2, _omitFieldNames ? '' : 'help')
@@ -868,7 +877,8 @@ class BackendType extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'BackendType',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: BackendType.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'name')
     ..aOS(2, _omitFieldNames ? '' : 'description')
@@ -950,7 +960,8 @@ class BackendTypesReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'BackendTypesReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: BackendTypesReply.$_createMessage)
     ..pPM<BackendType>(1, _omitFieldNames ? '' : 'types',
         subBuilder: BackendType.$_createMessage)
@@ -1012,7 +1023,8 @@ class AddBackendRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'AddBackendRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: AddBackendRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'name')
     ..aOS(2, _omitFieldNames ? '' : 'type')
@@ -1022,7 +1034,7 @@ class AddBackendRequest extends $pb.GeneratedMessage {
         entryClassName: 'AddBackendRequest.ParamsEntry',
         keyFieldType: $pb.PbFieldType.OS,
         valueFieldType: $pb.PbFieldType.OS,
-        packageName: const $pb.PackageName('cloudsync.v1'))
+        packageName: const $pb.PackageName('selfhold.shard.v1'))
     ..aOS(6, _omitFieldNames ? '' : 'account')
     ..hasRequiredFields = false;
 
@@ -1117,7 +1129,8 @@ class IdRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'IdRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: IdRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..hasRequiredFields = false;
@@ -1174,7 +1187,8 @@ class RemoveBackendRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'RemoveBackendRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: RemoveBackendRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOB(2, _omitFieldNames ? '' : 'force')
@@ -1244,14 +1258,15 @@ class AuthorizeRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'AuthorizeRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: AuthorizeRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'type')
     ..m<$core.String, $core.String>(2, _omitFieldNames ? '' : 'params',
         entryClassName: 'AuthorizeRequest.ParamsEntry',
         keyFieldType: $pb.PbFieldType.OS,
         valueFieldType: $pb.PbFieldType.OS,
-        packageName: const $pb.PackageName('cloudsync.v1'))
+        packageName: const $pb.PackageName('selfhold.shard.v1'))
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -1313,7 +1328,8 @@ class AuthorizeReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'AuthorizeReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: AuthorizeReply.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'url')
     ..aOS(2, _omitFieldNames ? '' : 'token')
@@ -1392,7 +1408,8 @@ class RenameBackendRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'RenameBackendRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: RenameBackendRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
@@ -1462,7 +1479,8 @@ class SetBackendEnabledRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SetBackendEnabledRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: SetBackendEnabledRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOB(2, _omitFieldNames ? '' : 'enabled')
@@ -1568,7 +1586,8 @@ class Backend extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Backend',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: Backend.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
@@ -1816,7 +1835,8 @@ class Device extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Device',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: Device.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
@@ -1934,7 +1954,8 @@ class StatusReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'StatusReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: StatusReply.$_createMessage)
     ..aI(1, _omitFieldNames ? '' : 'dataShards')
     ..aI(2, _omitFieldNames ? '' : 'parityShards')
@@ -2141,7 +2162,8 @@ class PathRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PathRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: PathRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'path')
     ..hasRequiredFields = false;
@@ -2198,7 +2220,8 @@ class PathsRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PathsRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: PathsRequest.$_createMessage)
     ..pPS(1, _omitFieldNames ? '' : 'paths')
     ..hasRequiredFields = false;
@@ -2251,7 +2274,8 @@ class SearchRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SearchRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: SearchRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'query')
     ..aI(2, _omitFieldNames ? '' : 'limit')
@@ -2334,7 +2358,8 @@ class Entry extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Entry',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: Entry.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'path')
     ..aOS(2, _omitFieldNames ? '' : 'name')
@@ -2469,7 +2494,8 @@ class ListReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: ListReply.$_createMessage)
     ..pPM<Entry>(1, _omitFieldNames ? '' : 'entries',
         subBuilder: Entry.$_createMessage)
@@ -2521,7 +2547,8 @@ class RemoveRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'RemoveRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: RemoveRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'path')
     ..aOB(2, _omitFieldNames ? '' : 'recursive')
@@ -2590,7 +2617,8 @@ class RenameRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'RenameRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: RenameRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'from')
     ..aOS(2, _omitFieldNames ? '' : 'to')
@@ -2659,7 +2687,8 @@ class UploadRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'UploadRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: UploadRequest.$_createMessage)
     ..pPS(1, _omitFieldNames ? '' : 'localPaths')
     ..aOS(2, _omitFieldNames ? '' : 'remoteDir')
@@ -2720,7 +2749,8 @@ class UploadReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'UploadReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: UploadReply.$_createMessage)
     ..aI(1, _omitFieldNames ? '' : 'files')
     ..hasRequiredFields = false;
@@ -2779,7 +2809,8 @@ class DownloadRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DownloadRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: DownloadRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'path')
     ..aOS(2, _omitFieldNames ? '' : 'localPath')
@@ -2856,7 +2887,8 @@ class LockInfo extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'LockInfo',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: LockInfo.$_createMessage)
     ..aOB(1, _omitFieldNames ? '' : 'locked')
     ..aOS(2, _omitFieldNames ? '' : 'deviceId')
@@ -2961,7 +2993,8 @@ class LocksReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'LocksReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: LocksReply.$_createMessage)
     ..pPM<LockInfo>(1, _omitFieldNames ? '' : 'locks',
         subBuilder: LockInfo.$_createMessage)
@@ -3011,7 +3044,8 @@ class RepairRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'RepairRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: RepairRequest.$_createMessage)
     ..aOB(1, _omitFieldNames ? '' : 'rebalance')
     ..hasRequiredFields = false;
@@ -3082,7 +3116,8 @@ class RepairReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'RepairReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: RepairReply.$_createMessage)
     ..aI(1, _omitFieldNames ? '' : 'blobs')
     ..aI(2, _omitFieldNames ? '' : 'repaired')
@@ -3205,7 +3240,8 @@ class GCRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GCRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: GCRequest.$_createMessage)
     ..aInt64(1, _omitFieldNames ? '' : 'graceSeconds')
     ..hasRequiredFields = false;
@@ -3266,7 +3302,8 @@ class GCReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GCReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: GCReply.$_createMessage)
     ..aI(1, _omitFieldNames ? '' : 'objects')
     ..aI(2, _omitFieldNames ? '' : 'unused')
@@ -3347,7 +3384,8 @@ class SetRedundancyRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SetRedundancyRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: SetRedundancyRequest.$_createMessage)
     ..aI(1, _omitFieldNames ? '' : 'dataShards')
     ..aI(2, _omitFieldNames ? '' : 'parityShards')
@@ -3417,7 +3455,8 @@ class Event extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Event',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: Event.$_createMessage)
     ..aE<Event_Kind>(1, _omitFieldNames ? '' : 'kind',
         enumValues: Event_Kind.values)
@@ -3485,7 +3524,8 @@ class LogsRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'LogsRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: LogsRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'backendId')
     ..aI(2, _omitFieldNames ? '' : 'limit')
@@ -3566,7 +3606,8 @@ class LogEntry extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'LogEntry',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: LogEntry.$_createMessage)
     ..a<$fixnum.Int64>(1, _omitFieldNames ? '' : 'seq', $pb.PbFieldType.OU6,
         defaultOrMaker: $fixnum.Int64.ZERO)
@@ -3692,7 +3733,8 @@ class LogsReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'LogsReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: LogsReply.$_createMessage)
     ..pPM<LogEntry>(1, _omitFieldNames ? '' : 'entries',
         subBuilder: LogEntry.$_createMessage)
@@ -3798,7 +3840,8 @@ class SecretEntry extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SecretEntry',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: SecretEntry.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'version')
@@ -4155,7 +4198,8 @@ class SecretServer extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SecretServer',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: SecretServer.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'folder')
     ..aE<ServerAuth>(2, _omitFieldNames ? '' : 'auth',
@@ -4263,7 +4307,8 @@ class SecretGroup extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SecretGroup',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: SecretGroup.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'name')
@@ -4355,7 +4400,8 @@ class SecretsReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SecretsReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: SecretsReply.$_createMessage)
     ..pPM<SecretGroup>(1, _omitFieldNames ? '' : 'groups',
         subBuilder: SecretGroup.$_createMessage)
@@ -4430,7 +4476,8 @@ class DeriveKeyRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DeriveKeyRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: DeriveKeyRequest.$_createMessage)
     ..aE<SecretKind>(1, _omitFieldNames ? '' : 'kind',
         enumValues: SecretKind.values)
@@ -4535,7 +4582,8 @@ class DerivedKey extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DerivedKey',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: DerivedKey.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'keyType')
     ..aOS(2, _omitFieldNames ? '' : 'publicKey')
@@ -4628,7 +4676,8 @@ class TotpCode extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'TotpCode',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: TotpCode.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'code')
@@ -4725,7 +4774,8 @@ class TotpCodesReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'TotpCodesReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: TotpCodesReply.$_createMessage)
     ..pPM<TotpCode>(1, _omitFieldNames ? '' : 'codes',
         subBuilder: TotpCode.$_createMessage)
@@ -4789,7 +4839,8 @@ class RecoveryCodeRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'RecoveryCodeRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: RecoveryCodeRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'code')
@@ -4865,7 +4916,8 @@ class CheckTotpRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CheckTotpRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: CheckTotpRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'secret')
     ..aOS(2, _omitFieldNames ? '' : 'algorithm')
@@ -4976,7 +5028,8 @@ class TotpPreview extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'TotpPreview',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: TotpPreview.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'issuer')
     ..aOS(2, _omitFieldNames ? '' : 'account')
@@ -5097,7 +5150,8 @@ class TotpLinksRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'TotpLinksRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: TotpLinksRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'text')
     ..hasRequiredFields = false;
@@ -5156,7 +5210,8 @@ class TotpLink extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'TotpLink',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: TotpLink.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'link')
     ..aOM<TotpPreview>(2, _omitFieldNames ? '' : 'preview',
@@ -5229,7 +5284,8 @@ class TotpBatch extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'TotpBatch',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: TotpBatch.$_createMessage)
     ..aI(1, _omitFieldNames ? '' : 'id')
     ..aI(2, _omitFieldNames ? '' : 'index')
@@ -5306,7 +5362,8 @@ class TotpLinksReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'TotpLinksReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: TotpLinksReply.$_createMessage)
     ..pPM<TotpLink>(1, _omitFieldNames ? '' : 'links',
         subBuilder: TotpLink.$_createMessage)
@@ -5375,7 +5432,8 @@ class SecretImportRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SecretImportRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: SecretImportRequest.$_createMessage)
     ..a<$core.List<$core.int>>(
         1, _omitFieldNames ? '' : 'data', $pb.PbFieldType.OY)
@@ -5510,7 +5568,8 @@ class SecretImportItem extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SecretImportItem',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: SecretImportItem.$_createMessage)
     ..aE<SecretKind>(1, _omitFieldNames ? '' : 'kind',
         enumValues: SecretKind.values)
@@ -5641,7 +5700,8 @@ class SecretImportReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SecretImportReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: SecretImportReply.$_createMessage)
     ..aOB(1, _omitFieldNames ? '' : 'needPassword')
     ..aOS(2, _omitFieldNames ? '' : 'format')
@@ -5770,7 +5830,8 @@ class PairingRequestInfo extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PairingRequestInfo',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: PairingRequestInfo.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'appId')
@@ -5961,7 +6022,8 @@ class AppPairing extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'AppPairing',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: AppPairing.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'appId')
@@ -6134,7 +6196,8 @@ class AppDataInfo extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'AppDataInfo',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: AppDataInfo.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'appId')
     ..aI(2, _omitFieldNames ? '' : 'records')
@@ -6215,7 +6278,8 @@ class AppsReply extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'AppsReply',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: AppsReply.$_createMessage)
     ..pPM<PairingRequestInfo>(1, _omitFieldNames ? '' : 'requests',
         subBuilder: PairingRequestInfo.$_createMessage)
@@ -6279,7 +6343,8 @@ class DecidePairingRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DecidePairingRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: DecidePairingRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOB(2, _omitFieldNames ? '' : 'approve')
@@ -6355,7 +6420,8 @@ class SetAppScopesRequest extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SetAppScopesRequest',
-      package: const $pb.PackageName(_omitMessageNames ? '' : 'cloudsync.v1'),
+      package:
+          const $pb.PackageName(_omitMessageNames ? '' : 'selfhold.shard.v1'),
       createEmptyInstance: SetAppScopesRequest.$_createMessage)
     ..aOS(1, _omitFieldNames ? '' : 'id')
     ..pPS(2, _omitFieldNames ? '' : 'scopes')

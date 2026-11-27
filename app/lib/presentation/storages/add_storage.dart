@@ -10,7 +10,7 @@ import '../../core/theme/colors.dart';
 import '../../core/theme/layout.dart';
 import '../../core/theme/typography.dart';
 import '../../data/rpc/core_client.dart';
-import '../../data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
+import '../../data/rpc/gen/shard.pbgrpc.dart' as pb;
 import '../common/hm.dart';
 import '../core/core_cubit.dart';
 
@@ -305,7 +305,7 @@ class _AddStorageState extends State<_AddStorage> {
               controller: _root,
               identifier: true,
               error: _errors['root'],
-              placeholder: '/mnt/disk/cloudsync',
+              placeholder: '/mnt/disk/shard',
               hint: tr(
                 'Absolute path. Better another disk: a copy on the same disk does not survive its failure.',
                 'Абсолютный путь. Лучше другой диск: копия на том же диске не защищает от его отказа.',
@@ -321,7 +321,7 @@ class _AddStorageState extends State<_AddStorage> {
               label: tr('Folder in the account', 'Папка в аккаунте'),
               controller: _root,
               identifier: true,
-              placeholder: 'cloudsync',
+              placeholder: 'shard',
             ),
           if (t.oauth) ...[
             const SizedBox(height: 24),

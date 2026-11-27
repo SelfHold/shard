@@ -15,7 +15,7 @@ import '../../core/theme/colors.dart';
 import '../../core/theme/layout.dart';
 import '../../core/theme/typography.dart';
 import '../../data/rpc/core_client.dart';
-import '../../data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
+import '../../data/rpc/gen/shard.pbgrpc.dart' as pb;
 import '../common/hm.dart';
 import '../core/core_cubit.dart';
 
@@ -221,7 +221,7 @@ class _FilesScreenState extends State<FilesScreen> {
         if (!await launchUrl(Uri.file(local))) throw tr('no app for this file', 'нет приложения для этого файла');
         return;
       }
-      final tmp = Directory(p.join((await getTemporaryDirectory()).path, 'cloudsync-open'));
+      final tmp = Directory(p.join((await getTemporaryDirectory()).path, 'shard-open'));
       await tmp.create(recursive: true);
       final local = p.join(tmp.path, e.name);
       Toasts.show(tr('Downloading…', 'Скачивание…'), detail: e.name);

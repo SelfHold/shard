@@ -4,12 +4,12 @@ import (
 	"context"
 	"testing"
 
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 func TestSameLocation(t *testing.T) {
 	mega := func(user string) vault.Backend {
-		return vault.Backend{Type: "mega", Root: "cloudsync", Params: map[string]string{"user": user}}
+		return vault.Backend{Type: "mega", Root: "shard", Params: map[string]string{"user": user}}
 	}
 	if !SameLocation(mega("A@x.com"), mega("a@x.com")) {
 		t.Fatal("same Mega account must match (case-insensitive)")
@@ -17,7 +17,7 @@ func TestSameLocation(t *testing.T) {
 	if SameLocation(mega("a@x.com"), mega("b@x.com")) {
 		t.Fatal("different accounts must not match")
 	}
-	drive := vault.Backend{Type: "drive", Root: "cloudsync"}
+	drive := vault.Backend{Type: "drive", Root: "shard"}
 	if SameLocation(drive, drive) {
 		t.Fatal("unknown account must not match")
 	}

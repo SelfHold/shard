@@ -1,6 +1,6 @@
 # Security policy
 
-Shard (formerly CloudSync) stores encrypted data and secrets (passwords, private keys,
+Shard stores encrypted data and secrets (passwords, private keys,
 2FA seeds), so security reports are taken seriously.
 
 ## Supported versions

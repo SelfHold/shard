@@ -1,6 +1,6 @@
 // This is a generated file - do not edit.
 //
-// Generated from cloudsync.proto.
+// Generated from shard.proto.
 
 // @dart = 3.3
 
@@ -16,14 +16,14 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'cloudsync.pb.dart' as $0;
+import 'shard.pb.dart' as $0;
 
-export 'cloudsync.pb.dart';
+export 'shard.pb.dart';
 
-/// CloudSync is served by the core: by cloudsyncd on desktops (unix socket
+/// Shard is served by the core: by shardd on desktops (unix socket
 /// or named pipe) and in-process on Android. The Flutter app is a client.
-@$pb.GrpcServiceName('cloudsync.v1.CloudSync')
-class CloudSyncClient extends $grpc.Client {
+@$pb.GrpcServiceName('selfhold.shard.v1.Shard')
+class ShardClient extends $grpc.Client {
   /// The hostname for this service.
   static const $core.String defaultHost = '';
 
@@ -32,7 +32,7 @@ class CloudSyncClient extends $grpc.Client {
     '',
   ];
 
-  CloudSyncClient(super.channel, {super.options, super.interceptors});
+  ShardClient(super.channel, {super.options, super.interceptors});
 
   /// Vault lifecycle.
   $grpc.ResponseFuture<$0.State> getState(
@@ -467,248 +467,248 @@ class CloudSyncClient extends $grpc.Client {
   // method descriptors
 
   static final _$getState = $grpc.ClientMethod<$0.Empty, $0.State>(
-      '/cloudsync.v1.CloudSync/GetState',
+      '/selfhold.shard.v1.Shard/GetState',
       ($0.Empty value) => value.writeToBuffer(),
       $0.State.fromBuffer);
   static final _$createVault =
       $grpc.ClientMethod<$0.CreateVaultRequest, $0.State>(
-          '/cloudsync.v1.CloudSync/CreateVault',
+          '/selfhold.shard.v1.Shard/CreateVault',
           ($0.CreateVaultRequest value) => value.writeToBuffer(),
           $0.State.fromBuffer);
   static final _$importVault =
       $grpc.ClientMethod<$0.ImportVaultRequest, $0.State>(
-          '/cloudsync.v1.CloudSync/ImportVault',
+          '/selfhold.shard.v1.Shard/ImportVault',
           ($0.ImportVaultRequest value) => value.writeToBuffer(),
           $0.State.fromBuffer);
   static final _$unlock = $grpc.ClientMethod<$0.UnlockRequest, $0.State>(
-      '/cloudsync.v1.CloudSync/Unlock',
+      '/selfhold.shard.v1.Shard/Unlock',
       ($0.UnlockRequest value) => value.writeToBuffer(),
       $0.State.fromBuffer);
   static final _$lockVault = $grpc.ClientMethod<$0.Empty, $0.State>(
-      '/cloudsync.v1.CloudSync/LockVault',
+      '/selfhold.shard.v1.Shard/LockVault',
       ($0.Empty value) => value.writeToBuffer(),
       $0.State.fromBuffer);
   static final _$changePassword =
       $grpc.ClientMethod<$0.ChangePasswordRequest, $0.Empty>(
-          '/cloudsync.v1.CloudSync/ChangePassword',
+          '/selfhold.shard.v1.Shard/ChangePassword',
           ($0.ChangePasswordRequest value) => value.writeToBuffer(),
           $0.Empty.fromBuffer);
   static final _$checkPassword =
       $grpc.ClientMethod<$0.CheckPasswordRequest, $0.Empty>(
-          '/cloudsync.v1.CloudSync/CheckPassword',
+          '/selfhold.shard.v1.Shard/CheckPassword',
           ($0.CheckPasswordRequest value) => value.writeToBuffer(),
           $0.Empty.fromBuffer);
   static final _$exportVault = $grpc.ClientMethod<$0.Empty, $0.VaultFile>(
-      '/cloudsync.v1.CloudSync/ExportVault',
+      '/selfhold.shard.v1.Shard/ExportVault',
       ($0.Empty value) => value.writeToBuffer(),
       $0.VaultFile.fromBuffer);
   static final _$backendTypes =
       $grpc.ClientMethod<$0.Empty, $0.BackendTypesReply>(
-          '/cloudsync.v1.CloudSync/BackendTypes',
+          '/selfhold.shard.v1.Shard/BackendTypes',
           ($0.Empty value) => value.writeToBuffer(),
           $0.BackendTypesReply.fromBuffer);
   static final _$addBackend =
       $grpc.ClientMethod<$0.AddBackendRequest, $0.Backend>(
-          '/cloudsync.v1.CloudSync/AddBackend',
+          '/selfhold.shard.v1.Shard/AddBackend',
           ($0.AddBackendRequest value) => value.writeToBuffer(),
           $0.Backend.fromBuffer);
   static final _$setBackendEnabled =
       $grpc.ClientMethod<$0.SetBackendEnabledRequest, $0.Backend>(
-          '/cloudsync.v1.CloudSync/SetBackendEnabled',
+          '/selfhold.shard.v1.Shard/SetBackendEnabled',
           ($0.SetBackendEnabledRequest value) => value.writeToBuffer(),
           $0.Backend.fromBuffer);
   static final _$renameBackend =
       $grpc.ClientMethod<$0.RenameBackendRequest, $0.Backend>(
-          '/cloudsync.v1.CloudSync/RenameBackend',
+          '/selfhold.shard.v1.Shard/RenameBackend',
           ($0.RenameBackendRequest value) => value.writeToBuffer(),
           $0.Backend.fromBuffer);
   static final _$removeBackend =
       $grpc.ClientMethod<$0.RemoveBackendRequest, $0.Empty>(
-          '/cloudsync.v1.CloudSync/RemoveBackend',
+          '/selfhold.shard.v1.Shard/RemoveBackend',
           ($0.RemoveBackendRequest value) => value.writeToBuffer(),
           $0.Empty.fromBuffer);
   static final _$authorize =
       $grpc.ClientMethod<$0.AuthorizeRequest, $0.AuthorizeReply>(
-          '/cloudsync.v1.CloudSync/Authorize',
+          '/selfhold.shard.v1.Shard/Authorize',
           ($0.AuthorizeRequest value) => value.writeToBuffer(),
           $0.AuthorizeReply.fromBuffer);
   static final _$reconnect =
       $grpc.ClientMethod<$0.IdRequest, $0.AuthorizeReply>(
-          '/cloudsync.v1.CloudSync/Reconnect',
+          '/selfhold.shard.v1.Shard/Reconnect',
           ($0.IdRequest value) => value.writeToBuffer(),
           $0.AuthorizeReply.fromBuffer);
   static final _$status = $grpc.ClientMethod<$0.Empty, $0.StatusReply>(
-      '/cloudsync.v1.CloudSync/Status',
+      '/selfhold.shard.v1.Shard/Status',
       ($0.Empty value) => value.writeToBuffer(),
       $0.StatusReply.fromBuffer);
   static final _$logs = $grpc.ClientMethod<$0.LogsRequest, $0.LogsReply>(
-      '/cloudsync.v1.CloudSync/Logs',
+      '/selfhold.shard.v1.Shard/Logs',
       ($0.LogsRequest value) => value.writeToBuffer(),
       $0.LogsReply.fromBuffer);
   static final _$clearLogs = $grpc.ClientMethod<$0.Empty, $0.Empty>(
-      '/cloudsync.v1.CloudSync/ClearLogs',
+      '/selfhold.shard.v1.Shard/ClearLogs',
       ($0.Empty value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$setMountPoint = $grpc.ClientMethod<$0.PathRequest, $0.State>(
-      '/cloudsync.v1.CloudSync/SetMountPoint',
+      '/selfhold.shard.v1.Shard/SetMountPoint',
       ($0.PathRequest value) => value.writeToBuffer(),
       $0.State.fromBuffer);
   static final _$shutdown = $grpc.ClientMethod<$0.Empty, $0.Empty>(
-      '/cloudsync.v1.CloudSync/Shutdown',
+      '/selfhold.shard.v1.Shard/Shutdown',
       ($0.Empty value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$list = $grpc.ClientMethod<$0.PathRequest, $0.ListReply>(
-      '/cloudsync.v1.CloudSync/List',
+      '/selfhold.shard.v1.Shard/List',
       ($0.PathRequest value) => value.writeToBuffer(),
       $0.ListReply.fromBuffer);
   static final _$search = $grpc.ClientMethod<$0.SearchRequest, $0.ListReply>(
-      '/cloudsync.v1.CloudSync/Search',
+      '/selfhold.shard.v1.Shard/Search',
       ($0.SearchRequest value) => value.writeToBuffer(),
       $0.ListReply.fromBuffer);
   static final _$stat = $grpc.ClientMethod<$0.PathRequest, $0.Entry>(
-      '/cloudsync.v1.CloudSync/Stat',
+      '/selfhold.shard.v1.Shard/Stat',
       ($0.PathRequest value) => value.writeToBuffer(),
       $0.Entry.fromBuffer);
   static final _$mkdir = $grpc.ClientMethod<$0.PathRequest, $0.Empty>(
-      '/cloudsync.v1.CloudSync/Mkdir',
+      '/selfhold.shard.v1.Shard/Mkdir',
       ($0.PathRequest value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$remove = $grpc.ClientMethod<$0.RemoveRequest, $0.Empty>(
-      '/cloudsync.v1.CloudSync/Remove',
+      '/selfhold.shard.v1.Shard/Remove',
       ($0.RemoveRequest value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$rename = $grpc.ClientMethod<$0.RenameRequest, $0.Empty>(
-      '/cloudsync.v1.CloudSync/Rename',
+      '/selfhold.shard.v1.Shard/Rename',
       ($0.RenameRequest value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$upload = $grpc.ClientMethod<$0.UploadRequest, $0.UploadReply>(
-      '/cloudsync.v1.CloudSync/Upload',
+      '/selfhold.shard.v1.Shard/Upload',
       ($0.UploadRequest value) => value.writeToBuffer(),
       $0.UploadReply.fromBuffer);
   static final _$download = $grpc.ClientMethod<$0.DownloadRequest, $0.Empty>(
-      '/cloudsync.v1.CloudSync/Download',
+      '/selfhold.shard.v1.Shard/Download',
       ($0.DownloadRequest value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$pin = $grpc.ClientMethod<$0.PathRequest, $0.Empty>(
-      '/cloudsync.v1.CloudSync/Pin',
+      '/selfhold.shard.v1.Shard/Pin',
       ($0.PathRequest value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$unpin = $grpc.ClientMethod<$0.PathRequest, $0.Empty>(
-      '/cloudsync.v1.CloudSync/Unpin',
+      '/selfhold.shard.v1.Shard/Unpin',
       ($0.PathRequest value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$lockHolder = $grpc.ClientMethod<$0.PathRequest, $0.LockInfo>(
-      '/cloudsync.v1.CloudSync/LockHolder',
+      '/selfhold.shard.v1.Shard/LockHolder',
       ($0.PathRequest value) => value.writeToBuffer(),
       $0.LockInfo.fromBuffer);
   static final _$locks = $grpc.ClientMethod<$0.PathsRequest, $0.LocksReply>(
-      '/cloudsync.v1.CloudSync/Locks',
+      '/selfhold.shard.v1.Shard/Locks',
       ($0.PathsRequest value) => value.writeToBuffer(),
       $0.LocksReply.fromBuffer);
   static final _$sync = $grpc.ClientMethod<$0.Empty, $0.Empty>(
-      '/cloudsync.v1.CloudSync/Sync',
+      '/selfhold.shard.v1.Shard/Sync',
       ($0.Empty value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$repair = $grpc.ClientMethod<$0.RepairRequest, $0.RepairReply>(
-      '/cloudsync.v1.CloudSync/Repair',
+      '/selfhold.shard.v1.Shard/Repair',
       ($0.RepairRequest value) => value.writeToBuffer(),
       $0.RepairReply.fromBuffer);
   static final _$gC = $grpc.ClientMethod<$0.GCRequest, $0.GCReply>(
-      '/cloudsync.v1.CloudSync/GC',
+      '/selfhold.shard.v1.Shard/GC',
       ($0.GCRequest value) => value.writeToBuffer(),
       $0.GCReply.fromBuffer);
   static final _$setRedundancy =
       $grpc.ClientMethod<$0.SetRedundancyRequest, $0.Empty>(
-          '/cloudsync.v1.CloudSync/SetRedundancy',
+          '/selfhold.shard.v1.Shard/SetRedundancy',
           ($0.SetRedundancyRequest value) => value.writeToBuffer(),
           $0.Empty.fromBuffer);
   static final _$listSecrets = $grpc.ClientMethod<$0.Empty, $0.SecretsReply>(
-      '/cloudsync.v1.CloudSync/ListSecrets',
+      '/selfhold.shard.v1.Shard/ListSecrets',
       ($0.Empty value) => value.writeToBuffer(),
       $0.SecretsReply.fromBuffer);
   static final _$getSecret = $grpc.ClientMethod<$0.IdRequest, $0.SecretEntry>(
-      '/cloudsync.v1.CloudSync/GetSecret',
+      '/selfhold.shard.v1.Shard/GetSecret',
       ($0.IdRequest value) => value.writeToBuffer(),
       $0.SecretEntry.fromBuffer);
   static final _$putSecret = $grpc.ClientMethod<$0.SecretEntry, $0.SecretEntry>(
-      '/cloudsync.v1.CloudSync/PutSecret',
+      '/selfhold.shard.v1.Shard/PutSecret',
       ($0.SecretEntry value) => value.writeToBuffer(),
       $0.SecretEntry.fromBuffer);
   static final _$deleteSecret = $grpc.ClientMethod<$0.IdRequest, $0.Empty>(
-      '/cloudsync.v1.CloudSync/DeleteSecret',
+      '/selfhold.shard.v1.Shard/DeleteSecret',
       ($0.IdRequest value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$putSecretGroup =
       $grpc.ClientMethod<$0.SecretGroup, $0.SecretGroup>(
-          '/cloudsync.v1.CloudSync/PutSecretGroup',
+          '/selfhold.shard.v1.Shard/PutSecretGroup',
           ($0.SecretGroup value) => value.writeToBuffer(),
           $0.SecretGroup.fromBuffer);
   static final _$deleteSecretGroup = $grpc.ClientMethod<$0.IdRequest, $0.Empty>(
-      '/cloudsync.v1.CloudSync/DeleteSecretGroup',
+      '/selfhold.shard.v1.Shard/DeleteSecretGroup',
       ($0.IdRequest value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$deriveKey =
       $grpc.ClientMethod<$0.DeriveKeyRequest, $0.DerivedKey>(
-          '/cloudsync.v1.CloudSync/DeriveKey',
+          '/selfhold.shard.v1.Shard/DeriveKey',
           ($0.DeriveKeyRequest value) => value.writeToBuffer(),
           $0.DerivedKey.fromBuffer);
   static final _$totpCodes = $grpc.ClientMethod<$0.Empty, $0.TotpCodesReply>(
-      '/cloudsync.v1.CloudSync/TotpCodes',
+      '/selfhold.shard.v1.Shard/TotpCodes',
       ($0.Empty value) => value.writeToBuffer(),
       $0.TotpCodesReply.fromBuffer);
   static final _$useRecoveryCode =
       $grpc.ClientMethod<$0.RecoveryCodeRequest, $0.SecretEntry>(
-          '/cloudsync.v1.CloudSync/UseRecoveryCode',
+          '/selfhold.shard.v1.Shard/UseRecoveryCode',
           ($0.RecoveryCodeRequest value) => value.writeToBuffer(),
           $0.SecretEntry.fromBuffer);
   static final _$checkTotp =
       $grpc.ClientMethod<$0.CheckTotpRequest, $0.TotpPreview>(
-          '/cloudsync.v1.CloudSync/CheckTotp',
+          '/selfhold.shard.v1.Shard/CheckTotp',
           ($0.CheckTotpRequest value) => value.writeToBuffer(),
           $0.TotpPreview.fromBuffer);
   static final _$readTotpLinks =
       $grpc.ClientMethod<$0.TotpLinksRequest, $0.TotpLinksReply>(
-          '/cloudsync.v1.CloudSync/ReadTotpLinks',
+          '/selfhold.shard.v1.Shard/ReadTotpLinks',
           ($0.TotpLinksRequest value) => value.writeToBuffer(),
           $0.TotpLinksReply.fromBuffer);
   static final _$importSecrets =
       $grpc.ClientMethod<$0.SecretImportRequest, $0.SecretImportReply>(
-          '/cloudsync.v1.CloudSync/ImportSecrets',
+          '/selfhold.shard.v1.Shard/ImportSecrets',
           ($0.SecretImportRequest value) => value.writeToBuffer(),
           $0.SecretImportReply.fromBuffer);
   static final _$listApps = $grpc.ClientMethod<$0.Empty, $0.AppsReply>(
-      '/cloudsync.v1.CloudSync/ListApps',
+      '/selfhold.shard.v1.Shard/ListApps',
       ($0.Empty value) => value.writeToBuffer(),
       $0.AppsReply.fromBuffer);
   static final _$decidePairing =
       $grpc.ClientMethod<$0.DecidePairingRequest, $0.Empty>(
-          '/cloudsync.v1.CloudSync/DecidePairing',
+          '/selfhold.shard.v1.Shard/DecidePairing',
           ($0.DecidePairingRequest value) => value.writeToBuffer(),
           $0.Empty.fromBuffer);
   static final _$revokeApp = $grpc.ClientMethod<$0.IdRequest, $0.Empty>(
-      '/cloudsync.v1.CloudSync/RevokeApp',
+      '/selfhold.shard.v1.Shard/RevokeApp',
       ($0.IdRequest value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$setAppScopes =
       $grpc.ClientMethod<$0.SetAppScopesRequest, $0.Empty>(
-          '/cloudsync.v1.CloudSync/SetAppScopes',
+          '/selfhold.shard.v1.Shard/SetAppScopes',
           ($0.SetAppScopesRequest value) => value.writeToBuffer(),
           $0.Empty.fromBuffer);
   static final _$deleteAppData = $grpc.ClientMethod<$0.IdRequest, $0.Empty>(
-      '/cloudsync.v1.CloudSync/DeleteAppData',
+      '/selfhold.shard.v1.Shard/DeleteAppData',
       ($0.IdRequest value) => value.writeToBuffer(),
       $0.Empty.fromBuffer);
   static final _$watch = $grpc.ClientMethod<$0.Empty, $0.Event>(
-      '/cloudsync.v1.CloudSync/Watch',
+      '/selfhold.shard.v1.Shard/Watch',
       ($0.Empty value) => value.writeToBuffer(),
       $0.Event.fromBuffer);
 }
 
-@$pb.GrpcServiceName('cloudsync.v1.CloudSync')
-abstract class CloudSyncServiceBase extends $grpc.Service {
-  $core.String get $name => 'cloudsync.v1.CloudSync';
+@$pb.GrpcServiceName('selfhold.shard.v1.Shard')
+abstract class ShardServiceBase extends $grpc.Service {
+  $core.String get $name => 'selfhold.shard.v1.Shard';
 
-  CloudSyncServiceBase() {
+  ShardServiceBase() {
     $addMethod($grpc.ServiceMethod<$0.Empty, $0.State>(
         'GetState',
         getState_Pre,

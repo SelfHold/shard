@@ -1,5 +1,5 @@
-// Gets the changes of one Watch (see ICloudSyncConnector.aidl).
-package dev.cloudsync.connector;
+// Gets the changes of one Watch (see IShardConnector.aidl).
+package dev.selfhold.shard.connector;
 
 oneway interface IConnectorWatcher {
     // A serialized Change message.

@@ -7,15 +7,15 @@ storages.
 
 ## Parts
 
-- `core/`: the Go core, with all logic and all secrets. `proto/cloudsync.proto` is the
+- `core/`: the Go core, with all logic and all secrets. `proto/shard.proto` is the
   gRPC API between the core and the app; `proto/connector.proto` is the published API
   for other apps ([CONNECTOR.md](CONNECTOR.md)).
-- `cmd/cs` (CLI) and `cmd/cloudsyncd` (desktop daemon: gRPC for the app, FUSE mount,
+- `cmd/shard` (CLI) and `cmd/shardd` (desktop daemon: gRPC for the app, FUSE mount,
   background sync, Connector API).
 - `mobilebind`: the core for Android (gomobile AAR), used by the Kotlin side
   (`Core`, `CoreService`, `VaultProvider`, `ConnectorService`).
 - `app/`: the Flutter UI. It only renders and never holds storage credentials or keys.
-  Desktops talk to `cloudsyncd` (`endpoint.json` + bearer token); Android runs the core
+  Desktops talk to `shardd` (`endpoint.json` + bearer token); Android runs the core
   in-process.
 
 ## Storage and index
@@ -48,7 +48,7 @@ storages.
   different content are merged deterministically (the larger hash is the base) and
   bumped.
 - One account (or local folder, including nested ones) holds only one storage:
-  `backend.SameLocation`, checked in `AddBackend` and `cs backend add`;
+  `backend.SameLocation`, checked in `AddBackend` and `shard backend add`;
   `Backend.Account` is recorded when the storage is added.
 - `local` storages need an absolute root; unknown rclone options are rejected
   (`backend.CheckRoot`, `ObscureParams`).

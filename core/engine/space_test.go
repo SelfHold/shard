@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"cloudsync/core/erasure"
+	"github.com/SelfHold/shard/core/erasure"
 )
 
 func TestWritable(t *testing.T) {

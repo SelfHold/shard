@@ -6,8 +6,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"cloudsync/core/connector/pb"
-	"cloudsync/core/engine"
+	"github.com/SelfHold/shard/core/connector/pb"
+	"github.com/SelfHold/shard/core/engine"
 )
 
 // The SSH keys of the password safe through the Connector API (scope
@@ -52,7 +52,7 @@ func (s *Server) ListSshKeys(ctx context.Context, _ *pb.ListSshKeysRequest) (*pb
 }
 
 // GetSshKeys is a secret read: the registry records which app read keys
-// and when (shown in CloudSync), never which keys.
+// and when (shown in Shard), never which keys.
 func (s *Server) GetSshKeys(ctx context.Context, r *pb.GetSshKeysRequest) (*pb.ListSshKeysReply, error) {
 	p, err := s.authScope(ctx, ScopeSSHKeys)
 	if err != nil {

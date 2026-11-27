@@ -9,9 +9,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"cloudsync/core/engine"
-	"cloudsync/core/rpc/pb"
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/engine"
+	"github.com/SelfHold/shard/core/rpc/pb"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 var kindToPB = map[secrets.Kind]pb.SecretKind{

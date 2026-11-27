@@ -10,7 +10,7 @@ import '../../core/theme/colors.dart';
 import '../../core/theme/layout.dart';
 import '../../core/theme/typography.dart';
 import '../../data/rpc/core_client.dart';
-import '../../data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
+import '../../data/rpc/gen/shard.pbgrpc.dart' as pb;
 import '../common/hm.dart';
 import '../core/core_cubit.dart';
 import 'group_icons.dart';
@@ -371,7 +371,7 @@ class _EditorState extends State<_Editor> {
         label: tr('Folder', 'Папка'),
         controller: _folder,
         placeholder: 'prod/eu',
-        hint: tr('Shown as folders in SSH Manager and DB Manager; "/" nests', 'Папки в SSH Manager и DB Manager; «/» — вложенность'),
+        hint: tr('Shown as folders in Postern and Cellar; "/" nests', 'Папки в Postern и Cellar; «/» — вложенность'),
       ),
       gap,
       HmTextField(

@@ -9,8 +9,8 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/proto"
 
-	"cloudsync/core/connector"
-	cpb "cloudsync/core/connector/pb"
+	"github.com/SelfHold/shard/core/connector"
+	cpb "github.com/SelfHold/shard/core/connector/pb"
 )
 
 // The Connector API for other Android apps (docs/CONNECTOR.md). The Kotlin
@@ -42,7 +42,7 @@ func connServer() *connector.Server {
 }
 
 func notStarted() []byte {
-	b, _ := proto.Marshal(&cpb.CallReply{Code: int32(codes.Unavailable), Message: "CloudSync core is not running"})
+	b, _ := proto.Marshal(&cpb.CallReply{Code: int32(codes.Unavailable), Message: "Shard core is not running"})
 	return b
 }
 

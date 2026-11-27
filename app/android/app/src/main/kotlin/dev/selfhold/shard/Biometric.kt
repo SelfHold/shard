@@ -1,4 +1,4 @@
-package dev.cloudsync.cloudsync
+package dev.selfhold.shard
 
 import android.content.Context
 import android.os.Build
@@ -141,7 +141,7 @@ class Biometric(private val activity: FragmentActivity) : MethodChannel.MethodCa
 
     companion object {
         private const val STORE = "AndroidKeyStore"
-        private const val KEY = "cloudsync.unlock"
+        private const val KEY = "dev.selfhold.shard.unlock"
         private const val TRANSFORM = "AES/GCM/NoPadding"
         private const val DATA = "data"
         private const val IV = "iv"

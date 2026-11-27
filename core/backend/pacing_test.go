@@ -3,7 +3,7 @@ package backend
 import (
 	"testing"
 
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 func TestSharePacing(t *testing.T) {

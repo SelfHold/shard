@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package cloudsync.v1;
+package selfhold.shard.v1;
 
-option go_package = "cloudsync/core/rpc/pb";
+option go_package = "github.com/SelfHold/shard/core/rpc/pb";
 
-// CloudSync is served by the core: by cloudsyncd on desktops (unix socket
+// Shard is served by the core: by shardd on desktops (unix socket
 // or named pipe) and in-process on Android. The Flutter app is a client.
-service CloudSync {
+service Shard {
   // Vault lifecycle.
   rpc GetState(Empty) returns (State);
   rpc CreateVault(CreateVaultRequest) returns (State);
@@ -201,7 +201,7 @@ message AddBackendRequest {
   string name = 1;
   string type = 2;
   string domain = 3; // failure domain; empty = type
-  string root = 4;   // folder in the account; empty = "cloudsync"
+  string root = 4;   // folder in the account; empty = "shard"
   map<string, string> params = 5;
   string account = 6; // who the user signed in as (from AuthorizeReply)
 }
@@ -666,7 +666,7 @@ message AppPairing {
   string package = 6;
   string cert = 7;
   int64 approved_unix_ms = 8;
-  int64 last_used_unix_ms = 9; // 0: not since CloudSync started
+  int64 last_used_unix_ms = 9; // 0: not since Shard started
   repeated string scopes = 10;  // granted, e.g. "passwords"
   int64 secrets_read_unix_ms = 11; // last time it read passwords; 0 = never
   int64 keys_read_unix_ms = 12;    // last time it read SSH private keys

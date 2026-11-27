@@ -1,16 +1,16 @@
 // Renders every section at a desktop and a phone width against a running
 // core and writes PNGs, for checking the UI against the design manifest:
 //
-//   SHOTS=/tmp/shots CS_PASSWORD=... flutter run -d linux -t tool/screenshots.dart
+//   SHOTS=/tmp/shots SHARD_PASSWORD=... flutter run -d linux -t tool/screenshots.dart
 import 'dart:io';
 import 'dart:ui' as ui;
 
-import 'package:cloudsync/app.dart';
-import 'package:cloudsync/core/settings/app_settings.dart';
-import 'package:cloudsync/data/rpc/endpoint.dart';
-import 'package:cloudsync/data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
-import 'package:cloudsync/presentation/core/core_cubit.dart';
-import 'package:cloudsync/presentation/shell/app_shell.dart';
+import 'package:shard/app.dart';
+import 'package:shard/core/settings/app_settings.dart';
+import 'package:shard/data/rpc/endpoint.dart';
+import 'package:shard/data/rpc/gen/shard.pbgrpc.dart' as pb;
+import 'package:shard/presentation/core/core_cubit.dart';
+import 'package:shard/presentation/shell/app_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -26,7 +26,7 @@ Future<void> main() async {
   runApp(
     ValueListenableBuilder(
       valueListenable: frame,
-      builder: (_, f, _) => CloudSyncApp(
+      builder: (_, f, _) => ShardApp(
         key: ValueKey(f),
         core: core,
         home: AppShell(initial: f.$2),
@@ -66,7 +66,7 @@ Future<void> main() async {
     for (final e in sizes.entries) {
       await shot('unlock-${e.key}', e.value, Section.files);
     }
-    final pw = Platform.environment['CS_PASSWORD'] ?? '';
+    final pw = Platform.environment['SHARD_PASSWORD'] ?? '';
     core.adopt(await core.api.unlock(pb.UnlockRequest(password: pw)));
     await Future<void>.delayed(const Duration(seconds: 2));
   }

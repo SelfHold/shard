@@ -6,7 +6,7 @@ import (
 	"errors"
 	"testing"
 
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 func TestOrigin(t *testing.T) {
@@ -30,7 +30,7 @@ func TestLoginsOverSafe(t *testing.T) {
 	ctx := context.Background()
 	a := newWorld(t).device("laptop")
 
-	// Typed in CloudSync with a URL: a login; without one, or of another
+	// Typed in Shard with a URL: a login; without one, or of another
 	// kind: not visible.
 	ui, err := a.PutSecret(ctx, "", "", secrets.Meta{Kind: secrets.KindPassword, Title: "Mail",
 		Username: "me", URL: "mail.example.com/login"}, secrets.Data{Password: "pw1", Notes: "n"})
@@ -60,7 +60,7 @@ func TestLoginsOverSafe(t *testing.T) {
 
 	// CAS.
 	l, err := a.LoginPut(ctx, Login{URL: "https://shop.example/signin", Username: "u", Password: "p1",
-		UsernameElement: "email", Extra: map[string][]byte{"bezel.scheme": []byte("1")}}, "")
+		UsernameElement: "email", Extra: map[string][]byte{"enclave.scheme": []byte("1")}}, "")
 	if err != nil || l.SignonRealm != "https://shop.example/" || l.URL != "https://shop.example/signin" || l.Revision == "" {
 		t.Fatalf("create: %+v %v", l, err)
 	}
@@ -77,7 +77,7 @@ func TestLoginsOverSafe(t *testing.T) {
 		t.Fatalf("old base after an update: %v", err)
 	}
 
-	// Edited in CloudSync (whose UI knows nothing of the browser's
+	// Edited in Shard (whose UI knows nothing of the browser's
 	// fields): they stay.
 	en, err := a.OpenSecret(l.ID)
 	if err != nil || en.Title != "shop.example" {
@@ -88,12 +88,12 @@ func TestLoginsOverSafe(t *testing.T) {
 		t.Fatal(err)
 	}
 	g := a.LoginGet([]string{l.ID})
-	if len(g) != 1 || g[0].UsernameElement != "email" || !bytes.Equal(g[0].Extra["bezel.scheme"], []byte("1")) ||
+	if len(g) != 1 || g[0].UsernameElement != "email" || !bytes.Equal(g[0].Extra["enclave.scheme"], []byte("1")) ||
 		g[0].PasswordModified != l2.PasswordModified {
-		t.Fatalf("after an edit in CloudSync: %+v (was %+v)", g, l2)
+		t.Fatalf("after an edit in Shard: %+v (was %+v)", g, l2)
 	}
 
-	// Blocked sites are not in CloudSync's list.
+	// Blocked sites are not in Shard's list.
 	b, err := a.LoginPut(ctx, Login{SignonRealm: "https://never.example/", Blocked: true, Username: "x", Password: "y"}, "")
 	if err != nil || !b.Blocked || b.Password != "" || b.Username != "" {
 		t.Fatalf("blocked: %+v %v", b, err)

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	"cloudsync/core/eventlog"
+	"github.com/SelfHold/shard/core/eventlog"
 )
 
 // Logged wraps s so every failed call is written to log (missing objects

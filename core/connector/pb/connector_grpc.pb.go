@@ -4,9 +4,9 @@
 // - protoc             v7.36.1
 // source: connector.proto
 
-// The CloudSync Connector API, version 1: what CloudSync offers to other
-// applications ("connected apps", e.g. MegaChat). An app keeps a few small
-// records (its settings file, its vault) in CloudSync; CloudSync stores them
+// The Shard Connector API, version 1: what Shard offers to other
+// applications ("connected apps", e.g. Parley). An app keeps a few small
+// records (its settings file, its vault) in Shard; Shard stores them
 // encrypted in every storage and gives every device the same value.
 //
 // This file is the contract. Apps copy it as is and generate their own
@@ -30,29 +30,29 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Connector_Hello_FullMethodName             = "/cloudsync.connector.v1.Connector/Hello"
-	Connector_RequestPairing_FullMethodName    = "/cloudsync.connector.v1.Connector/RequestPairing"
-	Connector_AwaitPairing_FullMethodName      = "/cloudsync.connector.v1.Connector/AwaitPairing"
-	Connector_Get_FullMethodName               = "/cloudsync.connector.v1.Connector/Get"
-	Connector_List_FullMethodName              = "/cloudsync.connector.v1.Connector/List"
-	Connector_Put_FullMethodName               = "/cloudsync.connector.v1.Connector/Put"
-	Connector_Delete_FullMethodName            = "/cloudsync.connector.v1.Connector/Delete"
-	Connector_AppKey_FullMethodName            = "/cloudsync.connector.v1.Connector/AppKey"
-	Connector_Watch_FullMethodName             = "/cloudsync.connector.v1.Connector/Watch"
-	Connector_Unpair_FullMethodName            = "/cloudsync.connector.v1.Connector/Unpair"
-	Connector_ListLogins_FullMethodName        = "/cloudsync.connector.v1.Connector/ListLogins"
-	Connector_GetLogins_FullMethodName         = "/cloudsync.connector.v1.Connector/GetLogins"
-	Connector_PutLogin_FullMethodName          = "/cloudsync.connector.v1.Connector/PutLogin"
-	Connector_DeleteLogin_FullMethodName       = "/cloudsync.connector.v1.Connector/DeleteLogin"
-	Connector_TouchLogin_FullMethodName        = "/cloudsync.connector.v1.Connector/TouchLogin"
-	Connector_ListChanges_FullMethodName       = "/cloudsync.connector.v1.Connector/ListChanges"
-	Connector_ListSshKeys_FullMethodName       = "/cloudsync.connector.v1.Connector/ListSshKeys"
-	Connector_GetSshKeys_FullMethodName        = "/cloudsync.connector.v1.Connector/GetSshKeys"
-	Connector_ListServers_FullMethodName       = "/cloudsync.connector.v1.Connector/ListServers"
-	Connector_GetServers_FullMethodName        = "/cloudsync.connector.v1.Connector/GetServers"
-	Connector_PutServer_FullMethodName         = "/cloudsync.connector.v1.Connector/PutServer"
-	Connector_DeleteServer_FullMethodName      = "/cloudsync.connector.v1.Connector/DeleteServer"
-	Connector_ListServerChanges_FullMethodName = "/cloudsync.connector.v1.Connector/ListServerChanges"
+	Connector_Hello_FullMethodName             = "/selfhold.shard.connector.v1.Connector/Hello"
+	Connector_RequestPairing_FullMethodName    = "/selfhold.shard.connector.v1.Connector/RequestPairing"
+	Connector_AwaitPairing_FullMethodName      = "/selfhold.shard.connector.v1.Connector/AwaitPairing"
+	Connector_Get_FullMethodName               = "/selfhold.shard.connector.v1.Connector/Get"
+	Connector_List_FullMethodName              = "/selfhold.shard.connector.v1.Connector/List"
+	Connector_Put_FullMethodName               = "/selfhold.shard.connector.v1.Connector/Put"
+	Connector_Delete_FullMethodName            = "/selfhold.shard.connector.v1.Connector/Delete"
+	Connector_AppKey_FullMethodName            = "/selfhold.shard.connector.v1.Connector/AppKey"
+	Connector_Watch_FullMethodName             = "/selfhold.shard.connector.v1.Connector/Watch"
+	Connector_Unpair_FullMethodName            = "/selfhold.shard.connector.v1.Connector/Unpair"
+	Connector_ListLogins_FullMethodName        = "/selfhold.shard.connector.v1.Connector/ListLogins"
+	Connector_GetLogins_FullMethodName         = "/selfhold.shard.connector.v1.Connector/GetLogins"
+	Connector_PutLogin_FullMethodName          = "/selfhold.shard.connector.v1.Connector/PutLogin"
+	Connector_DeleteLogin_FullMethodName       = "/selfhold.shard.connector.v1.Connector/DeleteLogin"
+	Connector_TouchLogin_FullMethodName        = "/selfhold.shard.connector.v1.Connector/TouchLogin"
+	Connector_ListChanges_FullMethodName       = "/selfhold.shard.connector.v1.Connector/ListChanges"
+	Connector_ListSshKeys_FullMethodName       = "/selfhold.shard.connector.v1.Connector/ListSshKeys"
+	Connector_GetSshKeys_FullMethodName        = "/selfhold.shard.connector.v1.Connector/GetSshKeys"
+	Connector_ListServers_FullMethodName       = "/selfhold.shard.connector.v1.Connector/ListServers"
+	Connector_GetServers_FullMethodName        = "/selfhold.shard.connector.v1.Connector/GetServers"
+	Connector_PutServer_FullMethodName         = "/selfhold.shard.connector.v1.Connector/PutServer"
+	Connector_DeleteServer_FullMethodName      = "/selfhold.shard.connector.v1.Connector/DeleteServer"
+	Connector_ListServerChanges_FullMethodName = "/selfhold.shard.connector.v1.Connector/ListServerChanges"
 )
 
 // ConnectorClient is the client API for Connector service.
@@ -62,7 +62,7 @@ type ConnectorClient interface {
 	// Hello says what is there: API version, whether the vault is open and
 	// whether this caller is paired. Call it first and after every reconnect.
 	Hello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
-	// RequestPairing asks the user (in CloudSync) to let this app keep its
+	// RequestPairing asks the user (in Shard) to let this app keep its
 	// data there. Show the returned code: the user sees the same one.
 	RequestPairing(ctx context.Context, in *PairingRequest, opts ...grpc.CallOption) (*PairingTicket, error)
 	// AwaitPairing waits (up to wait_seconds, at most 60) for the user's
@@ -383,7 +383,7 @@ type ConnectorServer interface {
 	// Hello says what is there: API version, whether the vault is open and
 	// whether this caller is paired. Call it first and after every reconnect.
 	Hello(context.Context, *HelloRequest) (*HelloReply, error)
-	// RequestPairing asks the user (in CloudSync) to let this app keep its
+	// RequestPairing asks the user (in Shard) to let this app keep its
 	// data there. Show the returned code: the user sees the same one.
 	RequestPairing(context.Context, *PairingRequest) (*PairingTicket, error)
 	// AwaitPairing waits (up to wait_seconds, at most 60) for the user's
@@ -959,7 +959,7 @@ func _Connector_ListServerChanges_Handler(srv interface{}, ctx context.Context, 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Connector_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "cloudsync.connector.v1.Connector",
+	ServiceName: "selfhold.shard.connector.v1.Connector",
 	HandlerType: (*ConnectorServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -13,9 +13,7 @@ Reed-Solomon k+m (m=1 работает как RAID 5). Всё шифруется
 на ваших устройствах. Ещё в Shard есть сейф паролей, и другие приложения
 [SelfHold](https://github.com/SelfHold) синхронизируют через него свои настройки.
 
-Раньше Shard назывался CloudSync; некоторые идентификаторы по-прежнему используют
-старое имя (Go-модуль `cloudsync`, бинарники `cloudsyncd`, файл vault `vault.cs`,
-папка настроек `cloudsync/`, Android-пакет `dev.cloudsync.cloudsync`).
+Раньше Shard назывался CloudSync.
 
 **Статус:** ранний личный проект. Опубликованных релизов пока нет, а до 1.0 формат
 данных в хранилищах и API могут меняться. Собирайте из исходников (см. ниже).
@@ -61,7 +59,7 @@ Reed-Solomon k+m (m=1 работает как RAID 5). Всё шифруется
 
 ## Модель безопасности вкратце
 
-- Vault (`vault.cs`, Argon2id) открывается одним паролем. В нём лежит мастер-ключ; все
+- Vault (`vault.shard`, Argon2id) открывается одним паролем. В нём лежит мастер-ключ; все
   остальные ключи (содержимое, имена объектов, журналы, сейф, подключённые приложения)
   выводятся из него.
 - Хранилища видят только шифротекст под HMAC-именами: ни имён файлов, ни размеров
@@ -88,7 +86,7 @@ Reed-Solomon k+m (m=1 работает как RAID 5). Всё шифруется
      → XChaCha20-Poly1305 → Reed-Solomon k+m → по одному шарду в хранилище
 ```
 
-- **Vault** (`vault.cs`) — единственный файл конфигурации: мастер-ключ, k/m,
+- **Vault** (`vault.shard`) — единственный файл конфигурации: мастер-ключ, k/m,
   хранилища с доступами, устройства. Зашифрован ключом из вашего пароля (Argon2id).
   Копия лежит в каждом хранилище, чтобы изменения (например, новое хранилище) доходили
   до других устройств.
@@ -100,10 +98,10 @@ Reed-Solomon k+m (m=1 работает как RAID 5). Всё шифруется
   (`j/<device>/<seq>`, зашифрован, копия в каждом хранилище). Дерево файлов —
   детерминированная свёртка всех операций (Lamport-часы). Параллельные правки одного
   файла дают конфликтную копию, а не потерю данных.
-- **Файлы по запросу.** Пины (`cs pin`) держат файлы или папки на устройстве;
+- **Файлы по запросу.** Пины (`shard pin`) держат файлы или папки на устройстве;
   `pin /` хранит полную локальную копию — *опорное устройство* (переключатель в
-  «Обслуживании»). Приложение закрепляет в фоне (прогресс в `Status`); `cs pin` и
-  `cs sync` дожидаются этого.
+  «Обслуживании»). Приложение закрепляет в фоне (прогресс в `Status`); `shard pin` и
+  `shard sync` дожидаются этого.
 - **Блокировки.** Открытие файла на запись ставит lease во все хранилища. Устройство
   владеет файлом, если на большинстве хранилищ кроме его lease нет других. Пока файл
   открыт на одном устройстве, на других он открывается только на чтение. Lease истекает
@@ -155,7 +153,7 @@ Reed-Solomon k+m (m=1 работает как RAID 5). Всё шифруется
 - **Подключённые приложения** ([docs/CONNECTOR.md](docs/CONNECTOR.md),
   `proto/connector.proto`). Приложение сопрягается с Shard один раз на устройстве: оно
   показывает 6-значный код, пользователь видит тот же код в Shard («Подключить
-  приложение?», Vault → Подключённые приложения или `cs apps approve`) и разрешает.
+  приложение?», Vault → Подключённые приложения или `shard apps approve`) и разрешает.
   После этого приложение хранит в vault небольшие записи (≤ 256 КиБ, например свой файл
   настроек). Запись — операция `app` в журналах устройств, зашифрованная ключом
   приложения. Запись делается от известной ревизии, устаревшая отклоняется.
@@ -186,10 +184,10 @@ Reed-Solomon k+m (m=1 работает как RAID 5). Всё шифруется
 | `core/secrets` | сейф паролей: шифрование записей, вывод публичных SSH- и web3-ключей, TOTP, разбор кодов восстановления |
 | `core/engine` | всё вместе: файлы, кэш, пины, синхронизация, repair |
 | `core/mount` | FUSE-монтирование (Linux) |
-| `core/rpc` | gRPC-сервис для приложения (`proto/cloudsync.proto`) |
+| `core/rpc` | gRPC-сервис для приложения (`proto/shard.proto`) |
 | `core/connector` | Connector API для других приложений (`proto/connector.proto`, [docs/CONNECTOR.md](docs/CONNECTOR.md)): сопряжение, записи приложений |
-| `cmd/cs` | CLI |
-| `cmd/cloudsyncd` | десктоп-демон: gRPC + монтирование + фоновая синхронизация |
+| `cmd/shard` | CLI |
+| `cmd/shardd` | десктоп-демон: gRPC + монтирование + фоновая синхронизация |
 | `mobilebind` | ядро для Android (`gomobile bind` → AAR) |
 | `app/` | Flutter-приложение для Linux и Android |
 | `app/lib/presentation/common` | набор виджетов приложения: дизайн-токены, только тёмная палитра, телефонная раскладка уже 768 px |
@@ -214,12 +212,12 @@ Reed-Solomon k+m (m=1 работает как RAID 5). Всё шифруется
   (`make proto`).
 
 ```bash
-make build         # builds/cs, builds/cloudsyncd (Linux, FUSE 2)
+make build         # builds/shard, builds/shardd (Linux, FUSE 2)
 make build FUSE_TAGS=-tags=fuse3   # если есть libfuse3.so.3
-make build-linux   # десктоп-приложение в builds/linux (cloudsyncd рядом)
+make build-linux   # десктоп-приложение в builds/linux (shardd рядом)
 make aar           # Go-ядро для Android (gomobile AAR)
 make build-apk     # APK для Android (arm64, x86_64) в builds/android; сначала собирает AAR
-make app-run       # собрать cloudsyncd и запустить приложение в режиме разработки
+make app-run       # собрать shardd и запустить приложение в режиме разработки
 make proto         # перегенерировать Go- и Dart-код из proto/
 make vet test      # go vet + тесты Go-ядра (тесты ограничены 1 ГБ памяти)
 make race          # то же с детектором гонок
@@ -227,35 +225,35 @@ make app-test      # flutter analyze + flutter test
 ```
 
 Release-APK подписывается ключом из `app/android/key.properties` или из переменных
-окружения `CS_KEYSTORE`, `CS_KEYSTORE_PASSWORD`, `CS_KEY_ALIAS`, `CS_KEY_PASSWORD`;
+окружения `SHARD_KEYSTORE`, `SHARD_KEYSTORE_PASSWORD`, `SHARD_KEY_ALIAS`, `SHARD_KEY_PASSWORD`;
 без них он подписывается debug-ключом.
 
 ## Быстрый старт (CLI)
 
 ```bash
-export CS_PASSWORD=...          # иначе пароль будет спрошен
-cs init -k 2 -m 1               # 2 части данных + 1 чётность: нужно ≥3 хранилищ
-cs backend add -name "Mega личный" -type mega user=me@x.com pass=...
-cs backend add -name "Mega рабочий" -type mega user=work@x.com pass=...
-cs backend add -name "S3" -type s3 provider=AWS access_key_id=... secret_access_key=... region=eu-central-1 bucket_acl=private
-cs backend add -name "MinIO" -type s3 -domain minio-home -root cloudsync \
+export SHARD_PASSWORD=...          # иначе пароль будет спрошен
+shard init -k 2 -m 1               # 2 части данных + 1 чётность: нужно ≥3 хранилищ
+shard backend add -name "Mega личный" -type mega user=me@x.com pass=...
+shard backend add -name "Mega рабочий" -type mega user=work@x.com pass=...
+shard backend add -name "S3" -type s3 provider=AWS access_key_id=... secret_access_key=... region=eu-central-1 bucket_acl=private
+shard backend add -name "MinIO" -type s3 -domain minio-home -root shard \
   provider=Minio endpoint=http://nas.local:9000 access_key_id=... secret_access_key=...
-cs backend add -name "Drive" -type drive token='{...}'   # token из `rclone authorize drive`
-cs status
-cs put ~/Documents /
-cs ls -l /Documents
-cs pin /Documents               # держать на этом устройстве
-cs get /Documents/report.pdf .
-cs repair                       # дописать потерянные шарды, перенести с отключённых хранилищ
+shard backend add -name "Drive" -type drive token='{...}'   # token из `rclone authorize drive`
+shard status
+shard put ~/Documents /
+shard ls -l /Documents
+shard pin /Documents               # держать на этом устройстве
+shard get /Documents/report.pdf .
+shard repair                       # дописать потерянные шарды, перенести с отключённых хранилищ
 ```
 
 Обслуживание:
 
 ```bash
-cs repair [-rebalance]          # проверить всё, восстановить; -rebalance — разложить по новым хранилищам
-cs redundancy -k 2 -m 2         # новая схема для новых файлов, затем cs repair
-cs gc                           # удалить данные, не нужные дольше 7 дней (-grace 168h)
-cs backend reconnect ID         # OAuth-токен истёк или отозван: войти в тот же аккаунт заново
+shard repair [-rebalance]          # проверить всё, восстановить; -rebalance — разложить по новым хранилищам
+shard redundancy -k 2 -m 2         # новая схема для новых файлов, затем shard repair
+shard gc                           # удалить данные, не нужные дольше 7 дней (-grace 168h)
+shard backend reconnect ID         # OAuth-токен истёк или отозван: войти в тот же аккаунт заново
 ```
 
 Для `-type local` папка задаётся абсолютным `-root`. Неизвестные параметры
@@ -269,16 +267,16 @@ S3-совместимые серверы (MinIO, Ceph, …): `-root` — это 
 
 Хранилище, у которого истёк вход (401, «invalid_grant»), сохраняет свой ID и данные: в
 приложении нажмите «Переподключить» на экране хранилищ или выполните
-`cs backend reconnect ID`. Вход в другой аккаунт отклоняется.
+`shard backend reconnect ID`. Вход в другой аккаунт отклоняется.
 
 ## Приложение
 
 Одно Flutter-приложение на всех платформах, ядро одно и то же:
 
-- **Linux.** Приложение — клиент демона `cloudsyncd`. Адрес и токен оно читает из
-  `<config dir>/cloudsync/endpoint.json`. Если демон не запущен, приложение запускает
-  его само: ищет рядом со своим бинарником, в `$CLOUDSYNCD` или в `PATH`. После
-  разблокировки демон монтирует vault в `~/CloudSync` (меняется флагом `-mount`).
+- **Linux.** Приложение — клиент демона `shardd`. Адрес и токен оно читает из
+  `<config dir>/selfhold/shard/endpoint.json`. Если демон не запущен, приложение запускает
+  его само: ищет рядом со своим бинарником, в `$SHARDD` или в `PATH`. После
+  разблокировки демон монтирует vault в `~/Shard` (меняется флагом `-mount`).
   «Открыть» в приложении открывает файл в этой папке, поэтому правки сохраняются, а файл
   на это время заблокирован. Закрытие файла не ждёт загрузки: файл сначала записывается
   в очередь на диске, потом загружается в фоне и до тех пор читается из локальной
@@ -303,7 +301,7 @@ S3-совместимые серверы (MinIO, Ceph, …): `-root` — это 
 - **Вход через браузер** (OAuth): ядро поднимает rclone-сервер на `127.0.0.1:53682`, а
   приложение открывает ссылку. Браузер должен быть на этом же устройстве.
 
-На новом устройстве нужен файл `vault.cs` (экспорт на экране Vault) и пароль.
+На новом устройстве нужен файл `vault.shard` (экспорт на экране Vault) и пароль.
 
 Скриншоты всех экранов на 1440 и 390 px против работающего демона:
 `SHOTS=/tmp/shots flutter run -d linux -t tool/screenshots.dart` (в `app/`).
@@ -331,10 +329,10 @@ self-hosted приложений. Каждое приложение работа
 слой синхронизации, который они используют через **Connector API**
 ([docs/CONNECTOR.md](docs/CONNECTOR.md), канонический опубликованный контракт):
 
-- [Parley](https://github.com/SelfHold/parley) (раньше MegaChat): клиент чатов и
+- [Parley](https://github.com/SelfHold/parley): клиент чатов и
   почты; хранит в Shard свой vault настроек.
-- [Postern](https://github.com/SelfHold/postern) (раньше SSH Manager) и
-  [Cellar](https://github.com/SelfHold/cellar) (раньше DB Manager): инструменты для SSH
+- [Postern](https://github.com/SelfHold/postern) и
+  [Cellar](https://github.com/SelfHold/cellar): инструменты для SSH
   и баз данных; через Shard делят один список серверов и SSH-ключи сейфа.
 - [Enclave](https://github.com/SelfHold/enclave): личная сборка Chromium; читает и
   сохраняет логины сайтов в сейфе Shard.

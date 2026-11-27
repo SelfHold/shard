@@ -1,4 +1,4 @@
-package dev.cloudsync.cloudsync
+package dev.selfhold.shard
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -32,7 +32,7 @@ class CoreService : Service() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
         val n = Notification.Builder(this, CHANNEL)
-            .setContentTitle("CloudSync")
+            .setContentTitle("Shard")
             .setContentText(res.getString(R.string.sync_notification_text))
             .setSmallIcon(R.drawable.ic_stat_sync)
             .setContentIntent(open)

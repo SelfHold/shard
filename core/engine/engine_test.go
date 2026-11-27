@@ -12,10 +12,10 @@ import (
 	"testing"
 	"time"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/chunker"
-	"cloudsync/core/lock"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/chunker"
+	"github.com/SelfHold/shard/core/lock"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 var fastKDF = vault.KDFParams{Time: 1, Memory: 1024, Threads: 1}
@@ -36,7 +36,7 @@ func newWorld(t *testing.T) *world {
 		{ID: "gd", Name: "Google Drive", Type: "drive"},
 		{ID: "s3", Name: "S3", Type: "s3"},
 	}
-	path := filepath.Join(t.TempDir(), "vault.cs")
+	path := filepath.Join(t.TempDir(), "vault.shard")
 	if _, err := vault.Create(path, []byte("pw"), c, fastKDF); err != nil {
 		t.Fatal(err)
 	}
@@ -51,7 +51,7 @@ func newWorld(t *testing.T) *world {
 // device opens the vault on a new device with its own vault file copy.
 func (w *world) device(name string) *Engine {
 	dir := w.t.TempDir()
-	vp := filepath.Join(dir, "vault.cs")
+	vp := filepath.Join(dir, "vault.shard")
 	if err := os.WriteFile(vp, w.vaultFile, 0o600); err != nil {
 		w.t.Fatal(err)
 	}
@@ -382,7 +382,7 @@ func TestRestartKeepsState(t *testing.T) {
 	ctx := context.Background()
 	w := newWorld(t)
 	dir := t.TempDir()
-	vp := filepath.Join(dir, "vault.cs")
+	vp := filepath.Join(dir, "vault.shard")
 	os.WriteFile(vp, w.vaultFile, 0o600)
 	v, _ := vault.Open(vp, []byte("pw"))
 	a := w.reopen(v, filepath.Join(dir, "data"), "laptop")
@@ -451,7 +451,7 @@ func TestRemoveStorage(t *testing.T) {
 	ctx := context.Background()
 	w := newWorld(t)
 	dir := t.TempDir()
-	vp := filepath.Join(dir, "vault.cs")
+	vp := filepath.Join(dir, "vault.shard")
 	os.WriteFile(vp, w.vaultFile, 0o600)
 	v, _ := vault.Open(vp, []byte("pw"))
 	a := w.reopen(v, filepath.Join(dir, "data"), "laptop")
@@ -522,7 +522,7 @@ func TestDomainRisk(t *testing.T) {
 func TestDataDirSingleProcess(t *testing.T) {
 	w := newWorld(t)
 	dir := t.TempDir()
-	vp := filepath.Join(dir, "vault.cs")
+	vp := filepath.Join(dir, "vault.shard")
 	os.WriteFile(vp, w.vaultFile, 0o600)
 	v, _ := vault.Open(vp, []byte("pw"))
 	a := w.reopen(v, filepath.Join(dir, "data"), "laptop")
@@ -542,7 +542,7 @@ func TestDataDirSingleProcess(t *testing.T) {
 // the vault and reopen.
 func (w *world) openOwn(name string) (*vault.Vault, string, *Engine) {
 	dir := w.t.TempDir()
-	vp := filepath.Join(dir, "vault.cs")
+	vp := filepath.Join(dir, "vault.shard")
 	os.WriteFile(vp, w.vaultFile, 0o600)
 	v, err := vault.Open(vp, []byte("pw"))
 	if err != nil {

@@ -6,9 +6,9 @@ import (
 	"crypto/rand"
 	"testing"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/crypto"
-	"cloudsync/core/erasure"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/erasure"
 )
 
 type env struct {

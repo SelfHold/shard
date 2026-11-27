@@ -7,9 +7,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"cloudsync/core/connector/pb"
-	"cloudsync/core/engine"
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/connector/pb"
+	"github.com/SelfHold/shard/core/engine"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 // The user's servers through the Connector API (scope "servers"): one

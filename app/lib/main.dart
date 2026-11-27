@@ -18,5 +18,5 @@ Future<void> main() async {
   unawaited(registerDesktopEntry());
   final core = CoreCubit(CoreLauncher.forPlatform())..connect();
   DesktopWindow.instance.stopService = core.stopService;
-  runApp(CloudSyncApp(core: core));
+  runApp(ShardApp(core: core));
 }

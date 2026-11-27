@@ -9,7 +9,7 @@ import '../../core/i18n.dart';
 import '../../core/theme/layout.dart';
 import '../../core/theme/typography.dart';
 import '../../data/rpc/core_client.dart';
-import '../../data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
+import '../../data/rpc/gen/shard.pbgrpc.dart' as pb;
 import '../common/hm.dart';
 import '../core/core_cubit.dart';
 
@@ -120,8 +120,8 @@ class _AppsCardState extends State<AppsCard> {
           gap,
           Text(
             tr(
-              'Apps such as MegaChat can keep their settings here: encrypted, in every storage, the same on all devices. An app asks once per device; you allow it here.',
-              'Приложения (например, MegaChat) могут хранить здесь свои настройки: зашифрованными, во всех хранилищах, одинаковыми на всех устройствах. Приложение просит доступ один раз на устройстве; разрешение даётся здесь.',
+              'Apps such as Parley can keep their settings here: encrypted, in every storage, the same on all devices. An app asks once per device; you allow it here.',
+              'Приложения (например, Parley) могут хранить здесь свои настройки: зашифрованными, во всех хранилищах, одинаковыми на всех устройствах. Приложение просит доступ один раз на устройстве; разрешение даётся здесь.',
             ),
             style: HmText.small.copyWith(height: 1.5),
           ),
@@ -295,7 +295,7 @@ class PairingDetails extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          tr('${q.appName} asks to keep its data in CloudSync', '${q.appName} просит хранить свои данные в CloudSync'),
+          tr('${q.appName} asks to keep its data in Shard', '${q.appName} просит хранить свои данные в Shard'),
           style: HmText.bodyStrong,
         ),
         for (final sc in secretScopes)

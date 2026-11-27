@@ -1,9 +1,9 @@
-package dev.cloudsync.cloudsync
+package dev.selfhold.shard
 
 import android.content.Context
 import android.provider.DocumentsContract
-import dev.cloudsync.mobilebind.Listener
-import dev.cloudsync.mobilebind.Mobilebind
+import dev.selfhold.shard.mobilebind.Listener
+import dev.selfhold.shard.mobilebind.Mobilebind
 import java.io.File
 
 /**
@@ -20,9 +20,9 @@ object Core {
     fun start(context: Context): Endpoint {
         endpoint?.let { return it }
         val app = context.applicationContext
-        val dir = File(app.filesDir, "cloudsync").apply { mkdirs() }
+        val dir = File(app.filesDir, "shard").apply { mkdirs() }
         // A unix socket path must stay under ~100 bytes: keep it short.
-        val socket = File(app.filesDir, "cs.sock").absolutePath
+        val socket = File(app.filesDir, "shard.sock").absolutePath
         val token = Mobilebind.start(dir.absolutePath, app.cacheDir.absolutePath, socket)
         Mobilebind.setListener(object : Listener {
             override fun onEvent(kind: Long, message: String?) {

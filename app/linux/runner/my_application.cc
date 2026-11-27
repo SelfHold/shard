@@ -27,7 +27,7 @@ static void my_application_activate(GApplication* application) {
 
   // No system title bar: the app draws its own (window_manager, see
   // lib/core/desktop/desktop_window.dart). The title stays for the taskbar.
-  gtk_window_set_title(window, "CloudSync");
+  gtk_window_set_title(window, "Shard");
   gtk_window_set_decorated(window, FALSE);
 
   // Window icon (X11 taskbars). GNOME on Wayland takes the icon from the
@@ -36,7 +36,7 @@ static void my_application_activate(GApplication* application) {
   if (exe != nullptr) {
     g_autofree gchar* dir = g_path_get_dirname(exe);
     g_autofree gchar* icon = g_build_filename(
-        dir, "data", "flutter_assets", "assets", "icon", "cloudsync.png",
+        dir, "data", "flutter_assets", "assets", "icon", "shard.png",
         nullptr);
     gtk_window_set_icon_from_file(window, icon, nullptr);
   }

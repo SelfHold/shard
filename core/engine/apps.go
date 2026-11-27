@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"cloudsync/core/crypto"
-	"cloudsync/core/index"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/index"
 )
 
 // Records of connected apps (core/connector): small values an app keeps in
@@ -207,7 +207,7 @@ func (e *Engine) AppDelete(ctx context.Context, app, key, base string) (AppItem,
 	return e.appWrite(ctx, app, key, base, nil, true)
 }
 
-// AppDeleteAll removes every record of app (from the CloudSync UI).
+// AppDeleteAll removes every record of app (from the Shard UI).
 func (e *Engine) AppDeleteAll(ctx context.Context, app string) (int, error) {
 	if !ValidAppID(app) {
 		return 0, fmt.Errorf("%w: app id %q", ErrAppInvalid, app)

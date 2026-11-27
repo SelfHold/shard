@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"cloudsync/core/crypto"
-	"cloudsync/core/index"
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 func (e *Engine) secretKeys() secrets.Keys { return secrets.NewKeys(e.cfg.Key()) }

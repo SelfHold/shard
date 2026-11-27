@@ -10,21 +10,22 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
 
 	"github.com/gofrs/flock"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/blob"
-	"cloudsync/core/chunker"
-	"cloudsync/core/crypto"
-	"cloudsync/core/erasure"
-	"cloudsync/core/eventlog"
-	"cloudsync/core/index"
-	"cloudsync/core/lock"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/blob"
+	"github.com/SelfHold/shard/core/chunker"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/erasure"
+	"github.com/SelfHold/shard/core/eventlog"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/lock"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 // Options configure an engine.
@@ -123,7 +124,7 @@ func Open(ctx context.Context, v *vault.Vault, opt Options) (*Engine, error) {
 	// lock leases of a device must not be shared by two processes.
 	dirLock := flock.New(filepath.Join(opt.DataDir, "lock"))
 	if ok, err := dirLock.TryLock(); err != nil || !ok {
-		return nil, fmt.Errorf("engine: %s is in use by another process (is cloudsyncd running?)", opt.DataDir)
+		return nil, fmt.Errorf("engine: %s is in use by another process (is shardd running?)", opt.DataDir)
 	}
 	e := &Engine{
 		v: v, opt: opt, stores: map[string]backend.Store{}, openErrs: map[string]error{}, dirLock: dirLock,
@@ -185,6 +186,10 @@ func Open(ctx context.Context, v *vault.Vault, opt Options) (*Engine, error) {
 		}
 	}
 	e.targets = targets
+	if len(targets) < e.cfg.DataShards+e.cfg.ParityShards {
+		e.closeStores()
+		return nil, e.storagesError(len(targets))
+	}
 	var err error
 	if e.blobs, err = blob.New(key, e.cfg.DataShards, e.cfg.ParityShards, targets, e.stores); err != nil {
 		e.closeStores()
@@ -272,9 +277,53 @@ func (e *Engine) openStores(ctx context.Context) error {
 		}
 	}
 	if len(e.storeList) == 0 {
-		return errors.New("engine: no storage could be opened")
+		e.closeStores() // disabled ones may have opened
+		return e.storagesError(0)
 	}
 	return nil
+}
+
+// StoragesError is returned by Open when fewer storages opened than new
+// data needs (k+m), or none at all. Failed holds why each storage that did
+// not open failed (by ID, disabled ones too), so the app can show it per
+// storage while the engine is not open.
+type StoragesError struct {
+	Opened, Enabled, Needed int
+	Failed                  map[string]error
+	OK                      []string // IDs of the storages that opened
+	failedNames             []string // enabled storages that did not open
+}
+
+func (e *StoragesError) Error() string {
+	if len(e.failedNames) == 0 {
+		return fmt.Sprintf("%d storages enabled, k+m=%d needed", e.Enabled, e.Needed)
+	}
+	return fmt.Sprintf("%d of %d storages opened, k+m=%d needed; not opened: %s",
+		e.Opened, e.Enabled, e.Needed, strings.Join(e.failedNames, ", "))
+}
+
+// storagesError describes the storages that did not open (opened: how many
+// enabled ones did).
+func (e *Engine) storagesError(opened int) *StoragesError {
+	out := &StoragesError{
+		Opened: opened, Needed: e.cfg.DataShards + e.cfg.ParityShards, Failed: map[string]error{},
+	}
+	for _, b := range e.cfg.Backends {
+		err := e.openErrs[b.ID]
+		if err != nil {
+			out.Failed[b.ID] = err
+		} else if e.stores[b.ID] != nil {
+			out.OK = append(out.OK, b.ID)
+		}
+		if b.Disabled {
+			continue
+		}
+		out.Enabled++
+		if err != nil {
+			out.failedNames = append(out.failedNames, b.Name)
+		}
+	}
+	return out
 }
 
 // StoreOpenTimeout and OpenSyncTimeout bound the network part of Open: a

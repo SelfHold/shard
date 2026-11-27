@@ -10,10 +10,14 @@ Before 1.0.0 the on-storage format and the gRPC API may change between minor ver
 
 ### Changed
 
-- The project is now called **Shard** (formerly CloudSync) and lives at
-  <https://github.com/SelfHold/shard>. Identifiers that are stored on devices or
-  published (Go module `cloudsync`, `cloudsyncd`, `vault.cs`, the Android package, the
-  AIDL names) keep the old name.
+- The project is now called **Shard** and lives at <https://github.com/SelfHold/shard>.
+  Every identifier follows the new name (clean break, nothing is migrated): Go module
+  `github.com/SelfHold/shard`, CLI `shard` and daemon `shardd`, vault file `vault.shard`,
+  config dir `<config dir>/selfhold/shard`, mount `~/Shard`, sockets `selfhold-shard*.sock`,
+  Android package `dev.selfhold.shard`, proto packages `selfhold.shard.v1` and
+  `selfhold.shard.connector.v1`, AIDL `dev.selfhold.shard.connector.IShardConnector`
+  (bind action `dev.selfhold.shard.connector.BIND`), env vars `SHARD_*`. Key derivation
+  labels changed too, so data written by earlier builds cannot be read.
 - Android notifications and the file picker root follow the language chosen in the
   app (English by default) instead of the system locale.
 - Documentation for the public repository: English README with a Russian translation,
@@ -25,8 +29,8 @@ Before 1.0.0 the on-storage format and the gRPC API may change between minor ver
 - **Connected apps** (Connector API v1, `proto/connector.proto`, `docs/CONNECTOR.md`):
   other apps keep small records (settings files) in the vault, the same on all devices.
   Pairing per device with a 6-digit code (app UI dialog, Vault → Connected apps,
-  `cs apps`), compare-and-swap writes, concurrent offline writes kept as versions for
-  the app to merge, a per-app key (`AppKey`), `Watch`. Served by `cloudsyncd` on its own
+  `shard apps`), compare-and-swap writes, concurrent offline writes kept as versions for
+  the app to merge, a per-app key (`AppKey`), `Watch`. Served by `shardd` on its own
   socket (`connector.json`) and on Android by the bound service `ConnectorService`
   (AIDL). New journal operation `app`; older devices carry it without reading it.
 - **Password store in the Connector API** (`docs/CONNECTOR.md` § 12): a pairing scope
@@ -38,7 +42,7 @@ Before 1.0.0 the on-storage format and the gRPC API may change between minor ver
   `Change{LOGIN}`); `TouchLogin` keeps use counters on the device only. Browser fields
   (form fields, `extra` ≤ 16 KiB) stay when the entry is edited in Shard; "never
   save" sites are a hidden entry kind. Vault → Connected apps shows which apps have the
-  scope and when they last read passwords. `cs apps approve ID passwords`, `cs apps scopes`.
+  scope and when they last read passwords. `shard apps approve ID passwords`, `shard apps scopes`.
 - **SSH keys and servers in the Connector API** (`docs/CONNECTOR.md` § 13–14), for
   Postern and Cellar. Scope `ssh_keys`: `ListSshKeys` (no secrets) and
   `GetSshKeys` (private key + passphrase, logged as a secret read), `Change{SSH_KEY}`;
@@ -48,7 +52,7 @@ Before 1.0.0 the on-storage format and the gRPC API may change between minor ver
   kept for the apps). Servers are a new safe entry kind (`SECRET_SERVER`): the app
   lists, shows and edits them (host, user, login method, SSH key, jump server, folder,
   tags, trusted host keys), and an SSH key's card lists the servers that use it. The
-  pairing dialog, the Android notification and `cs apps` name each scope; Vault →
+  pairing dialog, the Android notification and `shard apps` name each scope; Vault →
   Connected apps shows when each app last read passwords, keys and server passwords,
   and takes each scope away on its own.
 
@@ -59,7 +63,7 @@ First version (not published as a release).
 ### Added
 
 - **Core (Go).**
-  - Password-protected vault (`vault.cs`, Argon2id) with the master key, k/m, storages
+  - Password-protected vault (`vault.shard`, Argon2id) with the master key, k/m, storages
     and devices; a copy is kept in every storage and merged across devices.
   - Storages on top of rclone (Google Drive, Mega, S3, WebDAV, Dropbox, OneDrive,
     Yandex Disk, local folders and more), identified by ID: several accounts of one
@@ -79,10 +83,10 @@ First version (not published as a release).
     records with recovery codes, in groups with a picture; metadata and secrets are
     sealed with separate keys. Public keys, fingerprints and addresses are derived by
     the core.
-- **CLI `cs`:** `init`, `passwd`, `backend add|ls|enable|disable`, `status`, `ls`,
+- **CLI `shard`:** `init`, `passwd`, `backend add|ls|enable|disable`, `status`, `ls`,
   `put`, `get`, `cat`, `mkdir`, `rm`, `mv`, `pin`, `unpin`, `pins`, `lock`, `sync`,
   `repair`, `redundancy`, `gc`.
-- **Daemon `cloudsyncd`:** gRPC API for the app, vault mount (FUSE on Linux, WinFsp on
+- **Daemon `shardd`:** gRPC API for the app, vault mount (FUSE on Linux, WinFsp on
   Windows), background sync and an on-disk upload queue that survives restarts.
 - **App (Flutter) for Linux, Windows and Android:** unlock and first setup, files,
   storages (add wizard with browser sign-in for Drive, OneDrive, Dropbox), maintenance,

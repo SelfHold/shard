@@ -1,4 +1,4 @@
-package dev.cloudsync.cloudsync
+package dev.selfhold.shard
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -11,10 +11,10 @@ import android.content.pm.PackageManager
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
-import dev.cloudsync.connector.ICloudSyncConnector
-import dev.cloudsync.connector.IConnectorWatcher
-import dev.cloudsync.mobilebind.ConnectorSink
-import dev.cloudsync.mobilebind.Mobilebind
+import dev.selfhold.shard.connector.IShardConnector
+import dev.selfhold.shard.connector.IConnectorWatcher
+import dev.selfhold.shard.mobilebind.ConnectorSink
+import dev.selfhold.shard.mobilebind.Mobilebind
 import java.security.MessageDigest
 
 /**
@@ -30,7 +30,7 @@ class ConnectorService : Service() {
         return binder
     }
 
-    private val binder = object : ICloudSyncConnector.Stub() {
+    private val binder = object : IShardConnector.Stub() {
         override fun version(): Int = 1
 
         override fun call(method: String, request: ByteArray?): ByteArray {

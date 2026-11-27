@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../../core/i18n.dart';
 import '../../core/theme/colors.dart';
 import '../../core/theme/typography.dart';
-import '../../data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
+import '../../data/rpc/gen/shard.pbgrpc.dart' as pb;
 import '../common/hm.dart';
 import 'secret_util.dart';
 
@@ -18,7 +18,7 @@ class TotpCodes extends ChangeNotifier {
     _tick = Timer.periodic(const Duration(seconds: 1), (_) => _onTick());
   }
 
-  final pb.CloudSyncClient _api;
+  final pb.ShardClient _api;
   Map<String, pb.TotpCode> _codes = {};
   late final Timer _tick;
   int _skew = 0; // core clock − local clock, s

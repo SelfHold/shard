@@ -26,7 +26,7 @@ land in `builds/`.
 make vet test      # Go core (test runs are capped at 1 GB RAM, one at a time)
 make race          # Go core with the race detector
 make app-test      # flutter analyze + flutter test
-make proto         # after editing proto/cloudsync.proto or proto/connector.proto
+make proto         # after editing proto/shard.proto or proto/connector.proto
 make build-linux   # desktop app in builds/linux
 make build-apk     # Android APKs in builds/android
 ```
@@ -52,9 +52,9 @@ paths are covered with the `local` backend.
 - Targets are Linux and Android; macOS and iOS are planned, so keep platform specifics
   behind the existing seams (`mobilebind`, the data-dir lookup, the Kotlin glue).
   Windows is not maintained: do not extend or fix the Windows targets.
-- Never rename persisted or published identifiers (the `cloudsync` Go module, the
-  Android package, AIDL names, app ids, data dir and file names): they live on users'
-  devices and in other apps.
+- Never rename persisted or published identifiers (the Go module, the Android
+  package, AIDL names, app ids, data dir and file names) in passing: they live on
+  users' devices and in other apps.
 - Nothing secret in logs, errors or RPC responses: no tokens, passwords or keys.
 - Run `gofmt` and `dart format`; keep `make vet` and `flutter analyze` clean.
 - Add tests for behaviour changes, especially in `core/index`, `core/lock` and

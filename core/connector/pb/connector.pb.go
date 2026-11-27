@@ -4,9 +4,9 @@
 // 	protoc        v7.36.1
 // source: connector.proto
 
-// The CloudSync Connector API, version 1: what CloudSync offers to other
-// applications ("connected apps", e.g. MegaChat). An app keeps a few small
-// records (its settings file, its vault) in CloudSync; CloudSync stores them
+// The Shard Connector API, version 1: what Shard offers to other
+// applications ("connected apps", e.g. Parley). An app keeps a few small
+// records (its settings file, its vault) in Shard; Shard stores them
 // encrypted in every storage and gives every device the same value.
 //
 // This file is the contract. Apps copy it as is and generate their own
@@ -36,8 +36,8 @@ type VaultState int32
 
 const (
 	VaultState_VAULT_STATE_UNSPECIFIED VaultState = 0
-	VaultState_NO_VAULT                VaultState = 1 // CloudSync is not set up on this device
-	VaultState_LOCKED                  VaultState = 2 // the user has to unlock CloudSync
+	VaultState_NO_VAULT                VaultState = 1 // Shard is not set up on this device
+	VaultState_LOCKED                  VaultState = 2 // the user has to unlock Shard
 	// Unlocked, but no storage answers yet (or too few are configured):
 	// Get and List read this device's own copy, Put and Delete fail with
 	// UNAVAILABLE.
@@ -151,7 +151,7 @@ const (
 	Change_KIND_UNSPECIFIED Change_Kind = 0
 	Change_RECORD           Change_Kind = 1 // a record changed: key, revision (Get it)
 	Change_STATE            Change_Kind = 2 // vault state changed: state (call Hello)
-	// The pairing was revoked in CloudSync: the stream ends after it.
+	// The pairing was revoked in Shard: the stream ends after it.
 	Change_UNPAIRED Change_Kind = 3
 	// A login changed (scope "passwords"): key = login id, revision,
 	// deleted.
@@ -317,7 +317,7 @@ type HelloReply struct {
 	state       protoimpl.MessageState `protogen:"open.v1"`
 	ApiVersion  uint32                 `protobuf:"varint,1,opt,name=api_version,json=apiVersion,proto3" json:"api_version,omitempty"` // 1
 	CoreVersion string                 `protobuf:"bytes,2,opt,name=core_version,json=coreVersion,proto3" json:"core_version,omitempty"`
-	State       VaultState             `protobuf:"varint,3,opt,name=state,proto3,enum=cloudsync.connector.v1.VaultState" json:"state,omitempty"`
+	State       VaultState             `protobuf:"varint,3,opt,name=state,proto3,enum=selfhold.shard.connector.v1.VaultState" json:"state,omitempty"`
 	// The caller is paired (desktops: the request carries a valid token;
 	// Android: the calling package was approved for app_id).
 	Paired        bool     `protobuf:"varint,4,opt,name=paired,proto3" json:"paired,omitempty"`
@@ -418,10 +418,10 @@ func (x *HelloReply) GetScopes() []string {
 type PairingRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Stable id of the app, the same on every platform and device: the data
-	// namespace. ^[a-z0-9][a-z0-9._-]{1,63}$, e.g. "megachat".
+	// namespace. ^[a-z0-9][a-z0-9._-]{1,63}$, e.g. "parley".
 	AppId       string `protobuf:"bytes,1,opt,name=app_id,json=appId,proto3" json:"app_id,omitempty"`
-	AppName     string `protobuf:"bytes,2,opt,name=app_name,json=appName,proto3" json:"app_name,omitempty"` // shown to the user, e.g. "MegaChat"
-	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`        // shown to the user, e.g. "MegaChat 1.4 on linux"
+	AppName     string `protobuf:"bytes,2,opt,name=app_name,json=appName,proto3" json:"app_name,omitempty"` // shown to the user, e.g. "Parley"
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`        // shown to the user, e.g. "Parley 1.4 on linux"
 	// Extra permissions, besides the app's own records: "passwords" (read
 	// and change the logins of the password store). Unknown scopes ->
 	// INVALID_ARGUMENT. The user may grant fewer than asked.
@@ -491,7 +491,7 @@ func (x *PairingRequest) GetScopes() []string {
 type PairingTicket struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Ticket        string                 `protobuf:"bytes,1,opt,name=ticket,proto3" json:"ticket,omitempty"`                                       // secret: only the requester knows it
-	Code          string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`                                           // 6 digits, shown by the app and by CloudSync
+	Code          string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`                                           // 6 digits, shown by the app and by Shard
 	ExpiresUnixMs int64                  `protobuf:"varint,3,opt,name=expires_unix_ms,json=expiresUnixMs,proto3" json:"expires_unix_ms,omitempty"` // the request is dropped then (5 minutes)
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -602,7 +602,7 @@ func (x *AwaitPairingRequest) GetWaitSeconds() uint32 {
 
 type PairingResult struct {
 	state  protoimpl.MessageState `protogen:"open.v1"`
-	Status PairingStatus          `protobuf:"varint,1,opt,name=status,proto3,enum=cloudsync.connector.v1.PairingStatus" json:"status,omitempty"`
+	Status PairingStatus          `protobuf:"varint,1,opt,name=status,proto3,enum=selfhold.shard.connector.v1.PairingStatus" json:"status,omitempty"`
 	// Desktops: the bearer token for every later call; returned once. Keep
 	// it on this device only (it is per device, never put it in the synced
 	// data). Android: empty, the package itself is the credential.
@@ -946,7 +946,7 @@ func (x *ListReply) GetItems() []*Item {
 
 type PutRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 1–200 bytes of [A-Za-z0-9._/-], e.g. "vault.mc", "settings/ui.json".
+	// 1–200 bytes of [A-Za-z0-9._/-], e.g. "vault.parley", "settings/ui.json".
 	Key           string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	Data          []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"` // at most 256 KiB
 	Base          string `protobuf:"bytes,3,opt,name=base,proto3" json:"base,omitempty"`
@@ -1183,11 +1183,11 @@ func (*WatchRequest) Descriptor() ([]byte, []int) {
 
 type Change struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Kind          Change_Kind            `protobuf:"varint,1,opt,name=kind,proto3,enum=cloudsync.connector.v1.Change_Kind" json:"kind,omitempty"`
+	Kind          Change_Kind            `protobuf:"varint,1,opt,name=kind,proto3,enum=selfhold.shard.connector.v1.Change_Kind" json:"kind,omitempty"`
 	Key           string                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
 	Revision      string                 `protobuf:"bytes,3,opt,name=revision,proto3" json:"revision,omitempty"`
 	Deleted       bool                   `protobuf:"varint,4,opt,name=deleted,proto3" json:"deleted,omitempty"` // RECORD: no versions left
-	State         VaultState             `protobuf:"varint,5,opt,name=state,proto3,enum=cloudsync.connector.v1.VaultState" json:"state,omitempty"`
+	State         VaultState             `protobuf:"varint,5,opt,name=state,proto3,enum=selfhold.shard.connector.v1.VaultState" json:"state,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1333,7 +1333,7 @@ func (*UnpairReply) Descriptor() ([]byte, []int) {
 // app. Entries without one (notes, keys, ...) are not visible here.
 type Login struct {
 	state    protoimpl.MessageState `protogen:"open.v1"`
-	Id       string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`             // chosen by CloudSync; "" in PutLogin = a new login
+	Id       string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`             // chosen by Shard; "" in PutLogin = a new login
 	Revision string                 `protobuf:"bytes,2,opt,name=revision,proto3" json:"revision,omitempty"` // the base for PutLogin / DeleteLogin
 	// "https://example.com/" or "android://<hash>@<package>/". Several
 	// logins may share one (several accounts on a site).
@@ -1345,17 +1345,17 @@ type Login struct {
 	UsernameElement  string `protobuf:"bytes,8,opt,name=username_element,json=usernameElement,proto3" json:"username_element,omitempty"`
 	PasswordElement  string `protobuf:"bytes,9,opt,name=password_element,json=passwordElement,proto3" json:"password_element,omitempty"`
 	DisplayName      string `protobuf:"bytes,10,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
-	Notes            string `protobuf:"bytes,11,opt,name=notes,proto3" json:"notes,omitempty"`                                               // the entry's note in CloudSync; empty without data
+	Notes            string `protobuf:"bytes,11,opt,name=notes,proto3" json:"notes,omitempty"`                                               // the entry's note in Shard; empty without data
 	FederationOrigin string `protobuf:"bytes,12,opt,name=federation_origin,json=federationOrigin,proto3" json:"federation_origin,omitempty"` // federated login, no password
 	// "Never save for this site": signon_realm only, no credentials. Not
-	// shown in CloudSync's own password list.
+	// shown in Shard's own password list.
 	Blocked            bool  `protobuf:"varint,13,opt,name=blocked,proto3" json:"blocked,omitempty"`
 	CreatedMs          int64 `protobuf:"varint,14,opt,name=created_ms,json=createdMs,proto3" json:"created_ms,omitempty"`
 	ModifiedMs         int64 `protobuf:"varint,15,opt,name=modified_ms,json=modifiedMs,proto3" json:"modified_ms,omitempty"`
 	PasswordModifiedMs int64 `protobuf:"varint,16,opt,name=password_modified_ms,json=passwordModifiedMs,proto3" json:"password_modified_ms,omitempty"`
 	LastUsedMs         int64 `protobuf:"varint,17,opt,name=last_used_ms,json=lastUsedMs,proto3" json:"last_used_ms,omitempty"` // this device only (TouchLogin)
 	TimesUsed          int64 `protobuf:"varint,18,opt,name=times_used,json=timesUsed,proto3" json:"times_used,omitempty"`      // this device only (TouchLogin)
-	// Fields of the app CloudSync keeps but does not read; at most 16 KiB
+	// Fields of the app Shard keeps but does not read; at most 16 KiB
 	// in all (keys + values). Empty without data.
 	Extra         map[string][]byte `protobuf:"bytes,19,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	DeviceName    string            `protobuf:"bytes,20,opt,name=device_name,json=deviceName,proto3" json:"device_name,omitempty"` // device of the last change
@@ -2381,14 +2381,14 @@ func (x *ListSshKeysReply) GetKeys() []*SshKey {
 // folders, ...) in its own records, keyed by the server id, or in extra.
 type Server struct {
 	state    protoimpl.MessageState `protogen:"open.v1"`
-	Id       string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`             // chosen by CloudSync; "" in PutServer = a new one
+	Id       string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`             // chosen by Shard; "" in PutServer = a new one
 	Revision string                 `protobuf:"bytes,2,opt,name=revision,proto3" json:"revision,omitempty"` // the base for PutServer / DeleteServer
 	Name     string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	Group    string                 `protobuf:"bytes,4,opt,name=group,proto3" json:"group,omitempty"` // folder in the server tree, "" = none; "a/b" nests
 	Host     string                 `protobuf:"bytes,5,opt,name=host,proto3" json:"host,omitempty"`   // DNS name or IP
 	Port     uint32                 `protobuf:"varint,6,opt,name=port,proto3" json:"port,omitempty"`  // 0 = 22
 	User     string                 `protobuf:"bytes,7,opt,name=user,proto3" json:"user,omitempty"`
-	Auth     Server_Auth            `protobuf:"varint,8,opt,name=auth,proto3,enum=cloudsync.connector.v1.Server_Auth" json:"auth,omitempty"`
+	Auth     Server_Auth            `protobuf:"varint,8,opt,name=auth,proto3,enum=selfhold.shard.connector.v1.Server_Auth" json:"auth,omitempty"`
 	Password string                 `protobuf:"bytes,9,opt,name=password,proto3" json:"password,omitempty"`                    // PASSWORD; empty in ListServers without data
 	SshKeyId string                 `protobuf:"bytes,10,opt,name=ssh_key_id,json=sshKeyId,proto3" json:"ssh_key_id,omitempty"` // SSH_KEY: SshKey.id
 	// Trusted host keys, authorized_keys format ("ssh-ed25519 AAAA..."). An
@@ -2400,7 +2400,7 @@ type Server struct {
 	CreatedMs    int64    `protobuf:"varint,15,opt,name=created_ms,json=createdMs,proto3" json:"created_ms,omitempty"`
 	ModifiedMs   int64    `protobuf:"varint,16,opt,name=modified_ms,json=modifiedMs,proto3" json:"modified_ms,omitempty"`
 	DeviceName   string   `protobuf:"bytes,17,opt,name=device_name,json=deviceName,proto3" json:"device_name,omitempty"` // device of the last change
-	// Fields of the apps, CloudSync keeps but does not read. Keys are
+	// Fields of the apps, Shard keeps but does not read. Keys are
 	// "<app id>.<name>"; an app changes only its own keys and keeps the
 	// others as they are. At most 16 KiB in all. Empty without data.
 	Extra         map[string][]byte `protobuf:"bytes,18,rep,name=extra,proto3" json:"extra,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
@@ -2927,15 +2927,15 @@ var File_connector_proto protoreflect.FileDescriptor
 
 const file_connector_proto_rawDesc = "" +
 	"\n" +
-	"\x0fconnector.proto\x12\x16cloudsync.connector.v1\"%\n" +
+	"\x0fconnector.proto\x12\x1bselfhold.shard.connector.v1\"%\n" +
 	"\fHelloRequest\x12\x15\n" +
-	"\x06app_id\x18\x01 \x01(\tR\x05appId\"\x8d\x02\n" +
+	"\x06app_id\x18\x01 \x01(\tR\x05appId\"\x92\x02\n" +
 	"\n" +
 	"HelloReply\x12\x1f\n" +
 	"\vapi_version\x18\x01 \x01(\rR\n" +
 	"apiVersion\x12!\n" +
-	"\fcore_version\x18\x02 \x01(\tR\vcoreVersion\x128\n" +
-	"\x05state\x18\x03 \x01(\x0e2\".cloudsync.connector.v1.VaultStateR\x05state\x12\x16\n" +
+	"\fcore_version\x18\x02 \x01(\tR\vcoreVersion\x12=\n" +
+	"\x05state\x18\x03 \x01(\x0e2'.selfhold.shard.connector.v1.VaultStateR\x05state\x12\x16\n" +
 	"\x06paired\x18\x04 \x01(\bR\x06paired\x12\x15\n" +
 	"\x06app_id\x18\x05 \x01(\tR\x05appId\x12\x19\n" +
 	"\bvault_id\x18\x06 \x01(\tR\avaultId\x12\x1f\n" +
@@ -2953,9 +2953,9 @@ const file_connector_proto_rawDesc = "" +
 	"\x0fexpires_unix_ms\x18\x03 \x01(\x03R\rexpiresUnixMs\"P\n" +
 	"\x13AwaitPairingRequest\x12\x16\n" +
 	"\x06ticket\x18\x01 \x01(\tR\x06ticket\x12!\n" +
-	"\fwait_seconds\x18\x02 \x01(\rR\vwaitSeconds\"\x93\x01\n" +
-	"\rPairingResult\x12=\n" +
-	"\x06status\x18\x01 \x01(\x0e2%.cloudsync.connector.v1.PairingStatusR\x06status\x12\x14\n" +
+	"\fwait_seconds\x18\x02 \x01(\rR\vwaitSeconds\"\x98\x01\n" +
+	"\rPairingResult\x12B\n" +
+	"\x06status\x18\x01 \x01(\x0e2*.selfhold.shard.connector.v1.PairingStatusR\x06status\x12\x14\n" +
 	"\x05token\x18\x02 \x01(\tR\x05token\x12\x15\n" +
 	"\x06app_id\x18\x03 \x01(\tR\x05appId\x12\x16\n" +
 	"\x06scopes\x18\x04 \x03(\tR\x06scopes\"\x84\x01\n" +
@@ -2966,18 +2966,18 @@ const file_connector_proto_rawDesc = "" +
 	"\vdevice_name\x18\x04 \x01(\tR\n" +
 	"deviceName\x12 \n" +
 	"\ftime_unix_ms\x18\x05 \x01(\x03R\n" +
-	"timeUnixMs\"q\n" +
+	"timeUnixMs\"v\n" +
 	"\x04Item\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x1a\n" +
-	"\brevision\x18\x02 \x01(\tR\brevision\x12;\n" +
-	"\bversions\x18\x03 \x03(\v2\x1f.cloudsync.connector.v1.VersionR\bversions\"\x1e\n" +
+	"\brevision\x18\x02 \x01(\tR\brevision\x12@\n" +
+	"\bversions\x18\x03 \x03(\v2$.selfhold.shard.connector.v1.VersionR\bversions\"\x1e\n" +
 	"\n" +
 	"GetRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\"%\n" +
 	"\vListRequest\x12\x16\n" +
-	"\x06prefix\x18\x01 \x01(\tR\x06prefix\"?\n" +
-	"\tListReply\x122\n" +
-	"\x05items\x18\x01 \x03(\v2\x1c.cloudsync.connector.v1.ItemR\x05items\"F\n" +
+	"\x06prefix\x18\x01 \x01(\tR\x06prefix\"D\n" +
+	"\tListReply\x127\n" +
+	"\x05items\x18\x01 \x03(\v2!.selfhold.shard.connector.v1.ItemR\x05items\"F\n" +
 	"\n" +
 	"PutRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x12\n" +
@@ -2990,13 +2990,13 @@ const file_connector_proto_rawDesc = "" +
 	"\vAppKeyReply\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\fR\x03key\x12\x15\n" +
 	"\x06key_id\x18\x02 \x01(\tR\x05keyId\"\x0e\n" +
-	"\fWatchRequest\"\xb6\x02\n" +
-	"\x06Change\x127\n" +
-	"\x04kind\x18\x01 \x01(\x0e2#.cloudsync.connector.v1.Change.KindR\x04kind\x12\x10\n" +
+	"\fWatchRequest\"\xc0\x02\n" +
+	"\x06Change\x12<\n" +
+	"\x04kind\x18\x01 \x01(\x0e2(.selfhold.shard.connector.v1.Change.KindR\x04kind\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12\x1a\n" +
 	"\brevision\x18\x03 \x01(\tR\brevision\x12\x18\n" +
-	"\adeleted\x18\x04 \x01(\bR\adeleted\x128\n" +
-	"\x05state\x18\x05 \x01(\x0e2\".cloudsync.connector.v1.VaultStateR\x05state\"q\n" +
+	"\adeleted\x18\x04 \x01(\bR\adeleted\x12=\n" +
+	"\x05state\x18\x05 \x01(\x0e2'.selfhold.shard.connector.v1.VaultStateR\x05state\"q\n" +
 	"\x04Kind\x12\x14\n" +
 	"\x10KIND_UNSPECIFIED\x10\x00\x12\n" +
 	"\n" +
@@ -3010,7 +3010,7 @@ const file_connector_proto_rawDesc = "" +
 	"\n" +
 	"\x06SERVER\x10\a\"\x0f\n" +
 	"\rUnpairRequest\"\r\n" +
-	"\vUnpairReply\"\xe3\x05\n" +
+	"\vUnpairReply\"\xe8\x05\n" +
 	"\x05Login\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
 	"\brevision\x18\x02 \x01(\tR\brevision\x12!\n" +
@@ -3035,8 +3035,8 @@ const file_connector_proto_rawDesc = "" +
 	"\flast_used_ms\x18\x11 \x01(\x03R\n" +
 	"lastUsedMs\x12\x1d\n" +
 	"\n" +
-	"times_used\x18\x12 \x01(\x03R\ttimesUsed\x12>\n" +
-	"\x05extra\x18\x13 \x03(\v2(.cloudsync.connector.v1.Login.ExtraEntryR\x05extra\x12\x1f\n" +
+	"times_used\x18\x12 \x01(\x03R\ttimesUsed\x12C\n" +
+	"\x05extra\x18\x13 \x03(\v2-.selfhold.shard.connector.v1.Login.ExtraEntryR\x05extra\x12\x1f\n" +
 	"\vdevice_name\x18\x14 \x01(\tR\n" +
 	"deviceName\x1a8\n" +
 	"\n" +
@@ -3047,15 +3047,15 @@ const file_connector_proto_rawDesc = "" +
 	"\fsignon_realm\x18\x01 \x01(\tR\vsignonRealm\x12\x12\n" +
 	"\x04data\x18\x02 \x01(\bR\x04data\x12\x1d\n" +
 	"\n" +
-	"page_token\x18\x03 \x01(\tR\tpageToken\"\x88\x01\n" +
-	"\x0fListLoginsReply\x125\n" +
-	"\x06logins\x18\x01 \x03(\v2\x1d.cloudsync.connector.v1.LoginR\x06logins\x12&\n" +
+	"page_token\x18\x03 \x01(\tR\tpageToken\"\x8d\x01\n" +
+	"\x0fListLoginsReply\x12:\n" +
+	"\x06logins\x18\x01 \x03(\v2\".selfhold.shard.connector.v1.LoginR\x06logins\x12&\n" +
 	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\x12\x16\n" +
 	"\x06cursor\x18\x03 \x01(\tR\x06cursor\"$\n" +
 	"\x10GetLoginsRequest\x12\x10\n" +
-	"\x03ids\x18\x01 \x03(\tR\x03ids\"Z\n" +
-	"\x0fPutLoginRequest\x123\n" +
-	"\x05login\x18\x01 \x01(\v2\x1d.cloudsync.connector.v1.LoginR\x05login\x12\x12\n" +
+	"\x03ids\x18\x01 \x03(\tR\x03ids\"_\n" +
+	"\x0fPutLoginRequest\x128\n" +
+	"\x05login\x18\x01 \x01(\v2\".selfhold.shard.connector.v1.LoginR\x05login\x12\x12\n" +
 	"\x04base\x18\x02 \x01(\tR\x04base\"8\n" +
 	"\x12DeleteLoginRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
@@ -3070,9 +3070,9 @@ const file_connector_proto_rawDesc = "" +
 	"\brevision\x18\x02 \x01(\tR\brevision\x12\x18\n" +
 	"\adeleted\x18\x03 \x01(\bR\adeleted\",\n" +
 	"\x12ListChangesRequest\x12\x16\n" +
-	"\x06cursor\x18\x01 \x01(\tR\x06cursor\"\x7f\n" +
-	"\x10ListChangesReply\x12=\n" +
-	"\achanges\x18\x01 \x03(\v2#.cloudsync.connector.v1.LoginChangeR\achanges\x12\x16\n" +
+	"\x06cursor\x18\x01 \x01(\tR\x06cursor\"\x84\x01\n" +
+	"\x10ListChangesReply\x12B\n" +
+	"\achanges\x18\x01 \x03(\v2(.selfhold.shard.connector.v1.LoginChangeR\achanges\x12\x16\n" +
 	"\x06cursor\x18\x02 \x01(\tR\x06cursor\x12\x14\n" +
 	"\x05reset\x18\x03 \x01(\bR\x05reset\"\xbd\x03\n" +
 	"\x06SshKey\x12\x0e\n" +
@@ -3101,9 +3101,9 @@ const file_connector_proto_rawDesc = "" +
 	"passphrase\"\x14\n" +
 	"\x12ListSshKeysRequest\"%\n" +
 	"\x11GetSshKeysRequest\x12\x10\n" +
-	"\x03ids\x18\x01 \x03(\tR\x03ids\"F\n" +
-	"\x10ListSshKeysReply\x122\n" +
-	"\x04keys\x18\x01 \x03(\v2\x1e.cloudsync.connector.v1.SshKeyR\x04keys\"\x9a\x05\n" +
+	"\x03ids\x18\x01 \x03(\tR\x03ids\"K\n" +
+	"\x10ListSshKeysReply\x127\n" +
+	"\x04keys\x18\x01 \x03(\v2#.selfhold.shard.connector.v1.SshKeyR\x04keys\"\xa4\x05\n" +
 	"\x06Server\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
 	"\brevision\x18\x02 \x01(\tR\brevision\x12\x12\n" +
@@ -3111,8 +3111,8 @@ const file_connector_proto_rawDesc = "" +
 	"\x05group\x18\x04 \x01(\tR\x05group\x12\x12\n" +
 	"\x04host\x18\x05 \x01(\tR\x04host\x12\x12\n" +
 	"\x04port\x18\x06 \x01(\rR\x04port\x12\x12\n" +
-	"\x04user\x18\a \x01(\tR\x04user\x127\n" +
-	"\x04auth\x18\b \x01(\x0e2#.cloudsync.connector.v1.Server.AuthR\x04auth\x12\x1a\n" +
+	"\x04user\x18\a \x01(\tR\x04user\x12<\n" +
+	"\x04auth\x18\b \x01(\x0e2(.selfhold.shard.connector.v1.Server.AuthR\x04auth\x12\x1a\n" +
 	"\bpassword\x18\t \x01(\tR\bpassword\x12\x1c\n" +
 	"\n" +
 	"ssh_key_id\x18\n" +
@@ -3126,8 +3126,8 @@ const file_connector_proto_rawDesc = "" +
 	"\vmodified_ms\x18\x10 \x01(\x03R\n" +
 	"modifiedMs\x12\x1f\n" +
 	"\vdevice_name\x18\x11 \x01(\tR\n" +
-	"deviceName\x12?\n" +
-	"\x05extra\x18\x12 \x03(\v2).cloudsync.connector.v1.Server.ExtraEntryR\x05extra\x1a8\n" +
+	"deviceName\x12D\n" +
+	"\x05extra\x18\x12 \x03(\v2..selfhold.shard.connector.v1.Server.ExtraEntryR\x05extra\x1a8\n" +
 	"\n" +
 	"ExtraEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
@@ -3140,15 +3140,15 @@ const file_connector_proto_rawDesc = "" +
 	"\x12ListServersRequest\x12\x12\n" +
 	"\x04data\x18\x01 \x01(\bR\x04data\x12\x1d\n" +
 	"\n" +
-	"page_token\x18\x02 \x01(\tR\tpageToken\"\x8c\x01\n" +
-	"\x10ListServersReply\x128\n" +
-	"\aservers\x18\x01 \x03(\v2\x1e.cloudsync.connector.v1.ServerR\aservers\x12&\n" +
+	"page_token\x18\x02 \x01(\tR\tpageToken\"\x91\x01\n" +
+	"\x10ListServersReply\x12=\n" +
+	"\aservers\x18\x01 \x03(\v2#.selfhold.shard.connector.v1.ServerR\aservers\x12&\n" +
 	"\x0fnext_page_token\x18\x02 \x01(\tR\rnextPageToken\x12\x16\n" +
 	"\x06cursor\x18\x03 \x01(\tR\x06cursor\"%\n" +
 	"\x11GetServersRequest\x12\x10\n" +
-	"\x03ids\x18\x01 \x03(\tR\x03ids\"^\n" +
-	"\x10PutServerRequest\x126\n" +
-	"\x06server\x18\x01 \x01(\v2\x1e.cloudsync.connector.v1.ServerR\x06server\x12\x12\n" +
+	"\x03ids\x18\x01 \x03(\tR\x03ids\"c\n" +
+	"\x10PutServerRequest\x12;\n" +
+	"\x06server\x18\x01 \x01(\v2#.selfhold.shard.connector.v1.ServerR\x06server\x12\x12\n" +
 	"\x04base\x18\x02 \x01(\tR\x04base\"9\n" +
 	"\x13DeleteServerRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
@@ -3172,35 +3172,35 @@ const file_connector_proto_rawDesc = "" +
 	"\bAPPROVED\x10\x02\x12\n" +
 	"\n" +
 	"\x06DENIED\x10\x03\x12\v\n" +
-	"\aEXPIRED\x10\x042\xcd\x10\n" +
-	"\tConnector\x12Q\n" +
-	"\x05Hello\x12$.cloudsync.connector.v1.HelloRequest\x1a\".cloudsync.connector.v1.HelloReply\x12_\n" +
-	"\x0eRequestPairing\x12&.cloudsync.connector.v1.PairingRequest\x1a%.cloudsync.connector.v1.PairingTicket\x12b\n" +
-	"\fAwaitPairing\x12+.cloudsync.connector.v1.AwaitPairingRequest\x1a%.cloudsync.connector.v1.PairingResult\x12G\n" +
-	"\x03Get\x12\".cloudsync.connector.v1.GetRequest\x1a\x1c.cloudsync.connector.v1.Item\x12N\n" +
-	"\x04List\x12#.cloudsync.connector.v1.ListRequest\x1a!.cloudsync.connector.v1.ListReply\x12G\n" +
-	"\x03Put\x12\".cloudsync.connector.v1.PutRequest\x1a\x1c.cloudsync.connector.v1.Item\x12M\n" +
-	"\x06Delete\x12%.cloudsync.connector.v1.DeleteRequest\x1a\x1c.cloudsync.connector.v1.Item\x12T\n" +
-	"\x06AppKey\x12%.cloudsync.connector.v1.AppKeyRequest\x1a#.cloudsync.connector.v1.AppKeyReply\x12O\n" +
-	"\x05Watch\x12$.cloudsync.connector.v1.WatchRequest\x1a\x1e.cloudsync.connector.v1.Change0\x01\x12T\n" +
-	"\x06Unpair\x12%.cloudsync.connector.v1.UnpairRequest\x1a#.cloudsync.connector.v1.UnpairReply\x12`\n" +
+	"\aEXPIRED\x10\x042\xb3\x12\n" +
+	"\tConnector\x12[\n" +
+	"\x05Hello\x12).selfhold.shard.connector.v1.HelloRequest\x1a'.selfhold.shard.connector.v1.HelloReply\x12i\n" +
+	"\x0eRequestPairing\x12+.selfhold.shard.connector.v1.PairingRequest\x1a*.selfhold.shard.connector.v1.PairingTicket\x12l\n" +
+	"\fAwaitPairing\x120.selfhold.shard.connector.v1.AwaitPairingRequest\x1a*.selfhold.shard.connector.v1.PairingResult\x12Q\n" +
+	"\x03Get\x12'.selfhold.shard.connector.v1.GetRequest\x1a!.selfhold.shard.connector.v1.Item\x12X\n" +
+	"\x04List\x12(.selfhold.shard.connector.v1.ListRequest\x1a&.selfhold.shard.connector.v1.ListReply\x12Q\n" +
+	"\x03Put\x12'.selfhold.shard.connector.v1.PutRequest\x1a!.selfhold.shard.connector.v1.Item\x12W\n" +
+	"\x06Delete\x12*.selfhold.shard.connector.v1.DeleteRequest\x1a!.selfhold.shard.connector.v1.Item\x12^\n" +
+	"\x06AppKey\x12*.selfhold.shard.connector.v1.AppKeyRequest\x1a(.selfhold.shard.connector.v1.AppKeyReply\x12Y\n" +
+	"\x05Watch\x12).selfhold.shard.connector.v1.WatchRequest\x1a#.selfhold.shard.connector.v1.Change0\x01\x12^\n" +
+	"\x06Unpair\x12*.selfhold.shard.connector.v1.UnpairRequest\x1a(.selfhold.shard.connector.v1.UnpairReply\x12j\n" +
 	"\n" +
-	"ListLogins\x12).cloudsync.connector.v1.ListLoginsRequest\x1a'.cloudsync.connector.v1.ListLoginsReply\x12^\n" +
-	"\tGetLogins\x12(.cloudsync.connector.v1.GetLoginsRequest\x1a'.cloudsync.connector.v1.ListLoginsReply\x12R\n" +
-	"\bPutLogin\x12'.cloudsync.connector.v1.PutLoginRequest\x1a\x1d.cloudsync.connector.v1.Login\x12c\n" +
-	"\vDeleteLogin\x12*.cloudsync.connector.v1.DeleteLoginRequest\x1a(.cloudsync.connector.v1.DeleteLoginReply\x12`\n" +
+	"ListLogins\x12..selfhold.shard.connector.v1.ListLoginsRequest\x1a,.selfhold.shard.connector.v1.ListLoginsReply\x12h\n" +
+	"\tGetLogins\x12-.selfhold.shard.connector.v1.GetLoginsRequest\x1a,.selfhold.shard.connector.v1.ListLoginsReply\x12\\\n" +
+	"\bPutLogin\x12,.selfhold.shard.connector.v1.PutLoginRequest\x1a\".selfhold.shard.connector.v1.Login\x12m\n" +
+	"\vDeleteLogin\x12/.selfhold.shard.connector.v1.DeleteLoginRequest\x1a-.selfhold.shard.connector.v1.DeleteLoginReply\x12j\n" +
 	"\n" +
-	"TouchLogin\x12).cloudsync.connector.v1.TouchLoginRequest\x1a'.cloudsync.connector.v1.TouchLoginReply\x12c\n" +
-	"\vListChanges\x12*.cloudsync.connector.v1.ListChangesRequest\x1a(.cloudsync.connector.v1.ListChangesReply\x12c\n" +
-	"\vListSshKeys\x12*.cloudsync.connector.v1.ListSshKeysRequest\x1a(.cloudsync.connector.v1.ListSshKeysReply\x12a\n" +
+	"TouchLogin\x12..selfhold.shard.connector.v1.TouchLoginRequest\x1a,.selfhold.shard.connector.v1.TouchLoginReply\x12m\n" +
+	"\vListChanges\x12/.selfhold.shard.connector.v1.ListChangesRequest\x1a-.selfhold.shard.connector.v1.ListChangesReply\x12m\n" +
+	"\vListSshKeys\x12/.selfhold.shard.connector.v1.ListSshKeysRequest\x1a-.selfhold.shard.connector.v1.ListSshKeysReply\x12k\n" +
 	"\n" +
-	"GetSshKeys\x12).cloudsync.connector.v1.GetSshKeysRequest\x1a(.cloudsync.connector.v1.ListSshKeysReply\x12c\n" +
-	"\vListServers\x12*.cloudsync.connector.v1.ListServersRequest\x1a(.cloudsync.connector.v1.ListServersReply\x12a\n" +
+	"GetSshKeys\x12..selfhold.shard.connector.v1.GetSshKeysRequest\x1a-.selfhold.shard.connector.v1.ListSshKeysReply\x12m\n" +
+	"\vListServers\x12/.selfhold.shard.connector.v1.ListServersRequest\x1a-.selfhold.shard.connector.v1.ListServersReply\x12k\n" +
 	"\n" +
-	"GetServers\x12).cloudsync.connector.v1.GetServersRequest\x1a(.cloudsync.connector.v1.ListServersReply\x12U\n" +
-	"\tPutServer\x12(.cloudsync.connector.v1.PutServerRequest\x1a\x1e.cloudsync.connector.v1.Server\x12f\n" +
-	"\fDeleteServer\x12+.cloudsync.connector.v1.DeleteServerRequest\x1a).cloudsync.connector.v1.DeleteServerReply\x12i\n" +
-	"\x11ListServerChanges\x12*.cloudsync.connector.v1.ListChangesRequest\x1a(.cloudsync.connector.v1.ListChangesReplyB\x1dZ\x1bcloudsync/core/connector/pbb\x06proto3"
+	"GetServers\x12..selfhold.shard.connector.v1.GetServersRequest\x1a-.selfhold.shard.connector.v1.ListServersReply\x12_\n" +
+	"\tPutServer\x12-.selfhold.shard.connector.v1.PutServerRequest\x1a#.selfhold.shard.connector.v1.Server\x12p\n" +
+	"\fDeleteServer\x120.selfhold.shard.connector.v1.DeleteServerRequest\x1a..selfhold.shard.connector.v1.DeleteServerReply\x12s\n" +
+	"\x11ListServerChanges\x12/.selfhold.shard.connector.v1.ListChangesRequest\x1a-.selfhold.shard.connector.v1.ListChangesReplyB-Z+github.com/SelfHold/shard/core/connector/pbb\x06proto3"
 
 var (
 	file_connector_proto_rawDescOnce sync.Once
@@ -3217,118 +3217,118 @@ func file_connector_proto_rawDescGZIP() []byte {
 var file_connector_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
 var file_connector_proto_msgTypes = make([]protoimpl.MessageInfo, 45)
 var file_connector_proto_goTypes = []any{
-	(VaultState)(0),             // 0: cloudsync.connector.v1.VaultState
-	(PairingStatus)(0),          // 1: cloudsync.connector.v1.PairingStatus
-	(Change_Kind)(0),            // 2: cloudsync.connector.v1.Change.Kind
-	(Server_Auth)(0),            // 3: cloudsync.connector.v1.Server.Auth
-	(*HelloRequest)(nil),        // 4: cloudsync.connector.v1.HelloRequest
-	(*HelloReply)(nil),          // 5: cloudsync.connector.v1.HelloReply
-	(*PairingRequest)(nil),      // 6: cloudsync.connector.v1.PairingRequest
-	(*PairingTicket)(nil),       // 7: cloudsync.connector.v1.PairingTicket
-	(*AwaitPairingRequest)(nil), // 8: cloudsync.connector.v1.AwaitPairingRequest
-	(*PairingResult)(nil),       // 9: cloudsync.connector.v1.PairingResult
-	(*Version)(nil),             // 10: cloudsync.connector.v1.Version
-	(*Item)(nil),                // 11: cloudsync.connector.v1.Item
-	(*GetRequest)(nil),          // 12: cloudsync.connector.v1.GetRequest
-	(*ListRequest)(nil),         // 13: cloudsync.connector.v1.ListRequest
-	(*ListReply)(nil),           // 14: cloudsync.connector.v1.ListReply
-	(*PutRequest)(nil),          // 15: cloudsync.connector.v1.PutRequest
-	(*DeleteRequest)(nil),       // 16: cloudsync.connector.v1.DeleteRequest
-	(*AppKeyRequest)(nil),       // 17: cloudsync.connector.v1.AppKeyRequest
-	(*AppKeyReply)(nil),         // 18: cloudsync.connector.v1.AppKeyReply
-	(*WatchRequest)(nil),        // 19: cloudsync.connector.v1.WatchRequest
-	(*Change)(nil),              // 20: cloudsync.connector.v1.Change
-	(*UnpairRequest)(nil),       // 21: cloudsync.connector.v1.UnpairRequest
-	(*UnpairReply)(nil),         // 22: cloudsync.connector.v1.UnpairReply
-	(*Login)(nil),               // 23: cloudsync.connector.v1.Login
-	(*ListLoginsRequest)(nil),   // 24: cloudsync.connector.v1.ListLoginsRequest
-	(*ListLoginsReply)(nil),     // 25: cloudsync.connector.v1.ListLoginsReply
-	(*GetLoginsRequest)(nil),    // 26: cloudsync.connector.v1.GetLoginsRequest
-	(*PutLoginRequest)(nil),     // 27: cloudsync.connector.v1.PutLoginRequest
-	(*DeleteLoginRequest)(nil),  // 28: cloudsync.connector.v1.DeleteLoginRequest
-	(*DeleteLoginReply)(nil),    // 29: cloudsync.connector.v1.DeleteLoginReply
-	(*TouchLoginRequest)(nil),   // 30: cloudsync.connector.v1.TouchLoginRequest
-	(*TouchLoginReply)(nil),     // 31: cloudsync.connector.v1.TouchLoginReply
-	(*LoginChange)(nil),         // 32: cloudsync.connector.v1.LoginChange
-	(*ListChangesRequest)(nil),  // 33: cloudsync.connector.v1.ListChangesRequest
-	(*ListChangesReply)(nil),    // 34: cloudsync.connector.v1.ListChangesReply
-	(*SshKey)(nil),              // 35: cloudsync.connector.v1.SshKey
-	(*ListSshKeysRequest)(nil),  // 36: cloudsync.connector.v1.ListSshKeysRequest
-	(*GetSshKeysRequest)(nil),   // 37: cloudsync.connector.v1.GetSshKeysRequest
-	(*ListSshKeysReply)(nil),    // 38: cloudsync.connector.v1.ListSshKeysReply
-	(*Server)(nil),              // 39: cloudsync.connector.v1.Server
-	(*ListServersRequest)(nil),  // 40: cloudsync.connector.v1.ListServersRequest
-	(*ListServersReply)(nil),    // 41: cloudsync.connector.v1.ListServersReply
-	(*GetServersRequest)(nil),   // 42: cloudsync.connector.v1.GetServersRequest
-	(*PutServerRequest)(nil),    // 43: cloudsync.connector.v1.PutServerRequest
-	(*DeleteServerRequest)(nil), // 44: cloudsync.connector.v1.DeleteServerRequest
-	(*DeleteServerReply)(nil),   // 45: cloudsync.connector.v1.DeleteServerReply
-	(*CallReply)(nil),           // 46: cloudsync.connector.v1.CallReply
-	nil,                         // 47: cloudsync.connector.v1.Login.ExtraEntry
-	nil,                         // 48: cloudsync.connector.v1.Server.ExtraEntry
+	(VaultState)(0),             // 0: selfhold.shard.connector.v1.VaultState
+	(PairingStatus)(0),          // 1: selfhold.shard.connector.v1.PairingStatus
+	(Change_Kind)(0),            // 2: selfhold.shard.connector.v1.Change.Kind
+	(Server_Auth)(0),            // 3: selfhold.shard.connector.v1.Server.Auth
+	(*HelloRequest)(nil),        // 4: selfhold.shard.connector.v1.HelloRequest
+	(*HelloReply)(nil),          // 5: selfhold.shard.connector.v1.HelloReply
+	(*PairingRequest)(nil),      // 6: selfhold.shard.connector.v1.PairingRequest
+	(*PairingTicket)(nil),       // 7: selfhold.shard.connector.v1.PairingTicket
+	(*AwaitPairingRequest)(nil), // 8: selfhold.shard.connector.v1.AwaitPairingRequest
+	(*PairingResult)(nil),       // 9: selfhold.shard.connector.v1.PairingResult
+	(*Version)(nil),             // 10: selfhold.shard.connector.v1.Version
+	(*Item)(nil),                // 11: selfhold.shard.connector.v1.Item
+	(*GetRequest)(nil),          // 12: selfhold.shard.connector.v1.GetRequest
+	(*ListRequest)(nil),         // 13: selfhold.shard.connector.v1.ListRequest
+	(*ListReply)(nil),           // 14: selfhold.shard.connector.v1.ListReply
+	(*PutRequest)(nil),          // 15: selfhold.shard.connector.v1.PutRequest
+	(*DeleteRequest)(nil),       // 16: selfhold.shard.connector.v1.DeleteRequest
+	(*AppKeyRequest)(nil),       // 17: selfhold.shard.connector.v1.AppKeyRequest
+	(*AppKeyReply)(nil),         // 18: selfhold.shard.connector.v1.AppKeyReply
+	(*WatchRequest)(nil),        // 19: selfhold.shard.connector.v1.WatchRequest
+	(*Change)(nil),              // 20: selfhold.shard.connector.v1.Change
+	(*UnpairRequest)(nil),       // 21: selfhold.shard.connector.v1.UnpairRequest
+	(*UnpairReply)(nil),         // 22: selfhold.shard.connector.v1.UnpairReply
+	(*Login)(nil),               // 23: selfhold.shard.connector.v1.Login
+	(*ListLoginsRequest)(nil),   // 24: selfhold.shard.connector.v1.ListLoginsRequest
+	(*ListLoginsReply)(nil),     // 25: selfhold.shard.connector.v1.ListLoginsReply
+	(*GetLoginsRequest)(nil),    // 26: selfhold.shard.connector.v1.GetLoginsRequest
+	(*PutLoginRequest)(nil),     // 27: selfhold.shard.connector.v1.PutLoginRequest
+	(*DeleteLoginRequest)(nil),  // 28: selfhold.shard.connector.v1.DeleteLoginRequest
+	(*DeleteLoginReply)(nil),    // 29: selfhold.shard.connector.v1.DeleteLoginReply
+	(*TouchLoginRequest)(nil),   // 30: selfhold.shard.connector.v1.TouchLoginRequest
+	(*TouchLoginReply)(nil),     // 31: selfhold.shard.connector.v1.TouchLoginReply
+	(*LoginChange)(nil),         // 32: selfhold.shard.connector.v1.LoginChange
+	(*ListChangesRequest)(nil),  // 33: selfhold.shard.connector.v1.ListChangesRequest
+	(*ListChangesReply)(nil),    // 34: selfhold.shard.connector.v1.ListChangesReply
+	(*SshKey)(nil),              // 35: selfhold.shard.connector.v1.SshKey
+	(*ListSshKeysRequest)(nil),  // 36: selfhold.shard.connector.v1.ListSshKeysRequest
+	(*GetSshKeysRequest)(nil),   // 37: selfhold.shard.connector.v1.GetSshKeysRequest
+	(*ListSshKeysReply)(nil),    // 38: selfhold.shard.connector.v1.ListSshKeysReply
+	(*Server)(nil),              // 39: selfhold.shard.connector.v1.Server
+	(*ListServersRequest)(nil),  // 40: selfhold.shard.connector.v1.ListServersRequest
+	(*ListServersReply)(nil),    // 41: selfhold.shard.connector.v1.ListServersReply
+	(*GetServersRequest)(nil),   // 42: selfhold.shard.connector.v1.GetServersRequest
+	(*PutServerRequest)(nil),    // 43: selfhold.shard.connector.v1.PutServerRequest
+	(*DeleteServerRequest)(nil), // 44: selfhold.shard.connector.v1.DeleteServerRequest
+	(*DeleteServerReply)(nil),   // 45: selfhold.shard.connector.v1.DeleteServerReply
+	(*CallReply)(nil),           // 46: selfhold.shard.connector.v1.CallReply
+	nil,                         // 47: selfhold.shard.connector.v1.Login.ExtraEntry
+	nil,                         // 48: selfhold.shard.connector.v1.Server.ExtraEntry
 }
 var file_connector_proto_depIdxs = []int32{
-	0,  // 0: cloudsync.connector.v1.HelloReply.state:type_name -> cloudsync.connector.v1.VaultState
-	1,  // 1: cloudsync.connector.v1.PairingResult.status:type_name -> cloudsync.connector.v1.PairingStatus
-	10, // 2: cloudsync.connector.v1.Item.versions:type_name -> cloudsync.connector.v1.Version
-	11, // 3: cloudsync.connector.v1.ListReply.items:type_name -> cloudsync.connector.v1.Item
-	2,  // 4: cloudsync.connector.v1.Change.kind:type_name -> cloudsync.connector.v1.Change.Kind
-	0,  // 5: cloudsync.connector.v1.Change.state:type_name -> cloudsync.connector.v1.VaultState
-	47, // 6: cloudsync.connector.v1.Login.extra:type_name -> cloudsync.connector.v1.Login.ExtraEntry
-	23, // 7: cloudsync.connector.v1.ListLoginsReply.logins:type_name -> cloudsync.connector.v1.Login
-	23, // 8: cloudsync.connector.v1.PutLoginRequest.login:type_name -> cloudsync.connector.v1.Login
-	32, // 9: cloudsync.connector.v1.ListChangesReply.changes:type_name -> cloudsync.connector.v1.LoginChange
-	35, // 10: cloudsync.connector.v1.ListSshKeysReply.keys:type_name -> cloudsync.connector.v1.SshKey
-	3,  // 11: cloudsync.connector.v1.Server.auth:type_name -> cloudsync.connector.v1.Server.Auth
-	48, // 12: cloudsync.connector.v1.Server.extra:type_name -> cloudsync.connector.v1.Server.ExtraEntry
-	39, // 13: cloudsync.connector.v1.ListServersReply.servers:type_name -> cloudsync.connector.v1.Server
-	39, // 14: cloudsync.connector.v1.PutServerRequest.server:type_name -> cloudsync.connector.v1.Server
-	4,  // 15: cloudsync.connector.v1.Connector.Hello:input_type -> cloudsync.connector.v1.HelloRequest
-	6,  // 16: cloudsync.connector.v1.Connector.RequestPairing:input_type -> cloudsync.connector.v1.PairingRequest
-	8,  // 17: cloudsync.connector.v1.Connector.AwaitPairing:input_type -> cloudsync.connector.v1.AwaitPairingRequest
-	12, // 18: cloudsync.connector.v1.Connector.Get:input_type -> cloudsync.connector.v1.GetRequest
-	13, // 19: cloudsync.connector.v1.Connector.List:input_type -> cloudsync.connector.v1.ListRequest
-	15, // 20: cloudsync.connector.v1.Connector.Put:input_type -> cloudsync.connector.v1.PutRequest
-	16, // 21: cloudsync.connector.v1.Connector.Delete:input_type -> cloudsync.connector.v1.DeleteRequest
-	17, // 22: cloudsync.connector.v1.Connector.AppKey:input_type -> cloudsync.connector.v1.AppKeyRequest
-	19, // 23: cloudsync.connector.v1.Connector.Watch:input_type -> cloudsync.connector.v1.WatchRequest
-	21, // 24: cloudsync.connector.v1.Connector.Unpair:input_type -> cloudsync.connector.v1.UnpairRequest
-	24, // 25: cloudsync.connector.v1.Connector.ListLogins:input_type -> cloudsync.connector.v1.ListLoginsRequest
-	26, // 26: cloudsync.connector.v1.Connector.GetLogins:input_type -> cloudsync.connector.v1.GetLoginsRequest
-	27, // 27: cloudsync.connector.v1.Connector.PutLogin:input_type -> cloudsync.connector.v1.PutLoginRequest
-	28, // 28: cloudsync.connector.v1.Connector.DeleteLogin:input_type -> cloudsync.connector.v1.DeleteLoginRequest
-	30, // 29: cloudsync.connector.v1.Connector.TouchLogin:input_type -> cloudsync.connector.v1.TouchLoginRequest
-	33, // 30: cloudsync.connector.v1.Connector.ListChanges:input_type -> cloudsync.connector.v1.ListChangesRequest
-	36, // 31: cloudsync.connector.v1.Connector.ListSshKeys:input_type -> cloudsync.connector.v1.ListSshKeysRequest
-	37, // 32: cloudsync.connector.v1.Connector.GetSshKeys:input_type -> cloudsync.connector.v1.GetSshKeysRequest
-	40, // 33: cloudsync.connector.v1.Connector.ListServers:input_type -> cloudsync.connector.v1.ListServersRequest
-	42, // 34: cloudsync.connector.v1.Connector.GetServers:input_type -> cloudsync.connector.v1.GetServersRequest
-	43, // 35: cloudsync.connector.v1.Connector.PutServer:input_type -> cloudsync.connector.v1.PutServerRequest
-	44, // 36: cloudsync.connector.v1.Connector.DeleteServer:input_type -> cloudsync.connector.v1.DeleteServerRequest
-	33, // 37: cloudsync.connector.v1.Connector.ListServerChanges:input_type -> cloudsync.connector.v1.ListChangesRequest
-	5,  // 38: cloudsync.connector.v1.Connector.Hello:output_type -> cloudsync.connector.v1.HelloReply
-	7,  // 39: cloudsync.connector.v1.Connector.RequestPairing:output_type -> cloudsync.connector.v1.PairingTicket
-	9,  // 40: cloudsync.connector.v1.Connector.AwaitPairing:output_type -> cloudsync.connector.v1.PairingResult
-	11, // 41: cloudsync.connector.v1.Connector.Get:output_type -> cloudsync.connector.v1.Item
-	14, // 42: cloudsync.connector.v1.Connector.List:output_type -> cloudsync.connector.v1.ListReply
-	11, // 43: cloudsync.connector.v1.Connector.Put:output_type -> cloudsync.connector.v1.Item
-	11, // 44: cloudsync.connector.v1.Connector.Delete:output_type -> cloudsync.connector.v1.Item
-	18, // 45: cloudsync.connector.v1.Connector.AppKey:output_type -> cloudsync.connector.v1.AppKeyReply
-	20, // 46: cloudsync.connector.v1.Connector.Watch:output_type -> cloudsync.connector.v1.Change
-	22, // 47: cloudsync.connector.v1.Connector.Unpair:output_type -> cloudsync.connector.v1.UnpairReply
-	25, // 48: cloudsync.connector.v1.Connector.ListLogins:output_type -> cloudsync.connector.v1.ListLoginsReply
-	25, // 49: cloudsync.connector.v1.Connector.GetLogins:output_type -> cloudsync.connector.v1.ListLoginsReply
-	23, // 50: cloudsync.connector.v1.Connector.PutLogin:output_type -> cloudsync.connector.v1.Login
-	29, // 51: cloudsync.connector.v1.Connector.DeleteLogin:output_type -> cloudsync.connector.v1.DeleteLoginReply
-	31, // 52: cloudsync.connector.v1.Connector.TouchLogin:output_type -> cloudsync.connector.v1.TouchLoginReply
-	34, // 53: cloudsync.connector.v1.Connector.ListChanges:output_type -> cloudsync.connector.v1.ListChangesReply
-	38, // 54: cloudsync.connector.v1.Connector.ListSshKeys:output_type -> cloudsync.connector.v1.ListSshKeysReply
-	38, // 55: cloudsync.connector.v1.Connector.GetSshKeys:output_type -> cloudsync.connector.v1.ListSshKeysReply
-	41, // 56: cloudsync.connector.v1.Connector.ListServers:output_type -> cloudsync.connector.v1.ListServersReply
-	41, // 57: cloudsync.connector.v1.Connector.GetServers:output_type -> cloudsync.connector.v1.ListServersReply
-	39, // 58: cloudsync.connector.v1.Connector.PutServer:output_type -> cloudsync.connector.v1.Server
-	45, // 59: cloudsync.connector.v1.Connector.DeleteServer:output_type -> cloudsync.connector.v1.DeleteServerReply
-	34, // 60: cloudsync.connector.v1.Connector.ListServerChanges:output_type -> cloudsync.connector.v1.ListChangesReply
+	0,  // 0: selfhold.shard.connector.v1.HelloReply.state:type_name -> selfhold.shard.connector.v1.VaultState
+	1,  // 1: selfhold.shard.connector.v1.PairingResult.status:type_name -> selfhold.shard.connector.v1.PairingStatus
+	10, // 2: selfhold.shard.connector.v1.Item.versions:type_name -> selfhold.shard.connector.v1.Version
+	11, // 3: selfhold.shard.connector.v1.ListReply.items:type_name -> selfhold.shard.connector.v1.Item
+	2,  // 4: selfhold.shard.connector.v1.Change.kind:type_name -> selfhold.shard.connector.v1.Change.Kind
+	0,  // 5: selfhold.shard.connector.v1.Change.state:type_name -> selfhold.shard.connector.v1.VaultState
+	47, // 6: selfhold.shard.connector.v1.Login.extra:type_name -> selfhold.shard.connector.v1.Login.ExtraEntry
+	23, // 7: selfhold.shard.connector.v1.ListLoginsReply.logins:type_name -> selfhold.shard.connector.v1.Login
+	23, // 8: selfhold.shard.connector.v1.PutLoginRequest.login:type_name -> selfhold.shard.connector.v1.Login
+	32, // 9: selfhold.shard.connector.v1.ListChangesReply.changes:type_name -> selfhold.shard.connector.v1.LoginChange
+	35, // 10: selfhold.shard.connector.v1.ListSshKeysReply.keys:type_name -> selfhold.shard.connector.v1.SshKey
+	3,  // 11: selfhold.shard.connector.v1.Server.auth:type_name -> selfhold.shard.connector.v1.Server.Auth
+	48, // 12: selfhold.shard.connector.v1.Server.extra:type_name -> selfhold.shard.connector.v1.Server.ExtraEntry
+	39, // 13: selfhold.shard.connector.v1.ListServersReply.servers:type_name -> selfhold.shard.connector.v1.Server
+	39, // 14: selfhold.shard.connector.v1.PutServerRequest.server:type_name -> selfhold.shard.connector.v1.Server
+	4,  // 15: selfhold.shard.connector.v1.Connector.Hello:input_type -> selfhold.shard.connector.v1.HelloRequest
+	6,  // 16: selfhold.shard.connector.v1.Connector.RequestPairing:input_type -> selfhold.shard.connector.v1.PairingRequest
+	8,  // 17: selfhold.shard.connector.v1.Connector.AwaitPairing:input_type -> selfhold.shard.connector.v1.AwaitPairingRequest
+	12, // 18: selfhold.shard.connector.v1.Connector.Get:input_type -> selfhold.shard.connector.v1.GetRequest
+	13, // 19: selfhold.shard.connector.v1.Connector.List:input_type -> selfhold.shard.connector.v1.ListRequest
+	15, // 20: selfhold.shard.connector.v1.Connector.Put:input_type -> selfhold.shard.connector.v1.PutRequest
+	16, // 21: selfhold.shard.connector.v1.Connector.Delete:input_type -> selfhold.shard.connector.v1.DeleteRequest
+	17, // 22: selfhold.shard.connector.v1.Connector.AppKey:input_type -> selfhold.shard.connector.v1.AppKeyRequest
+	19, // 23: selfhold.shard.connector.v1.Connector.Watch:input_type -> selfhold.shard.connector.v1.WatchRequest
+	21, // 24: selfhold.shard.connector.v1.Connector.Unpair:input_type -> selfhold.shard.connector.v1.UnpairRequest
+	24, // 25: selfhold.shard.connector.v1.Connector.ListLogins:input_type -> selfhold.shard.connector.v1.ListLoginsRequest
+	26, // 26: selfhold.shard.connector.v1.Connector.GetLogins:input_type -> selfhold.shard.connector.v1.GetLoginsRequest
+	27, // 27: selfhold.shard.connector.v1.Connector.PutLogin:input_type -> selfhold.shard.connector.v1.PutLoginRequest
+	28, // 28: selfhold.shard.connector.v1.Connector.DeleteLogin:input_type -> selfhold.shard.connector.v1.DeleteLoginRequest
+	30, // 29: selfhold.shard.connector.v1.Connector.TouchLogin:input_type -> selfhold.shard.connector.v1.TouchLoginRequest
+	33, // 30: selfhold.shard.connector.v1.Connector.ListChanges:input_type -> selfhold.shard.connector.v1.ListChangesRequest
+	36, // 31: selfhold.shard.connector.v1.Connector.ListSshKeys:input_type -> selfhold.shard.connector.v1.ListSshKeysRequest
+	37, // 32: selfhold.shard.connector.v1.Connector.GetSshKeys:input_type -> selfhold.shard.connector.v1.GetSshKeysRequest
+	40, // 33: selfhold.shard.connector.v1.Connector.ListServers:input_type -> selfhold.shard.connector.v1.ListServersRequest
+	42, // 34: selfhold.shard.connector.v1.Connector.GetServers:input_type -> selfhold.shard.connector.v1.GetServersRequest
+	43, // 35: selfhold.shard.connector.v1.Connector.PutServer:input_type -> selfhold.shard.connector.v1.PutServerRequest
+	44, // 36: selfhold.shard.connector.v1.Connector.DeleteServer:input_type -> selfhold.shard.connector.v1.DeleteServerRequest
+	33, // 37: selfhold.shard.connector.v1.Connector.ListServerChanges:input_type -> selfhold.shard.connector.v1.ListChangesRequest
+	5,  // 38: selfhold.shard.connector.v1.Connector.Hello:output_type -> selfhold.shard.connector.v1.HelloReply
+	7,  // 39: selfhold.shard.connector.v1.Connector.RequestPairing:output_type -> selfhold.shard.connector.v1.PairingTicket
+	9,  // 40: selfhold.shard.connector.v1.Connector.AwaitPairing:output_type -> selfhold.shard.connector.v1.PairingResult
+	11, // 41: selfhold.shard.connector.v1.Connector.Get:output_type -> selfhold.shard.connector.v1.Item
+	14, // 42: selfhold.shard.connector.v1.Connector.List:output_type -> selfhold.shard.connector.v1.ListReply
+	11, // 43: selfhold.shard.connector.v1.Connector.Put:output_type -> selfhold.shard.connector.v1.Item
+	11, // 44: selfhold.shard.connector.v1.Connector.Delete:output_type -> selfhold.shard.connector.v1.Item
+	18, // 45: selfhold.shard.connector.v1.Connector.AppKey:output_type -> selfhold.shard.connector.v1.AppKeyReply
+	20, // 46: selfhold.shard.connector.v1.Connector.Watch:output_type -> selfhold.shard.connector.v1.Change
+	22, // 47: selfhold.shard.connector.v1.Connector.Unpair:output_type -> selfhold.shard.connector.v1.UnpairReply
+	25, // 48: selfhold.shard.connector.v1.Connector.ListLogins:output_type -> selfhold.shard.connector.v1.ListLoginsReply
+	25, // 49: selfhold.shard.connector.v1.Connector.GetLogins:output_type -> selfhold.shard.connector.v1.ListLoginsReply
+	23, // 50: selfhold.shard.connector.v1.Connector.PutLogin:output_type -> selfhold.shard.connector.v1.Login
+	29, // 51: selfhold.shard.connector.v1.Connector.DeleteLogin:output_type -> selfhold.shard.connector.v1.DeleteLoginReply
+	31, // 52: selfhold.shard.connector.v1.Connector.TouchLogin:output_type -> selfhold.shard.connector.v1.TouchLoginReply
+	34, // 53: selfhold.shard.connector.v1.Connector.ListChanges:output_type -> selfhold.shard.connector.v1.ListChangesReply
+	38, // 54: selfhold.shard.connector.v1.Connector.ListSshKeys:output_type -> selfhold.shard.connector.v1.ListSshKeysReply
+	38, // 55: selfhold.shard.connector.v1.Connector.GetSshKeys:output_type -> selfhold.shard.connector.v1.ListSshKeysReply
+	41, // 56: selfhold.shard.connector.v1.Connector.ListServers:output_type -> selfhold.shard.connector.v1.ListServersReply
+	41, // 57: selfhold.shard.connector.v1.Connector.GetServers:output_type -> selfhold.shard.connector.v1.ListServersReply
+	39, // 58: selfhold.shard.connector.v1.Connector.PutServer:output_type -> selfhold.shard.connector.v1.Server
+	45, // 59: selfhold.shard.connector.v1.Connector.DeleteServer:output_type -> selfhold.shard.connector.v1.DeleteServerReply
+	34, // 60: selfhold.shard.connector.v1.Connector.ListServerChanges:output_type -> selfhold.shard.connector.v1.ListChangesReply
 	38, // [38:61] is the sub-list for method output_type
 	15, // [15:38] is the sub-list for method input_type
 	15, // [15:15] is the sub-list for extension type_name

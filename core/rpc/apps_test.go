@@ -17,10 +17,10 @@ import (
 	"google.golang.org/grpc/test/bufconn"
 	"google.golang.org/protobuf/proto"
 
-	"cloudsync/core/connector"
-	cpb "cloudsync/core/connector/pb"
-	"cloudsync/core/rpc/pb"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/connector"
+	cpb "github.com/SelfHold/shard/core/connector/pb"
+	"github.com/SelfHold/shard/core/rpc/pb"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 // readyService is an unlocked service with three local storages.
@@ -29,7 +29,7 @@ func readyService(t *testing.T) *Service {
 	vault.DefaultKDF = vault.KDFParams{Time: 1, Memory: 1024, Threads: 1}
 	ctx := context.Background()
 	dir := t.TempDir()
-	s := NewService(filepath.Join(dir, "vault.cs"), dir, "linux")
+	s := NewService(filepath.Join(dir, "vault.shard"), dir, "linux")
 	s.SyncEvery = time.Hour
 	t.Cleanup(func() { s.Close(ctx) })
 	if _, err := s.CreateVault(ctx, &pb.CreateVaultRequest{Password: "pw", DataShards: 2, ParityShards: 1, DeviceName: "laptop"}); err != nil {
@@ -72,11 +72,11 @@ func TestConnectorFlow(t *testing.T) {
 	s := readyService(t)
 	c := connectorClient(t, s)
 
-	h, err := c.Hello(ctx, &cpb.HelloRequest{AppId: "megachat"})
+	h, err := c.Hello(ctx, &cpb.HelloRequest{AppId: "parley"})
 	if err != nil || h.ApiVersion != 1 || h.State != cpb.VaultState_READY || h.Paired {
 		t.Fatalf("hello: %+v %v", h, err)
 	}
-	if _, err := c.Get(ctx, &cpb.GetRequest{Key: "vault.mc"}); status.Code(err) != codes.Unauthenticated {
+	if _, err := c.Get(ctx, &cpb.GetRequest{Key: "vault.parley"}); status.Code(err) != codes.Unauthenticated {
 		t.Fatalf("get without pairing: %v", err)
 	}
 	if _, err := c.RequestPairing(ctx, &cpb.PairingRequest{AppId: "Bad App"}); status.Code(err) != codes.InvalidArgument {
@@ -84,7 +84,7 @@ func TestConnectorFlow(t *testing.T) {
 	}
 
 	// Pairing: the user sees the request with the same code and approves.
-	tk, err := c.RequestPairing(ctx, &cpb.PairingRequest{AppId: "megachat", AppName: "MegaChat", Description: "MegaChat on linux"})
+	tk, err := c.RequestPairing(ctx, &cpb.PairingRequest{AppId: "parley", AppName: "Parley", Description: "Parley on linux"})
 	if err != nil || len(tk.Code) != 6 || tk.Ticket == "" {
 		t.Fatalf("request: %+v %v", tk, err)
 	}
@@ -100,7 +100,7 @@ func TestConnectorFlow(t *testing.T) {
 		s.DecidePairing(ctx, &pb.DecidePairingRequest{Id: apps.Requests[0].Id, Approve: true})
 	}()
 	res, err := c.AwaitPairing(ctx, &cpb.AwaitPairingRequest{Ticket: tk.Ticket, WaitSeconds: 10})
-	if err != nil || res.Status != cpb.PairingStatus_APPROVED || res.Token == "" || res.AppId != "megachat" {
+	if err != nil || res.Status != cpb.PairingStatus_APPROVED || res.Token == "" || res.AppId != "parley" {
 		t.Fatalf("await: %+v %v", res, err)
 	}
 	if r, _ := c.AwaitPairing(ctx, &cpb.AwaitPairingRequest{Ticket: tk.Ticket}); r.Status != cpb.PairingStatus_EXPIRED || r.Token != "" {
@@ -112,7 +112,7 @@ func TestConnectorFlow(t *testing.T) {
 	}
 
 	auth := metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+res.Token)
-	if h, _ := c.Hello(auth, &cpb.HelloRequest{}); !h.Paired || h.AppId != "megachat" {
+	if h, _ := c.Hello(auth, &cpb.HelloRequest{}); !h.Paired || h.AppId != "parley" {
 		t.Fatalf("hello when paired: %+v", h)
 	}
 	wctx, stopWatch := context.WithCancel(auth)
@@ -123,18 +123,18 @@ func TestConnectorFlow(t *testing.T) {
 	}
 	time.Sleep(50 * time.Millisecond) // the stream subscribes
 
-	it, err := c.Put(auth, &cpb.PutRequest{Key: "vault.mc", Data: []byte("cfg-1")})
+	it, err := c.Put(auth, &cpb.PutRequest{Key: "vault.parley", Data: []byte("cfg-1")})
 	if err != nil || len(it.Versions) != 1 || it.Revision == "" {
 		t.Fatalf("put: %+v %v", it, err)
 	}
 	ch, err := w.Recv()
-	if err != nil || ch.Kind != cpb.Change_RECORD || ch.Key != "vault.mc" || ch.Revision != it.Revision {
+	if err != nil || ch.Kind != cpb.Change_RECORD || ch.Key != "vault.parley" || ch.Revision != it.Revision {
 		t.Fatalf("watch: %+v %v", ch, err)
 	}
-	if _, err := c.Put(auth, &cpb.PutRequest{Key: "vault.mc", Data: []byte("x")}); status.Code(err) != codes.Aborted {
+	if _, err := c.Put(auth, &cpb.PutRequest{Key: "vault.parley", Data: []byte("x")}); status.Code(err) != codes.Aborted {
 		t.Fatalf("stale base: %v", err)
 	}
-	got, err := c.Get(auth, &cpb.GetRequest{Key: "vault.mc"})
+	got, err := c.Get(auth, &cpb.GetRequest{Key: "vault.parley"})
 	if err != nil || string(got.Versions[0].Data) != "cfg-1" || got.Versions[0].DeviceName != "laptop" {
 		t.Fatalf("get: %+v %v", got, err)
 	}
@@ -151,29 +151,29 @@ func TestConnectorFlow(t *testing.T) {
 
 	// Android: the bound service passes the package; the same API as bytes.
 	srv := s.Connector()
-	droid := connector.Caller{Package: "dev.megachat", Cert: "ab12"}
+	droid := connector.Caller{Package: "dev.selfhold.parley", Cert: "ab12"}
 	var rep cpb.CallReply
-	proto.Unmarshal(srv.Call(ctx, droid, "Get", mustMarshal(&cpb.GetRequest{Key: "vault.mc"})), &rep)
+	proto.Unmarshal(srv.Call(ctx, droid, "Get", mustMarshal(&cpb.GetRequest{Key: "vault.parley"})), &rep)
 	if codes.Code(rep.Code) != codes.Unauthenticated {
 		t.Fatalf("android before pairing: %+v", &rep)
 	}
-	proto.Unmarshal(srv.Call(ctx, droid, "RequestPairing", mustMarshal(&cpb.PairingRequest{AppId: "megachat", AppName: "MegaChat"})), &rep)
+	proto.Unmarshal(srv.Call(ctx, droid, "RequestPairing", mustMarshal(&cpb.PairingRequest{AppId: "parley", AppName: "Parley"})), &rep)
 	var dtk cpb.PairingTicket
 	if rep.Code != 0 || proto.Unmarshal(rep.Payload, &dtk) != nil {
 		t.Fatalf("android request: %+v", &rep)
 	}
 	apps, _ = s.ListApps(ctx, &pb.Empty{})
-	if len(apps.Requests) != 1 || apps.Requests[0].Package != "dev.megachat" || !apps.Requests[0].AlreadyPaired {
+	if len(apps.Requests) != 1 || apps.Requests[0].Package != "dev.selfhold.parley" || !apps.Requests[0].AlreadyPaired {
 		t.Fatalf("android request seen as %+v", apps.Requests)
 	}
 	s.DecidePairing(ctx, &pb.DecidePairingRequest{Id: apps.Requests[0].Id, Approve: true})
-	proto.Unmarshal(srv.Call(ctx, droid, "Get", mustMarshal(&cpb.GetRequest{Key: "vault.mc"})), &rep)
+	proto.Unmarshal(srv.Call(ctx, droid, "Get", mustMarshal(&cpb.GetRequest{Key: "vault.parley"})), &rep)
 	var dit cpb.Item
 	if rep.Code != 0 || proto.Unmarshal(rep.Payload, &dit) != nil || string(dit.Versions[0].Data) != "cfg-1" {
 		t.Fatalf("android get: %+v", &rep)
 	}
 	// Another certificate is another caller.
-	proto.Unmarshal(srv.Call(ctx, connector.Caller{Package: "dev.megachat", Cert: "ff"}, "Get", mustMarshal(&cpb.GetRequest{Key: "vault.mc"})), &rep)
+	proto.Unmarshal(srv.Call(ctx, connector.Caller{Package: "dev.selfhold.parley", Cert: "ff"}, "Get", mustMarshal(&cpb.GetRequest{Key: "vault.parley"})), &rep)
 	if codes.Code(rep.Code) != codes.Unauthenticated {
 		t.Fatalf("other certificate: %+v", &rep)
 	}
@@ -200,7 +200,7 @@ func TestConnectorFlow(t *testing.T) {
 			break
 		}
 	}
-	if _, err := c.Get(auth, &cpb.GetRequest{Key: "vault.mc"}); status.Code(err) != codes.Unauthenticated {
+	if _, err := c.Get(auth, &cpb.GetRequest{Key: "vault.parley"}); status.Code(err) != codes.Unauthenticated {
 		t.Fatalf("get after revoke: %v", err)
 	}
 
@@ -212,7 +212,7 @@ func TestConnectorFlow(t *testing.T) {
 	if dh.State != cpb.VaultState_LOCKED || !dh.Paired {
 		t.Fatalf("hello when locked: %+v", &dh)
 	}
-	proto.Unmarshal(srv.Call(ctx, droid, "Put", mustMarshal(&cpb.PutRequest{Key: "vault.mc", Base: dit.Revision})), &rep)
+	proto.Unmarshal(srv.Call(ctx, droid, "Put", mustMarshal(&cpb.PutRequest{Key: "vault.parley", Base: dit.Revision})), &rep)
 	if codes.Code(rep.Code) != codes.FailedPrecondition {
 		t.Fatalf("put when locked: %+v", &rep)
 	}
@@ -225,17 +225,17 @@ func TestConnectorFlow(t *testing.T) {
 func TestConnectorDeny(t *testing.T) {
 	ctx := context.Background()
 	dir := t.TempDir()
-	s := NewService(filepath.Join(dir, "vault.cs"), dir, "linux")
+	s := NewService(filepath.Join(dir, "vault.shard"), dir, "linux")
 	c := connectorClient(t, s)
 	if h, _ := c.Hello(ctx, &cpb.HelloRequest{}); h.State != cpb.VaultState_NO_VAULT {
 		t.Fatalf("no vault: %+v", h)
 	}
-	tk, err := c.RequestPairing(ctx, &cpb.PairingRequest{AppId: "megachat"})
+	tk, err := c.RequestPairing(ctx, &cpb.PairingRequest{AppId: "parley"})
 	if err != nil {
 		t.Fatal(err)
 	}
 	// A second request of the same app replaces the first.
-	tk2, _ := c.RequestPairing(ctx, &cpb.PairingRequest{AppId: "megachat"})
+	tk2, _ := c.RequestPairing(ctx, &cpb.PairingRequest{AppId: "parley"})
 	if r, _ := c.AwaitPairing(ctx, &cpb.AwaitPairingRequest{Ticket: tk.Ticket}); r.Status != cpb.PairingStatus_EXPIRED {
 		t.Fatalf("replaced request: %+v", r)
 	}

@@ -8,18 +8,18 @@ import (
 )
 
 // EndpointFile is where apps find the desktop connector: <user config
-// dir>/cloudsync/connector.json (~/.config/cloudsync, %AppData%\cloudsync,
-// ~/Library/Application Support/cloudsync). It holds no secret.
+// dir>/selfhold/shard/connector.json (~/.config/selfhold/shard,
+// ~/Library/Application Support/selfhold/shard). It holds no secret.
 func EndpointFile() string {
 	dir, err := os.UserConfigDir()
 	if err != nil {
 		dir = "."
 	}
-	return filepath.Join(dir, "cloudsync", "connector.json")
+	return filepath.Join(dir, "selfhold", "shard", "connector.json")
 }
 
 // DefaultListen is the desktop connector socket:
-// $XDG_RUNTIME_DIR/cloudsync-connector.sock (else next to base), a
+// $XDG_RUNTIME_DIR/selfhold-shard-connector.sock (else next to base), a
 // localhost port on Windows.
 func DefaultListen(base string) string {
 	if runtime.GOOS == "windows" {
@@ -29,7 +29,7 @@ func DefaultListen(base string) string {
 	if d == "" {
 		d = base
 	}
-	return "unix:" + filepath.Join(d, "cloudsync-connector.sock")
+	return "unix:" + filepath.Join(d, "selfhold-shard-connector.sock")
 }
 
 // Endpoint is the content of connector.json.

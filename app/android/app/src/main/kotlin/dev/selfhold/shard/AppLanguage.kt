@@ -1,4 +1,4 @@
-package dev.cloudsync.cloudsync
+package dev.selfhold.shard
 
 import android.content.Context
 import android.content.res.Configuration

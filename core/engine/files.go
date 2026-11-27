@@ -12,8 +12,8 @@ import (
 	"sync"
 	"time"
 
-	"cloudsync/core/blob"
-	"cloudsync/core/index"
+	"github.com/SelfHold/shard/core/blob"
+	"github.com/SelfHold/shard/core/index"
 )
 
 // Errors returned for file operations.

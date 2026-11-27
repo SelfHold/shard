@@ -11,7 +11,7 @@ import (
 
 	"golang.org/x/crypto/ssh"
 
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 // testSSHKey returns an OpenSSH private key (encrypted with passphrase
@@ -108,7 +108,7 @@ func TestServersOverSafe(t *testing.T) {
 
 	sv, err := a.ServerPut(ctx, Server{Name: "db", Group: "/prod//eu/", Host: "db.example", Port: 2222, User: "root",
 		Auth: secrets.AuthSSHKey, SSHKeyID: key.ID, HostKeys: []string{hostKey, hostKey}, Notes: "n", Password: "pw",
-		Tags: []string{"pg", " pg "}, Extra: map[string][]byte{"dbmanager.dbs": {1}}}, "")
+		Tags: []string{"pg", " pg "}, Extra: map[string][]byte{"cellar.dbs": {1}}}, "")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -122,10 +122,10 @@ func TestServersOverSafe(t *testing.T) {
 		t.Fatalf("list without data: %+v", list)
 	}
 	got := a.ServerGet([]string{sv.ID, key.ID, "nope"})
-	if len(got) != 1 || got[0].Password != "pw" || got[0].Extra["dbmanager.dbs"][0] != 1 {
+	if len(got) != 1 || got[0].Password != "pw" || got[0].Extra["cellar.dbs"][0] != 1 {
 		t.Fatalf("get: %+v", got)
 	}
-	// What the user sees in CloudSync: a server entry with host:port.
+	// What the user sees in Shard: a server entry with host:port.
 	en, err := a.OpenSecret(sv.ID)
 	if err != nil || en.Kind != secrets.KindServer || en.URL != "db.example:2222" || en.Username != "root" || en.Title != "db" {
 		t.Fatalf("entry: %+v %v", en, err)
@@ -177,7 +177,7 @@ func TestServersOverSafe(t *testing.T) {
 		}
 	}
 
-	// Edited in CloudSync without the server fields: they and extra stay.
+	// Edited in Shard without the server fields: they and extra stay.
 	cur, _ := a.OpenSecret(up.ID)
 	m := cur.Meta
 	m.Server, m.Title = nil, "renamed"
@@ -186,8 +186,8 @@ func TestServersOverSafe(t *testing.T) {
 	}
 	after := a.ServerGet([]string{up.ID})[0]
 	if after.Name != "renamed" || after.Password != "pw2" || after.SSHKeyID != key.ID || len(after.HostKeys) != 1 ||
-		after.Extra["dbmanager.dbs"] == nil {
-		t.Fatalf("after an edit in CloudSync: %+v", after)
+		after.Extra["cellar.dbs"] == nil {
+		t.Fatalf("after an edit in Shard: %+v", after)
 	}
 	if err := a.ServerDelete(ctx, up.ID, after.Revision); err != nil {
 		t.Fatal(err)

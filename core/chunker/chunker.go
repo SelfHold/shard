@@ -10,7 +10,7 @@ import (
 	"io"
 	"math/bits"
 
-	"cloudsync/core/crypto"
+	"github.com/SelfHold/shard/core/crypto"
 )
 
 // Params are chunk size limits in bytes.

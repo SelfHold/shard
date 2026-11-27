@@ -2,13 +2,14 @@ package engine
 
 import (
 	"context"
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
 	"time"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 // stuckStore never answers: every call waits until its context ends (a
@@ -34,7 +35,7 @@ func TestOpenWithDeadStorage(t *testing.T) {
 
 	w := newWorld(t)
 	dir := t.TempDir()
-	vp := filepath.Join(dir, "vault.cs")
+	vp := filepath.Join(dir, "vault.shard")
 	os.WriteFile(vp, w.vaultFile, 0o600)
 	v, err := vault.Open(vp, []byte("pw"))
 	if err != nil {
@@ -71,11 +72,43 @@ func TestOpenWithDeadStorage(t *testing.T) {
 	}
 }
 
+// Too few storages open for k+m: Open says which ones failed and why, and
+// which ones opened, so the app can show it per storage.
+func TestOpenTooFewStorages(t *testing.T) {
+	w := newWorld(t)
+	dir := t.TempDir()
+	vp := filepath.Join(dir, "vault.shard")
+	os.WriteFile(vp, w.vaultFile, 0o600)
+	v, err := vault.Open(vp, []byte("pw"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = Open(context.Background(), v, Options{
+		DataDir: filepath.Join(dir, "data"),
+		OpenStore: func(_ context.Context, _ string, b vault.Backend) (backend.Store, error) {
+			if b.Type == "mega" {
+				return nil, errors.New("no answer in 30s")
+			}
+			return w.mem[b.ID], nil
+		},
+	})
+	var se *StoragesError
+	if !errors.As(err, &se) {
+		t.Fatalf("open with 2 of 4 storages: %v", err)
+	}
+	if se.Opened != 2 || se.Enabled != 4 || se.Needed != 3 || len(se.Failed) != 2 || se.Failed["mega1"] == nil || len(se.OK) != 2 {
+		t.Fatalf("storages error: %+v", se)
+	}
+	if want := "2 of 4 storages opened, k+m=3 needed; not opened: Mega personal, Mega work"; err.Error() != want {
+		t.Fatalf("message %q", err)
+	}
+}
+
 // Cancelling Open (the vault locked meanwhile) ends it promptly.
 func TestOpenCancelled(t *testing.T) {
 	w := newWorld(t)
 	dir := t.TempDir()
-	vp := filepath.Join(dir, "vault.cs")
+	vp := filepath.Join(dir, "vault.shard")
 	os.WriteFile(vp, w.vaultFile, 0o600)
 	v, _ := vault.Open(vp, []byte("pw"))
 	ctx, cancel := context.WithCancel(context.Background())

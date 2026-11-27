@@ -19,7 +19,7 @@ import (
 	"github.com/rclone/rclone/fs/config/obscure"
 	"github.com/rclone/rclone/fs/object"
 
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 // ParamSetter receives option changes rclone makes at runtime (refreshed
@@ -66,7 +66,7 @@ func OpenRclone(ctx context.Context, vaultID string, b vault.Backend, onSet Para
 	}
 	done := make(chan result, 1)
 	go func() {
-		f, err := info.NewFs(context.WithoutCancel(ctx), "cs-"+b.ID, root, m)
+		f, err := info.NewFs(context.WithoutCancel(ctx), "shard-"+b.ID, root, m)
 		done <- result{f, err}
 	}()
 	var f fs.Fs

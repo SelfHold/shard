@@ -12,7 +12,7 @@ import (
 	"github.com/rclone/rclone/fs/config/configmap"
 	"github.com/rclone/rclone/lib/oauthutil"
 
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 var oauthMu sync.Mutex // rclone keeps one sign-in server and URL hook
@@ -44,7 +44,7 @@ func Authorize(ctx context.Context, typ string, params map[string]string, openUR
 			in[k] = v
 		}
 	}
-	name := "cs-authorize"
+	name := "shard-authorize"
 	m := fs.ConfigMap(ri.Prefix, ri.Options, name, in)
 	out := configmap.Simple{}
 	m.ClearSetters()

@@ -13,12 +13,12 @@ import (
 	"sync"
 	"time"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/blob"
-	"cloudsync/core/erasure"
-	"cloudsync/core/index"
-	"cloudsync/core/lock"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/blob"
+	"github.com/SelfHold/shard/core/erasure"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/lock"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 // RepairOptions select the optional parts of Repair.

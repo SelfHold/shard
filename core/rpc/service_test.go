@@ -10,15 +10,15 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"cloudsync/core/rpc/pb"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/rpc/pb"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 func TestSetupFlow(t *testing.T) {
 	vault.DefaultKDF = vault.KDFParams{Time: 1, Memory: 1024, Threads: 1}
 	ctx := context.Background()
 	dir := t.TempDir()
-	s := NewService(filepath.Join(dir, "vault.cs"), dir, "linux")
+	s := NewService(filepath.Join(dir, "vault.shard"), dir, "linux")
 	s.SyncEvery = time.Hour
 	t.Cleanup(func() { s.Close(ctx) })
 
@@ -190,4 +190,27 @@ func countFiles(dir string) int {
 		return nil
 	})
 	return n
+}
+
+// While not ready, Status shows per storage whether the last open reached
+// it: an error for those that did not open, online for those that did.
+func TestConfigStatusOpenResult(t *testing.T) {
+	cfg, _ := vault.New(2, 1)
+	cfg.Backends = []vault.Backend{
+		{ID: "a", Name: "A", Type: "mega"},
+		{ID: "b", Name: "B", Type: "drive"},
+		{ID: "c", Name: "C", Type: "s3"},
+	}
+	rep := configStatus(cfg, false, map[string]string{"a": "no answer in 30s"}, map[string]bool{"b": true})
+	a, b, c := rep.Backends[0], rep.Backends[1], rep.Backends[2]
+	if a.Error != "no answer in 30s" || a.Online || b.Error != "" || !b.Online || c.Error != "" || c.Online {
+		t.Fatalf("storages: %v", rep.Backends)
+	}
+	// While opening again, the last result no longer applies.
+	rep = configStatus(cfg, true, map[string]string{"a": "x"}, map[string]bool{"b": true})
+	for _, x := range rep.Backends {
+		if !x.Preparing || x.Error != "" || x.Online {
+			t.Fatalf("opening: %v", x)
+		}
+	}
 }

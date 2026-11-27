@@ -10,15 +10,15 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"cloudsync/core/connector"
-	cpb "cloudsync/core/connector/pb"
-	"cloudsync/core/crypto"
-	"cloudsync/core/engine"
-	"cloudsync/core/eventlog"
-	"cloudsync/core/rpc/pb"
+	"github.com/SelfHold/shard/core/connector"
+	cpb "github.com/SelfHold/shard/core/connector/pb"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/engine"
+	"github.com/SelfHold/shard/core/eventlog"
+	"github.com/SelfHold/shard/core/rpc/pb"
 )
 
-// Connected apps: the Service is the connector's Host, and the CloudSync
+// Connected apps: the Service is the connector's Host, and the Shard
 // UI manages pairings through the methods below.
 
 // Connector returns the Connector API server over this service (one per
@@ -67,9 +67,9 @@ func (s *Service) AppWriter() (connector.Writer, error) {
 	case s.e != nil:
 		return s.e, nil
 	case s.v != nil:
-		return nil, status.Error(codes.Unavailable, "CloudSync has no storage connection yet: "+s.problem)
+		return nil, status.Error(codes.Unavailable, "Shard has no storage connection yet: "+s.problem)
 	}
-	return nil, status.Error(codes.FailedPrecondition, "CloudSync is locked")
+	return nil, status.Error(codes.FailedPrecondition, "Shard is locked")
 }
 
 func (s *Service) Logins() (connector.LoginReader, error) {
@@ -92,7 +92,7 @@ func (s *Service) LoginWriter() (connector.LoginWriter, error) {
 	return loginWriter{w.(*engine.Engine), s}, nil
 }
 
-// loginWriter tells the CloudSync UI after an app changed a login.
+// loginWriter tells the Shard UI after an app changed a login.
 type loginWriter struct {
 	*engine.Engine
 	s *Service
@@ -146,7 +146,7 @@ func (s *Service) ServerWriter() (connector.ServerWriter, error) {
 	return serverWriter{w.(*engine.Engine), s}, nil
 }
 
-// serverWriter tells the CloudSync UI after an app changed a server.
+// serverWriter tells the Shard UI after an app changed a server.
 type serverWriter struct {
 	*engine.Engine
 	s *Service
@@ -172,7 +172,7 @@ func (s *Service) MasterKey() (crypto.Key, error) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	if s.v == nil {
-		return crypto.Key{}, status.Error(codes.FailedPrecondition, "CloudSync is locked")
+		return crypto.Key{}, status.Error(codes.FailedPrecondition, "Shard is locked")
 	}
 	return s.v.Config().Key(), nil
 }

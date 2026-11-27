@@ -27,10 +27,10 @@ import (
 
 	"github.com/winfsp/cgofuse/fuse"
 
-	"cloudsync/core/crypto"
-	"cloudsync/core/engine"
-	"cloudsync/core/index"
-	"cloudsync/core/lock"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/engine"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/lock"
 )
 
 // FS implements fuse.FileSystemInterface over an engine.
@@ -114,7 +114,7 @@ func Mount(f *FS, dir string, opts ...string) (*fuse.FileSystemHost, <-chan bool
 				done <- false
 			}
 		}()
-		done <- host.Mount(dir, append([]string{"-o", "fsname=cloudsync,subtype=cloudsync"}, opts...))
+		done <- host.Mount(dir, append([]string{"-o", "fsname=shard,subtype=shard"}, opts...))
 	}()
 	return host, done
 }

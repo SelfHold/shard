@@ -13,8 +13,8 @@ import 'presentation/common/overlays.dart';
 import 'presentation/core/core_cubit.dart';
 import 'presentation/shell/app_shell.dart';
 
-class CloudSyncApp extends StatefulWidget {
-  const CloudSyncApp({super.key, required this.core, this.home = const AppShell(), this.frame});
+class ShardApp extends StatefulWidget {
+  const ShardApp({super.key, required this.core, this.home = const AppShell(), this.frame});
 
   final CoreCubit core;
   final Widget home;
@@ -23,10 +23,10 @@ class CloudSyncApp extends StatefulWidget {
   final TransitionBuilder? frame;
 
   @override
-  State<CloudSyncApp> createState() => _CloudSyncAppState();
+  State<ShardApp> createState() => _ShardAppState();
 }
 
-class _CloudSyncAppState extends State<CloudSyncApp> {
+class _ShardAppState extends State<ShardApp> {
   @override
   void initState() {
     super.initState();
@@ -59,7 +59,7 @@ class _CloudSyncAppState extends State<CloudSyncApp> {
   Widget build(BuildContext context) => BlocProvider.value(
     value: core,
     child: MaterialApp(
-      title: 'CloudSync',
+      title: 'Shard',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
       darkTheme: AppTheme.dark,

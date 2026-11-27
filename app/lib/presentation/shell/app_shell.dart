@@ -229,7 +229,7 @@ class _Header extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text('CloudSync', style: HmText.logo),
+          Text('Shard', style: HmText.logo),
           const Spacer(),
           if (section != null) ...[
             for (final s in [Section.files, Section.secrets, Section.storages, Section.maintenance, Section.log]) ...[
@@ -412,7 +412,7 @@ class _MobileHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text('CloudSync', style: HmText.logo.copyWith(fontSize: 18)),
+          Text('Shard', style: HmText.logo.copyWith(fontSize: 18)),
           const Spacer(),
           HmDot(
             ok: online && !syncing,
@@ -477,7 +477,7 @@ class BuildInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final st = core.state;
     const dot = Opacity(opacity: 0.4, child: Text('  ·  '));
-    final children = <Widget>[Text('CLOUDSYNC V${AppConfig.version}'), dot, Text('APP ${AppConfig.buildId}'.toUpperCase())];
+    final children = <Widget>[Text('SHARD V${AppConfig.version}'), dot, Text('APP ${AppConfig.buildId}'.toUpperCase())];
     if (st != null && core.conn == Conn.ready) {
       final same = st.coreVersion == AppConfig.version && st.coreBuild == AppConfig.buildId;
       final coreBuild = st.coreBuild.isEmpty ? '?' : '${st.coreVersion} ${st.coreBuild}';

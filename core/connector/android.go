@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 
-	"cloudsync/core/connector/pb"
+	"github.com/SelfHold/shard/core/connector/pb"
 )
 
 // Call serves one unary method for the Android bound service: req is the

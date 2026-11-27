@@ -16,9 +16,9 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 
-	"cloudsync/core/connector"
-	cpb "cloudsync/core/connector/pb"
-	"cloudsync/core/rpc/pb"
+	"github.com/SelfHold/shard/core/connector"
+	cpb "github.com/SelfHold/shard/core/connector/pb"
+	"github.com/SelfHold/shard/core/rpc/pb"
 )
 
 func newSSHKey(t *testing.T) (private, authorized string) {
@@ -80,14 +80,14 @@ func TestConnectorSSHKeysAndServers(t *testing.T) {
 	}
 
 	// Asked for both, the user allows the servers only.
-	sm, res := pairApp(t, s, c, "sshmanager", []string{"servers", "ssh_keys"}, []string{"servers"})
+	sm, res := pairApp(t, s, c, "postern", []string{"servers", "ssh_keys"}, []string{"servers"})
 	if len(res.Scopes) != 1 || res.Scopes[0] != "servers" {
 		t.Fatalf("granted: %v", res.Scopes)
 	}
 	if _, err := c.ListSshKeys(sm, &cpb.ListSshKeysRequest{}); status.Code(err) != codes.PermissionDenied {
 		t.Fatalf("keys without their scope: %v", err)
 	}
-	db, res := pairApp(t, s, c, "dbmanager", []string{"servers", "ssh_keys"}, []string{"servers", "ssh_keys"})
+	db, res := pairApp(t, s, c, "cellar", []string{"servers", "ssh_keys"}, []string{"servers", "ssh_keys"})
 	if len(res.Scopes) != 2 {
 		t.Fatalf("granted: %v", res.Scopes)
 	}
@@ -99,7 +99,7 @@ func TestConnectorSSHKeysAndServers(t *testing.T) {
 	}
 	time.Sleep(50 * time.Millisecond) // the stream subscribes
 
-	// An SSH key made in CloudSync.
+	// An SSH key made in Shard.
 	priv, pub := newSSHKey(t)
 	key, err := s.PutSecret(ctx, &pb.SecretEntry{Kind: pb.SecretKind_SECRET_SSH, Title: "deploy", PrivateKey: priv, Comment: "ci"})
 	if err != nil {
@@ -113,14 +113,14 @@ func TestConnectorSSHKeysAndServers(t *testing.T) {
 		kl.Keys[0].Encrypted || kl.Keys[0].Revision != key.Version {
 		t.Fatalf("list keys: %+v %v", kl, err)
 	}
-	if p := pairingOf(t, s, "dbmanager"); p.KeysReadUnixMs != 0 {
+	if p := pairingOf(t, s, "cellar"); p.KeysReadUnixMs != 0 {
 		t.Fatal("listing keys counted as a secret read")
 	}
 	kg, err := c.GetSshKeys(db, &cpb.GetSshKeysRequest{Ids: []string{key.Id, "nope"}})
 	if err != nil || len(kg.Keys) != 1 || kg.Keys[0].PrivateKey != priv {
 		t.Fatalf("get keys: %+v %v", kg, err)
 	}
-	if p := pairingOf(t, s, "dbmanager"); p.KeysReadUnixMs == 0 || p.SecretsReadUnixMs != 0 {
+	if p := pairingOf(t, s, "cellar"); p.KeysReadUnixMs == 0 || p.SecretsReadUnixMs != 0 {
 		t.Fatalf("key read times: %+v", p)
 	}
 	if _, err := c.GetSshKeys(db, &cpb.GetSshKeysRequest{Ids: make([]string, 501)}); status.Code(err) != codes.InvalidArgument {
@@ -134,7 +134,7 @@ func TestConnectorSSHKeysAndServers(t *testing.T) {
 	}
 	sv, err := c.PutServer(sm, &cpb.PutServerRequest{Server: &cpb.Server{Name: "db1", Group: "prod", Host: "db1.example",
 		Port: 2222, User: "root", Auth: cpb.Server_SSH_KEY, SshKeyId: key.Id, HostKeys: []string{pub},
-		Password: "srv-secret", Extra: map[string][]byte{"sshmanager.color": []byte("red")}}})
+		Password: "srv-secret", Extra: map[string][]byte{"postern.color": []byte("red")}}})
 	if err != nil || sv.Id == "" || sv.DeviceName != "laptop" || sv.Port != 2222 || sv.Auth != cpb.Server_SSH_KEY {
 		t.Fatalf("create: %+v %v", sv, err)
 	}
@@ -146,14 +146,14 @@ func TestConnectorSSHKeysAndServers(t *testing.T) {
 		l.Servers[0].Host != "db1.example" || l.Servers[0].SshKeyId != key.Id {
 		t.Fatalf("list: %+v %v", l, err)
 	}
-	if p := pairingOf(t, s, "dbmanager"); p.ServersReadUnixMs != 0 {
+	if p := pairingOf(t, s, "cellar"); p.ServersReadUnixMs != 0 {
 		t.Fatal("a list without data counted as a secret read")
 	}
 	l, _ = c.ListServers(db, &cpb.ListServersRequest{Data: true})
-	if l.Servers[0].Password != "srv-secret" || string(l.Servers[0].Extra["sshmanager.color"]) != "red" {
+	if l.Servers[0].Password != "srv-secret" || string(l.Servers[0].Extra["postern.color"]) != "red" {
 		t.Fatalf("list with data: %+v", l.Servers[0])
 	}
-	if p := pairingOf(t, s, "dbmanager"); p.ServersReadUnixMs == 0 {
+	if p := pairingOf(t, s, "cellar"); p.ServersReadUnixMs == 0 {
 		t.Fatal("server passwords read, not shown")
 	}
 
@@ -162,7 +162,7 @@ func TestConnectorSSHKeysAndServers(t *testing.T) {
 		t.Fatalf("stale base: %v", err)
 	}
 	up := proto.Clone(l.Servers[0]).(*cpb.Server)
-	up.Extra["dbmanager.dbs"] = []byte("[]")
+	up.Extra["cellar.dbs"] = []byte("[]")
 	up.HostKeys = append(up.HostKeys, "ssh-ed25519 not*base64")
 	if _, err := c.PutServer(db, &cpb.PutServerRequest{Server: up, Base: l.Servers[0].Revision}); status.Code(err) != codes.InvalidArgument {
 		t.Fatalf("a bad host key: %v", err) // not base64
@@ -183,10 +183,10 @@ func TestConnectorSSHKeysAndServers(t *testing.T) {
 		t.Fatalf("no host: %v", err)
 	}
 
-	// The user sees it in CloudSync as a server entry.
+	// The user sees it in Shard as a server entry.
 	en, err := s.GetSecret(ctx, &pb.IdRequest{Id: sv.Id})
 	if err != nil || en.Kind != pb.SecretKind_SECRET_SERVER || en.Url != "db1.example:2222" || en.Server.GetSshKeyId() != key.Id ||
-		strings.Join(en.Server.ExtraKeys, ",") != "dbmanager.dbs,sshmanager.color" {
+		strings.Join(en.Server.ExtraKeys, ",") != "cellar.dbs,postern.color" {
 		t.Fatalf("entry: %+v %v", en, err)
 	}
 
@@ -240,7 +240,7 @@ func TestConnectorSSHKeysAndServers(t *testing.T) {
 	}
 
 	// Taking the keys away: SCOPES, then PERMISSION_DENIED; servers stay.
-	if _, err := s.SetAppScopes(ctx, &pb.SetAppScopesRequest{Id: pairingOf(t, s, "dbmanager").Id, Scopes: []string{"servers"}}); err != nil {
+	if _, err := s.SetAppScopes(ctx, &pb.SetAppScopesRequest{Id: pairingOf(t, s, "cellar").Id, Scopes: []string{"servers"}}); err != nil {
 		t.Fatal(err)
 	}
 	recvUntil(t, w, cpb.Change_SCOPES, "")
@@ -256,7 +256,7 @@ func TestConnectorServersOffline(t *testing.T) {
 	ctx := context.Background()
 	s := readyService(t)
 	c := connectorClient(t, s)
-	auth, _ := pairApp(t, s, c, "sshmanager", []string{"servers", "ssh_keys"}, []string{"servers", "ssh_keys"})
+	auth, _ := pairApp(t, s, c, "postern", []string{"servers", "ssh_keys"}, []string{"servers", "ssh_keys"})
 	sv, err := c.PutServer(auth, &cpb.PutServerRequest{Server: &cpb.Server{Host: "a.example", Password: "p"}})
 	if err != nil {
 		t.Fatal(err)

@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"cloudsync/core/secrets"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/secrets"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 func journalNames(w *world, id string) map[string]bool {
@@ -93,7 +93,7 @@ func TestSafeSurvivesLosingEveryStorage(t *testing.T) {
 	ctx := context.Background()
 	w := newWorld(t)
 	dir := t.TempDir()
-	vp := filepath.Join(dir, "vault.cs")
+	vp := filepath.Join(dir, "vault.shard")
 	os.WriteFile(vp, w.vaultFile, 0o600)
 	v, _ := vault.Open(vp, []byte("pw"))
 	a := w.reopen(v, filepath.Join(dir, "data"), "laptop")
@@ -147,7 +147,7 @@ func TestOfflineSafe(t *testing.T) {
 	ctx := context.Background()
 	w := newWorld(t)
 	dir := t.TempDir()
-	vp := filepath.Join(dir, "vault.cs")
+	vp := filepath.Join(dir, "vault.shard")
 	os.WriteFile(vp, w.vaultFile, 0o600)
 	v, _ := vault.Open(vp, []byte("pw"))
 	data := filepath.Join(dir, "data")
@@ -184,7 +184,7 @@ func TestOfflineSafe(t *testing.T) {
 
 	// A data dir of another vault is refused.
 	c, _ := vault.New(2, 1)
-	op := filepath.Join(dir, "other.cs")
+	op := filepath.Join(dir, "other.shard")
 	vault.Create(op, []byte("pw"), c, fastKDF)
 	ov, _ := vault.Open(op, []byte("pw"))
 	if _, err := OpenOfflineSafe(ov, data); err == nil {

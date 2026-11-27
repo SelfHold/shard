@@ -69,10 +69,10 @@ func TestChangeLogDropsOldDeletes(t *testing.T) {
 
 func TestScopes(t *testing.T) {
 	r := NewRegistry(t.TempDir())
-	if _, err := r.Ask(Caller{}, "bezel", "Bezel", "", "files"); err == nil {
+	if _, err := r.Ask(Caller{}, "enclave", "Enclave", "", "files"); err == nil {
 		t.Fatal("unknown scope taken")
 	}
-	q, err := r.Ask(Caller{}, "bezel", "Bezel", "", ScopePasswords, ScopePasswords)
+	q, err := r.Ask(Caller{}, "enclave", "Enclave", "", ScopePasswords, ScopePasswords)
 	if err != nil || len(q.Scopes) != 1 {
 		t.Fatalf("ask: %+v %v", q, err)
 	}

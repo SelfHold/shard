@@ -8,14 +8,14 @@ import (
 	"strings"
 	"time"
 
-	"cloudsync/core/crypto"
-	"cloudsync/core/index"
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 // Servers: the user's servers, one list for every connected app with the
 // scope "servers" (docs/CONNECTOR.md). A server is a KindServer entry of
-// the password safe, so the user sees and edits it in CloudSync next to
+// the password safe, so the user sees and edits it in Shard next to
 // the SSH keys it logs in with.
 
 const (

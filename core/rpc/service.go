@@ -1,4 +1,4 @@
-// Package rpc serves the CloudSync gRPC API over an engine. The same
+// Package rpc serves the Shard gRPC API over an engine. The same
 // service runs in the desktop daemon and inside the Android app.
 package rpc
 
@@ -20,16 +20,16 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/connector"
-	"cloudsync/core/crypto"
-	"cloudsync/core/engine"
-	"cloudsync/core/eventlog"
-	"cloudsync/core/index"
-	"cloudsync/core/lock"
-	"cloudsync/core/rpc/pb"
-	"cloudsync/core/secrets"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/connector"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/engine"
+	"github.com/SelfHold/shard/core/eventlog"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/lock"
+	"github.com/SelfHold/shard/core/rpc/pb"
+	"github.com/SelfHold/shard/core/secrets"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 // Hooks let the host react to the vault being opened or closed (the
@@ -50,9 +50,9 @@ type Hooks struct {
 	Shutdown func()
 }
 
-// Service implements pb.CloudSyncServer.
+// Service implements pb.ShardServer.
 type Service struct {
-	pb.UnimplementedCloudSyncServer
+	pb.UnimplementedShardServer
 	VaultPath string
 	DataRoot  string // device data dirs are created inside
 	Platform  string
@@ -67,7 +67,11 @@ type Service struct {
 	mount string
 	// The vault is open but the engine is not (too few storages yet, ...):
 	// storages can still be added, then the engine opens.
-	problem    string
+	problem string
+	// Why each storage did not open in the last failed open (by ID, cleaned
+	// for the app), and which ones did: shown per storage while not ready.
+	storeErrs  map[string]string
+	storeOK    map[string]bool
 	deviceName string
 	// The password safe read from this device's own copies while the
 	// engine is not open (offlineOf: the vault it was read for).
@@ -354,6 +358,7 @@ func (s *Service) open(v *vault.Vault, deviceName string) *pb.State {
 		return s.state()
 	}
 	s.v, s.deviceName, s.problem = v, deviceName, ""
+	s.storeErrs, s.storeOK = nil, nil
 	ctx, cancel := context.WithCancel(context.Background())
 	done := make(chan struct{})
 	s.opening, s.cancelOpen = done, cancel
@@ -383,6 +388,18 @@ func (s *Service) start(ctx context.Context, cancel context.CancelFunc, done cha
 		// Unlocked but not ready: the app shows the problem and lets the
 		// user add storages; every vault change retries.
 		s.problem = err.Error()
+		var se *engine.StoragesError
+		if errors.As(err, &se) {
+			// New maps: Status reads the old ones without the lock.
+			errs, ok := map[string]string{}, map[string]bool{}
+			for id, err := range se.Failed {
+				errs[id] = eventlog.Clean(err.Error())
+			}
+			for _, id := range se.OK {
+				ok[id] = true
+			}
+			s.storeErrs, s.storeOK = errs, ok
+		}
 		s.Log.Add(eventlog.Warn, "vault", "", "not ready: "+err.Error())
 		s.publish(pb.Event_STATE_CHANGED, "")
 		return
@@ -601,7 +618,7 @@ func (s *Service) AddBackend(ctx context.Context, r *pb.AddBackendRequest) (*pb.
 	}
 	root := r.Root
 	if root == "" {
-		root = "cloudsync"
+		root = "shard"
 	}
 	if err := backend.CheckRoot(r.Type, root); err != nil {
 		return nil, status.Error(codes.InvalidArgument, err.Error())
@@ -785,12 +802,12 @@ func (s *Service) Status(ctx context.Context, _ *pb.Empty) (*pb.StatusReply, err
 	e, err := s.engine()
 	if err != nil {
 		s.mu.Lock()
-		v, opening := s.v, s.opening != nil
+		v, opening, errs, ok := s.v, s.opening != nil, s.storeErrs, s.storeOK
 		s.mu.Unlock()
 		if v == nil {
 			return nil, err
 		}
-		return configStatus(v.Config(), opening), nil
+		return configStatus(v.Config(), opening, errs, ok), nil
 	}
 	st := e.Status(ctx)
 	out := &pb.StatusReply{
@@ -852,17 +869,21 @@ func (s *Service) Status(ctx context.Context, _ *pb.Empty) (*pb.StatusReply, err
 
 // configStatus describes a vault whose engine is not open; while it is
 // opening, the storages show as preparing.
-func configStatus(cfg *vault.Config, opening bool) *pb.StatusReply {
+// configStatus lists the storages of cfg while the engine is not open.
+// errs and ok come from the last failed open: a storage in errs did not
+// open (Error says why), one in ok did (Online); the others are not checked.
+func configStatus(cfg *vault.Config, opening bool, errs map[string]string, ok map[string]bool) *pb.StatusReply {
 	out := &pb.StatusReply{
 		DataShards: int32(cfg.DataShards), ParityShards: int32(cfg.ParityShards),
 		DomainRisk: engine.DomainRisk(cfg), VaultVersion: cfg.Version,
 	}
 	for _, b := range cfg.Backends {
 		pbb := &pb.Backend{
-			Id: b.ID, Name: b.Name, Type: b.Type, Domain: b.FailureDomain(), Enabled: !b.Disabled, Error: "not checked",
+			Id: b.ID, Name: b.Name, Type: b.Type, Domain: b.FailureDomain(), Enabled: !b.Disabled,
+			Error: errs[b.ID], Online: ok[b.ID],
 		}
 		if opening && !b.Disabled {
-			pbb.Preparing, pbb.Error = true, ""
+			pbb.Preparing, pbb.Error, pbb.Online = true, "", false
 		}
 		backendInfo(cfg, pbb)
 		out.Backends = append(out.Backends, pbb)
@@ -1040,7 +1061,7 @@ func (s *Service) Sync(ctx context.Context, _ *pb.Empty) (*pb.Empty, error) {
 	return &pb.Empty{}, nil
 }
 
-func (s *Service) Watch(_ *pb.Empty, stream pb.CloudSync_WatchServer) error {
+func (s *Service) Watch(_ *pb.Empty, stream pb.Shard_WatchServer) error {
 	ch := make(chan *pb.Event, 16)
 	s.subMu.Lock()
 	s.subs[ch] = struct{}{}

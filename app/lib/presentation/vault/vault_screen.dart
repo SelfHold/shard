@@ -14,7 +14,7 @@ import '../../core/theme/layout.dart';
 import '../../core/theme/typography.dart';
 import '../../data/biometric.dart';
 import '../../data/rpc/core_client.dart';
-import '../../data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
+import '../../data/rpc/gen/shard.pbgrpc.dart' as pb;
 import '../apps/apps_card.dart';
 import '../common/hm.dart';
 import '../core/core_cubit.dart';
@@ -158,7 +158,7 @@ class _VaultScreenState extends State<VaultScreen> {
     try {
       final f = await _core.api.exportVault(pb.Empty());
       final bytes = Uint8List.fromList(f.vault);
-      final path = await FilePicker.platform.saveFile(dialogTitle: tr('Save vault', 'Сохранить vault'), fileName: 'vault.cs', bytes: bytes);
+      final path = await FilePicker.platform.saveFile(dialogTitle: tr('Save vault', 'Сохранить vault'), fileName: 'vault.shard', bytes: bytes);
       if (path == null) return;
       if (!Platform.isAndroid) await File(path).writeAsBytes(bytes, flush: true);
       Toasts.success(tr('Vault saved', 'Vault сохранён'), path);
@@ -274,7 +274,7 @@ class _VaultScreenState extends State<VaultScreen> {
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Text(
-                      tr('cloudsyncd: syncs and shows the folder', 'cloudsyncd: синхронизирует и показывает папку'),
+                      tr('shardd: syncs and shows the folder', 'shardd: синхронизирует и показывает папку'),
                       style: HmText.small,
                     ),
                     HmButton(

@@ -14,13 +14,13 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"cloudsync/core/connector/pb"
-	"cloudsync/core/crypto"
-	"cloudsync/core/engine"
+	"github.com/SelfHold/shard/core/connector/pb"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/engine"
 )
 
 // The password store through the Connector API (scope "passwords"): the
-// logins of CloudSync's safe (engine/logins.go).
+// logins of Shard's safe (engine/logins.go).
 
 // LoginReader reads logins: the open engine, or this device's own copy
 // while no storage answers.

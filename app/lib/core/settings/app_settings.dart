@@ -9,7 +9,7 @@ import '../../data/rpc/endpoint.dart';
 import '../i18n.dart';
 
 /// App preferences of this device (not part of the vault): kept in
-/// `<config dir>/cloudsync/app.json` on desktops, in app support on Android.
+/// `<config dir>/selfhold/shard/app.json` on desktops, in app support on Android.
 class AppSettings extends ChangeNotifier {
   AppSettings._(this._file);
 

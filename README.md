@@ -13,9 +13,7 @@ Everything is encrypted and decrypted on your devices only. Shard also keeps a
 password safe, and other [SelfHold](https://github.com/SelfHold) apps sync their
 settings through it.
 
-Shard was formerly called CloudSync; some identifiers still use the old name (the Go
-module `cloudsync`, the binaries `cloudsyncd`, the vault file `vault.cs`, the config
-directory `cloudsync/`, the Android package `dev.cloudsync.cloudsync`).
+Shard was formerly called CloudSync.
 
 **Status:** an early, personal project. There are no published releases yet, and
 before 1.0 the on-storage format and the APIs may change. Build it from source (see
@@ -57,7 +55,7 @@ below).
 
 ## Security model in brief
 
-- One password opens the vault (`vault.cs`, Argon2id). It holds the master key; every
+- One password opens the vault (`vault.shard`, Argon2id). It holds the master key; every
   other key (content, object names, journals, the safe, connected apps) is derived
   from it.
 - Storages only ever see ciphertext under HMAC names: no file names, no sizes of single
@@ -82,7 +80,7 @@ file → FastCDC chunks (~4 MB; small files are packed together)
      → XChaCha20-Poly1305 → Reed-Solomon k+m → one shard per storage
 ```
 
-- **Vault** (`vault.cs`) is the only configuration file: master key, k/m, storages with
+- **Vault** (`vault.shard`) is the only configuration file: master key, k/m, storages with
   their credentials, devices. It is encrypted with a key derived from your password
   (Argon2id). A copy lives in every storage, so changes (such as a new storage) reach
   the other devices.
@@ -94,9 +92,9 @@ file → FastCDC chunks (~4 MB; small files are packed together)
   (`j/<device>/<seq>`, encrypted, a copy in every storage). The file tree is a
   deterministic fold of all operations (Lamport clocks). Concurrent edits of one file
   give a conflict copy, not data loss.
-- **Files on demand.** Pins (`cs pin`) keep files or folders on the device; `pin /`
+- **Files on demand.** Pins (`shard pin`) keep files or folders on the device; `pin /`
   keeps a full local copy — a *reference device* (a switch in Maintenance). The app
-  pins in the background (progress in `Status`); `cs pin` and `cs sync` wait for it.
+  pins in the background (progress in `Status`); `shard pin` and `shard sync` wait for it.
 - **Locks.** Opening a file for writing puts a lease into every storage. A device owns
   the file when a majority of storages hold no other lease besides its own. While a file
   is open on one device, other devices can open it read-only. A lease expires unless
@@ -145,7 +143,7 @@ file → FastCDC chunks (~4 MB; small files are packed together)
 - **Connected apps** ([docs/CONNECTOR.md](docs/CONNECTOR.md), `proto/connector.proto`).
   An app pairs with Shard once per device: it shows a 6-digit code, the user sees
   the same code in Shard ("Connect an app?", Vault → Connected apps, or
-  `cs apps approve`) and allows it. Then the app keeps small records (≤ 256 KiB, e.g.
+  `shard apps approve`) and allows it. Then the app keeps small records (≤ 256 KiB, e.g.
   its settings file) in the vault. A record is an `app` operation in the device
   journals, sealed with a key of the app. Writes carry the revision they were made
   from, and a stale one is refused. Writes made concurrently on offline devices
@@ -175,10 +173,10 @@ file → FastCDC chunks (~4 MB; small files are packed together)
 | `core/secrets` | password safe: record sealing, SSH and web3 public key derivation, TOTP, recovery code parsing |
 | `core/engine` | all of the above together: files, cache, pins, sync, repair |
 | `core/mount` | FUSE mount (Linux) |
-| `core/rpc` | gRPC service for the app (`proto/cloudsync.proto`) |
+| `core/rpc` | gRPC service for the app (`proto/shard.proto`) |
 | `core/connector` | Connector API for other apps (`proto/connector.proto`, [docs/CONNECTOR.md](docs/CONNECTOR.md)): pairing, app records |
-| `cmd/cs` | CLI |
-| `cmd/cloudsyncd` | desktop daemon: gRPC + mount + background sync |
+| `cmd/shard` | CLI |
+| `cmd/shardd` | desktop daemon: gRPC + mount + background sync |
 | `mobilebind` | core for Android (`gomobile bind` → AAR) |
 | `app/` | Flutter app for Linux and Android |
 | `app/lib/presentation/common` | the app's widget kit: design tokens, dark-only palette, phone layout below 768 px |
@@ -202,12 +200,12 @@ Requirements:
   (`dart pub global activate protoc_plugin`), only to regenerate code (`make proto`).
 
 ```bash
-make build         # builds/cs, builds/cloudsyncd (Linux, FUSE 2)
+make build         # builds/shard, builds/shardd (Linux, FUSE 2)
 make build FUSE_TAGS=-tags=fuse3   # if libfuse3.so.3 is available
-make build-linux   # desktop app in builds/linux (cloudsyncd next to it)
+make build-linux   # desktop app in builds/linux (shardd next to it)
 make aar           # the Go core for Android (gomobile AAR)
 make build-apk     # Android APKs (arm64, x86_64) in builds/android; builds the AAR first
-make app-run       # build cloudsyncd and run the app in development mode
+make app-run       # build shardd and run the app in development mode
 make proto         # regenerate Go and Dart code from proto/
 make vet test      # go vet + Go core tests (tests capped at 1 GB RAM)
 make race          # the same with the race detector
@@ -215,35 +213,35 @@ make app-test      # flutter analyze + flutter test
 ```
 
 A release APK is signed with the key given in `app/android/key.properties` or in the
-`CS_KEYSTORE`, `CS_KEYSTORE_PASSWORD`, `CS_KEY_ALIAS`, `CS_KEY_PASSWORD` environment
+`SHARD_KEYSTORE`, `SHARD_KEYSTORE_PASSWORD`, `SHARD_KEY_ALIAS`, `SHARD_KEY_PASSWORD` environment
 variables; without them it is signed with the debug key.
 
 ## Quick start (CLI)
 
 ```bash
-export CS_PASSWORD=...          # or you will be prompted
-cs init -k 2 -m 1               # 2 data + 1 parity shard: needs ≥3 storages
-cs backend add -name "Mega personal" -type mega user=me@x.com pass=...
-cs backend add -name "Mega work" -type mega user=work@x.com pass=...
-cs backend add -name "S3" -type s3 provider=AWS access_key_id=... secret_access_key=... region=eu-central-1 bucket_acl=private
-cs backend add -name "MinIO" -type s3 -domain minio-home -root cloudsync \
+export SHARD_PASSWORD=...          # or you will be prompted
+shard init -k 2 -m 1               # 2 data + 1 parity shard: needs ≥3 storages
+shard backend add -name "Mega personal" -type mega user=me@x.com pass=...
+shard backend add -name "Mega work" -type mega user=work@x.com pass=...
+shard backend add -name "S3" -type s3 provider=AWS access_key_id=... secret_access_key=... region=eu-central-1 bucket_acl=private
+shard backend add -name "MinIO" -type s3 -domain minio-home -root shard \
   provider=Minio endpoint=http://nas.local:9000 access_key_id=... secret_access_key=...
-cs backend add -name "Drive" -type drive token='{...}'   # token from `rclone authorize drive`
-cs status
-cs put ~/Documents /
-cs ls -l /Documents
-cs pin /Documents               # keep it on this device
-cs get /Documents/report.pdf .
-cs repair                       # write missing shards, move them off disabled storages
+shard backend add -name "Drive" -type drive token='{...}'   # token from `rclone authorize drive`
+shard status
+shard put ~/Documents /
+shard ls -l /Documents
+shard pin /Documents               # keep it on this device
+shard get /Documents/report.pdf .
+shard repair                       # write missing shards, move them off disabled storages
 ```
 
 Maintenance:
 
 ```bash
-cs repair [-rebalance]          # verify everything, repair; -rebalance spreads data onto new storages
-cs redundancy -k 2 -m 2         # new scheme for new files, then run cs repair
-cs gc                           # delete data unused for more than 7 days (-grace 168h)
-cs backend reconnect ID         # OAuth token expired or revoked: sign in to the same account again
+shard repair [-rebalance]          # verify everything, repair; -rebalance spreads data onto new storages
+shard redundancy -k 2 -m 2         # new scheme for new files, then run shard repair
+shard gc                           # delete data unused for more than 7 days (-grace 168h)
+shard backend reconnect ID         # OAuth token expired or revoked: sign in to the same account again
 ```
 
 For `-type local` the folder is given with an absolute `-root`. Unknown options are
@@ -256,17 +254,17 @@ Give a self-hosted server its own `-domain`: otherwise it shares the failure zon
 `s3` with every other S3 storage.
 
 A storage whose sign-in expired (401, “invalid_grant”) keeps its ID and data: in the
-app use “Reconnect” on the Storages screen, or `cs backend reconnect ID`. Signing in
+app use “Reconnect” on the Storages screen, or `shard backend reconnect ID`. Signing in
 to another account is refused.
 
 ## App
 
 One Flutter app on every platform, the same core underneath:
 
-- **Linux.** The app is a client of the `cloudsyncd` daemon. It reads the
-  address and token from `<config dir>/cloudsync/endpoint.json`. If the daemon is not
-  running, the app starts it: it looks next to its own binary, in `$CLOUDSYNCD` or in
-  `PATH`. After unlocking, the daemon mounts the vault at `~/CloudSync` (`-mount`
+- **Linux.** The app is a client of the `shardd` daemon. It reads the
+  address and token from `<config dir>/selfhold/shard/endpoint.json`. If the daemon is not
+  running, the app starts it: it looks next to its own binary, in `$SHARDD` or in
+  `PATH`. After unlocking, the daemon mounts the vault at `~/Shard` (`-mount`
   changes it). "Open" in the app opens the file in that folder, so edits are saved and
   the file is locked meanwhile. Closing a file does not wait for the upload: the file
   is first written to an on-disk queue, then uploaded in the background and read from
@@ -292,7 +290,7 @@ One Flutter app on every platform, the same core underneath:
 - **Browser sign-in** (OAuth): the core starts an rclone server on `127.0.0.1:53682` and
   the app opens the link. The browser must be on the same device.
 
-A new device needs the `vault.cs` file (export it on the Vault screen) and the password.
+A new device needs the `vault.shard` file (export it on the Vault screen) and the password.
 
 Screenshots of every screen at 1440 and 390 px against a running daemon:
 `SHOTS=/tmp/shots flutter run -d linux -t tool/screenshots.dart` (in `app/`).
@@ -321,10 +319,10 @@ self-hosted apps. Each app works on its own; Shard is the optional sync layer th
 share through the **Connector API** ([docs/CONNECTOR.md](docs/CONNECTOR.md), the
 canonical published contract):
 
-- [Parley](https://github.com/SelfHold/parley) (formerly MegaChat): chat and mail
+- [Parley](https://github.com/SelfHold/parley): chat and mail
   client; keeps its settings vault in Shard.
-- [Postern](https://github.com/SelfHold/postern) (formerly SSH Manager) and
-  [Cellar](https://github.com/SelfHold/cellar) (formerly DB Manager): SSH and database
+- [Postern](https://github.com/SelfHold/postern) and
+  [Cellar](https://github.com/SelfHold/cellar): SSH and database
   tools; share one server list and the safe's SSH keys through Shard.
 - [Enclave](https://github.com/SelfHold/enclave): a personal Chromium build; reads and
   saves website logins in Shard's safe.

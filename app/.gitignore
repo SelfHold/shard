@@ -45,5 +45,4 @@ app.*.map.json
 /android/app/release
 
 # The Go core for Android: built by `make aar`, never committed.
-/android/app/libs/cloudsync.aar
-/android/app/libs/cloudsync-sources.jar
+/android/app/libs/

@@ -9,17 +9,17 @@ import (
 	"sync"
 	"time"
 
-	"cloudsync/core/crypto"
-	"cloudsync/core/index"
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 // Logins: the website logins of the password safe as connected apps see
 // them (Connector API, scope "passwords"; docs/CONNECTOR.md). A login is a
 // KindPassword entry with a website or an Android app, or a KindNeverSave
-// site. They are the entries the user sees in CloudSync, not copies: a
+// site. They are the entries the user sees in Shard, not copies: a
 // login written by a browser is an ordinary entry, and an entry typed in
-// CloudSync with a URL is a login.
+// Shard with a URL is a login.
 
 const (
 	// MaxLogins is how many logins the API lets a vault have.
@@ -266,7 +266,7 @@ func (e *Engine) LoginRevisions() map[string]string { return e.view().LoginRevis
 // LoginPut creates (l.ID = "", base = "") or replaces a login. base is the
 // revision l was made from: another revision now gives ErrLoginConflict
 // and nothing is written. Fields of the entry the API does not carry
-// (group, title typed in CloudSync, kind-specific fields) are kept.
+// (group, title typed in Shard, kind-specific fields) are kept.
 func (e *Engine) LoginPut(ctx context.Context, l Login, base string) (Login, error) {
 	e.loginMu.Lock()
 	defer e.loginMu.Unlock()
@@ -360,7 +360,7 @@ func applyLogin(m *secrets.Meta, d *secrets.Data, l Login, now time.Time) error 
 	lm := &secrets.LoginMeta{ActionURL: l.ActionURL, UsernameElement: l.UsernameElement,
 		PasswordElement: l.PasswordElement, DisplayName: l.DisplayName, FederationOrigin: l.FederationOrigin}
 	// The realm is kept only when the URL does not give it, so a site
-	// edited in CloudSync moves the realm with it.
+	// edited in Shard moves the realm with it.
 	if realm != Origin(m.URL) {
 		lm.Realm = realm
 	}
@@ -397,7 +397,7 @@ func (e *Engine) LoginDelete(ctx context.Context, id, base string) error {
 }
 
 // keepLoginFields carries what a browser stored with an entry over an
-// edit in CloudSync, whose UI does not show it; old is the entry before.
+// edit in Shard, whose UI does not show it; old is the entry before.
 func keepLoginFields(m *secrets.Meta, d *secrets.Data, old secrets.Entry, now time.Time) {
 	if old.Data == nil {
 		return
@@ -425,6 +425,6 @@ func keepLoginFields(m *secrets.Meta, d *secrets.Data, old secrets.Entry, now ti
 		m.PasswordChangedMs = now.UnixMilli()
 	}
 	if m.Login != nil && m.Login.DisplayName != "" && m.Title != old.Title {
-		m.Login.DisplayName = m.Title // renamed in CloudSync
+		m.Login.DisplayName = m.Title // renamed in Shard
 	}
 }

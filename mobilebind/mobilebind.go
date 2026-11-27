@@ -20,19 +20,19 @@ import (
 	rconfig "github.com/rclone/rclone/fs/config"
 	"google.golang.org/grpc"
 
-	"cloudsync/core/crypto"
-	"cloudsync/core/engine"
-	"cloudsync/core/index"
-	"cloudsync/core/lock"
-	"cloudsync/core/rpc"
-	"cloudsync/core/rpc/pb"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/engine"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/lock"
+	"github.com/SelfHold/shard/core/rpc"
+	"github.com/SelfHold/shard/core/rpc/pb"
 )
 
 // Listener gets core events (implemented in Kotlin).
 type Listener interface {
 	// OnEvent: kind is 1 tree changed, 2 state changed, 3 sync done,
 	// 4 sync error, 5 safe changed, 6 connected apps changed (see
-	// Event.Kind in cloudsync.proto).
+	// Event.Kind in shard.proto).
 	OnEvent(kind int, message string)
 }
 
@@ -46,7 +46,7 @@ var (
 	locks    = map[string]*lock.Lock{}
 )
 
-// Start runs the core: the vault lives in dataDir/vault.cs, device state
+// Start runs the core: the vault lives in dataDir/vault.shard, device state
 // next to it, temporary files go to cacheDir, and gRPC listens on the unix
 // socket sock. It returns the bearer token clients must send. Calling it
 // again returns the same token.
@@ -74,10 +74,10 @@ func Start(dataDir, cacheDir, sock string) (string, error) {
 		return "", err
 	}
 	os.Chmod(sock, 0o600)
-	s := rpc.NewService(filepath.Join(dataDir, "vault.cs"), dataDir, "android")
+	s := rpc.NewService(filepath.Join(dataDir, "vault.shard"), dataDir, "android")
 	token = crypto.RandomID(32)
 	srv = grpc.NewServer(rpc.TokenAuth(token)...)
-	pb.RegisterCloudSyncServer(srv, s)
+	pb.RegisterShardServer(srv, s)
 	go srv.Serve(lis)
 	svc, sockPath = s, sock
 	return token, nil
@@ -145,7 +145,7 @@ type Entry struct {
 func toEntry(en index.Entry) Entry {
 	out := Entry{Path: en.Path, Name: en.Name(), Dir: en.Dir, Modified: en.Time.UnixMilli()}
 	if en.Path == "/" {
-		out.Name = "CloudSync"
+		out.Name = "Shard"
 	}
 	if en.Version != nil {
 		out.Size = en.Version.Size

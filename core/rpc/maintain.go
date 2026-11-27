@@ -9,13 +9,13 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/engine"
-	"cloudsync/core/erasure"
-	"cloudsync/core/eventlog"
-	"cloudsync/core/index"
-	"cloudsync/core/rpc/pb"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/engine"
+	"github.com/SelfHold/shard/core/erasure"
+	"github.com/SelfHold/shard/core/eventlog"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/rpc/pb"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 func (s *Service) Repair(ctx context.Context, r *pb.RepairRequest) (*pb.RepairReply, error) {
@@ -144,7 +144,7 @@ func (s *Service) RemoveBackend(ctx context.Context, r *pb.RemoveBackendRequest)
 	return &pb.Empty{}, nil
 }
 
-func (s *Service) Authorize(r *pb.AuthorizeRequest, stream pb.CloudSync_AuthorizeServer) error {
+func (s *Service) Authorize(r *pb.AuthorizeRequest, stream pb.Shard_AuthorizeServer) error {
 	open := func(url string) error {
 		return stream.Send(&pb.AuthorizeReply{Url: url})
 	}
@@ -157,7 +157,7 @@ func (s *Service) Authorize(r *pb.AuthorizeRequest, stream pb.CloudSync_Authoriz
 	return stream.Send(reply)
 }
 
-func (s *Service) Reconnect(r *pb.IdRequest, stream pb.CloudSync_ReconnectServer) error {
+func (s *Service) Reconnect(r *pb.IdRequest, stream pb.Shard_ReconnectServer) error {
 	s.mu.Lock()
 	v := s.v
 	s.mu.Unlock()

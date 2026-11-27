@@ -3,7 +3,7 @@
 *.test
 *.out
 *.log
-/vault.cs
+/vault.shard
 /starter-backup/
 
 # Local assistant notes and settings: never published.

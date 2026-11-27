@@ -1,9 +1,9 @@
-// Command cloudsyncd is the desktop daemon: it serves the CloudSync gRPC
+// Command shardd is the desktop daemon: it serves the Shard gRPC
 // API to the app, mounts the vault as a folder when unlocked and syncs in
 // the background.
 //
 // The app finds the daemon through endpoint.json in the config dir:
-// {"address": "unix:///run/user/1000/cloudsync.sock", "token": "..."}.
+// {"address": "unix:///run/user/1000/selfhold-shard.sock", "token": "..."}.
 // The file is readable only by the user; every call must carry the token.
 //
 // Other apps (docs/CONNECTOR.md) reach the Connector API on a socket of its
@@ -32,30 +32,30 @@ import (
 	"github.com/winfsp/cgofuse/fuse"
 	"google.golang.org/grpc"
 
-	"cloudsync/core/connector"
-	cpb "cloudsync/core/connector/pb"
-	"cloudsync/core/crypto"
-	"cloudsync/core/engine"
-	"cloudsync/core/eventlog"
-	"cloudsync/core/mount"
-	"cloudsync/core/rpc"
-	"cloudsync/core/rpc/pb"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/connector"
+	cpb "github.com/SelfHold/shard/core/connector/pb"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/engine"
+	"github.com/SelfHold/shard/core/eventlog"
+	"github.com/SelfHold/shard/core/mount"
+	"github.com/SelfHold/shard/core/rpc"
+	"github.com/SelfHold/shard/core/rpc/pb"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 func main() {
 	cfgDir, _ := os.UserConfigDir()
 	home, _ := os.UserHomeDir()
-	base := filepath.Join(cfgDir, "cloudsync")
-	vaultPath := flag.String("vault", filepath.Join(base, "vault.cs"), "vault file")
+	base := filepath.Join(cfgDir, "selfhold", "shard")
+	vaultPath := flag.String("vault", filepath.Join(base, "vault.shard"), "vault file")
 	dataRoot := flag.String("data", base, "device data root")
-	mountDir := flag.String("mount", filepath.Join(home, "CloudSync"), "where to show the vault (empty: do not mount)")
+	mountDir := flag.String("mount", filepath.Join(home, "Shard"), "where to show the vault (empty: do not mount)")
 	listen := flag.String("listen", defaultListen(base), "unix:PATH or tcp:HOST:PORT")
 	endpoint := flag.String("endpoint", filepath.Join(base, "endpoint.json"), "where to write address and token for the app")
 	connListen := flag.String("connector-listen", connector.DefaultListen(base), "Connector API for other apps: unix:PATH or tcp:HOST:PORT (empty: off)")
 	connEndpoint := flag.String("connector-endpoint", filepath.Join(base, "connector.json"), "where to write the Connector API address")
 	device := flag.String("device", "", "device name (default: hostname)")
-	logFile := flag.String("log", filepath.Join(base, "cloudsyncd.log"), "log file (empty: stderr only)")
+	logFile := flag.String("log", filepath.Join(base, "shardd.log"), "log file (empty: stderr only)")
 	flag.Parse()
 
 	out := io.Writer(os.Stderr)
@@ -65,7 +65,7 @@ func main() {
 			out = io.MultiWriter(os.Stderr, f)
 		}
 	}
-	logger := log.New(out, "cloudsyncd: ", log.LstdFlags)
+	logger := log.New(out, "shardd: ", log.LstdFlags)
 	svc := rpc.NewService(*vaultPath, *dataRoot, runtime.GOOS)
 	svc.Log = eventlog.New(1000, out)
 
@@ -99,7 +99,7 @@ func main() {
 		logger.Fatal(err)
 	}
 	srv := grpc.NewServer(rpc.TokenAuth(token)...)
-	pb.RegisterCloudSyncServer(srv, svc)
+	pb.RegisterShardServer(srv, svc)
 
 	var conn *grpc.Server
 	if *connListen != "" {
@@ -120,8 +120,8 @@ func main() {
 		}()
 	}
 
-	if pw := os.Getenv("CS_PASSWORD"); pw != "" {
-		os.Unsetenv("CS_PASSWORD")
+	if pw := os.Getenv("SHARD_PASSWORD"); pw != "" {
+		os.Unsetenv("SHARD_PASSWORD")
 		v, err := vault.Open(*vaultPath, []byte(pw))
 		if err != nil {
 			logger.Fatal(err)
@@ -167,7 +167,7 @@ func defaultListen(base string) string {
 	if dir == "" {
 		dir = base
 	}
-	return "unix:" + filepath.Join(dir, "cloudsync.sock")
+	return "unix:" + filepath.Join(dir, "selfhold-shard.sock")
 }
 
 func listenOn(addr string) (net.Listener, error) {
@@ -182,7 +182,7 @@ func listenOn(addr string) (net.Listener, error) {
 		}
 		if c, err := net.Dial("unix", p); err == nil {
 			c.Close()
-			return nil, fmt.Errorf("another cloudsyncd is running on %s", p)
+			return nil, fmt.Errorf("another shardd is running on %s", p)
 		}
 		os.Remove(p)
 		l, err := net.Listen("unix", p)

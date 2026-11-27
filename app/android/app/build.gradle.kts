@@ -8,17 +8,17 @@ plugins {
 }
 
 // Release signing: android/key.properties (storeFile, storePassword, keyAlias,
-// keyPassword) or the same values in CS_KEYSTORE / CS_KEYSTORE_PASSWORD /
-// CS_KEY_ALIAS / CS_KEY_PASSWORD (CI). Without them release builds use the debug key.
+// keyPassword) or the same values in SHARD_KEYSTORE / SHARD_KEYSTORE_PASSWORD /
+// SHARD_KEY_ALIAS / SHARD_KEY_PASSWORD (CI). Without them release builds use the debug key.
 val keyProps = Properties().apply {
     val f = rootProject.file("key.properties")
     if (f.exists()) f.inputStream().use { load(it) }
 }
 fun signing(prop: String, env: String): String? = keyProps.getProperty(prop) ?: System.getenv(env)
-val releaseStore = signing("storeFile", "CS_KEYSTORE")
+val releaseStore = signing("storeFile", "SHARD_KEYSTORE")
 
 android {
-    namespace = "dev.cloudsync.cloudsync"
+    namespace = "dev.selfhold.shard"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -31,13 +31,13 @@ android {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
-    // ICloudSyncConnector (ConnectorService, the Connector API for other apps).
+    // IShardConnector (ConnectorService, the Connector API for other apps).
     buildFeatures {
         aidl = true
     }
 
     defaultConfig {
-        applicationId = "dev.cloudsync.cloudsync"
+        applicationId = "dev.selfhold.shard"
         // openProxyFileDescriptor (streamed reads in the documents provider).
         minSdk = 26
         targetSdk = flutter.targetSdkVersion
@@ -49,9 +49,9 @@ android {
         if (releaseStore != null) {
             create("release") {
                 storeFile = file(releaseStore)
-                storePassword = signing("storePassword", "CS_KEYSTORE_PASSWORD")
-                keyAlias = signing("keyAlias", "CS_KEY_ALIAS")
-                keyPassword = signing("keyPassword", "CS_KEY_PASSWORD")
+                storePassword = signing("storePassword", "SHARD_KEYSTORE_PASSWORD")
+                keyAlias = signing("keyAlias", "SHARD_KEY_ALIAS")
+                keyPassword = signing("keyPassword", "SHARD_KEY_PASSWORD")
             }
         }
     }
@@ -68,7 +68,7 @@ flutter {
 }
 
 dependencies {
-    implementation(files("libs/cloudsync.aar"))
+    implementation(files("libs/shard.aar"))
     // Unlock by fingerprint (Biometric.kt); AppCompat for its dialog on Android 8.
     implementation("androidx.biometric:biometric:1.1.0")
     implementation("androidx.appcompat:appcompat:1.7.0")

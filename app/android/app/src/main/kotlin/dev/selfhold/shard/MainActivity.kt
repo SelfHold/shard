@@ -1,4 +1,4 @@
-package dev.cloudsync.cloudsync
+package dev.selfhold.shard
 
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -11,8 +11,8 @@ class MainActivity : FlutterFragmentActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "dev.cloudsync/biometric").setMethodCallHandler(Biometric(this))
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "dev.cloudsync/core").setMethodCallHandler { call, result ->
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "dev.selfhold.shard/biometric").setMethodCallHandler(Biometric(this))
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "dev.selfhold.shard/core").setMethodCallHandler { call, result ->
             when (call.method) {
                 // Starts the core (if needed) and returns where the UI connects.
                 "start" -> worker.execute {

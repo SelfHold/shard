@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/crypto"
-	"cloudsync/core/erasure"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/erasure"
 )
 
 // BackendSpace is the space of one storage.

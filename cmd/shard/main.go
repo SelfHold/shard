@@ -1,4 +1,4 @@
-// Command cs is a command line client for a cloudsync vault. It is meant
+// Command shard is a command line client for a Shard vault. It is meant
 // for testing the core against real storages and for scripting.
 package main
 
@@ -19,57 +19,57 @@ import (
 
 	"golang.org/x/term"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/crypto"
-	"cloudsync/core/engine"
-	"cloudsync/core/index"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/engine"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/vault"
 )
 
-const usage = `cs — cloudsync command line
+const usage = `shard — Shard command line
 
 Vault:
-  cs init [-k 2] [-m 1]                  create a vault
-  cs passwd                              change the vault password
-  cs backend add -name N -type T [-domain D] [-root R] key=value...
+  shard init [-k 2] [-m 1]                  create a vault
+  shard passwd                              change the vault password
+  shard backend add -name N -type T [-domain D] [-root R] key=value...
                                          -root: folder in the account; for -type local
                                          an absolute path on this machine
-  cs backend ls | types
-  cs backend disable|enable ID
-  cs backend reconnect ID      sign in again (expired or revoked token)
-  cs status                              storages, devices, pending changes
+  shard backend ls | types
+  shard backend disable|enable ID
+  shard backend reconnect ID      sign in again (expired or revoked token)
+  shard status                              storages, devices, pending changes
 
 Files:
-  cs ls [-l] [PATH]
-  cs put LOCAL... REMOTE_DIR             upload files or directories
-  cs get REMOTE LOCAL                    download a file or directory
-  cs cat REMOTE
-  cs mkdir PATH | rm [-r] PATH | mv FROM TO
-  cs pin PATH | unpin PATH | pins        keep files on this device
-  cs lock PATH                           hold the write lock until Ctrl-C
-  cs sync
+  shard ls [-l] [PATH]
+  shard put LOCAL... REMOTE_DIR             upload files or directories
+  shard get REMOTE LOCAL                    download a file or directory
+  shard cat REMOTE
+  shard mkdir PATH | rm [-r] PATH | mv FROM TO
+  shard pin PATH | unpin PATH | pins        keep files on this device
+  shard lock PATH                           hold the write lock until Ctrl-C
+  shard sync
 
 Maintenance:
-  cs repair [-rebalance]                 check every shard, rewrite lost ones, re-encode
+  shard repair [-rebalance]                 check every shard, rewrite lost ones, re-encode
                                          after a k/m change; -rebalance spreads data
                                          over storages added later
-  cs gc [-grace 168h]                    remove data no file uses any more
-  cs redundancy -k K -m M                change k/m for new files (then cs repair)
+  shard gc [-grace 168h]                    remove data no file uses any more
+  shard redundancy -k K -m M                change k/m for new files (then shard repair)
 
-Connected apps (through the running cloudsyncd, docs/CONNECTOR.md):
-  cs apps [ls]                           pairing requests, paired apps, their data
-  cs apps approve ID [SCOPE...]          allow a pairing request (compare the code);
+Connected apps (through the running shardd, docs/CONNECTOR.md):
+  shard apps [ls]                           pairing requests, paired apps, their data
+  shard apps approve ID [SCOPE...]          allow a pairing request (compare the code);
                                          grants only the scopes named: passwords, ssh_keys, servers
-  cs apps deny ID                        refuse a pairing request
-  cs apps scopes ID [SCOPE...]           keep only these scopes of a pairing
-  cs apps revoke ID                      forget a pairing on this device
-  cs apps rm-data APP                    delete an app's records on all devices
+  shard apps deny ID                        refuse a pairing request
+  shard apps scopes ID [SCOPE...]           keep only these scopes of a pairing
+  shard apps revoke ID                      forget a pairing on this device
+  shard apps rm-data APP                    delete an app's records on all devices
 
 Global flags (before the command):
-  -vault FILE   vault file (default: user config dir/cloudsync/vault.cs)
+  -vault FILE   vault file (default: user config dir/selfhold/shard/vault.shard)
   -data DIR     device state and cache (default: next to the vault)
   -device NAME  this device's name (default: hostname)
-The password is read from $CS_PASSWORD or asked for.
+The password is read from $SHARD_PASSWORD or asked for.
 Google Drive and other OAuth storages take token='{...}' from "rclone authorize <type>".
 `
 
@@ -81,7 +81,7 @@ func main() {
 	a := app{}
 	def := ""
 	if d, err := os.UserConfigDir(); err == nil {
-		def = filepath.Join(d, "cloudsync", "vault.cs")
+		def = filepath.Join(d, "selfhold", "shard", "vault.shard")
 	}
 	flag.StringVar(&a.vaultPath, "vault", def, "vault file")
 	flag.StringVar(&a.dataDir, "data", "", "device data dir")
@@ -95,7 +95,7 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 	if err := a.run(ctx, flag.Arg(0), flag.Args()[1:]); err != nil {
-		fmt.Fprintln(os.Stderr, "cs:", err)
+		fmt.Fprintln(os.Stderr, "shard:", err)
 		os.Exit(1)
 	}
 }
@@ -125,12 +125,12 @@ func (a *app) run(ctx context.Context, cmd string, args []string) error {
 		return put(ctx, e, args)
 	case "get":
 		if len(args) != 2 {
-			return errors.New("usage: cs get REMOTE LOCAL")
+			return errors.New("usage: shard get REMOTE LOCAL")
 		}
 		return e.Download(ctx, args[0], args[1])
 	case "cat":
 		if len(args) != 1 {
-			return errors.New("usage: cs cat REMOTE")
+			return errors.New("usage: shard cat REMOTE")
 		}
 		f, err := e.OpenFile(ctx, args[0])
 		if err != nil {
@@ -147,7 +147,7 @@ func (a *app) run(ctx context.Context, cmd string, args []string) error {
 		return each(fl.Args(), func(p string) error { return e.Remove(ctx, p, *r) })
 	case "mv":
 		if len(args) != 2 {
-			return errors.New("usage: cs mv FROM TO")
+			return errors.New("usage: shard mv FROM TO")
 		}
 		return e.Rename(ctx, args[0], args[1])
 	case "pin":
@@ -161,7 +161,7 @@ func (a *app) run(ctx context.Context, cmd string, args []string) error {
 		return nil
 	case "lock":
 		if len(args) != 1 {
-			return errors.New("usage: cs lock PATH")
+			return errors.New("usage: shard lock PATH")
 		}
 		l, err := e.Lock(ctx, args[0])
 		if err != nil {
@@ -211,10 +211,10 @@ func (a *app) run(ctx context.Context, cmd string, args []string) error {
 		if err := e.SetRedundancy(*k, *m); err != nil {
 			return err
 		}
-		fmt.Printf("new files use k=%d m=%d; run 'cs repair' to encode existing files again\n", *k, *m)
+		fmt.Printf("new files use k=%d m=%d; run 'shard repair' to encode existing files again\n", *k, *m)
 		return nil
 	}
-	return fmt.Errorf("unknown command %q (see cs -h)", cmd)
+	return fmt.Errorf("unknown command %q (see shard -h)", cmd)
 }
 
 func each(args []string, fn func(string) error) error {
@@ -230,7 +230,7 @@ func each(args []string, fn func(string) error) error {
 }
 
 func password(confirm bool) ([]byte, error) {
-	if p := os.Getenv("CS_PASSWORD"); p != "" {
+	if p := os.Getenv("SHARD_PASSWORD"); p != "" {
 		return []byte(p), nil
 	}
 	if !term.IsTerminal(int(os.Stdin.Fd())) {
@@ -289,7 +289,7 @@ func (a *app) passwd() error {
 		return err
 	}
 	fmt.Fprintln(os.Stderr, "New password:")
-	os.Unsetenv("CS_PASSWORD")
+	os.Unsetenv("SHARD_PASSWORD")
 	pw, err := password(true)
 	if err != nil {
 		return err
@@ -311,7 +311,7 @@ func (a *app) engine(ctx context.Context) (*engine.Engine, error) {
 
 func (a *app) backend(ctx context.Context, args []string) error {
 	if len(args) == 0 {
-		return errors.New("usage: cs backend add|ls|types|disable|enable|reconnect")
+		return errors.New("usage: shard backend add|ls|types|disable|enable|reconnect")
 	}
 	if args[0] == "types" {
 		fmt.Println(strings.Join(backend.Types(), " "))
@@ -341,7 +341,7 @@ func (a *app) backend(ctx context.Context, args []string) error {
 		name := fl.String("name", "", "display name")
 		typ := fl.String("type", "", "rclone type: drive, mega, s3, webdav, ...")
 		domain := fl.String("domain", "", "failure domain (default: type)")
-		root := fl.String("root", "cloudsync", "folder inside the account")
+		root := fl.String("root", "shard", "folder inside the account")
 		fl.Parse(args[1:])
 		if *name == "" || *typ == "" {
 			return errors.New("-name and -type are required")
@@ -393,7 +393,7 @@ func (a *app) backend(ctx context.Context, args []string) error {
 		return nil
 	case "reconnect":
 		if len(args) != 2 {
-			return errors.New("usage: cs backend reconnect ID")
+			return errors.New("usage: shard backend reconnect ID")
 		}
 		account, err := backend.Reconnect(ctx, v, args[1], func(url string) error {
 			fmt.Println("open in a browser on this device:", url)
@@ -406,7 +406,7 @@ func (a *app) backend(ctx context.Context, args []string) error {
 		return nil
 	case "disable", "enable":
 		if len(args) != 2 {
-			return fmt.Errorf("usage: cs backend %s ID", args[0])
+			return fmt.Errorf("usage: shard backend %s ID", args[0])
 		}
 		err := v.Update(func(c *vault.Config) error {
 			for i := range c.Backends {
@@ -418,7 +418,7 @@ func (a *app) backend(ctx context.Context, args []string) error {
 			return fmt.Errorf("no backend %s", args[1])
 		})
 		if err == nil && args[0] == "disable" {
-			fmt.Println("disabled; run 'cs repair' to move its shards to the other storages")
+			fmt.Println("disabled; run 'shard repair' to move its shards to the other storages")
 		}
 		return err
 	}
@@ -452,7 +452,7 @@ func status(ctx context.Context, e *engine.Engine) error {
 	for _, b := range st.Backends {
 		state := "online"
 		if b.Behind {
-			state = "online, missing data (new or wiped: run 'cs repair')"
+			state = "online, missing data (new or wiped: run 'shard repair')"
 		}
 		if !b.Online {
 			state = "offline: " + b.Error
@@ -524,7 +524,7 @@ func ls(e *engine.Engine, args []string) error {
 
 func put(ctx context.Context, e *engine.Engine, args []string) error {
 	if len(args) < 2 {
-		return errors.New("usage: cs put LOCAL... REMOTE_DIR")
+		return errors.New("usage: shard put LOCAL... REMOTE_DIR")
 	}
 	ups, err := engine.LocalUploads(args[:len(args)-1], args[len(args)-1])
 	if err != nil {
@@ -537,7 +537,7 @@ func put(ctx context.Context, e *engine.Engine, args []string) error {
 	}
 	fmt.Printf("%d files stored in %s\n", len(out), time.Since(start).Round(time.Millisecond))
 	if n := e.Pending(); n > 0 {
-		fmt.Printf("%d changes not uploaded yet (storages unreachable); run 'cs sync' later\n", n)
+		fmt.Printf("%d changes not uploaded yet (storages unreachable); run 'shard sync' later\n", n)
 	}
 	return nil
 }

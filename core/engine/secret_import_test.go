@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 func TestImportSecrets(t *testing.T) {

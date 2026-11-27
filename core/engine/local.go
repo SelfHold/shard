@@ -10,7 +10,7 @@ import (
 	"sort"
 	"strings"
 
-	"cloudsync/core/index"
+	"github.com/SelfHold/shard/core/index"
 )
 
 // LocalUploads walks local files and directories and returns uploads that
@@ -97,7 +97,7 @@ func (e *Engine) downloadFile(ctx context.Context, en index.Entry, local string)
 	if err := os.MkdirAll(filepath.Dir(local), 0o755); err != nil {
 		return err
 	}
-	tmp, err := os.CreateTemp(filepath.Dir(local), ".cs-download-*")
+	tmp, err := os.CreateTemp(filepath.Dir(local), ".shard-download-*")
 	if err != nil {
 		return err
 	}

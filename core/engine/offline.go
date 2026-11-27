@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"cloudsync/core/index"
-	"cloudsync/core/secrets"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/secrets"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 // OfflineSafe is the password safe read from this device's own copies

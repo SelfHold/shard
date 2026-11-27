@@ -3,8 +3,8 @@ package engine
 import (
 	"time"
 
-	"cloudsync/core/index"
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/index"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 // SSH keys: the KindSSH entries of the password safe as connected apps

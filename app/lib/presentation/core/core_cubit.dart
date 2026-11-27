@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/rpc/core_client.dart';
 import '../../data/rpc/endpoint.dart';
-import '../../data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
+import '../../data/rpc/gen/shard.pbgrpc.dart' as pb;
 import '../../core/i18n.dart';
 
 enum Conn { connecting, ready, failed }
@@ -88,7 +88,7 @@ class CoreCubit extends Cubit<CoreState> {
   StreamSubscription<pb.Event>? _events;
   Timer? _statusTimer;
 
-  pb.CloudSyncClient get api {
+  pb.ShardClient get api {
     final c = _client;
     if (c == null) throw StateError('not connected');
     return c.api;

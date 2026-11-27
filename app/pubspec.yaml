@@ -1,5 +1,5 @@
-name: cloudsync
-description: CloudSync — encrypted file sync over several cloud storages, without a server.
+name: shard
+description: Shard — encrypted file sync over several cloud storages, without a server.
 publish_to: 'none'
 version: 0.1.0+1
 

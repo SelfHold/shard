@@ -16,7 +16,7 @@ import (
 	"sync"
 	"time"
 
-	"cloudsync/core/blob"
+	"github.com/SelfHold/shard/core/blob"
 )
 
 // Kind of operation.

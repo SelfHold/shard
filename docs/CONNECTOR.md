@@ -1,21 +1,16 @@
 # Shard Connector API — integration guide for apps
 
-Shard was formerly called CloudSync. Identifiers in the contract still use the
-old name and will not change: the daemon `cloudsyncd`, the config directory
-`cloudsync/`, the Android package `dev.cloudsync.cloudsync`, the AIDL package
-`dev.cloudsync.connector` and `ICloudSyncConnector`.
-
 **API version 1.** This file is self-contained: build an app's integration from it
 (apps link to it instead of keeping a copy). The contract files are at the end
 ([Appendix A](#appendix-a-connectorproto), [Appendix B](#appendix-b-aidl-android)).
 Their canonical copies live in the Shard repository
 (<https://github.com/SelfHold/shard>) (`proto/connector.proto`,
-`app/android/app/src/main/aidl/dev/cloudsync/connector/*.aidl`). They must
+`app/android/app/src/main/aidl/dev/selfhold/shard/connector/*.aidl`). They must
 match those copies byte for byte.
 
 ## 1. What it gives an app
 
-An app that holds its settings in a file (Parley: `vault.mc`) can add a
+An app that holds its settings in a file (Parley: `vault.parley`) can add a
 **"Sync via Shard"** switch. With the switch on, the app gives the file to
 Shard, and Shard:
 
@@ -46,7 +41,7 @@ user's files, passwords, storages or other apps' records. The exceptions are
 
 | Term | Meaning |
 |---|---|
-| **App id** | Stable name of the app and of its data, the same on every platform and device: `^[a-z0-9][a-z0-9._-]{1,63}$`, e.g. `megachat`. Never change it: other ids see other data. |
+| **App id** | Stable name of the app and of its data, the same on every platform and device: `^[a-z0-9][a-z0-9._-]{1,63}$`, e.g. `parley`. Never change it: other ids see other data. |
 | **Pairing** | The user's permission for this app **on this device**. It is made once per device and the user can revoke it in Shard. |
 | **Record** | A named value of the app: key `^[A-Za-z0-9._/-]{1,200}$` (no `..`), value up to **256 KiB**, at most **256 records** per app. Every write keeps the whole value in the vault's journals forever, so records suit settings and vault files. They are not for message caches or media. |
 | **Revision** | Opaque string naming the record's current state. Pass it as `base` to the next `Put`/`Delete` (compare-and-swap). `""` means the record was never written. |
@@ -61,18 +56,18 @@ ciphertext.
 
 ### 3.1 Desktop (Linux; macOS planned)
 
-Shard's daemon `cloudsyncd` serves the Connector API on a socket of its
+Shard's daemon `shardd` serves the Connector API on a socket of its
 own and writes its address into **`connector.json`**:
 
 | OS | Path |
 |---|---|
-| Linux | `$XDG_CONFIG_HOME/cloudsync/connector.json` (default `~/.config/cloudsync/connector.json`) |
-| macOS (planned) | `~/Library/Application Support/cloudsync/connector.json` |
+| Linux | `$XDG_CONFIG_HOME/selfhold/shard/connector.json` (default `~/.config/selfhold/shard/connector.json`) |
+| macOS (planned) | `~/Library/Application Support/selfhold/shard/connector.json` |
 
-(Go: `os.UserConfigDir()` + `cloudsync/connector.json`.)
+(Go: `os.UserConfigDir()` + `selfhold/shard/connector.json`.)
 
 ```json
-{ "address": "unix:///run/user/1000/cloudsync-connector.sock", "api_version": 1 }
+{ "address": "unix:///run/user/1000/selfhold-shard-connector.sock", "api_version": 1 }
 ```
 
 - `address` is either `unix:///absolute/path` (Linux, macOS) or `host:port` on
@@ -91,22 +86,22 @@ own and writes its address into **`connector.json`**:
 
 ### 3.2 Android
 
-Shard (package **`dev.cloudsync.cloudsync`**) exports a bound service.
+Shard (package **`dev.selfhold.shard`**) exports a bound service.
 
 1. Copy the two AIDL files from [Appendix B](#appendix-b-aidl-android) into
-   `src/main/aidl/dev/cloudsync/connector/`, keeping the package name, and
+   `src/main/aidl/dev/selfhold/shard/connector/`, keeping the package name, and
    enable `buildFeatures { aidl = true }`.
 2. Declare package visibility in the app's manifest (Android 11+):
    ```xml
    <queries>
-     <package android:name="dev.cloudsync.cloudsync"/>
+     <package android:name="dev.selfhold.shard"/>
    </queries>
    ```
 3. Bind with an explicit intent:
    ```kotlin
-   val i = Intent("dev.cloudsync.connector.BIND").setPackage("dev.cloudsync.cloudsync")
+   val i = Intent("dev.selfhold.shard.connector.BIND").setPackage("dev.selfhold.shard")
    context.bindService(i, conn, Context.BIND_AUTO_CREATE)
-   // onServiceConnected: val api = ICloudSyncConnector.Stub.asInterface(binder)
+   // onServiceConnected: val api = IShardConnector.Stub.asInterface(binder)
    ```
    If `bindService` returns `false`, Shard is not installed: stay standalone.
 4. Call methods as `api.call("Get", GetRequest.toByteArray())`. The reply is
@@ -122,7 +117,7 @@ Shard (package **`dev.cloudsync.cloudsync`**) exports a bound service.
    package signed with another key is another app and has to pair again.
    `AwaitPairing` answers `APPROVED` with an empty token.
 7. To let the user unlock Shard or answer a request, open it with
-   `packageManager.getLaunchIntentForPackage("dev.cloudsync.cloudsync")`.
+   `packageManager.getLaunchIntentForPackage("dev.selfhold.shard")`.
    Shard also posts a notification when a pairing request is waiting.
 
 Generate message classes from `connector.proto` (e.g. protobuf-javalite, or
@@ -262,8 +257,8 @@ while you are disconnected.
 
 ## 7. Recommended integration: one settings file
 
-The usual case: the app has a file `F` (Parley: `vault.mc`), and `F`
-becomes record `key = "vault.mc"`.
+The usual case: the app has a file `F` (Parley: `vault.parley`), and `F`
+becomes record `key = "vault.parley"`.
 
 Keep **local sync state** per device, outside `F`: `enabled`, `token`
 (desktop), `vault_id`, `base` (the revision `F` was last synced at) and
@@ -388,7 +383,7 @@ A browser needs the user's logins: it fills them on sites, saves new ones and
 updates changed passwords. With the `passwords` scope it works on the logins
 of **Shard's own password store**, the same entries the user sees in
 Shard, not on a copy in its records. The first client is the Enclave browser
-(app id `bezel`).
+(app id `enclave`).
 
 ### 12.1 What a login is
 
@@ -437,7 +432,7 @@ without a URL) are never visible as logins; SSH keys have their own scope
 | `TouchLogin{id, used_ms}` | record a fill: no new revision, no base, cheap |
 | `ListChanges{cursor}` | ids + revisions (+ `deleted`) changed since `cursor`, oldest first; `reset = true`: the cursor is too old or of another vault/device, list everything again |
 
-On Android the same methods go through `ICloudSyncConnector.call`
+On Android the same methods go through `IShardConnector.call`
 (`"ListLogins"`, `"GetLogins"`, `"PutLogin"`, `"DeleteLogin"`, `"TouchLogin"`,
 `"ListChanges"`); the scope belongs to the calling package + certificate.
 
@@ -481,14 +476,14 @@ reapply the user's change and retry with the new revision.
 An SSH client needs the user's keys: the user picks one of them when
 connecting to a server. With the `ssh_keys` scope an app **reads** (never
 writes) the entries of kind SSH of Shard's password store. First clients:
-Cellar (`dbmanager`) and Postern (`sshmanager`).
+Cellar (`cellar`) and Postern (`postern`).
 
 | Method | Does |
 |---|---|
 | `ListSshKeys{}` | every SSH key, without `private_key` / `passphrase` |
 | `GetSshKeys{ids}` | up to 500 keys with `private_key` and `passphrase`; unknown ids are left out |
 
-On Android: `ICloudSyncConnector.call("ListSshKeys" / "GetSshKeys", ...)`.
+On Android: `IShardConnector.call("ListSshKeys" / "GetSshKeys", ...)`.
 
 | Field | Meaning |
 |---|---|
@@ -532,7 +527,7 @@ by the server id, or in `Server.extra`.
 | `ListServerChanges{cursor}` | the same `ListChangesRequest` / `ListChangesReply` as logins (`LoginChange` is just id + revision + deleted); `reset` → list everything again |
 
 On Android: `"ListServers"`, `"GetServers"`, `"PutServer"`, `"DeleteServer"`,
-`"ListServerChanges"` through `ICloudSyncConnector.call`.
+`"ListServerChanges"` through `IShardConnector.call`.
 
 | Field | Meaning |
 |---|---|
@@ -575,12 +570,12 @@ Rules:
 
 ## Appendix: Parley specifics
 
-These notes target the Parley code base (formerly MegaChat): `core/vault`,
+These notes target the Parley code base: `core/vault`,
 `core/rpc`, `core/embed`, Flutter `settings`.
 
-- App id `megachat`, record key `vault.mc` (the bytes of the vault file). The
+- App id `parley`, record key `vault.parley` (the bytes of the vault file). The
   per-device sync state (token, `base`, `synced_hash`, `vault_id`) goes into
-  the data dir (e.g. `<data dir>/cloudsync.json`, token in the OS keychain
+  the data dir (e.g. `<data dir>/shard.json`, token in the OS keychain
   next to the remembered unlock key), never into `vault.Config`.
 - `vault.Config.Version` is bumped on every change, but it is not enough to
   merge: two devices both reach version N+1. Merge `Accounts` by `ID`
@@ -593,9 +588,9 @@ These notes target the Parley code base (formerly MegaChat): `core/vault`,
   device while another was offline): if one does not open with the current
   key, ask for the other password before merging, or let the user choose a
   version.
-- Without Shard, everything stays as today: `vault.mc` with a password,
+- Without Shard, everything stays as today: `vault.parley` with a password,
   the remembered key in the keychain, `SetVaultPath`.
-- With "Protected by Shard" (§ 8), `vault.mc` is sealed with `AppKey`
+- With "Protected by Shard" (§ 8), `vault.parley` is sealed with `AppKey`
   instead of the Argon2id password key. Keep the file header so the two modes
   can be told apart (e.g. a new magic `MCVAULT\x02` = sealed with `AppKey`,
   `key_id` in the header).
@@ -603,15 +598,15 @@ These notes target the Parley code base (formerly MegaChat): `core/vault`,
 ## Appendix A: `connector.proto`
 
 Canonical: `proto/connector.proto` in the Shard repository. Go users:
-`option go_package` points into Shard's Go module (`cloudsync`). Override it when generating
-your own client (`--go_opt=Mconnector.proto=yourmodule/cloudsyncpb`).
+`option go_package` points into Shard's Go module (`github.com/SelfHold/shard`). Override it when generating
+your own client (`--go_opt=Mconnector.proto=yourmodule/shardpb`).
 
 ```proto
 syntax = "proto3";
 
-// The CloudSync Connector API, version 1: what CloudSync offers to other
-// applications ("connected apps", e.g. MegaChat). An app keeps a few small
-// records (its settings file, its vault) in CloudSync; CloudSync stores them
+// The Shard Connector API, version 1: what Shard offers to other
+// applications ("connected apps", e.g. Parley). An app keeps a few small
+// records (its settings file, its vault) in Shard; Shard stores them
 // encrypted in every storage and gives every device the same value.
 //
 // This file is the contract. Apps copy it as is and generate their own
@@ -619,9 +614,9 @@ syntax = "proto3";
 // on desktops, a bound service on Android), pairing and the merge rules.
 // Only fields and methods are ever added to v1; nothing is renamed or
 // renumbered.
-package cloudsync.connector.v1;
+package selfhold.shard.connector.v1;
 
-option go_package = "cloudsync/core/connector/pb";
+option go_package = "github.com/SelfHold/shard/core/connector/pb";
 
 service Connector {
   // --- no credentials needed ---------------------------------------------
@@ -629,7 +624,7 @@ service Connector {
   // Hello says what is there: API version, whether the vault is open and
   // whether this caller is paired. Call it first and after every reconnect.
   rpc Hello(HelloRequest) returns (HelloReply);
-  // RequestPairing asks the user (in CloudSync) to let this app keep its
+  // RequestPairing asks the user (in Shard) to let this app keep its
   // data there. Show the returned code: the user sees the same one.
   rpc RequestPairing(PairingRequest) returns (PairingTicket);
   // AwaitPairing waits (up to wait_seconds, at most 60) for the user's
@@ -662,7 +657,7 @@ service Connector {
   rpc Unpair(UnpairRequest) returns (UnpairReply);
 
   // --- scope "passwords" only (PERMISSION_DENIED without it): logins of
-  // CloudSync's own password store, the entries the user sees there ------
+  // Shard's own password store, the entries the user sees there ------
 
   // ListLogins returns logins, by id, in pages of at most 500. data = true
   // includes username, password, notes and extra; otherwise only what a
@@ -684,7 +679,7 @@ service Connector {
   rpc ListChanges(ListChangesRequest) returns (ListChangesReply);
 
   // --- scope "ssh_keys" only (PERMISSION_DENIED without it): the SSH keys
-  // of CloudSync's password safe (entries of kind SSH). Read only ---------
+  // of Shard's password safe (entries of kind SSH). Read only ---------
 
   // ListSshKeys returns every SSH key of the safe, by id, without secrets
   // (no private_key, no passphrase).
@@ -694,8 +689,8 @@ service Connector {
   rpc GetSshKeys(GetSshKeysRequest) returns (ListSshKeysReply);
 
   // --- scope "servers" only (PERMISSION_DENIED without it): the user's
-  // servers, one list shared by every app with the scope (SSH Manager,
-  // DB Manager, ...), the same entries the user sees in CloudSync ----------
+  // servers, one list shared by every app with the scope (Postern,
+  // Cellar, ...), the same entries the user sees in Shard ----------
 
   // ListServers returns servers, by id, in pages of at most 500. data =
   // true includes password and extra.
@@ -715,8 +710,8 @@ service Connector {
 
 enum VaultState {
   VAULT_STATE_UNSPECIFIED = 0;
-  NO_VAULT = 1; // CloudSync is not set up on this device
-  LOCKED = 2;   // the user has to unlock CloudSync
+  NO_VAULT = 1; // Shard is not set up on this device
+  LOCKED = 2;   // the user has to unlock Shard
   // Unlocked, but no storage answers yet (or too few are configured):
   // Get and List read this device's own copy, Put and Delete fail with
   // UNAVAILABLE.
@@ -743,10 +738,10 @@ message HelloReply {
 
 message PairingRequest {
   // Stable id of the app, the same on every platform and device: the data
-  // namespace. ^[a-z0-9][a-z0-9._-]{1,63}$, e.g. "megachat".
+  // namespace. ^[a-z0-9][a-z0-9._-]{1,63}$, e.g. "parley".
   string app_id = 1;
-  string app_name = 2;    // shown to the user, e.g. "MegaChat"
-  string description = 3; // shown to the user, e.g. "MegaChat 1.4 on linux"
+  string app_name = 2;    // shown to the user, e.g. "Parley"
+  string description = 3; // shown to the user, e.g. "Parley 1.4 on linux"
   // Extra permissions, besides the app's own records: "passwords" (read
   // and change the logins of the password store). Unknown scopes ->
   // INVALID_ARGUMENT. The user may grant fewer than asked.
@@ -755,7 +750,7 @@ message PairingRequest {
 
 message PairingTicket {
   string ticket = 1;          // secret: only the requester knows it
-  string code = 2;            // 6 digits, shown by the app and by CloudSync
+  string code = 2;            // 6 digits, shown by the app and by Shard
   int64 expires_unix_ms = 3;  // the request is dropped then (5 minutes)
 }
 
@@ -814,7 +809,7 @@ message ListReply {
 }
 
 message PutRequest {
-  // 1–200 bytes of [A-Za-z0-9._/-], e.g. "vault.mc", "settings/ui.json".
+  // 1–200 bytes of [A-Za-z0-9._/-], e.g. "vault.parley", "settings/ui.json".
   string key = 1;
   bytes data = 2; // at most 256 KiB
   string base = 3;
@@ -839,7 +834,7 @@ message Change {
     KIND_UNSPECIFIED = 0;
     RECORD = 1; // a record changed: key, revision (Get it)
     STATE = 2;  // vault state changed: state (call Hello)
-    // The pairing was revoked in CloudSync: the stream ends after it.
+    // The pairing was revoked in Shard: the stream ends after it.
     UNPAIRED = 3;
     // A login changed (scope "passwords"): key = login id, revision,
     // deleted.
@@ -869,7 +864,7 @@ message UnpairReply {}
 // A login: one entry of the password store with a website or an Android
 // app. Entries without one (notes, keys, ...) are not visible here.
 message Login {
-  string id = 1;       // chosen by CloudSync; "" in PutLogin = a new login
+  string id = 1;       // chosen by Shard; "" in PutLogin = a new login
   string revision = 2; // the base for PutLogin / DeleteLogin
   // "https://example.com/" or "android://<hash>@<package>/". Several
   // logins may share one (several accounts on a site).
@@ -881,17 +876,17 @@ message Login {
   string username_element = 8;
   string password_element = 9;
   string display_name = 10;
-  string notes = 11;     // the entry's note in CloudSync; empty without data
+  string notes = 11;     // the entry's note in Shard; empty without data
   string federation_origin = 12; // federated login, no password
   // "Never save for this site": signon_realm only, no credentials. Not
-  // shown in CloudSync's own password list.
+  // shown in Shard's own password list.
   bool blocked = 13;
   int64 created_ms = 14;
   int64 modified_ms = 15;
   int64 password_modified_ms = 16;
   int64 last_used_ms = 17; // this device only (TouchLogin)
   int64 times_used = 18;   // this device only (TouchLogin)
-  // Fields of the app CloudSync keeps but does not read; at most 16 KiB
+  // Fields of the app Shard keeps but does not read; at most 16 KiB
   // in all (keys + values). Empty without data.
   map<string, bytes> extra = 19;
   string device_name = 20; // device of the last change
@@ -991,7 +986,7 @@ message ListSshKeysReply {
 // with the scope; an app keeps its own data about a server (databases,
 // folders, ...) in its own records, keyed by the server id, or in extra.
 message Server {
-  string id = 1;       // chosen by CloudSync; "" in PutServer = a new one
+  string id = 1;       // chosen by Shard; "" in PutServer = a new one
   string revision = 2; // the base for PutServer / DeleteServer
   string name = 3;
   string group = 4;    // folder in the server tree, "" = none; "a/b" nests
@@ -1016,7 +1011,7 @@ message Server {
   int64 created_ms = 15;
   int64 modified_ms = 16;
   string device_name = 17; // device of the last change
-  // Fields of the apps, CloudSync keeps but does not read. Keys are
+  // Fields of the apps, Shard keeps but does not read. Keys are
   // "<app id>.<name>"; an app changes only its own keys and keeps the
   // others as they are. At most 16 KiB in all. Empty without data.
   map<string, bytes> extra = 18;
@@ -1061,25 +1056,25 @@ message CallReply {
 
 ## Appendix B: AIDL (Android)
 
-Canonical: `app/android/app/src/main/aidl/dev/cloudsync/connector/` in the
-Shard repository. Put both files into `src/main/aidl/dev/cloudsync/connector/`.
+Canonical: `app/android/app/src/main/aidl/dev/selfhold/shard/connector/` in the
+Shard repository. Put both files into `src/main/aidl/dev/selfhold/shard/connector/`.
 
-`ICloudSyncConnector.aidl`:
+`IShardConnector.aidl`:
 
 ```aidl
-// The CloudSync Connector API on Android (docs/CONNECTOR.md). Apps copy
+// The Shard Connector API on Android (docs/CONNECTOR.md). Apps copy
 // this file and IConnectorWatcher.aidl as is, in the same package
-// (dev.cloudsync.connector), and bind with an explicit intent:
-// action "dev.cloudsync.connector.BIND", package "dev.cloudsync.cloudsync".
+// (dev.selfhold.shard.connector), and bind with an explicit intent:
+// action "dev.selfhold.shard.connector.BIND", package "dev.selfhold.shard".
 //
 // Requests and replies are serialized messages of proto/connector.proto.
-// CloudSync knows the caller from Binder (package + signing certificate):
+// Shard knows the caller from Binder (package + signing certificate):
 // there is no token on Android.
-package dev.cloudsync.connector;
+package dev.selfhold.shard.connector;
 
-import dev.cloudsync.connector.IConnectorWatcher;
+import dev.selfhold.shard.connector.IConnectorWatcher;
 
-interface ICloudSyncConnector {
+interface IShardConnector {
     // Version of this binder interface: 1.
     int version();
 
@@ -1100,8 +1095,8 @@ interface ICloudSyncConnector {
 `IConnectorWatcher.aidl`:
 
 ```aidl
-// Gets the changes of one Watch (see ICloudSyncConnector.aidl).
-package dev.cloudsync.connector;
+// Gets the changes of one Watch (see IShardConnector.aidl).
+package dev.selfhold.shard.connector;
 
 oneway interface IConnectorWatcher {
     // A serialized Change message.

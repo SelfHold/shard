@@ -4,7 +4,7 @@
 //
 // File layout:
 //
-//	magic "CSVAULT\x01" | argon2 time u32 | memory KiB u32 | threads u8 | salt [16]
+//	magic "SHVAULT\x01" | argon2 time u32 | memory KiB u32 | threads u8 | salt [16]
 //	| XChaCha20-Poly1305(key, JSON config, ad = everything before it)
 package vault
 
@@ -24,10 +24,10 @@ import (
 
 	"golang.org/x/crypto/argon2"
 
-	"cloudsync/core/crypto"
+	"github.com/SelfHold/shard/core/crypto"
 )
 
-var magic = []byte("CSVAULT\x01")
+var magic = []byte("SHVAULT\x01")
 
 const (
 	saltSize   = 16

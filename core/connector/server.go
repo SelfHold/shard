@@ -13,10 +13,10 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	"cloudsync/core/connector/pb"
-	"cloudsync/core/crypto"
-	"cloudsync/core/engine"
-	"cloudsync/core/secrets"
+	"github.com/SelfHold/shard/core/connector/pb"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/engine"
+	"github.com/SelfHold/shard/core/secrets"
 )
 
 // APIVersion is the Connector API version this core serves.
@@ -45,7 +45,7 @@ type HostState struct {
 	Version    string // core version
 }
 
-// Host is the CloudSync service the connector works over (rpc.Service).
+// Host is the Shard service the connector works over (rpc.Service).
 type Host interface {
 	ConnectorState() HostState
 	// AppRecords fails with a gRPC status while the vault is locked.
@@ -117,7 +117,7 @@ func callerOf(ctx context.Context) Caller {
 func (s *Server) auth(ctx context.Context) (Pairing, error) {
 	p, ok := s.Reg.Authenticate(callerOf(ctx))
 	if !ok {
-		return Pairing{}, status.Error(codes.Unauthenticated, "not paired with CloudSync on this device")
+		return Pairing{}, status.Error(codes.Unauthenticated, "not paired with Shard on this device")
 	}
 	return p, nil
 }

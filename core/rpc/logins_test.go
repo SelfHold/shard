@@ -14,9 +14,9 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 
-	"cloudsync/core/connector"
-	cpb "cloudsync/core/connector/pb"
-	"cloudsync/core/rpc/pb"
+	"github.com/SelfHold/shard/core/connector"
+	cpb "github.com/SelfHold/shard/core/connector/pb"
+	"github.com/SelfHold/shard/core/rpc/pb"
 )
 
 // pairApp pairs app over c and returns a context with its token; grant are
@@ -66,7 +66,7 @@ func TestConnectorLogins(t *testing.T) {
 	s := readyService(t)
 	c := connectorClient(t, s)
 
-	if _, err := c.RequestPairing(ctx, &cpb.PairingRequest{AppId: "bezel", Scopes: []string{"files"}}); status.Code(err) != codes.InvalidArgument {
+	if _, err := c.RequestPairing(ctx, &cpb.PairingRequest{AppId: "enclave", Scopes: []string{"files"}}); status.Code(err) != codes.InvalidArgument {
 		t.Fatalf("unknown scope: %v", err)
 	}
 
@@ -95,7 +95,7 @@ func TestConnectorLogins(t *testing.T) {
 		t.Fatalf("records only granted %v", res.Scopes)
 	}
 
-	auth, res := pairApp(t, s, c, "bezel", []string{"passwords"}, []string{"passwords"})
+	auth, res := pairApp(t, s, c, "enclave", []string{"passwords"}, []string{"passwords"})
 	if len(res.Scopes) != 1 || res.Scopes[0] != "passwords" {
 		t.Fatalf("granted: %v", res.Scopes)
 	}
@@ -110,14 +110,14 @@ func TestConnectorLogins(t *testing.T) {
 	}
 	time.Sleep(50 * time.Millisecond) // the stream subscribes
 
-	// Made in CloudSync: listed as a login.
+	// Made in Shard: listed as a login.
 	ui, err := s.PutSecret(ctx, &pb.SecretEntry{Kind: pb.SecretKind_SECRET_PASSWORD, Title: "Mail",
 		Username: "me", Url: "https://mail.example/inbox", Password: "pw"})
 	if err != nil {
 		t.Fatal(err)
 	}
 	if ch, err := w.Recv(); err != nil || ch.Kind != cpb.Change_LOGIN || ch.Key != ui.Id {
-		t.Fatalf("watch after an entry made in CloudSync: %+v %v", ch, err)
+		t.Fatalf("watch after an entry made in Shard: %+v %v", ch, err)
 	}
 	l, err := c.ListLogins(auth, &cpb.ListLoginsRequest{})
 	if err != nil || len(l.Logins) != 1 || l.Logins[0].SignonRealm != "https://mail.example/" ||
@@ -128,7 +128,7 @@ func TestConnectorLogins(t *testing.T) {
 
 	// CAS.
 	nl, err := c.PutLogin(auth, &cpb.PutLoginRequest{Login: &cpb.Login{Url: "https://shop.example/login",
-		Username: "u", Password: "p1", Extra: map[string][]byte{"bezel.scheme": {1}}}})
+		Username: "u", Password: "p1", Extra: map[string][]byte{"enclave.scheme": {1}}}})
 	if err != nil || nl.Id == "" || nl.DeviceName != "laptop" {
 		t.Fatalf("create: %+v %v", nl, err)
 	}
@@ -151,12 +151,12 @@ func TestConnectorLogins(t *testing.T) {
 		t.Fatalf("no site: %v", err)
 	}
 	g, err := c.GetLogins(auth, &cpb.GetLoginsRequest{Ids: []string{nl.Id}})
-	if err != nil || len(g.Logins) != 1 || g.Logins[0].Password != "p2" || g.Logins[0].Extra["bezel.scheme"][0] != 1 {
+	if err != nil || len(g.Logins) != 1 || g.Logins[0].Password != "p2" || g.Logins[0].Extra["enclave.scheme"][0] != 1 {
 		t.Fatalf("get: %+v %v", g, err)
 	}
 	if apps, _ := s.ListApps(ctx, &pb.Empty{}); func() bool {
 		for _, p := range apps.Pairings {
-			if p.AppId == "bezel" {
+			if p.AppId == "enclave" {
 				return p.SecretsReadUnixMs == 0
 			}
 		}
@@ -165,7 +165,7 @@ func TestConnectorLogins(t *testing.T) {
 		t.Fatal("the time passwords were read is not shown")
 	}
 
-	// Blocked: visible to the app, not in CloudSync's list.
+	// Blocked: visible to the app, not in Shard's list.
 	bl, err := c.PutLogin(auth, &cpb.PutLoginRequest{Login: &cpb.Login{SignonRealm: "https://never.example/", Blocked: true}})
 	if err != nil || !bl.Blocked {
 		t.Fatalf("blocked: %+v %v", bl, err)
@@ -173,7 +173,7 @@ func TestConnectorLogins(t *testing.T) {
 	list, _ := s.ListSecrets(ctx, &pb.Empty{})
 	for _, e := range list.Entries {
 		if e.Id == bl.Id {
-			t.Fatal("a blocked site is in CloudSync's password list")
+			t.Fatal("a blocked site is in Shard's password list")
 		}
 	}
 
@@ -243,7 +243,7 @@ func TestConnectorLogins(t *testing.T) {
 	}
 	var pid string
 	for _, p := range s.Apps.Pairings() {
-		if p.App == "bezel" {
+		if p.App == "enclave" {
 			pid = p.ID
 		}
 	}
@@ -283,7 +283,7 @@ func TestConnectorLoginsOffline(t *testing.T) {
 	ctx := context.Background()
 	s := readyService(t)
 	c := connectorClient(t, s)
-	auth, _ := pairApp(t, s, c, "bezel", []string{"passwords"}, []string{"passwords"})
+	auth, _ := pairApp(t, s, c, "enclave", []string{"passwords"}, []string{"passwords"})
 	nl, err := c.PutLogin(auth, &cpb.PutLoginRequest{Login: &cpb.Login{Url: "https://a.example/", Username: "u", Password: "p"}})
 	if err != nil {
 		t.Fatal(err)

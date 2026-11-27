@@ -5,7 +5,7 @@ import (
 	"maps"
 	"time"
 
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 // Google Drive limits requests per OAuth app (project), not per account.

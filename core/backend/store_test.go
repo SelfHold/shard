@@ -8,8 +8,8 @@ import (
 	"reflect"
 	"testing"
 
-	"cloudsync/core/eventlog"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/eventlog"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 func conformance(t *testing.T, s Store) {

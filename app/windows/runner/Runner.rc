@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "dev.cloudsync" "\0"
-            VALUE "FileDescription", "cloudsync" "\0"
+            VALUE "CompanyName", "dev.selfhold.shard" "\0"
+            VALUE "FileDescription", "shard" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "cloudsync" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 dev.cloudsync. All rights reserved." "\0"
-            VALUE "OriginalFilename", "cloudsync.exe" "\0"
-            VALUE "ProductName", "cloudsync" "\0"
+            VALUE "InternalName", "shard" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 dev.selfhold.shard. All rights reserved." "\0"
+            VALUE "OriginalFilename", "shard.exe" "\0"
+            VALUE "ProductName", "shard" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

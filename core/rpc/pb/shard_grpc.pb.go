@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.6.2
 // - protoc             v7.36.1
-// source: cloudsync.proto
+// source: shard.proto
 
 package pb
 
@@ -19,69 +19,69 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CloudSync_GetState_FullMethodName          = "/cloudsync.v1.CloudSync/GetState"
-	CloudSync_CreateVault_FullMethodName       = "/cloudsync.v1.CloudSync/CreateVault"
-	CloudSync_ImportVault_FullMethodName       = "/cloudsync.v1.CloudSync/ImportVault"
-	CloudSync_Unlock_FullMethodName            = "/cloudsync.v1.CloudSync/Unlock"
-	CloudSync_LockVault_FullMethodName         = "/cloudsync.v1.CloudSync/LockVault"
-	CloudSync_ChangePassword_FullMethodName    = "/cloudsync.v1.CloudSync/ChangePassword"
-	CloudSync_CheckPassword_FullMethodName     = "/cloudsync.v1.CloudSync/CheckPassword"
-	CloudSync_ExportVault_FullMethodName       = "/cloudsync.v1.CloudSync/ExportVault"
-	CloudSync_BackendTypes_FullMethodName      = "/cloudsync.v1.CloudSync/BackendTypes"
-	CloudSync_AddBackend_FullMethodName        = "/cloudsync.v1.CloudSync/AddBackend"
-	CloudSync_SetBackendEnabled_FullMethodName = "/cloudsync.v1.CloudSync/SetBackendEnabled"
-	CloudSync_RenameBackend_FullMethodName     = "/cloudsync.v1.CloudSync/RenameBackend"
-	CloudSync_RemoveBackend_FullMethodName     = "/cloudsync.v1.CloudSync/RemoveBackend"
-	CloudSync_Authorize_FullMethodName         = "/cloudsync.v1.CloudSync/Authorize"
-	CloudSync_Reconnect_FullMethodName         = "/cloudsync.v1.CloudSync/Reconnect"
-	CloudSync_Status_FullMethodName            = "/cloudsync.v1.CloudSync/Status"
-	CloudSync_Logs_FullMethodName              = "/cloudsync.v1.CloudSync/Logs"
-	CloudSync_ClearLogs_FullMethodName         = "/cloudsync.v1.CloudSync/ClearLogs"
-	CloudSync_SetMountPoint_FullMethodName     = "/cloudsync.v1.CloudSync/SetMountPoint"
-	CloudSync_Shutdown_FullMethodName          = "/cloudsync.v1.CloudSync/Shutdown"
-	CloudSync_List_FullMethodName              = "/cloudsync.v1.CloudSync/List"
-	CloudSync_Search_FullMethodName            = "/cloudsync.v1.CloudSync/Search"
-	CloudSync_Stat_FullMethodName              = "/cloudsync.v1.CloudSync/Stat"
-	CloudSync_Mkdir_FullMethodName             = "/cloudsync.v1.CloudSync/Mkdir"
-	CloudSync_Remove_FullMethodName            = "/cloudsync.v1.CloudSync/Remove"
-	CloudSync_Rename_FullMethodName            = "/cloudsync.v1.CloudSync/Rename"
-	CloudSync_Upload_FullMethodName            = "/cloudsync.v1.CloudSync/Upload"
-	CloudSync_Download_FullMethodName          = "/cloudsync.v1.CloudSync/Download"
-	CloudSync_Pin_FullMethodName               = "/cloudsync.v1.CloudSync/Pin"
-	CloudSync_Unpin_FullMethodName             = "/cloudsync.v1.CloudSync/Unpin"
-	CloudSync_LockHolder_FullMethodName        = "/cloudsync.v1.CloudSync/LockHolder"
-	CloudSync_Locks_FullMethodName             = "/cloudsync.v1.CloudSync/Locks"
-	CloudSync_Sync_FullMethodName              = "/cloudsync.v1.CloudSync/Sync"
-	CloudSync_Repair_FullMethodName            = "/cloudsync.v1.CloudSync/Repair"
-	CloudSync_GC_FullMethodName                = "/cloudsync.v1.CloudSync/GC"
-	CloudSync_SetRedundancy_FullMethodName     = "/cloudsync.v1.CloudSync/SetRedundancy"
-	CloudSync_ListSecrets_FullMethodName       = "/cloudsync.v1.CloudSync/ListSecrets"
-	CloudSync_GetSecret_FullMethodName         = "/cloudsync.v1.CloudSync/GetSecret"
-	CloudSync_PutSecret_FullMethodName         = "/cloudsync.v1.CloudSync/PutSecret"
-	CloudSync_DeleteSecret_FullMethodName      = "/cloudsync.v1.CloudSync/DeleteSecret"
-	CloudSync_PutSecretGroup_FullMethodName    = "/cloudsync.v1.CloudSync/PutSecretGroup"
-	CloudSync_DeleteSecretGroup_FullMethodName = "/cloudsync.v1.CloudSync/DeleteSecretGroup"
-	CloudSync_DeriveKey_FullMethodName         = "/cloudsync.v1.CloudSync/DeriveKey"
-	CloudSync_TotpCodes_FullMethodName         = "/cloudsync.v1.CloudSync/TotpCodes"
-	CloudSync_UseRecoveryCode_FullMethodName   = "/cloudsync.v1.CloudSync/UseRecoveryCode"
-	CloudSync_CheckTotp_FullMethodName         = "/cloudsync.v1.CloudSync/CheckTotp"
-	CloudSync_ReadTotpLinks_FullMethodName     = "/cloudsync.v1.CloudSync/ReadTotpLinks"
-	CloudSync_ImportSecrets_FullMethodName     = "/cloudsync.v1.CloudSync/ImportSecrets"
-	CloudSync_ListApps_FullMethodName          = "/cloudsync.v1.CloudSync/ListApps"
-	CloudSync_DecidePairing_FullMethodName     = "/cloudsync.v1.CloudSync/DecidePairing"
-	CloudSync_RevokeApp_FullMethodName         = "/cloudsync.v1.CloudSync/RevokeApp"
-	CloudSync_SetAppScopes_FullMethodName      = "/cloudsync.v1.CloudSync/SetAppScopes"
-	CloudSync_DeleteAppData_FullMethodName     = "/cloudsync.v1.CloudSync/DeleteAppData"
-	CloudSync_Watch_FullMethodName             = "/cloudsync.v1.CloudSync/Watch"
+	Shard_GetState_FullMethodName          = "/selfhold.shard.v1.Shard/GetState"
+	Shard_CreateVault_FullMethodName       = "/selfhold.shard.v1.Shard/CreateVault"
+	Shard_ImportVault_FullMethodName       = "/selfhold.shard.v1.Shard/ImportVault"
+	Shard_Unlock_FullMethodName            = "/selfhold.shard.v1.Shard/Unlock"
+	Shard_LockVault_FullMethodName         = "/selfhold.shard.v1.Shard/LockVault"
+	Shard_ChangePassword_FullMethodName    = "/selfhold.shard.v1.Shard/ChangePassword"
+	Shard_CheckPassword_FullMethodName     = "/selfhold.shard.v1.Shard/CheckPassword"
+	Shard_ExportVault_FullMethodName       = "/selfhold.shard.v1.Shard/ExportVault"
+	Shard_BackendTypes_FullMethodName      = "/selfhold.shard.v1.Shard/BackendTypes"
+	Shard_AddBackend_FullMethodName        = "/selfhold.shard.v1.Shard/AddBackend"
+	Shard_SetBackendEnabled_FullMethodName = "/selfhold.shard.v1.Shard/SetBackendEnabled"
+	Shard_RenameBackend_FullMethodName     = "/selfhold.shard.v1.Shard/RenameBackend"
+	Shard_RemoveBackend_FullMethodName     = "/selfhold.shard.v1.Shard/RemoveBackend"
+	Shard_Authorize_FullMethodName         = "/selfhold.shard.v1.Shard/Authorize"
+	Shard_Reconnect_FullMethodName         = "/selfhold.shard.v1.Shard/Reconnect"
+	Shard_Status_FullMethodName            = "/selfhold.shard.v1.Shard/Status"
+	Shard_Logs_FullMethodName              = "/selfhold.shard.v1.Shard/Logs"
+	Shard_ClearLogs_FullMethodName         = "/selfhold.shard.v1.Shard/ClearLogs"
+	Shard_SetMountPoint_FullMethodName     = "/selfhold.shard.v1.Shard/SetMountPoint"
+	Shard_Shutdown_FullMethodName          = "/selfhold.shard.v1.Shard/Shutdown"
+	Shard_List_FullMethodName              = "/selfhold.shard.v1.Shard/List"
+	Shard_Search_FullMethodName            = "/selfhold.shard.v1.Shard/Search"
+	Shard_Stat_FullMethodName              = "/selfhold.shard.v1.Shard/Stat"
+	Shard_Mkdir_FullMethodName             = "/selfhold.shard.v1.Shard/Mkdir"
+	Shard_Remove_FullMethodName            = "/selfhold.shard.v1.Shard/Remove"
+	Shard_Rename_FullMethodName            = "/selfhold.shard.v1.Shard/Rename"
+	Shard_Upload_FullMethodName            = "/selfhold.shard.v1.Shard/Upload"
+	Shard_Download_FullMethodName          = "/selfhold.shard.v1.Shard/Download"
+	Shard_Pin_FullMethodName               = "/selfhold.shard.v1.Shard/Pin"
+	Shard_Unpin_FullMethodName             = "/selfhold.shard.v1.Shard/Unpin"
+	Shard_LockHolder_FullMethodName        = "/selfhold.shard.v1.Shard/LockHolder"
+	Shard_Locks_FullMethodName             = "/selfhold.shard.v1.Shard/Locks"
+	Shard_Sync_FullMethodName              = "/selfhold.shard.v1.Shard/Sync"
+	Shard_Repair_FullMethodName            = "/selfhold.shard.v1.Shard/Repair"
+	Shard_GC_FullMethodName                = "/selfhold.shard.v1.Shard/GC"
+	Shard_SetRedundancy_FullMethodName     = "/selfhold.shard.v1.Shard/SetRedundancy"
+	Shard_ListSecrets_FullMethodName       = "/selfhold.shard.v1.Shard/ListSecrets"
+	Shard_GetSecret_FullMethodName         = "/selfhold.shard.v1.Shard/GetSecret"
+	Shard_PutSecret_FullMethodName         = "/selfhold.shard.v1.Shard/PutSecret"
+	Shard_DeleteSecret_FullMethodName      = "/selfhold.shard.v1.Shard/DeleteSecret"
+	Shard_PutSecretGroup_FullMethodName    = "/selfhold.shard.v1.Shard/PutSecretGroup"
+	Shard_DeleteSecretGroup_FullMethodName = "/selfhold.shard.v1.Shard/DeleteSecretGroup"
+	Shard_DeriveKey_FullMethodName         = "/selfhold.shard.v1.Shard/DeriveKey"
+	Shard_TotpCodes_FullMethodName         = "/selfhold.shard.v1.Shard/TotpCodes"
+	Shard_UseRecoveryCode_FullMethodName   = "/selfhold.shard.v1.Shard/UseRecoveryCode"
+	Shard_CheckTotp_FullMethodName         = "/selfhold.shard.v1.Shard/CheckTotp"
+	Shard_ReadTotpLinks_FullMethodName     = "/selfhold.shard.v1.Shard/ReadTotpLinks"
+	Shard_ImportSecrets_FullMethodName     = "/selfhold.shard.v1.Shard/ImportSecrets"
+	Shard_ListApps_FullMethodName          = "/selfhold.shard.v1.Shard/ListApps"
+	Shard_DecidePairing_FullMethodName     = "/selfhold.shard.v1.Shard/DecidePairing"
+	Shard_RevokeApp_FullMethodName         = "/selfhold.shard.v1.Shard/RevokeApp"
+	Shard_SetAppScopes_FullMethodName      = "/selfhold.shard.v1.Shard/SetAppScopes"
+	Shard_DeleteAppData_FullMethodName     = "/selfhold.shard.v1.Shard/DeleteAppData"
+	Shard_Watch_FullMethodName             = "/selfhold.shard.v1.Shard/Watch"
 )
 
-// CloudSyncClient is the client API for CloudSync service.
+// ShardClient is the client API for Shard service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// CloudSync is served by the core: by cloudsyncd on desktops (unix socket
+// Shard is served by the core: by shardd on desktops (unix socket
 // or named pipe) and in-process on Android. The Flutter app is a client.
-type CloudSyncClient interface {
+type ShardClient interface {
 	// Vault lifecycle.
 	GetState(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*State, error)
 	CreateVault(ctx context.Context, in *CreateVaultRequest, opts ...grpc.CallOption) (*State, error)
@@ -185,147 +185,147 @@ type CloudSyncClient interface {
 	Watch(ctx context.Context, in *Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Event], error)
 }
 
-type cloudSyncClient struct {
+type shardClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCloudSyncClient(cc grpc.ClientConnInterface) CloudSyncClient {
-	return &cloudSyncClient{cc}
+func NewShardClient(cc grpc.ClientConnInterface) ShardClient {
+	return &shardClient{cc}
 }
 
-func (c *cloudSyncClient) GetState(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*State, error) {
+func (c *shardClient) GetState(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*State, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(State)
-	err := c.cc.Invoke(ctx, CloudSync_GetState_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_GetState_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) CreateVault(ctx context.Context, in *CreateVaultRequest, opts ...grpc.CallOption) (*State, error) {
+func (c *shardClient) CreateVault(ctx context.Context, in *CreateVaultRequest, opts ...grpc.CallOption) (*State, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(State)
-	err := c.cc.Invoke(ctx, CloudSync_CreateVault_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_CreateVault_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) ImportVault(ctx context.Context, in *ImportVaultRequest, opts ...grpc.CallOption) (*State, error) {
+func (c *shardClient) ImportVault(ctx context.Context, in *ImportVaultRequest, opts ...grpc.CallOption) (*State, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(State)
-	err := c.cc.Invoke(ctx, CloudSync_ImportVault_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_ImportVault_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Unlock(ctx context.Context, in *UnlockRequest, opts ...grpc.CallOption) (*State, error) {
+func (c *shardClient) Unlock(ctx context.Context, in *UnlockRequest, opts ...grpc.CallOption) (*State, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(State)
-	err := c.cc.Invoke(ctx, CloudSync_Unlock_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Unlock_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) LockVault(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*State, error) {
+func (c *shardClient) LockVault(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*State, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(State)
-	err := c.cc.Invoke(ctx, CloudSync_LockVault_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_LockVault_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_ChangePassword_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_ChangePassword_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) CheckPassword(ctx context.Context, in *CheckPasswordRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) CheckPassword(ctx context.Context, in *CheckPasswordRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_CheckPassword_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_CheckPassword_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) ExportVault(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*VaultFile, error) {
+func (c *shardClient) ExportVault(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*VaultFile, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(VaultFile)
-	err := c.cc.Invoke(ctx, CloudSync_ExportVault_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_ExportVault_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) BackendTypes(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*BackendTypesReply, error) {
+func (c *shardClient) BackendTypes(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*BackendTypesReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(BackendTypesReply)
-	err := c.cc.Invoke(ctx, CloudSync_BackendTypes_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_BackendTypes_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) AddBackend(ctx context.Context, in *AddBackendRequest, opts ...grpc.CallOption) (*Backend, error) {
+func (c *shardClient) AddBackend(ctx context.Context, in *AddBackendRequest, opts ...grpc.CallOption) (*Backend, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Backend)
-	err := c.cc.Invoke(ctx, CloudSync_AddBackend_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_AddBackend_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) SetBackendEnabled(ctx context.Context, in *SetBackendEnabledRequest, opts ...grpc.CallOption) (*Backend, error) {
+func (c *shardClient) SetBackendEnabled(ctx context.Context, in *SetBackendEnabledRequest, opts ...grpc.CallOption) (*Backend, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Backend)
-	err := c.cc.Invoke(ctx, CloudSync_SetBackendEnabled_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_SetBackendEnabled_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) RenameBackend(ctx context.Context, in *RenameBackendRequest, opts ...grpc.CallOption) (*Backend, error) {
+func (c *shardClient) RenameBackend(ctx context.Context, in *RenameBackendRequest, opts ...grpc.CallOption) (*Backend, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Backend)
-	err := c.cc.Invoke(ctx, CloudSync_RenameBackend_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_RenameBackend_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) RemoveBackend(ctx context.Context, in *RemoveBackendRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) RemoveBackend(ctx context.Context, in *RemoveBackendRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_RemoveBackend_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_RemoveBackend_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Authorize(ctx context.Context, in *AuthorizeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AuthorizeReply], error) {
+func (c *shardClient) Authorize(ctx context.Context, in *AuthorizeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AuthorizeReply], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &CloudSync_ServiceDesc.Streams[0], CloudSync_Authorize_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Shard_ServiceDesc.Streams[0], Shard_Authorize_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -340,11 +340,11 @@ func (c *cloudSyncClient) Authorize(ctx context.Context, in *AuthorizeRequest, o
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type CloudSync_AuthorizeClient = grpc.ServerStreamingClient[AuthorizeReply]
+type Shard_AuthorizeClient = grpc.ServerStreamingClient[AuthorizeReply]
 
-func (c *cloudSyncClient) Reconnect(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AuthorizeReply], error) {
+func (c *shardClient) Reconnect(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AuthorizeReply], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &CloudSync_ServiceDesc.Streams[1], CloudSync_Reconnect_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Shard_ServiceDesc.Streams[1], Shard_Reconnect_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -359,391 +359,391 @@ func (c *cloudSyncClient) Reconnect(ctx context.Context, in *IdRequest, opts ...
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type CloudSync_ReconnectClient = grpc.ServerStreamingClient[AuthorizeReply]
+type Shard_ReconnectClient = grpc.ServerStreamingClient[AuthorizeReply]
 
-func (c *cloudSyncClient) Status(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*StatusReply, error) {
+func (c *shardClient) Status(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*StatusReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(StatusReply)
-	err := c.cc.Invoke(ctx, CloudSync_Status_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Status_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Logs(ctx context.Context, in *LogsRequest, opts ...grpc.CallOption) (*LogsReply, error) {
+func (c *shardClient) Logs(ctx context.Context, in *LogsRequest, opts ...grpc.CallOption) (*LogsReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(LogsReply)
-	err := c.cc.Invoke(ctx, CloudSync_Logs_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Logs_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) ClearLogs(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) ClearLogs(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_ClearLogs_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_ClearLogs_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) SetMountPoint(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*State, error) {
+func (c *shardClient) SetMountPoint(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*State, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(State)
-	err := c.cc.Invoke(ctx, CloudSync_SetMountPoint_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_SetMountPoint_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Shutdown(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) Shutdown(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_Shutdown_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Shutdown_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) List(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*ListReply, error) {
+func (c *shardClient) List(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*ListReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListReply)
-	err := c.cc.Invoke(ctx, CloudSync_List_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_List_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*ListReply, error) {
+func (c *shardClient) Search(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*ListReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ListReply)
-	err := c.cc.Invoke(ctx, CloudSync_Search_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Search_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Stat(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*Entry, error) {
+func (c *shardClient) Stat(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*Entry, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Entry)
-	err := c.cc.Invoke(ctx, CloudSync_Stat_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Stat_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Mkdir(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) Mkdir(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_Mkdir_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Mkdir_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Remove(ctx context.Context, in *RemoveRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) Remove(ctx context.Context, in *RemoveRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_Remove_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Remove_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Rename(ctx context.Context, in *RenameRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) Rename(ctx context.Context, in *RenameRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_Rename_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Rename_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Upload(ctx context.Context, in *UploadRequest, opts ...grpc.CallOption) (*UploadReply, error) {
+func (c *shardClient) Upload(ctx context.Context, in *UploadRequest, opts ...grpc.CallOption) (*UploadReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UploadReply)
-	err := c.cc.Invoke(ctx, CloudSync_Upload_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Upload_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Download(ctx context.Context, in *DownloadRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) Download(ctx context.Context, in *DownloadRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_Download_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Download_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Pin(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) Pin(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_Pin_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Pin_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Unpin(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) Unpin(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_Unpin_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Unpin_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) LockHolder(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*LockInfo, error) {
+func (c *shardClient) LockHolder(ctx context.Context, in *PathRequest, opts ...grpc.CallOption) (*LockInfo, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(LockInfo)
-	err := c.cc.Invoke(ctx, CloudSync_LockHolder_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_LockHolder_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Locks(ctx context.Context, in *PathsRequest, opts ...grpc.CallOption) (*LocksReply, error) {
+func (c *shardClient) Locks(ctx context.Context, in *PathsRequest, opts ...grpc.CallOption) (*LocksReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(LocksReply)
-	err := c.cc.Invoke(ctx, CloudSync_Locks_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Locks_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Sync(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) Sync(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_Sync_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Sync_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Repair(ctx context.Context, in *RepairRequest, opts ...grpc.CallOption) (*RepairReply, error) {
+func (c *shardClient) Repair(ctx context.Context, in *RepairRequest, opts ...grpc.CallOption) (*RepairReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RepairReply)
-	err := c.cc.Invoke(ctx, CloudSync_Repair_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_Repair_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) GC(ctx context.Context, in *GCRequest, opts ...grpc.CallOption) (*GCReply, error) {
+func (c *shardClient) GC(ctx context.Context, in *GCRequest, opts ...grpc.CallOption) (*GCReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GCReply)
-	err := c.cc.Invoke(ctx, CloudSync_GC_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_GC_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) SetRedundancy(ctx context.Context, in *SetRedundancyRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) SetRedundancy(ctx context.Context, in *SetRedundancyRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_SetRedundancy_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_SetRedundancy_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) ListSecrets(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*SecretsReply, error) {
+func (c *shardClient) ListSecrets(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*SecretsReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SecretsReply)
-	err := c.cc.Invoke(ctx, CloudSync_ListSecrets_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_ListSecrets_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) GetSecret(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*SecretEntry, error) {
+func (c *shardClient) GetSecret(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*SecretEntry, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SecretEntry)
-	err := c.cc.Invoke(ctx, CloudSync_GetSecret_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_GetSecret_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) PutSecret(ctx context.Context, in *SecretEntry, opts ...grpc.CallOption) (*SecretEntry, error) {
+func (c *shardClient) PutSecret(ctx context.Context, in *SecretEntry, opts ...grpc.CallOption) (*SecretEntry, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SecretEntry)
-	err := c.cc.Invoke(ctx, CloudSync_PutSecret_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_PutSecret_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) DeleteSecret(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) DeleteSecret(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_DeleteSecret_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_DeleteSecret_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) PutSecretGroup(ctx context.Context, in *SecretGroup, opts ...grpc.CallOption) (*SecretGroup, error) {
+func (c *shardClient) PutSecretGroup(ctx context.Context, in *SecretGroup, opts ...grpc.CallOption) (*SecretGroup, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SecretGroup)
-	err := c.cc.Invoke(ctx, CloudSync_PutSecretGroup_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_PutSecretGroup_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) DeleteSecretGroup(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) DeleteSecretGroup(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_DeleteSecretGroup_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_DeleteSecretGroup_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) DeriveKey(ctx context.Context, in *DeriveKeyRequest, opts ...grpc.CallOption) (*DerivedKey, error) {
+func (c *shardClient) DeriveKey(ctx context.Context, in *DeriveKeyRequest, opts ...grpc.CallOption) (*DerivedKey, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DerivedKey)
-	err := c.cc.Invoke(ctx, CloudSync_DeriveKey_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_DeriveKey_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) TotpCodes(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*TotpCodesReply, error) {
+func (c *shardClient) TotpCodes(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*TotpCodesReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TotpCodesReply)
-	err := c.cc.Invoke(ctx, CloudSync_TotpCodes_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_TotpCodes_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) UseRecoveryCode(ctx context.Context, in *RecoveryCodeRequest, opts ...grpc.CallOption) (*SecretEntry, error) {
+func (c *shardClient) UseRecoveryCode(ctx context.Context, in *RecoveryCodeRequest, opts ...grpc.CallOption) (*SecretEntry, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SecretEntry)
-	err := c.cc.Invoke(ctx, CloudSync_UseRecoveryCode_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_UseRecoveryCode_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) CheckTotp(ctx context.Context, in *CheckTotpRequest, opts ...grpc.CallOption) (*TotpPreview, error) {
+func (c *shardClient) CheckTotp(ctx context.Context, in *CheckTotpRequest, opts ...grpc.CallOption) (*TotpPreview, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TotpPreview)
-	err := c.cc.Invoke(ctx, CloudSync_CheckTotp_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_CheckTotp_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) ReadTotpLinks(ctx context.Context, in *TotpLinksRequest, opts ...grpc.CallOption) (*TotpLinksReply, error) {
+func (c *shardClient) ReadTotpLinks(ctx context.Context, in *TotpLinksRequest, opts ...grpc.CallOption) (*TotpLinksReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TotpLinksReply)
-	err := c.cc.Invoke(ctx, CloudSync_ReadTotpLinks_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_ReadTotpLinks_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) ImportSecrets(ctx context.Context, in *SecretImportRequest, opts ...grpc.CallOption) (*SecretImportReply, error) {
+func (c *shardClient) ImportSecrets(ctx context.Context, in *SecretImportRequest, opts ...grpc.CallOption) (*SecretImportReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SecretImportReply)
-	err := c.cc.Invoke(ctx, CloudSync_ImportSecrets_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_ImportSecrets_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) ListApps(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*AppsReply, error) {
+func (c *shardClient) ListApps(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*AppsReply, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AppsReply)
-	err := c.cc.Invoke(ctx, CloudSync_ListApps_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_ListApps_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) DecidePairing(ctx context.Context, in *DecidePairingRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) DecidePairing(ctx context.Context, in *DecidePairingRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_DecidePairing_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_DecidePairing_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) RevokeApp(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) RevokeApp(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_RevokeApp_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_RevokeApp_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) SetAppScopes(ctx context.Context, in *SetAppScopesRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) SetAppScopes(ctx context.Context, in *SetAppScopesRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_SetAppScopes_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_SetAppScopes_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) DeleteAppData(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Empty, error) {
+func (c *shardClient) DeleteAppData(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*Empty, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, CloudSync_DeleteAppData_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, Shard_DeleteAppData_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *cloudSyncClient) Watch(ctx context.Context, in *Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Event], error) {
+func (c *shardClient) Watch(ctx context.Context, in *Empty, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Event], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	stream, err := c.cc.NewStream(ctx, &CloudSync_ServiceDesc.Streams[2], CloudSync_Watch_FullMethodName, cOpts...)
+	stream, err := c.cc.NewStream(ctx, &Shard_ServiceDesc.Streams[2], Shard_Watch_FullMethodName, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -758,15 +758,15 @@ func (c *cloudSyncClient) Watch(ctx context.Context, in *Empty, opts ...grpc.Cal
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type CloudSync_WatchClient = grpc.ServerStreamingClient[Event]
+type Shard_WatchClient = grpc.ServerStreamingClient[Event]
 
-// CloudSyncServer is the server API for CloudSync service.
-// All implementations must embed UnimplementedCloudSyncServer
+// ShardServer is the server API for Shard service.
+// All implementations must embed UnimplementedShardServer
 // for forward compatibility.
 //
-// CloudSync is served by the core: by cloudsyncd on desktops (unix socket
+// Shard is served by the core: by shardd on desktops (unix socket
 // or named pipe) and in-process on Android. The Flutter app is a client.
-type CloudSyncServer interface {
+type ShardServer interface {
 	// Vault lifecycle.
 	GetState(context.Context, *Empty) (*State, error)
 	CreateVault(context.Context, *CreateVaultRequest) (*State, error)
@@ -868,1378 +868,1378 @@ type CloudSyncServer interface {
 	DeleteAppData(context.Context, *IdRequest) (*Empty, error)
 	// Events for live UI updates.
 	Watch(*Empty, grpc.ServerStreamingServer[Event]) error
-	mustEmbedUnimplementedCloudSyncServer()
+	mustEmbedUnimplementedShardServer()
 }
 
-// UnimplementedCloudSyncServer must be embedded to have
+// UnimplementedShardServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedCloudSyncServer struct{}
+type UnimplementedShardServer struct{}
 
-func (UnimplementedCloudSyncServer) GetState(context.Context, *Empty) (*State, error) {
+func (UnimplementedShardServer) GetState(context.Context, *Empty) (*State, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetState not implemented")
 }
-func (UnimplementedCloudSyncServer) CreateVault(context.Context, *CreateVaultRequest) (*State, error) {
+func (UnimplementedShardServer) CreateVault(context.Context, *CreateVaultRequest) (*State, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateVault not implemented")
 }
-func (UnimplementedCloudSyncServer) ImportVault(context.Context, *ImportVaultRequest) (*State, error) {
+func (UnimplementedShardServer) ImportVault(context.Context, *ImportVaultRequest) (*State, error) {
 	return nil, status.Error(codes.Unimplemented, "method ImportVault not implemented")
 }
-func (UnimplementedCloudSyncServer) Unlock(context.Context, *UnlockRequest) (*State, error) {
+func (UnimplementedShardServer) Unlock(context.Context, *UnlockRequest) (*State, error) {
 	return nil, status.Error(codes.Unimplemented, "method Unlock not implemented")
 }
-func (UnimplementedCloudSyncServer) LockVault(context.Context, *Empty) (*State, error) {
+func (UnimplementedShardServer) LockVault(context.Context, *Empty) (*State, error) {
 	return nil, status.Error(codes.Unimplemented, "method LockVault not implemented")
 }
-func (UnimplementedCloudSyncServer) ChangePassword(context.Context, *ChangePasswordRequest) (*Empty, error) {
+func (UnimplementedShardServer) ChangePassword(context.Context, *ChangePasswordRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method ChangePassword not implemented")
 }
-func (UnimplementedCloudSyncServer) CheckPassword(context.Context, *CheckPasswordRequest) (*Empty, error) {
+func (UnimplementedShardServer) CheckPassword(context.Context, *CheckPasswordRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method CheckPassword not implemented")
 }
-func (UnimplementedCloudSyncServer) ExportVault(context.Context, *Empty) (*VaultFile, error) {
+func (UnimplementedShardServer) ExportVault(context.Context, *Empty) (*VaultFile, error) {
 	return nil, status.Error(codes.Unimplemented, "method ExportVault not implemented")
 }
-func (UnimplementedCloudSyncServer) BackendTypes(context.Context, *Empty) (*BackendTypesReply, error) {
+func (UnimplementedShardServer) BackendTypes(context.Context, *Empty) (*BackendTypesReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method BackendTypes not implemented")
 }
-func (UnimplementedCloudSyncServer) AddBackend(context.Context, *AddBackendRequest) (*Backend, error) {
+func (UnimplementedShardServer) AddBackend(context.Context, *AddBackendRequest) (*Backend, error) {
 	return nil, status.Error(codes.Unimplemented, "method AddBackend not implemented")
 }
-func (UnimplementedCloudSyncServer) SetBackendEnabled(context.Context, *SetBackendEnabledRequest) (*Backend, error) {
+func (UnimplementedShardServer) SetBackendEnabled(context.Context, *SetBackendEnabledRequest) (*Backend, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetBackendEnabled not implemented")
 }
-func (UnimplementedCloudSyncServer) RenameBackend(context.Context, *RenameBackendRequest) (*Backend, error) {
+func (UnimplementedShardServer) RenameBackend(context.Context, *RenameBackendRequest) (*Backend, error) {
 	return nil, status.Error(codes.Unimplemented, "method RenameBackend not implemented")
 }
-func (UnimplementedCloudSyncServer) RemoveBackend(context.Context, *RemoveBackendRequest) (*Empty, error) {
+func (UnimplementedShardServer) RemoveBackend(context.Context, *RemoveBackendRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method RemoveBackend not implemented")
 }
-func (UnimplementedCloudSyncServer) Authorize(*AuthorizeRequest, grpc.ServerStreamingServer[AuthorizeReply]) error {
+func (UnimplementedShardServer) Authorize(*AuthorizeRequest, grpc.ServerStreamingServer[AuthorizeReply]) error {
 	return status.Error(codes.Unimplemented, "method Authorize not implemented")
 }
-func (UnimplementedCloudSyncServer) Reconnect(*IdRequest, grpc.ServerStreamingServer[AuthorizeReply]) error {
+func (UnimplementedShardServer) Reconnect(*IdRequest, grpc.ServerStreamingServer[AuthorizeReply]) error {
 	return status.Error(codes.Unimplemented, "method Reconnect not implemented")
 }
-func (UnimplementedCloudSyncServer) Status(context.Context, *Empty) (*StatusReply, error) {
+func (UnimplementedShardServer) Status(context.Context, *Empty) (*StatusReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Status not implemented")
 }
-func (UnimplementedCloudSyncServer) Logs(context.Context, *LogsRequest) (*LogsReply, error) {
+func (UnimplementedShardServer) Logs(context.Context, *LogsRequest) (*LogsReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Logs not implemented")
 }
-func (UnimplementedCloudSyncServer) ClearLogs(context.Context, *Empty) (*Empty, error) {
+func (UnimplementedShardServer) ClearLogs(context.Context, *Empty) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method ClearLogs not implemented")
 }
-func (UnimplementedCloudSyncServer) SetMountPoint(context.Context, *PathRequest) (*State, error) {
+func (UnimplementedShardServer) SetMountPoint(context.Context, *PathRequest) (*State, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetMountPoint not implemented")
 }
-func (UnimplementedCloudSyncServer) Shutdown(context.Context, *Empty) (*Empty, error) {
+func (UnimplementedShardServer) Shutdown(context.Context, *Empty) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Shutdown not implemented")
 }
-func (UnimplementedCloudSyncServer) List(context.Context, *PathRequest) (*ListReply, error) {
+func (UnimplementedShardServer) List(context.Context, *PathRequest) (*ListReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method List not implemented")
 }
-func (UnimplementedCloudSyncServer) Search(context.Context, *SearchRequest) (*ListReply, error) {
+func (UnimplementedShardServer) Search(context.Context, *SearchRequest) (*ListReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Search not implemented")
 }
-func (UnimplementedCloudSyncServer) Stat(context.Context, *PathRequest) (*Entry, error) {
+func (UnimplementedShardServer) Stat(context.Context, *PathRequest) (*Entry, error) {
 	return nil, status.Error(codes.Unimplemented, "method Stat not implemented")
 }
-func (UnimplementedCloudSyncServer) Mkdir(context.Context, *PathRequest) (*Empty, error) {
+func (UnimplementedShardServer) Mkdir(context.Context, *PathRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Mkdir not implemented")
 }
-func (UnimplementedCloudSyncServer) Remove(context.Context, *RemoveRequest) (*Empty, error) {
+func (UnimplementedShardServer) Remove(context.Context, *RemoveRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Remove not implemented")
 }
-func (UnimplementedCloudSyncServer) Rename(context.Context, *RenameRequest) (*Empty, error) {
+func (UnimplementedShardServer) Rename(context.Context, *RenameRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Rename not implemented")
 }
-func (UnimplementedCloudSyncServer) Upload(context.Context, *UploadRequest) (*UploadReply, error) {
+func (UnimplementedShardServer) Upload(context.Context, *UploadRequest) (*UploadReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Upload not implemented")
 }
-func (UnimplementedCloudSyncServer) Download(context.Context, *DownloadRequest) (*Empty, error) {
+func (UnimplementedShardServer) Download(context.Context, *DownloadRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Download not implemented")
 }
-func (UnimplementedCloudSyncServer) Pin(context.Context, *PathRequest) (*Empty, error) {
+func (UnimplementedShardServer) Pin(context.Context, *PathRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Pin not implemented")
 }
-func (UnimplementedCloudSyncServer) Unpin(context.Context, *PathRequest) (*Empty, error) {
+func (UnimplementedShardServer) Unpin(context.Context, *PathRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Unpin not implemented")
 }
-func (UnimplementedCloudSyncServer) LockHolder(context.Context, *PathRequest) (*LockInfo, error) {
+func (UnimplementedShardServer) LockHolder(context.Context, *PathRequest) (*LockInfo, error) {
 	return nil, status.Error(codes.Unimplemented, "method LockHolder not implemented")
 }
-func (UnimplementedCloudSyncServer) Locks(context.Context, *PathsRequest) (*LocksReply, error) {
+func (UnimplementedShardServer) Locks(context.Context, *PathsRequest) (*LocksReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Locks not implemented")
 }
-func (UnimplementedCloudSyncServer) Sync(context.Context, *Empty) (*Empty, error) {
+func (UnimplementedShardServer) Sync(context.Context, *Empty) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method Sync not implemented")
 }
-func (UnimplementedCloudSyncServer) Repair(context.Context, *RepairRequest) (*RepairReply, error) {
+func (UnimplementedShardServer) Repair(context.Context, *RepairRequest) (*RepairReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method Repair not implemented")
 }
-func (UnimplementedCloudSyncServer) GC(context.Context, *GCRequest) (*GCReply, error) {
+func (UnimplementedShardServer) GC(context.Context, *GCRequest) (*GCReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method GC not implemented")
 }
-func (UnimplementedCloudSyncServer) SetRedundancy(context.Context, *SetRedundancyRequest) (*Empty, error) {
+func (UnimplementedShardServer) SetRedundancy(context.Context, *SetRedundancyRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetRedundancy not implemented")
 }
-func (UnimplementedCloudSyncServer) ListSecrets(context.Context, *Empty) (*SecretsReply, error) {
+func (UnimplementedShardServer) ListSecrets(context.Context, *Empty) (*SecretsReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListSecrets not implemented")
 }
-func (UnimplementedCloudSyncServer) GetSecret(context.Context, *IdRequest) (*SecretEntry, error) {
+func (UnimplementedShardServer) GetSecret(context.Context, *IdRequest) (*SecretEntry, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetSecret not implemented")
 }
-func (UnimplementedCloudSyncServer) PutSecret(context.Context, *SecretEntry) (*SecretEntry, error) {
+func (UnimplementedShardServer) PutSecret(context.Context, *SecretEntry) (*SecretEntry, error) {
 	return nil, status.Error(codes.Unimplemented, "method PutSecret not implemented")
 }
-func (UnimplementedCloudSyncServer) DeleteSecret(context.Context, *IdRequest) (*Empty, error) {
+func (UnimplementedShardServer) DeleteSecret(context.Context, *IdRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteSecret not implemented")
 }
-func (UnimplementedCloudSyncServer) PutSecretGroup(context.Context, *SecretGroup) (*SecretGroup, error) {
+func (UnimplementedShardServer) PutSecretGroup(context.Context, *SecretGroup) (*SecretGroup, error) {
 	return nil, status.Error(codes.Unimplemented, "method PutSecretGroup not implemented")
 }
-func (UnimplementedCloudSyncServer) DeleteSecretGroup(context.Context, *IdRequest) (*Empty, error) {
+func (UnimplementedShardServer) DeleteSecretGroup(context.Context, *IdRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteSecretGroup not implemented")
 }
-func (UnimplementedCloudSyncServer) DeriveKey(context.Context, *DeriveKeyRequest) (*DerivedKey, error) {
+func (UnimplementedShardServer) DeriveKey(context.Context, *DeriveKeyRequest) (*DerivedKey, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeriveKey not implemented")
 }
-func (UnimplementedCloudSyncServer) TotpCodes(context.Context, *Empty) (*TotpCodesReply, error) {
+func (UnimplementedShardServer) TotpCodes(context.Context, *Empty) (*TotpCodesReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method TotpCodes not implemented")
 }
-func (UnimplementedCloudSyncServer) UseRecoveryCode(context.Context, *RecoveryCodeRequest) (*SecretEntry, error) {
+func (UnimplementedShardServer) UseRecoveryCode(context.Context, *RecoveryCodeRequest) (*SecretEntry, error) {
 	return nil, status.Error(codes.Unimplemented, "method UseRecoveryCode not implemented")
 }
-func (UnimplementedCloudSyncServer) CheckTotp(context.Context, *CheckTotpRequest) (*TotpPreview, error) {
+func (UnimplementedShardServer) CheckTotp(context.Context, *CheckTotpRequest) (*TotpPreview, error) {
 	return nil, status.Error(codes.Unimplemented, "method CheckTotp not implemented")
 }
-func (UnimplementedCloudSyncServer) ReadTotpLinks(context.Context, *TotpLinksRequest) (*TotpLinksReply, error) {
+func (UnimplementedShardServer) ReadTotpLinks(context.Context, *TotpLinksRequest) (*TotpLinksReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method ReadTotpLinks not implemented")
 }
-func (UnimplementedCloudSyncServer) ImportSecrets(context.Context, *SecretImportRequest) (*SecretImportReply, error) {
+func (UnimplementedShardServer) ImportSecrets(context.Context, *SecretImportRequest) (*SecretImportReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method ImportSecrets not implemented")
 }
-func (UnimplementedCloudSyncServer) ListApps(context.Context, *Empty) (*AppsReply, error) {
+func (UnimplementedShardServer) ListApps(context.Context, *Empty) (*AppsReply, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListApps not implemented")
 }
-func (UnimplementedCloudSyncServer) DecidePairing(context.Context, *DecidePairingRequest) (*Empty, error) {
+func (UnimplementedShardServer) DecidePairing(context.Context, *DecidePairingRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method DecidePairing not implemented")
 }
-func (UnimplementedCloudSyncServer) RevokeApp(context.Context, *IdRequest) (*Empty, error) {
+func (UnimplementedShardServer) RevokeApp(context.Context, *IdRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method RevokeApp not implemented")
 }
-func (UnimplementedCloudSyncServer) SetAppScopes(context.Context, *SetAppScopesRequest) (*Empty, error) {
+func (UnimplementedShardServer) SetAppScopes(context.Context, *SetAppScopesRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetAppScopes not implemented")
 }
-func (UnimplementedCloudSyncServer) DeleteAppData(context.Context, *IdRequest) (*Empty, error) {
+func (UnimplementedShardServer) DeleteAppData(context.Context, *IdRequest) (*Empty, error) {
 	return nil, status.Error(codes.Unimplemented, "method DeleteAppData not implemented")
 }
-func (UnimplementedCloudSyncServer) Watch(*Empty, grpc.ServerStreamingServer[Event]) error {
+func (UnimplementedShardServer) Watch(*Empty, grpc.ServerStreamingServer[Event]) error {
 	return status.Error(codes.Unimplemented, "method Watch not implemented")
 }
-func (UnimplementedCloudSyncServer) mustEmbedUnimplementedCloudSyncServer() {}
-func (UnimplementedCloudSyncServer) testEmbeddedByValue()                   {}
+func (UnimplementedShardServer) mustEmbedUnimplementedShardServer() {}
+func (UnimplementedShardServer) testEmbeddedByValue()               {}
 
-// UnsafeCloudSyncServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CloudSyncServer will
+// UnsafeShardServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ShardServer will
 // result in compilation errors.
-type UnsafeCloudSyncServer interface {
-	mustEmbedUnimplementedCloudSyncServer()
+type UnsafeShardServer interface {
+	mustEmbedUnimplementedShardServer()
 }
 
-func RegisterCloudSyncServer(s grpc.ServiceRegistrar, srv CloudSyncServer) {
-	// If the following call panics, it indicates UnimplementedCloudSyncServer was
+func RegisterShardServer(s grpc.ServiceRegistrar, srv ShardServer) {
+	// If the following call panics, it indicates UnimplementedShardServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&CloudSync_ServiceDesc, srv)
+	s.RegisterService(&Shard_ServiceDesc, srv)
 }
 
-func _CloudSync_GetState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_GetState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).GetState(ctx, in)
+		return srv.(ShardServer).GetState(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_GetState_FullMethodName,
+		FullMethod: Shard_GetState_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).GetState(ctx, req.(*Empty))
+		return srv.(ShardServer).GetState(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_CreateVault_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_CreateVault_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateVaultRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).CreateVault(ctx, in)
+		return srv.(ShardServer).CreateVault(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_CreateVault_FullMethodName,
+		FullMethod: Shard_CreateVault_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).CreateVault(ctx, req.(*CreateVaultRequest))
+		return srv.(ShardServer).CreateVault(ctx, req.(*CreateVaultRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_ImportVault_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_ImportVault_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ImportVaultRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).ImportVault(ctx, in)
+		return srv.(ShardServer).ImportVault(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_ImportVault_FullMethodName,
+		FullMethod: Shard_ImportVault_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).ImportVault(ctx, req.(*ImportVaultRequest))
+		return srv.(ShardServer).ImportVault(ctx, req.(*ImportVaultRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Unlock_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Unlock_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UnlockRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Unlock(ctx, in)
+		return srv.(ShardServer).Unlock(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Unlock_FullMethodName,
+		FullMethod: Shard_Unlock_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Unlock(ctx, req.(*UnlockRequest))
+		return srv.(ShardServer).Unlock(ctx, req.(*UnlockRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_LockVault_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_LockVault_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).LockVault(ctx, in)
+		return srv.(ShardServer).LockVault(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_LockVault_FullMethodName,
+		FullMethod: Shard_LockVault_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).LockVault(ctx, req.(*Empty))
+		return srv.(ShardServer).LockVault(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_ChangePassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_ChangePassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ChangePasswordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).ChangePassword(ctx, in)
+		return srv.(ShardServer).ChangePassword(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_ChangePassword_FullMethodName,
+		FullMethod: Shard_ChangePassword_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).ChangePassword(ctx, req.(*ChangePasswordRequest))
+		return srv.(ShardServer).ChangePassword(ctx, req.(*ChangePasswordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_CheckPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_CheckPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CheckPasswordRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).CheckPassword(ctx, in)
+		return srv.(ShardServer).CheckPassword(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_CheckPassword_FullMethodName,
+		FullMethod: Shard_CheckPassword_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).CheckPassword(ctx, req.(*CheckPasswordRequest))
+		return srv.(ShardServer).CheckPassword(ctx, req.(*CheckPasswordRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_ExportVault_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_ExportVault_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).ExportVault(ctx, in)
+		return srv.(ShardServer).ExportVault(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_ExportVault_FullMethodName,
+		FullMethod: Shard_ExportVault_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).ExportVault(ctx, req.(*Empty))
+		return srv.(ShardServer).ExportVault(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_BackendTypes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_BackendTypes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).BackendTypes(ctx, in)
+		return srv.(ShardServer).BackendTypes(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_BackendTypes_FullMethodName,
+		FullMethod: Shard_BackendTypes_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).BackendTypes(ctx, req.(*Empty))
+		return srv.(ShardServer).BackendTypes(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_AddBackend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_AddBackend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddBackendRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).AddBackend(ctx, in)
+		return srv.(ShardServer).AddBackend(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_AddBackend_FullMethodName,
+		FullMethod: Shard_AddBackend_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).AddBackend(ctx, req.(*AddBackendRequest))
+		return srv.(ShardServer).AddBackend(ctx, req.(*AddBackendRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_SetBackendEnabled_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_SetBackendEnabled_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetBackendEnabledRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).SetBackendEnabled(ctx, in)
+		return srv.(ShardServer).SetBackendEnabled(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_SetBackendEnabled_FullMethodName,
+		FullMethod: Shard_SetBackendEnabled_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).SetBackendEnabled(ctx, req.(*SetBackendEnabledRequest))
+		return srv.(ShardServer).SetBackendEnabled(ctx, req.(*SetBackendEnabledRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_RenameBackend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_RenameBackend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RenameBackendRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).RenameBackend(ctx, in)
+		return srv.(ShardServer).RenameBackend(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_RenameBackend_FullMethodName,
+		FullMethod: Shard_RenameBackend_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).RenameBackend(ctx, req.(*RenameBackendRequest))
+		return srv.(ShardServer).RenameBackend(ctx, req.(*RenameBackendRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_RemoveBackend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_RemoveBackend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RemoveBackendRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).RemoveBackend(ctx, in)
+		return srv.(ShardServer).RemoveBackend(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_RemoveBackend_FullMethodName,
+		FullMethod: Shard_RemoveBackend_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).RemoveBackend(ctx, req.(*RemoveBackendRequest))
+		return srv.(ShardServer).RemoveBackend(ctx, req.(*RemoveBackendRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Authorize_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _Shard_Authorize_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(AuthorizeRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(CloudSyncServer).Authorize(m, &grpc.GenericServerStream[AuthorizeRequest, AuthorizeReply]{ServerStream: stream})
+	return srv.(ShardServer).Authorize(m, &grpc.GenericServerStream[AuthorizeRequest, AuthorizeReply]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type CloudSync_AuthorizeServer = grpc.ServerStreamingServer[AuthorizeReply]
+type Shard_AuthorizeServer = grpc.ServerStreamingServer[AuthorizeReply]
 
-func _CloudSync_Reconnect_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _Shard_Reconnect_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(IdRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(CloudSyncServer).Reconnect(m, &grpc.GenericServerStream[IdRequest, AuthorizeReply]{ServerStream: stream})
+	return srv.(ShardServer).Reconnect(m, &grpc.GenericServerStream[IdRequest, AuthorizeReply]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type CloudSync_ReconnectServer = grpc.ServerStreamingServer[AuthorizeReply]
+type Shard_ReconnectServer = grpc.ServerStreamingServer[AuthorizeReply]
 
-func _CloudSync_Status_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Status_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Status(ctx, in)
+		return srv.(ShardServer).Status(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Status_FullMethodName,
+		FullMethod: Shard_Status_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Status(ctx, req.(*Empty))
+		return srv.(ShardServer).Status(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Logs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Logs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LogsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Logs(ctx, in)
+		return srv.(ShardServer).Logs(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Logs_FullMethodName,
+		FullMethod: Shard_Logs_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Logs(ctx, req.(*LogsRequest))
+		return srv.(ShardServer).Logs(ctx, req.(*LogsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_ClearLogs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_ClearLogs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).ClearLogs(ctx, in)
+		return srv.(ShardServer).ClearLogs(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_ClearLogs_FullMethodName,
+		FullMethod: Shard_ClearLogs_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).ClearLogs(ctx, req.(*Empty))
+		return srv.(ShardServer).ClearLogs(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_SetMountPoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_SetMountPoint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PathRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).SetMountPoint(ctx, in)
+		return srv.(ShardServer).SetMountPoint(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_SetMountPoint_FullMethodName,
+		FullMethod: Shard_SetMountPoint_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).SetMountPoint(ctx, req.(*PathRequest))
+		return srv.(ShardServer).SetMountPoint(ctx, req.(*PathRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Shutdown_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Shutdown_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Shutdown(ctx, in)
+		return srv.(ShardServer).Shutdown(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Shutdown_FullMethodName,
+		FullMethod: Shard_Shutdown_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Shutdown(ctx, req.(*Empty))
+		return srv.(ShardServer).Shutdown(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PathRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).List(ctx, in)
+		return srv.(ShardServer).List(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_List_FullMethodName,
+		FullMethod: Shard_List_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).List(ctx, req.(*PathRequest))
+		return srv.(ShardServer).List(ctx, req.(*PathRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SearchRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Search(ctx, in)
+		return srv.(ShardServer).Search(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Search_FullMethodName,
+		FullMethod: Shard_Search_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Search(ctx, req.(*SearchRequest))
+		return srv.(ShardServer).Search(ctx, req.(*SearchRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Stat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Stat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PathRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Stat(ctx, in)
+		return srv.(ShardServer).Stat(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Stat_FullMethodName,
+		FullMethod: Shard_Stat_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Stat(ctx, req.(*PathRequest))
+		return srv.(ShardServer).Stat(ctx, req.(*PathRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Mkdir_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Mkdir_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PathRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Mkdir(ctx, in)
+		return srv.(ShardServer).Mkdir(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Mkdir_FullMethodName,
+		FullMethod: Shard_Mkdir_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Mkdir(ctx, req.(*PathRequest))
+		return srv.(ShardServer).Mkdir(ctx, req.(*PathRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Remove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Remove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RemoveRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Remove(ctx, in)
+		return srv.(ShardServer).Remove(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Remove_FullMethodName,
+		FullMethod: Shard_Remove_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Remove(ctx, req.(*RemoveRequest))
+		return srv.(ShardServer).Remove(ctx, req.(*RemoveRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Rename_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Rename_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RenameRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Rename(ctx, in)
+		return srv.(ShardServer).Rename(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Rename_FullMethodName,
+		FullMethod: Shard_Rename_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Rename(ctx, req.(*RenameRequest))
+		return srv.(ShardServer).Rename(ctx, req.(*RenameRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Upload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Upload_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UploadRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Upload(ctx, in)
+		return srv.(ShardServer).Upload(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Upload_FullMethodName,
+		FullMethod: Shard_Upload_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Upload(ctx, req.(*UploadRequest))
+		return srv.(ShardServer).Upload(ctx, req.(*UploadRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Download_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Download_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DownloadRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Download(ctx, in)
+		return srv.(ShardServer).Download(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Download_FullMethodName,
+		FullMethod: Shard_Download_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Download(ctx, req.(*DownloadRequest))
+		return srv.(ShardServer).Download(ctx, req.(*DownloadRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Pin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Pin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PathRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Pin(ctx, in)
+		return srv.(ShardServer).Pin(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Pin_FullMethodName,
+		FullMethod: Shard_Pin_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Pin(ctx, req.(*PathRequest))
+		return srv.(ShardServer).Pin(ctx, req.(*PathRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Unpin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Unpin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PathRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Unpin(ctx, in)
+		return srv.(ShardServer).Unpin(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Unpin_FullMethodName,
+		FullMethod: Shard_Unpin_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Unpin(ctx, req.(*PathRequest))
+		return srv.(ShardServer).Unpin(ctx, req.(*PathRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_LockHolder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_LockHolder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PathRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).LockHolder(ctx, in)
+		return srv.(ShardServer).LockHolder(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_LockHolder_FullMethodName,
+		FullMethod: Shard_LockHolder_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).LockHolder(ctx, req.(*PathRequest))
+		return srv.(ShardServer).LockHolder(ctx, req.(*PathRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Locks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Locks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PathsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Locks(ctx, in)
+		return srv.(ShardServer).Locks(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Locks_FullMethodName,
+		FullMethod: Shard_Locks_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Locks(ctx, req.(*PathsRequest))
+		return srv.(ShardServer).Locks(ctx, req.(*PathsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Sync_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Sync_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Sync(ctx, in)
+		return srv.(ShardServer).Sync(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Sync_FullMethodName,
+		FullMethod: Shard_Sync_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Sync(ctx, req.(*Empty))
+		return srv.(ShardServer).Sync(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Repair_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_Repair_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RepairRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).Repair(ctx, in)
+		return srv.(ShardServer).Repair(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_Repair_FullMethodName,
+		FullMethod: Shard_Repair_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).Repair(ctx, req.(*RepairRequest))
+		return srv.(ShardServer).Repair(ctx, req.(*RepairRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_GC_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_GC_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GCRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).GC(ctx, in)
+		return srv.(ShardServer).GC(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_GC_FullMethodName,
+		FullMethod: Shard_GC_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).GC(ctx, req.(*GCRequest))
+		return srv.(ShardServer).GC(ctx, req.(*GCRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_SetRedundancy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_SetRedundancy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetRedundancyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).SetRedundancy(ctx, in)
+		return srv.(ShardServer).SetRedundancy(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_SetRedundancy_FullMethodName,
+		FullMethod: Shard_SetRedundancy_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).SetRedundancy(ctx, req.(*SetRedundancyRequest))
+		return srv.(ShardServer).SetRedundancy(ctx, req.(*SetRedundancyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_ListSecrets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_ListSecrets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).ListSecrets(ctx, in)
+		return srv.(ShardServer).ListSecrets(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_ListSecrets_FullMethodName,
+		FullMethod: Shard_ListSecrets_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).ListSecrets(ctx, req.(*Empty))
+		return srv.(ShardServer).ListSecrets(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_GetSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_GetSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).GetSecret(ctx, in)
+		return srv.(ShardServer).GetSecret(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_GetSecret_FullMethodName,
+		FullMethod: Shard_GetSecret_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).GetSecret(ctx, req.(*IdRequest))
+		return srv.(ShardServer).GetSecret(ctx, req.(*IdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_PutSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_PutSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SecretEntry)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).PutSecret(ctx, in)
+		return srv.(ShardServer).PutSecret(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_PutSecret_FullMethodName,
+		FullMethod: Shard_PutSecret_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).PutSecret(ctx, req.(*SecretEntry))
+		return srv.(ShardServer).PutSecret(ctx, req.(*SecretEntry))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_DeleteSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_DeleteSecret_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).DeleteSecret(ctx, in)
+		return srv.(ShardServer).DeleteSecret(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_DeleteSecret_FullMethodName,
+		FullMethod: Shard_DeleteSecret_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).DeleteSecret(ctx, req.(*IdRequest))
+		return srv.(ShardServer).DeleteSecret(ctx, req.(*IdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_PutSecretGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_PutSecretGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SecretGroup)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).PutSecretGroup(ctx, in)
+		return srv.(ShardServer).PutSecretGroup(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_PutSecretGroup_FullMethodName,
+		FullMethod: Shard_PutSecretGroup_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).PutSecretGroup(ctx, req.(*SecretGroup))
+		return srv.(ShardServer).PutSecretGroup(ctx, req.(*SecretGroup))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_DeleteSecretGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_DeleteSecretGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).DeleteSecretGroup(ctx, in)
+		return srv.(ShardServer).DeleteSecretGroup(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_DeleteSecretGroup_FullMethodName,
+		FullMethod: Shard_DeleteSecretGroup_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).DeleteSecretGroup(ctx, req.(*IdRequest))
+		return srv.(ShardServer).DeleteSecretGroup(ctx, req.(*IdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_DeriveKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_DeriveKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeriveKeyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).DeriveKey(ctx, in)
+		return srv.(ShardServer).DeriveKey(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_DeriveKey_FullMethodName,
+		FullMethod: Shard_DeriveKey_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).DeriveKey(ctx, req.(*DeriveKeyRequest))
+		return srv.(ShardServer).DeriveKey(ctx, req.(*DeriveKeyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_TotpCodes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_TotpCodes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).TotpCodes(ctx, in)
+		return srv.(ShardServer).TotpCodes(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_TotpCodes_FullMethodName,
+		FullMethod: Shard_TotpCodes_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).TotpCodes(ctx, req.(*Empty))
+		return srv.(ShardServer).TotpCodes(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_UseRecoveryCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_UseRecoveryCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RecoveryCodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).UseRecoveryCode(ctx, in)
+		return srv.(ShardServer).UseRecoveryCode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_UseRecoveryCode_FullMethodName,
+		FullMethod: Shard_UseRecoveryCode_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).UseRecoveryCode(ctx, req.(*RecoveryCodeRequest))
+		return srv.(ShardServer).UseRecoveryCode(ctx, req.(*RecoveryCodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_CheckTotp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_CheckTotp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CheckTotpRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).CheckTotp(ctx, in)
+		return srv.(ShardServer).CheckTotp(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_CheckTotp_FullMethodName,
+		FullMethod: Shard_CheckTotp_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).CheckTotp(ctx, req.(*CheckTotpRequest))
+		return srv.(ShardServer).CheckTotp(ctx, req.(*CheckTotpRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_ReadTotpLinks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_ReadTotpLinks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TotpLinksRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).ReadTotpLinks(ctx, in)
+		return srv.(ShardServer).ReadTotpLinks(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_ReadTotpLinks_FullMethodName,
+		FullMethod: Shard_ReadTotpLinks_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).ReadTotpLinks(ctx, req.(*TotpLinksRequest))
+		return srv.(ShardServer).ReadTotpLinks(ctx, req.(*TotpLinksRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_ImportSecrets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_ImportSecrets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SecretImportRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).ImportSecrets(ctx, in)
+		return srv.(ShardServer).ImportSecrets(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_ImportSecrets_FullMethodName,
+		FullMethod: Shard_ImportSecrets_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).ImportSecrets(ctx, req.(*SecretImportRequest))
+		return srv.(ShardServer).ImportSecrets(ctx, req.(*SecretImportRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_ListApps_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_ListApps_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).ListApps(ctx, in)
+		return srv.(ShardServer).ListApps(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_ListApps_FullMethodName,
+		FullMethod: Shard_ListApps_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).ListApps(ctx, req.(*Empty))
+		return srv.(ShardServer).ListApps(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_DecidePairing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_DecidePairing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DecidePairingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).DecidePairing(ctx, in)
+		return srv.(ShardServer).DecidePairing(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_DecidePairing_FullMethodName,
+		FullMethod: Shard_DecidePairing_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).DecidePairing(ctx, req.(*DecidePairingRequest))
+		return srv.(ShardServer).DecidePairing(ctx, req.(*DecidePairingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_RevokeApp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_RevokeApp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).RevokeApp(ctx, in)
+		return srv.(ShardServer).RevokeApp(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_RevokeApp_FullMethodName,
+		FullMethod: Shard_RevokeApp_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).RevokeApp(ctx, req.(*IdRequest))
+		return srv.(ShardServer).RevokeApp(ctx, req.(*IdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_SetAppScopes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_SetAppScopes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetAppScopesRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).SetAppScopes(ctx, in)
+		return srv.(ShardServer).SetAppScopes(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_SetAppScopes_FullMethodName,
+		FullMethod: Shard_SetAppScopes_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).SetAppScopes(ctx, req.(*SetAppScopesRequest))
+		return srv.(ShardServer).SetAppScopes(ctx, req.(*SetAppScopesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_DeleteAppData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Shard_DeleteAppData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IdRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CloudSyncServer).DeleteAppData(ctx, in)
+		return srv.(ShardServer).DeleteAppData(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: CloudSync_DeleteAppData_FullMethodName,
+		FullMethod: Shard_DeleteAppData_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CloudSyncServer).DeleteAppData(ctx, req.(*IdRequest))
+		return srv.(ShardServer).DeleteAppData(ctx, req.(*IdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CloudSync_Watch_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _Shard_Watch_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(Empty)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(CloudSyncServer).Watch(m, &grpc.GenericServerStream[Empty, Event]{ServerStream: stream})
+	return srv.(ShardServer).Watch(m, &grpc.GenericServerStream[Empty, Event]{ServerStream: stream})
 }
 
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
-type CloudSync_WatchServer = grpc.ServerStreamingServer[Event]
+type Shard_WatchServer = grpc.ServerStreamingServer[Event]
 
-// CloudSync_ServiceDesc is the grpc.ServiceDesc for CloudSync service.
+// Shard_ServiceDesc is the grpc.ServiceDesc for Shard service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CloudSync_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "cloudsync.v1.CloudSync",
-	HandlerType: (*CloudSyncServer)(nil),
+var Shard_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "selfhold.shard.v1.Shard",
+	HandlerType: (*ShardServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetState",
-			Handler:    _CloudSync_GetState_Handler,
+			Handler:    _Shard_GetState_Handler,
 		},
 		{
 			MethodName: "CreateVault",
-			Handler:    _CloudSync_CreateVault_Handler,
+			Handler:    _Shard_CreateVault_Handler,
 		},
 		{
 			MethodName: "ImportVault",
-			Handler:    _CloudSync_ImportVault_Handler,
+			Handler:    _Shard_ImportVault_Handler,
 		},
 		{
 			MethodName: "Unlock",
-			Handler:    _CloudSync_Unlock_Handler,
+			Handler:    _Shard_Unlock_Handler,
 		},
 		{
 			MethodName: "LockVault",
-			Handler:    _CloudSync_LockVault_Handler,
+			Handler:    _Shard_LockVault_Handler,
 		},
 		{
 			MethodName: "ChangePassword",
-			Handler:    _CloudSync_ChangePassword_Handler,
+			Handler:    _Shard_ChangePassword_Handler,
 		},
 		{
 			MethodName: "CheckPassword",
-			Handler:    _CloudSync_CheckPassword_Handler,
+			Handler:    _Shard_CheckPassword_Handler,
 		},
 		{
 			MethodName: "ExportVault",
-			Handler:    _CloudSync_ExportVault_Handler,
+			Handler:    _Shard_ExportVault_Handler,
 		},
 		{
 			MethodName: "BackendTypes",
-			Handler:    _CloudSync_BackendTypes_Handler,
+			Handler:    _Shard_BackendTypes_Handler,
 		},
 		{
 			MethodName: "AddBackend",
-			Handler:    _CloudSync_AddBackend_Handler,
+			Handler:    _Shard_AddBackend_Handler,
 		},
 		{
 			MethodName: "SetBackendEnabled",
-			Handler:    _CloudSync_SetBackendEnabled_Handler,
+			Handler:    _Shard_SetBackendEnabled_Handler,
 		},
 		{
 			MethodName: "RenameBackend",
-			Handler:    _CloudSync_RenameBackend_Handler,
+			Handler:    _Shard_RenameBackend_Handler,
 		},
 		{
 			MethodName: "RemoveBackend",
-			Handler:    _CloudSync_RemoveBackend_Handler,
+			Handler:    _Shard_RemoveBackend_Handler,
 		},
 		{
 			MethodName: "Status",
-			Handler:    _CloudSync_Status_Handler,
+			Handler:    _Shard_Status_Handler,
 		},
 		{
 			MethodName: "Logs",
-			Handler:    _CloudSync_Logs_Handler,
+			Handler:    _Shard_Logs_Handler,
 		},
 		{
 			MethodName: "ClearLogs",
-			Handler:    _CloudSync_ClearLogs_Handler,
+			Handler:    _Shard_ClearLogs_Handler,
 		},
 		{
 			MethodName: "SetMountPoint",
-			Handler:    _CloudSync_SetMountPoint_Handler,
+			Handler:    _Shard_SetMountPoint_Handler,
 		},
 		{
 			MethodName: "Shutdown",
-			Handler:    _CloudSync_Shutdown_Handler,
+			Handler:    _Shard_Shutdown_Handler,
 		},
 		{
 			MethodName: "List",
-			Handler:    _CloudSync_List_Handler,
+			Handler:    _Shard_List_Handler,
 		},
 		{
 			MethodName: "Search",
-			Handler:    _CloudSync_Search_Handler,
+			Handler:    _Shard_Search_Handler,
 		},
 		{
 			MethodName: "Stat",
-			Handler:    _CloudSync_Stat_Handler,
+			Handler:    _Shard_Stat_Handler,
 		},
 		{
 			MethodName: "Mkdir",
-			Handler:    _CloudSync_Mkdir_Handler,
+			Handler:    _Shard_Mkdir_Handler,
 		},
 		{
 			MethodName: "Remove",
-			Handler:    _CloudSync_Remove_Handler,
+			Handler:    _Shard_Remove_Handler,
 		},
 		{
 			MethodName: "Rename",
-			Handler:    _CloudSync_Rename_Handler,
+			Handler:    _Shard_Rename_Handler,
 		},
 		{
 			MethodName: "Upload",
-			Handler:    _CloudSync_Upload_Handler,
+			Handler:    _Shard_Upload_Handler,
 		},
 		{
 			MethodName: "Download",
-			Handler:    _CloudSync_Download_Handler,
+			Handler:    _Shard_Download_Handler,
 		},
 		{
 			MethodName: "Pin",
-			Handler:    _CloudSync_Pin_Handler,
+			Handler:    _Shard_Pin_Handler,
 		},
 		{
 			MethodName: "Unpin",
-			Handler:    _CloudSync_Unpin_Handler,
+			Handler:    _Shard_Unpin_Handler,
 		},
 		{
 			MethodName: "LockHolder",
-			Handler:    _CloudSync_LockHolder_Handler,
+			Handler:    _Shard_LockHolder_Handler,
 		},
 		{
 			MethodName: "Locks",
-			Handler:    _CloudSync_Locks_Handler,
+			Handler:    _Shard_Locks_Handler,
 		},
 		{
 			MethodName: "Sync",
-			Handler:    _CloudSync_Sync_Handler,
+			Handler:    _Shard_Sync_Handler,
 		},
 		{
 			MethodName: "Repair",
-			Handler:    _CloudSync_Repair_Handler,
+			Handler:    _Shard_Repair_Handler,
 		},
 		{
 			MethodName: "GC",
-			Handler:    _CloudSync_GC_Handler,
+			Handler:    _Shard_GC_Handler,
 		},
 		{
 			MethodName: "SetRedundancy",
-			Handler:    _CloudSync_SetRedundancy_Handler,
+			Handler:    _Shard_SetRedundancy_Handler,
 		},
 		{
 			MethodName: "ListSecrets",
-			Handler:    _CloudSync_ListSecrets_Handler,
+			Handler:    _Shard_ListSecrets_Handler,
 		},
 		{
 			MethodName: "GetSecret",
-			Handler:    _CloudSync_GetSecret_Handler,
+			Handler:    _Shard_GetSecret_Handler,
 		},
 		{
 			MethodName: "PutSecret",
-			Handler:    _CloudSync_PutSecret_Handler,
+			Handler:    _Shard_PutSecret_Handler,
 		},
 		{
 			MethodName: "DeleteSecret",
-			Handler:    _CloudSync_DeleteSecret_Handler,
+			Handler:    _Shard_DeleteSecret_Handler,
 		},
 		{
 			MethodName: "PutSecretGroup",
-			Handler:    _CloudSync_PutSecretGroup_Handler,
+			Handler:    _Shard_PutSecretGroup_Handler,
 		},
 		{
 			MethodName: "DeleteSecretGroup",
-			Handler:    _CloudSync_DeleteSecretGroup_Handler,
+			Handler:    _Shard_DeleteSecretGroup_Handler,
 		},
 		{
 			MethodName: "DeriveKey",
-			Handler:    _CloudSync_DeriveKey_Handler,
+			Handler:    _Shard_DeriveKey_Handler,
 		},
 		{
 			MethodName: "TotpCodes",
-			Handler:    _CloudSync_TotpCodes_Handler,
+			Handler:    _Shard_TotpCodes_Handler,
 		},
 		{
 			MethodName: "UseRecoveryCode",
-			Handler:    _CloudSync_UseRecoveryCode_Handler,
+			Handler:    _Shard_UseRecoveryCode_Handler,
 		},
 		{
 			MethodName: "CheckTotp",
-			Handler:    _CloudSync_CheckTotp_Handler,
+			Handler:    _Shard_CheckTotp_Handler,
 		},
 		{
 			MethodName: "ReadTotpLinks",
-			Handler:    _CloudSync_ReadTotpLinks_Handler,
+			Handler:    _Shard_ReadTotpLinks_Handler,
 		},
 		{
 			MethodName: "ImportSecrets",
-			Handler:    _CloudSync_ImportSecrets_Handler,
+			Handler:    _Shard_ImportSecrets_Handler,
 		},
 		{
 			MethodName: "ListApps",
-			Handler:    _CloudSync_ListApps_Handler,
+			Handler:    _Shard_ListApps_Handler,
 		},
 		{
 			MethodName: "DecidePairing",
-			Handler:    _CloudSync_DecidePairing_Handler,
+			Handler:    _Shard_DecidePairing_Handler,
 		},
 		{
 			MethodName: "RevokeApp",
-			Handler:    _CloudSync_RevokeApp_Handler,
+			Handler:    _Shard_RevokeApp_Handler,
 		},
 		{
 			MethodName: "SetAppScopes",
-			Handler:    _CloudSync_SetAppScopes_Handler,
+			Handler:    _Shard_SetAppScopes_Handler,
 		},
 		{
 			MethodName: "DeleteAppData",
-			Handler:    _CloudSync_DeleteAppData_Handler,
+			Handler:    _Shard_DeleteAppData_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Authorize",
-			Handler:       _CloudSync_Authorize_Handler,
+			Handler:       _Shard_Authorize_Handler,
 			ServerStreams: true,
 		},
 		{
 			StreamName:    "Reconnect",
-			Handler:       _CloudSync_Reconnect_Handler,
+			Handler:       _Shard_Reconnect_Handler,
 			ServerStreams: true,
 		},
 		{
 			StreamName:    "Watch",
-			Handler:       _CloudSync_Watch_Handler,
+			Handler:       _Shard_Watch_Handler,
 			ServerStreams: true,
 		},
 	},
-	Metadata: "cloudsync.proto",
+	Metadata: "shard.proto",
 }

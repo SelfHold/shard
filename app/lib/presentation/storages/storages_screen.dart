@@ -9,7 +9,7 @@ import '../../core/theme/colors.dart';
 import '../../core/theme/layout.dart';
 import '../../core/theme/typography.dart';
 import '../../data/rpc/core_client.dart';
-import '../../data/rpc/gen/cloudsync.pbgrpc.dart' as pb;
+import '../../data/rpc/gen/shard.pbgrpc.dart' as pb;
 import '../common/hm.dart';
 import '../../core/i18n.dart';
 import '../core/core_cubit.dart';
@@ -26,6 +26,7 @@ class StoragesScreen extends StatefulWidget {
 
 class _StoragesScreenState extends State<StoragesScreen> {
   bool _repairing = false;
+  bool _retrying = false;
 
   // Read once in initState: handlers use it after awaits, when the screen
   // may already be gone and context.read would throw.
@@ -183,6 +184,19 @@ class _StoragesScreenState extends State<StoragesScreen> {
 
   void _showLog(pb.Backend b) => AppShell.openLog(context, b.id);
 
+  /// Opens the storages again while the vault is not ready (unlocking an
+  /// unlocked vault retries without the password).
+  Future<void> _retry() async {
+    setState(() => _retrying = true);
+    try {
+      _core.adopt(await _core.api.unlock(pb.UnlockRequest()));
+    } catch (e) {
+      Toasts.error(tr('Could not retry', 'Не удалось повторить'), errorText(e));
+    } finally {
+      if (mounted) setState(() => _retrying = false);
+    }
+  }
+
   Future<void> _repair() async {
     setState(() => _repairing = true);
     try {
@@ -216,6 +230,9 @@ class _StoragesScreenState extends State<StoragesScreen> {
     final backends = st?.backends ?? <pb.Backend>[];
     final enabled = backends.where((b) => b.enabled).length;
     final online = backends.where((b) => b.enabled && b.online).length;
+    // Not ready: the storages the last open could not reach (with why).
+    final failed = ready ? <pb.Backend>[] : backends.where((b) => b.enabled && !b.preparing && b.error.isNotEmpty).toList();
+    final checked = ready || failed.isNotEmpty || online > 0;
     final behind = backends.where((b) => b.behind).length;
     final k = st?.dataShards ?? 0, m = st?.parityShards ?? 0;
     final hm = Hm.of(context);
@@ -243,8 +260,16 @@ class _StoragesScreenState extends State<StoragesScreen> {
                     'The vault is open but not working yet: it needs at least ${k + m} storages (k=$k + m=$m), there are $enabled.',
                     'Vault открыт, но ещё не работает: нужно хотя бы ${k + m} хранилищ (k=$k + m=$m), сейчас $enabled.',
                   )
+                : failed.isNotEmpty
+                ? tr(
+                    'The vault is open but not working: $online of $enabled storages answered, at least ${k + m} are needed (k=$k + m=$m). Not answering: ${failed.map((b) => b.name).join(', ')}.',
+                    'Vault открыт, но не работает: ответили $online из $enabled хранилищ, нужно хотя бы ${k + m} (k=$k + m=$m). Не отвечают: ${failed.map((b) => b.name).join(', ')}.',
+                  )
                 : tr('The vault is not ready: ', 'Vault не готов: ') + (core.state?.problem ?? ''),
             tone: HmTone.warning,
+            action: enabled < k + m
+                ? null
+                : HmButton(tr('Retry', 'Повторить'), small: true, icon: Icons.refresh, loading: _retrying, onPressed: _retry),
           ),
         if ((st?.domainRisk ?? false) && enabled >= k + m)
           HmBanner(
@@ -265,7 +290,7 @@ class _StoragesScreenState extends State<StoragesScreen> {
         HmStatCards(
           children: [
             HmStatCard(label: tr('Storages', 'Хранилищ'), value: '$enabled', accent: HmAccent.total),
-            HmStatCard(label: tr('Online', 'В сети'), value: ready ? '$online' : '—', accent: online == enabled && ready ? HmAccent.ok : HmAccent.error),
+            HmStatCard(label: tr('Online', 'В сети'), value: checked ? '$online' : '—', accent: online == enabled && ready ? HmAccent.ok : HmAccent.error),
             HmStatCard(
               label: tr('Room for files', 'Ещё поместится'),
               value: !ready || room == null ? '—' : formatSize(room) + (unreported > 0 ? '+' : ''),
@@ -292,7 +317,9 @@ class _StoragesScreenState extends State<StoragesScreen> {
           emptyIcon: Icons.cloud_off_outlined,
           emptyAction: HmButton(tr('Add storage', 'Добавить хранилище'), icon: Icons.add, onPressed: _add),
           onRefresh: _core.refreshStatus,
-          rowStatus: (b) => !ready || !b.enabled || b.preparing ? null : (b.online ? HmStatus.ok : HmStatus.error),
+          rowStatus: (b) => !b.enabled || b.preparing || (!ready && !b.online && b.error.isEmpty)
+              ? null
+              : (b.online ? HmStatus.ok : HmStatus.error),
           columns: [
             HmColumn(
               label: tr('Name', 'Название'),
@@ -353,7 +380,7 @@ class _StoragesScreenState extends State<StoragesScreen> {
               HmActionButton(
                 icon: Icons.login,
                 label: tr('Reconnect (sign in again)', 'Переподключить (войти заново)'),
-                kind: ready && b.enabled && !b.online && !b.preparing ? HmAction.warning : HmAction.neutral,
+                kind: (ready || b.error.isNotEmpty) && b.enabled && !b.online && !b.preparing ? HmAction.warning : HmAction.neutral,
                 onPressed: () => _reconnect(b),
               ),
             HmActionButton(
@@ -407,12 +434,14 @@ class _BackendState extends StatelessWidget {
         HmBadge(tr('preparing…', 'подготовка…'), tone: HmTone.accent)
       else if (!b.enabled)
         HmBadge(tr('disabled', 'отключено'))
-      else if (!ready)
-        HmBadge(tr('not checked', 'не проверено'))
       else if (b.online)
         HmBadge(tr('online', 'в сети'), tone: HmTone.ok)
+      else if (ready)
+        HmBadge(tr('unreachable', 'недоступно'), tone: HmTone.error)
+      else if (b.error.isNotEmpty) // the last open did not reach it
+        HmBadge(tr('not answering', 'не отвечает'), tone: HmTone.error)
       else
-        HmBadge(tr('unreachable', 'недоступно'), tone: HmTone.error),
+        HmBadge(tr('not checked', 'не проверено')),
       if (b.behind) HmBadge(tr('behind', 'отстаёт'), tone: HmTone.warning),
       if (b.sameAs.isNotEmpty) HmBadge(tr('duplicate', 'дубликат'), tone: HmTone.warning),
     ];
@@ -422,7 +451,7 @@ class _BackendState extends StatelessWidget {
             'Same account or folder as “${sameAs ?? b.sameAs}”: it adds no redundancy. Disable one and remove it from the vault.',
             'Тот же аккаунт или папка, что у «${sameAs ?? b.sameAs}»: защиты это не добавляет. Отключите одно и удалите из vault.',
           );
-    final err = [if (ready && b.error.isNotEmpty && !b.online) b.error, ?dup].join('\n');
+    final err = [if (b.error.isNotEmpty && !b.online && !b.preparing) b.error, ?dup].join('\n');
     return Tooltip(
       message: err,
       child: Wrap(

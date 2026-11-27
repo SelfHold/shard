@@ -20,8 +20,8 @@ import (
 	"strings"
 	"time"
 
-	"cloudsync/core/crypto"
-	"cloudsync/core/index"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/index"
 )
 
 // Kind of entry.
@@ -34,7 +34,7 @@ const (
 	KindTOTP     Kind = "totp" // two-factor codes and recovery codes
 	// KindNeverSave is a site a browser must not offer to save a password
 	// for (Connector API, "blocked"): a URL only, no secret. It is not
-	// shown in CloudSync's own lists.
+	// shown in Shard's own lists.
 	KindNeverSave Kind = "never-save"
 	// KindServer is a server reached over SSH (Connector API, scope
 	// "servers"): URL is host[:port], Username the login user, Password
@@ -43,8 +43,8 @@ const (
 )
 
 // LoginMeta is what a browser keeps of a website login besides the
-// username and URL (Connector API). CloudSync shows none of it; it stays
-// when the entry is edited in CloudSync.
+// username and URL (Connector API). Shard shows none of it; it stays
+// when the entry is edited in Shard.
 type LoginMeta struct {
 	Realm            string `json:"realm,omitempty"` // signon realm; "" = origin of Meta.URL
 	ActionURL        string `json:"action_url,omitempty"`
@@ -89,7 +89,7 @@ type Data struct {
 	// Recovery codes not used yet; a used one is removed (UseRecoveryCode).
 	RecoveryCodes []string `json:"recovery_codes,omitempty"`
 	// Fields of a connected app (a browser) kept with a login, not read
-	// by CloudSync; at most MaxExtra bytes of keys and values.
+	// by Shard; at most MaxExtra bytes of keys and values.
 	Extra map[string][]byte `json:"extra,omitempty"`
 }
 

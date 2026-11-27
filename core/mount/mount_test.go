@@ -14,10 +14,10 @@ import (
 
 	"github.com/winfsp/cgofuse/fuse"
 
-	"cloudsync/core/backend"
-	"cloudsync/core/chunker"
-	"cloudsync/core/engine"
-	"cloudsync/core/vault"
+	"github.com/SelfHold/shard/core/backend"
+	"github.com/SelfHold/shard/core/chunker"
+	"github.com/SelfHold/shard/core/engine"
+	"github.com/SelfHold/shard/core/vault"
 )
 
 // gate holds shard uploads ("d/...") until it is opened.
@@ -57,7 +57,7 @@ func newRig(t *testing.T) *rig {
 		{ID: "c", Name: "C", Type: "s3"},
 	}
 	dir := t.TempDir()
-	vp := filepath.Join(dir, "vault.cs")
+	vp := filepath.Join(dir, "vault.shard")
 	v, err := vault.Create(vp, []byte("pw"), c, vault.KDFParams{Time: 1, Memory: 1024, Threads: 1})
 	if err != nil {
 		t.Fatal(err)

@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v7.36.1
-// source: cloudsync.proto
+// source: shard.proto
 
 package pb
 
@@ -65,11 +65,11 @@ func (x SecretKind) String() string {
 }
 
 func (SecretKind) Descriptor() protoreflect.EnumDescriptor {
-	return file_cloudsync_proto_enumTypes[0].Descriptor()
+	return file_shard_proto_enumTypes[0].Descriptor()
 }
 
 func (SecretKind) Type() protoreflect.EnumType {
-	return &file_cloudsync_proto_enumTypes[0]
+	return &file_shard_proto_enumTypes[0]
 }
 
 func (x SecretKind) Number() protoreflect.EnumNumber {
@@ -78,7 +78,7 @@ func (x SecretKind) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SecretKind.Descriptor instead.
 func (SecretKind) EnumDescriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{0}
+	return file_shard_proto_rawDescGZIP(), []int{0}
 }
 
 type Web3Network int32
@@ -114,11 +114,11 @@ func (x Web3Network) String() string {
 }
 
 func (Web3Network) Descriptor() protoreflect.EnumDescriptor {
-	return file_cloudsync_proto_enumTypes[1].Descriptor()
+	return file_shard_proto_enumTypes[1].Descriptor()
 }
 
 func (Web3Network) Type() protoreflect.EnumType {
-	return &file_cloudsync_proto_enumTypes[1]
+	return &file_shard_proto_enumTypes[1]
 }
 
 func (x Web3Network) Number() protoreflect.EnumNumber {
@@ -127,7 +127,7 @@ func (x Web3Network) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Web3Network.Descriptor instead.
 func (Web3Network) EnumDescriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{1}
+	return file_shard_proto_rawDescGZIP(), []int{1}
 }
 
 type ServerAuth int32
@@ -166,11 +166,11 @@ func (x ServerAuth) String() string {
 }
 
 func (ServerAuth) Descriptor() protoreflect.EnumDescriptor {
-	return file_cloudsync_proto_enumTypes[2].Descriptor()
+	return file_shard_proto_enumTypes[2].Descriptor()
 }
 
 func (ServerAuth) Type() protoreflect.EnumType {
-	return &file_cloudsync_proto_enumTypes[2]
+	return &file_shard_proto_enumTypes[2]
 }
 
 func (x ServerAuth) Number() protoreflect.EnumNumber {
@@ -179,7 +179,7 @@ func (x ServerAuth) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ServerAuth.Descriptor instead.
 func (ServerAuth) EnumDescriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{2}
+	return file_shard_proto_rawDescGZIP(), []int{2}
 }
 
 type SecretImportStatus int32
@@ -215,11 +215,11 @@ func (x SecretImportStatus) String() string {
 }
 
 func (SecretImportStatus) Descriptor() protoreflect.EnumDescriptor {
-	return file_cloudsync_proto_enumTypes[3].Descriptor()
+	return file_shard_proto_enumTypes[3].Descriptor()
 }
 
 func (SecretImportStatus) Type() protoreflect.EnumType {
-	return &file_cloudsync_proto_enumTypes[3]
+	return &file_shard_proto_enumTypes[3]
 }
 
 func (x SecretImportStatus) Number() protoreflect.EnumNumber {
@@ -228,7 +228,7 @@ func (x SecretImportStatus) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SecretImportStatus.Descriptor instead.
 func (SecretImportStatus) EnumDescriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{3}
+	return file_shard_proto_rawDescGZIP(), []int{3}
 }
 
 type Event_Kind int32
@@ -276,11 +276,11 @@ func (x Event_Kind) String() string {
 }
 
 func (Event_Kind) Descriptor() protoreflect.EnumDescriptor {
-	return file_cloudsync_proto_enumTypes[4].Descriptor()
+	return file_shard_proto_enumTypes[4].Descriptor()
 }
 
 func (Event_Kind) Type() protoreflect.EnumType {
-	return &file_cloudsync_proto_enumTypes[4]
+	return &file_shard_proto_enumTypes[4]
 }
 
 func (x Event_Kind) Number() protoreflect.EnumNumber {
@@ -289,7 +289,7 @@ func (x Event_Kind) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Event_Kind.Descriptor instead.
 func (Event_Kind) EnumDescriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{38, 0}
+	return file_shard_proto_rawDescGZIP(), []int{38, 0}
 }
 
 type Empty struct {
@@ -300,7 +300,7 @@ type Empty struct {
 
 func (x *Empty) Reset() {
 	*x = Empty{}
-	mi := &file_cloudsync_proto_msgTypes[0]
+	mi := &file_shard_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -312,7 +312,7 @@ func (x *Empty) String() string {
 func (*Empty) ProtoMessage() {}
 
 func (x *Empty) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[0]
+	mi := &file_shard_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -325,7 +325,7 @@ func (x *Empty) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Empty.ProtoReflect.Descriptor instead.
 func (*Empty) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{0}
+	return file_shard_proto_rawDescGZIP(), []int{0}
 }
 
 type State struct {
@@ -358,7 +358,7 @@ type State struct {
 
 func (x *State) Reset() {
 	*x = State{}
-	mi := &file_cloudsync_proto_msgTypes[1]
+	mi := &file_shard_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -370,7 +370,7 @@ func (x *State) String() string {
 func (*State) ProtoMessage() {}
 
 func (x *State) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[1]
+	mi := &file_shard_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -383,7 +383,7 @@ func (x *State) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use State.ProtoReflect.Descriptor instead.
 func (*State) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{1}
+	return file_shard_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *State) GetVaultExists() bool {
@@ -503,7 +503,7 @@ type CreateVaultRequest struct {
 
 func (x *CreateVaultRequest) Reset() {
 	*x = CreateVaultRequest{}
-	mi := &file_cloudsync_proto_msgTypes[2]
+	mi := &file_shard_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -515,7 +515,7 @@ func (x *CreateVaultRequest) String() string {
 func (*CreateVaultRequest) ProtoMessage() {}
 
 func (x *CreateVaultRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[2]
+	mi := &file_shard_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -528,7 +528,7 @@ func (x *CreateVaultRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateVaultRequest.ProtoReflect.Descriptor instead.
 func (*CreateVaultRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{2}
+	return file_shard_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreateVaultRequest) GetPassword() string {
@@ -570,7 +570,7 @@ type ImportVaultRequest struct {
 
 func (x *ImportVaultRequest) Reset() {
 	*x = ImportVaultRequest{}
-	mi := &file_cloudsync_proto_msgTypes[3]
+	mi := &file_shard_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -582,7 +582,7 @@ func (x *ImportVaultRequest) String() string {
 func (*ImportVaultRequest) ProtoMessage() {}
 
 func (x *ImportVaultRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[3]
+	mi := &file_shard_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -595,7 +595,7 @@ func (x *ImportVaultRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ImportVaultRequest.ProtoReflect.Descriptor instead.
 func (*ImportVaultRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{3}
+	return file_shard_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ImportVaultRequest) GetVault() []byte {
@@ -629,7 +629,7 @@ type UnlockRequest struct {
 
 func (x *UnlockRequest) Reset() {
 	*x = UnlockRequest{}
-	mi := &file_cloudsync_proto_msgTypes[4]
+	mi := &file_shard_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -641,7 +641,7 @@ func (x *UnlockRequest) String() string {
 func (*UnlockRequest) ProtoMessage() {}
 
 func (x *UnlockRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[4]
+	mi := &file_shard_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -654,7 +654,7 @@ func (x *UnlockRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockRequest.ProtoReflect.Descriptor instead.
 func (*UnlockRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{4}
+	return file_shard_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *UnlockRequest) GetPassword() string {
@@ -681,7 +681,7 @@ type ChangePasswordRequest struct {
 
 func (x *ChangePasswordRequest) Reset() {
 	*x = ChangePasswordRequest{}
-	mi := &file_cloudsync_proto_msgTypes[5]
+	mi := &file_shard_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -693,7 +693,7 @@ func (x *ChangePasswordRequest) String() string {
 func (*ChangePasswordRequest) ProtoMessage() {}
 
 func (x *ChangePasswordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[5]
+	mi := &file_shard_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -706,7 +706,7 @@ func (x *ChangePasswordRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangePasswordRequest.ProtoReflect.Descriptor instead.
 func (*ChangePasswordRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{5}
+	return file_shard_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ChangePasswordRequest) GetOldPassword() string {
@@ -732,7 +732,7 @@ type CheckPasswordRequest struct {
 
 func (x *CheckPasswordRequest) Reset() {
 	*x = CheckPasswordRequest{}
-	mi := &file_cloudsync_proto_msgTypes[6]
+	mi := &file_shard_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -744,7 +744,7 @@ func (x *CheckPasswordRequest) String() string {
 func (*CheckPasswordRequest) ProtoMessage() {}
 
 func (x *CheckPasswordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[6]
+	mi := &file_shard_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -757,7 +757,7 @@ func (x *CheckPasswordRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckPasswordRequest.ProtoReflect.Descriptor instead.
 func (*CheckPasswordRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{6}
+	return file_shard_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *CheckPasswordRequest) GetPassword() string {
@@ -776,7 +776,7 @@ type VaultFile struct {
 
 func (x *VaultFile) Reset() {
 	*x = VaultFile{}
-	mi := &file_cloudsync_proto_msgTypes[7]
+	mi := &file_shard_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -788,7 +788,7 @@ func (x *VaultFile) String() string {
 func (*VaultFile) ProtoMessage() {}
 
 func (x *VaultFile) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[7]
+	mi := &file_shard_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -801,7 +801,7 @@ func (x *VaultFile) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VaultFile.ProtoReflect.Descriptor instead.
 func (*VaultFile) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{7}
+	return file_shard_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *VaultFile) GetVault() []byte {
@@ -826,7 +826,7 @@ type BackendOption struct {
 
 func (x *BackendOption) Reset() {
 	*x = BackendOption{}
-	mi := &file_cloudsync_proto_msgTypes[8]
+	mi := &file_shard_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -838,7 +838,7 @@ func (x *BackendOption) String() string {
 func (*BackendOption) ProtoMessage() {}
 
 func (x *BackendOption) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[8]
+	mi := &file_shard_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -851,7 +851,7 @@ func (x *BackendOption) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BackendOption.ProtoReflect.Descriptor instead.
 func (*BackendOption) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{8}
+	return file_shard_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *BackendOption) GetName() string {
@@ -915,7 +915,7 @@ type BackendType struct {
 
 func (x *BackendType) Reset() {
 	*x = BackendType{}
-	mi := &file_cloudsync_proto_msgTypes[9]
+	mi := &file_shard_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -927,7 +927,7 @@ func (x *BackendType) String() string {
 func (*BackendType) ProtoMessage() {}
 
 func (x *BackendType) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[9]
+	mi := &file_shard_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -940,7 +940,7 @@ func (x *BackendType) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BackendType.ProtoReflect.Descriptor instead.
 func (*BackendType) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{9}
+	return file_shard_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *BackendType) GetName() string {
@@ -980,7 +980,7 @@ type BackendTypesReply struct {
 
 func (x *BackendTypesReply) Reset() {
 	*x = BackendTypesReply{}
-	mi := &file_cloudsync_proto_msgTypes[10]
+	mi := &file_shard_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -992,7 +992,7 @@ func (x *BackendTypesReply) String() string {
 func (*BackendTypesReply) ProtoMessage() {}
 
 func (x *BackendTypesReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[10]
+	mi := &file_shard_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1005,7 +1005,7 @@ func (x *BackendTypesReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BackendTypesReply.ProtoReflect.Descriptor instead.
 func (*BackendTypesReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{10}
+	return file_shard_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *BackendTypesReply) GetTypes() []*BackendType {
@@ -1020,7 +1020,7 @@ type AddBackendRequest struct {
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Type          string                 `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
 	Domain        string                 `protobuf:"bytes,3,opt,name=domain,proto3" json:"domain,omitempty"` // failure domain; empty = type
-	Root          string                 `protobuf:"bytes,4,opt,name=root,proto3" json:"root,omitempty"`     // folder in the account; empty = "cloudsync"
+	Root          string                 `protobuf:"bytes,4,opt,name=root,proto3" json:"root,omitempty"`     // folder in the account; empty = "shard"
 	Params        map[string]string      `protobuf:"bytes,5,rep,name=params,proto3" json:"params,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	Account       string                 `protobuf:"bytes,6,opt,name=account,proto3" json:"account,omitempty"` // who the user signed in as (from AuthorizeReply)
 	unknownFields protoimpl.UnknownFields
@@ -1029,7 +1029,7 @@ type AddBackendRequest struct {
 
 func (x *AddBackendRequest) Reset() {
 	*x = AddBackendRequest{}
-	mi := &file_cloudsync_proto_msgTypes[11]
+	mi := &file_shard_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1041,7 +1041,7 @@ func (x *AddBackendRequest) String() string {
 func (*AddBackendRequest) ProtoMessage() {}
 
 func (x *AddBackendRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[11]
+	mi := &file_shard_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1054,7 +1054,7 @@ func (x *AddBackendRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddBackendRequest.ProtoReflect.Descriptor instead.
 func (*AddBackendRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{11}
+	return file_shard_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *AddBackendRequest) GetName() string {
@@ -1108,7 +1108,7 @@ type IdRequest struct {
 
 func (x *IdRequest) Reset() {
 	*x = IdRequest{}
-	mi := &file_cloudsync_proto_msgTypes[12]
+	mi := &file_shard_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1120,7 +1120,7 @@ func (x *IdRequest) String() string {
 func (*IdRequest) ProtoMessage() {}
 
 func (x *IdRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[12]
+	mi := &file_shard_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1133,7 +1133,7 @@ func (x *IdRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IdRequest.ProtoReflect.Descriptor instead.
 func (*IdRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{12}
+	return file_shard_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *IdRequest) GetId() string {
@@ -1153,7 +1153,7 @@ type RemoveBackendRequest struct {
 
 func (x *RemoveBackendRequest) Reset() {
 	*x = RemoveBackendRequest{}
-	mi := &file_cloudsync_proto_msgTypes[13]
+	mi := &file_shard_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1165,7 +1165,7 @@ func (x *RemoveBackendRequest) String() string {
 func (*RemoveBackendRequest) ProtoMessage() {}
 
 func (x *RemoveBackendRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[13]
+	mi := &file_shard_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1178,7 +1178,7 @@ func (x *RemoveBackendRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemoveBackendRequest.ProtoReflect.Descriptor instead.
 func (*RemoveBackendRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{13}
+	return file_shard_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *RemoveBackendRequest) GetId() string {
@@ -1205,7 +1205,7 @@ type AuthorizeRequest struct {
 
 func (x *AuthorizeRequest) Reset() {
 	*x = AuthorizeRequest{}
-	mi := &file_cloudsync_proto_msgTypes[14]
+	mi := &file_shard_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1217,7 +1217,7 @@ func (x *AuthorizeRequest) String() string {
 func (*AuthorizeRequest) ProtoMessage() {}
 
 func (x *AuthorizeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[14]
+	mi := &file_shard_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1230,7 +1230,7 @@ func (x *AuthorizeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthorizeRequest.ProtoReflect.Descriptor instead.
 func (*AuthorizeRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{14}
+	return file_shard_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *AuthorizeRequest) GetType() string {
@@ -1258,7 +1258,7 @@ type AuthorizeReply struct {
 
 func (x *AuthorizeReply) Reset() {
 	*x = AuthorizeReply{}
-	mi := &file_cloudsync_proto_msgTypes[15]
+	mi := &file_shard_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1270,7 +1270,7 @@ func (x *AuthorizeReply) String() string {
 func (*AuthorizeReply) ProtoMessage() {}
 
 func (x *AuthorizeReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[15]
+	mi := &file_shard_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1283,7 +1283,7 @@ func (x *AuthorizeReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthorizeReply.ProtoReflect.Descriptor instead.
 func (*AuthorizeReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{15}
+	return file_shard_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *AuthorizeReply) GetUrl() string {
@@ -1317,7 +1317,7 @@ type RenameBackendRequest struct {
 
 func (x *RenameBackendRequest) Reset() {
 	*x = RenameBackendRequest{}
-	mi := &file_cloudsync_proto_msgTypes[16]
+	mi := &file_shard_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1329,7 +1329,7 @@ func (x *RenameBackendRequest) String() string {
 func (*RenameBackendRequest) ProtoMessage() {}
 
 func (x *RenameBackendRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[16]
+	mi := &file_shard_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1342,7 +1342,7 @@ func (x *RenameBackendRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RenameBackendRequest.ProtoReflect.Descriptor instead.
 func (*RenameBackendRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{16}
+	return file_shard_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *RenameBackendRequest) GetId() string {
@@ -1369,7 +1369,7 @@ type SetBackendEnabledRequest struct {
 
 func (x *SetBackendEnabledRequest) Reset() {
 	*x = SetBackendEnabledRequest{}
-	mi := &file_cloudsync_proto_msgTypes[17]
+	mi := &file_shard_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1381,7 +1381,7 @@ func (x *SetBackendEnabledRequest) String() string {
 func (*SetBackendEnabledRequest) ProtoMessage() {}
 
 func (x *SetBackendEnabledRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[17]
+	mi := &file_shard_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1394,7 +1394,7 @@ func (x *SetBackendEnabledRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetBackendEnabledRequest.ProtoReflect.Descriptor instead.
 func (*SetBackendEnabledRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{17}
+	return file_shard_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *SetBackendEnabledRequest) GetId() string {
@@ -1445,7 +1445,7 @@ type Backend struct {
 
 func (x *Backend) Reset() {
 	*x = Backend{}
-	mi := &file_cloudsync_proto_msgTypes[18]
+	mi := &file_shard_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1457,7 +1457,7 @@ func (x *Backend) String() string {
 func (*Backend) ProtoMessage() {}
 
 func (x *Backend) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[18]
+	mi := &file_shard_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1470,7 +1470,7 @@ func (x *Backend) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Backend.ProtoReflect.Descriptor instead.
 func (*Backend) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{18}
+	return file_shard_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *Backend) GetId() string {
@@ -1618,7 +1618,7 @@ type Device struct {
 
 func (x *Device) Reset() {
 	*x = Device{}
-	mi := &file_cloudsync_proto_msgTypes[19]
+	mi := &file_shard_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1630,7 +1630,7 @@ func (x *Device) String() string {
 func (*Device) ProtoMessage() {}
 
 func (x *Device) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[19]
+	mi := &file_shard_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1643,7 +1643,7 @@ func (x *Device) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Device.ProtoReflect.Descriptor instead.
 func (*Device) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{19}
+	return file_shard_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *Device) GetId() string {
@@ -1703,7 +1703,7 @@ type StatusReply struct {
 
 func (x *StatusReply) Reset() {
 	*x = StatusReply{}
-	mi := &file_cloudsync_proto_msgTypes[20]
+	mi := &file_shard_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1715,7 +1715,7 @@ func (x *StatusReply) String() string {
 func (*StatusReply) ProtoMessage() {}
 
 func (x *StatusReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[20]
+	mi := &file_shard_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1728,7 +1728,7 @@ func (x *StatusReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StatusReply.ProtoReflect.Descriptor instead.
 func (*StatusReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{20}
+	return file_shard_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *StatusReply) GetDataShards() int32 {
@@ -1859,7 +1859,7 @@ type PathRequest struct {
 
 func (x *PathRequest) Reset() {
 	*x = PathRequest{}
-	mi := &file_cloudsync_proto_msgTypes[21]
+	mi := &file_shard_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1871,7 +1871,7 @@ func (x *PathRequest) String() string {
 func (*PathRequest) ProtoMessage() {}
 
 func (x *PathRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[21]
+	mi := &file_shard_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1884,7 +1884,7 @@ func (x *PathRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PathRequest.ProtoReflect.Descriptor instead.
 func (*PathRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{21}
+	return file_shard_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *PathRequest) GetPath() string {
@@ -1903,7 +1903,7 @@ type PathsRequest struct {
 
 func (x *PathsRequest) Reset() {
 	*x = PathsRequest{}
-	mi := &file_cloudsync_proto_msgTypes[22]
+	mi := &file_shard_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1915,7 +1915,7 @@ func (x *PathsRequest) String() string {
 func (*PathsRequest) ProtoMessage() {}
 
 func (x *PathsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[22]
+	mi := &file_shard_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1928,7 +1928,7 @@ func (x *PathsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PathsRequest.ProtoReflect.Descriptor instead.
 func (*PathsRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{22}
+	return file_shard_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *PathsRequest) GetPaths() []string {
@@ -1948,7 +1948,7 @@ type SearchRequest struct {
 
 func (x *SearchRequest) Reset() {
 	*x = SearchRequest{}
-	mi := &file_cloudsync_proto_msgTypes[23]
+	mi := &file_shard_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1960,7 +1960,7 @@ func (x *SearchRequest) String() string {
 func (*SearchRequest) ProtoMessage() {}
 
 func (x *SearchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[23]
+	mi := &file_shard_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1973,7 +1973,7 @@ func (x *SearchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SearchRequest.ProtoReflect.Descriptor instead.
 func (*SearchRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{23}
+	return file_shard_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *SearchRequest) GetQuery() string {
@@ -2007,7 +2007,7 @@ type Entry struct {
 
 func (x *Entry) Reset() {
 	*x = Entry{}
-	mi := &file_cloudsync_proto_msgTypes[24]
+	mi := &file_shard_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2019,7 +2019,7 @@ func (x *Entry) String() string {
 func (*Entry) ProtoMessage() {}
 
 func (x *Entry) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[24]
+	mi := &file_shard_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2032,7 +2032,7 @@ func (x *Entry) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Entry.ProtoReflect.Descriptor instead.
 func (*Entry) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{24}
+	return file_shard_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *Entry) GetPath() string {
@@ -2107,7 +2107,7 @@ type ListReply struct {
 
 func (x *ListReply) Reset() {
 	*x = ListReply{}
-	mi := &file_cloudsync_proto_msgTypes[25]
+	mi := &file_shard_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2119,7 +2119,7 @@ func (x *ListReply) String() string {
 func (*ListReply) ProtoMessage() {}
 
 func (x *ListReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[25]
+	mi := &file_shard_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2132,7 +2132,7 @@ func (x *ListReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListReply.ProtoReflect.Descriptor instead.
 func (*ListReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{25}
+	return file_shard_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *ListReply) GetEntries() []*Entry {
@@ -2152,7 +2152,7 @@ type RemoveRequest struct {
 
 func (x *RemoveRequest) Reset() {
 	*x = RemoveRequest{}
-	mi := &file_cloudsync_proto_msgTypes[26]
+	mi := &file_shard_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2164,7 +2164,7 @@ func (x *RemoveRequest) String() string {
 func (*RemoveRequest) ProtoMessage() {}
 
 func (x *RemoveRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[26]
+	mi := &file_shard_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2177,7 +2177,7 @@ func (x *RemoveRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RemoveRequest.ProtoReflect.Descriptor instead.
 func (*RemoveRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{26}
+	return file_shard_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *RemoveRequest) GetPath() string {
@@ -2204,7 +2204,7 @@ type RenameRequest struct {
 
 func (x *RenameRequest) Reset() {
 	*x = RenameRequest{}
-	mi := &file_cloudsync_proto_msgTypes[27]
+	mi := &file_shard_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2216,7 +2216,7 @@ func (x *RenameRequest) String() string {
 func (*RenameRequest) ProtoMessage() {}
 
 func (x *RenameRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[27]
+	mi := &file_shard_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2229,7 +2229,7 @@ func (x *RenameRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RenameRequest.ProtoReflect.Descriptor instead.
 func (*RenameRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{27}
+	return file_shard_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *RenameRequest) GetFrom() string {
@@ -2256,7 +2256,7 @@ type UploadRequest struct {
 
 func (x *UploadRequest) Reset() {
 	*x = UploadRequest{}
-	mi := &file_cloudsync_proto_msgTypes[28]
+	mi := &file_shard_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2268,7 +2268,7 @@ func (x *UploadRequest) String() string {
 func (*UploadRequest) ProtoMessage() {}
 
 func (x *UploadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[28]
+	mi := &file_shard_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2281,7 +2281,7 @@ func (x *UploadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadRequest.ProtoReflect.Descriptor instead.
 func (*UploadRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{28}
+	return file_shard_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *UploadRequest) GetLocalPaths() []string {
@@ -2307,7 +2307,7 @@ type UploadReply struct {
 
 func (x *UploadReply) Reset() {
 	*x = UploadReply{}
-	mi := &file_cloudsync_proto_msgTypes[29]
+	mi := &file_shard_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2319,7 +2319,7 @@ func (x *UploadReply) String() string {
 func (*UploadReply) ProtoMessage() {}
 
 func (x *UploadReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[29]
+	mi := &file_shard_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2332,7 +2332,7 @@ func (x *UploadReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadReply.ProtoReflect.Descriptor instead.
 func (*UploadReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{29}
+	return file_shard_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *UploadReply) GetFiles() int32 {
@@ -2352,7 +2352,7 @@ type DownloadRequest struct {
 
 func (x *DownloadRequest) Reset() {
 	*x = DownloadRequest{}
-	mi := &file_cloudsync_proto_msgTypes[30]
+	mi := &file_shard_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2364,7 +2364,7 @@ func (x *DownloadRequest) String() string {
 func (*DownloadRequest) ProtoMessage() {}
 
 func (x *DownloadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[30]
+	mi := &file_shard_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2377,7 +2377,7 @@ func (x *DownloadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DownloadRequest.ProtoReflect.Descriptor instead.
 func (*DownloadRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{30}
+	return file_shard_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *DownloadRequest) GetPath() string {
@@ -2408,7 +2408,7 @@ type LockInfo struct {
 
 func (x *LockInfo) Reset() {
 	*x = LockInfo{}
-	mi := &file_cloudsync_proto_msgTypes[31]
+	mi := &file_shard_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2420,7 +2420,7 @@ func (x *LockInfo) String() string {
 func (*LockInfo) ProtoMessage() {}
 
 func (x *LockInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[31]
+	mi := &file_shard_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2433,7 +2433,7 @@ func (x *LockInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LockInfo.ProtoReflect.Descriptor instead.
 func (*LockInfo) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{31}
+	return file_shard_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *LockInfo) GetPath() string {
@@ -2487,7 +2487,7 @@ type LocksReply struct {
 
 func (x *LocksReply) Reset() {
 	*x = LocksReply{}
-	mi := &file_cloudsync_proto_msgTypes[32]
+	mi := &file_shard_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2499,7 +2499,7 @@ func (x *LocksReply) String() string {
 func (*LocksReply) ProtoMessage() {}
 
 func (x *LocksReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[32]
+	mi := &file_shard_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2512,7 +2512,7 @@ func (x *LocksReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LocksReply.ProtoReflect.Descriptor instead.
 func (*LocksReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{32}
+	return file_shard_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *LocksReply) GetLocks() []*LockInfo {
@@ -2531,7 +2531,7 @@ type RepairRequest struct {
 
 func (x *RepairRequest) Reset() {
 	*x = RepairRequest{}
-	mi := &file_cloudsync_proto_msgTypes[33]
+	mi := &file_shard_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2543,7 +2543,7 @@ func (x *RepairRequest) String() string {
 func (*RepairRequest) ProtoMessage() {}
 
 func (x *RepairRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[33]
+	mi := &file_shard_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2556,7 +2556,7 @@ func (x *RepairRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RepairRequest.ProtoReflect.Descriptor instead.
 func (*RepairRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{33}
+	return file_shard_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *RepairRequest) GetRebalance() bool {
@@ -2584,7 +2584,7 @@ type RepairReply struct {
 
 func (x *RepairReply) Reset() {
 	*x = RepairReply{}
-	mi := &file_cloudsync_proto_msgTypes[34]
+	mi := &file_shard_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2596,7 +2596,7 @@ func (x *RepairReply) String() string {
 func (*RepairReply) ProtoMessage() {}
 
 func (x *RepairReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[34]
+	mi := &file_shard_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2609,7 +2609,7 @@ func (x *RepairReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RepairReply.ProtoReflect.Descriptor instead.
 func (*RepairReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{34}
+	return file_shard_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *RepairReply) GetBlobs() int32 {
@@ -2677,7 +2677,7 @@ type GCRequest struct {
 
 func (x *GCRequest) Reset() {
 	*x = GCRequest{}
-	mi := &file_cloudsync_proto_msgTypes[35]
+	mi := &file_shard_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2689,7 +2689,7 @@ func (x *GCRequest) String() string {
 func (*GCRequest) ProtoMessage() {}
 
 func (x *GCRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[35]
+	mi := &file_shard_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2702,7 +2702,7 @@ func (x *GCRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GCRequest.ProtoReflect.Descriptor instead.
 func (*GCRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{35}
+	return file_shard_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *GCRequest) GetGraceSeconds() int64 {
@@ -2724,7 +2724,7 @@ type GCReply struct {
 
 func (x *GCReply) Reset() {
 	*x = GCReply{}
-	mi := &file_cloudsync_proto_msgTypes[36]
+	mi := &file_shard_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2736,7 +2736,7 @@ func (x *GCReply) String() string {
 func (*GCReply) ProtoMessage() {}
 
 func (x *GCReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[36]
+	mi := &file_shard_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2749,7 +2749,7 @@ func (x *GCReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GCReply.ProtoReflect.Descriptor instead.
 func (*GCReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{36}
+	return file_shard_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *GCReply) GetObjects() int32 {
@@ -2790,7 +2790,7 @@ type SetRedundancyRequest struct {
 
 func (x *SetRedundancyRequest) Reset() {
 	*x = SetRedundancyRequest{}
-	mi := &file_cloudsync_proto_msgTypes[37]
+	mi := &file_shard_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2802,7 +2802,7 @@ func (x *SetRedundancyRequest) String() string {
 func (*SetRedundancyRequest) ProtoMessage() {}
 
 func (x *SetRedundancyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[37]
+	mi := &file_shard_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2815,7 +2815,7 @@ func (x *SetRedundancyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetRedundancyRequest.ProtoReflect.Descriptor instead.
 func (*SetRedundancyRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{37}
+	return file_shard_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *SetRedundancyRequest) GetDataShards() int32 {
@@ -2834,7 +2834,7 @@ func (x *SetRedundancyRequest) GetParityShards() int32 {
 
 type Event struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Kind          Event_Kind             `protobuf:"varint,1,opt,name=kind,proto3,enum=cloudsync.v1.Event_Kind" json:"kind,omitempty"`
+	Kind          Event_Kind             `protobuf:"varint,1,opt,name=kind,proto3,enum=selfhold.shard.v1.Event_Kind" json:"kind,omitempty"`
 	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -2842,7 +2842,7 @@ type Event struct {
 
 func (x *Event) Reset() {
 	*x = Event{}
-	mi := &file_cloudsync_proto_msgTypes[38]
+	mi := &file_shard_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2854,7 +2854,7 @@ func (x *Event) String() string {
 func (*Event) ProtoMessage() {}
 
 func (x *Event) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[38]
+	mi := &file_shard_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2867,7 +2867,7 @@ func (x *Event) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Event.ProtoReflect.Descriptor instead.
 func (*Event) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{38}
+	return file_shard_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *Event) GetKind() Event_Kind {
@@ -2894,7 +2894,7 @@ type LogsRequest struct {
 
 func (x *LogsRequest) Reset() {
 	*x = LogsRequest{}
-	mi := &file_cloudsync_proto_msgTypes[39]
+	mi := &file_shard_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2906,7 +2906,7 @@ func (x *LogsRequest) String() string {
 func (*LogsRequest) ProtoMessage() {}
 
 func (x *LogsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[39]
+	mi := &file_shard_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2919,7 +2919,7 @@ func (x *LogsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogsRequest.ProtoReflect.Descriptor instead.
 func (*LogsRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{39}
+	return file_shard_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *LogsRequest) GetBackendId() string {
@@ -2952,7 +2952,7 @@ type LogEntry struct {
 
 func (x *LogEntry) Reset() {
 	*x = LogEntry{}
-	mi := &file_cloudsync_proto_msgTypes[40]
+	mi := &file_shard_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2964,7 +2964,7 @@ func (x *LogEntry) String() string {
 func (*LogEntry) ProtoMessage() {}
 
 func (x *LogEntry) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[40]
+	mi := &file_shard_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2977,7 +2977,7 @@ func (x *LogEntry) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogEntry.ProtoReflect.Descriptor instead.
 func (*LogEntry) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{40}
+	return file_shard_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *LogEntry) GetSeq() uint64 {
@@ -3045,7 +3045,7 @@ type LogsReply struct {
 
 func (x *LogsReply) Reset() {
 	*x = LogsReply{}
-	mi := &file_cloudsync_proto_msgTypes[41]
+	mi := &file_shard_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3057,7 +3057,7 @@ func (x *LogsReply) String() string {
 func (*LogsReply) ProtoMessage() {}
 
 func (x *LogsReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[41]
+	mi := &file_shard_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3070,7 +3070,7 @@ func (x *LogsReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LogsReply.ProtoReflect.Descriptor instead.
 func (*LogsReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{41}
+	return file_shard_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *LogsReply) GetEntries() []*LogEntry {
@@ -3086,13 +3086,13 @@ type SecretEntry struct {
 	// Version the client edited (from GetSecret); a change made meanwhile on
 	// another device is kept as a conflict copy instead of being replaced.
 	Version  string      `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
-	Kind     SecretKind  `protobuf:"varint,3,opt,name=kind,proto3,enum=cloudsync.v1.SecretKind" json:"kind,omitempty"`
+	Kind     SecretKind  `protobuf:"varint,3,opt,name=kind,proto3,enum=selfhold.shard.v1.SecretKind" json:"kind,omitempty"`
 	Title    string      `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
 	GroupId  string      `protobuf:"bytes,5,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
 	Username string      `protobuf:"bytes,6,opt,name=username,proto3" json:"username,omitempty"`
 	Url      string      `protobuf:"bytes,7,opt,name=url,proto3" json:"url,omitempty"`
 	Comment  string      `protobuf:"bytes,8,opt,name=comment,proto3" json:"comment,omitempty"` // SSH: comment of the public key line
-	Network  Web3Network `protobuf:"varint,9,opt,name=network,proto3,enum=cloudsync.v1.Web3Network" json:"network,omitempty"`
+	Network  Web3Network `protobuf:"varint,9,opt,name=network,proto3,enum=selfhold.shard.v1.Web3Network" json:"network,omitempty"`
 	// Derived by the core from the private key (read only).
 	KeyType      string `protobuf:"bytes,10,opt,name=key_type,json=keyType,proto3" json:"key_type,omitempty"`
 	PublicKey    string `protobuf:"bytes,11,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"` // SSH: authorized_keys line
@@ -3126,7 +3126,7 @@ type SecretEntry struct {
 
 func (x *SecretEntry) Reset() {
 	*x = SecretEntry{}
-	mi := &file_cloudsync_proto_msgTypes[42]
+	mi := &file_shard_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3138,7 +3138,7 @@ func (x *SecretEntry) String() string {
 func (*SecretEntry) ProtoMessage() {}
 
 func (x *SecretEntry) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[42]
+	mi := &file_shard_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3151,7 +3151,7 @@ func (x *SecretEntry) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SecretEntry.ProtoReflect.Descriptor instead.
 func (*SecretEntry) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{42}
+	return file_shard_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *SecretEntry) GetId() string {
@@ -3360,7 +3360,7 @@ func (x *SecretEntry) GetServer() *SecretServer {
 type SecretServer struct {
 	state        protoimpl.MessageState `protogen:"open.v1"`
 	Folder       string                 `protobuf:"bytes,1,opt,name=folder,proto3" json:"folder,omitempty"` // "a/b" nests folders in the apps' server trees
-	Auth         ServerAuth             `protobuf:"varint,2,opt,name=auth,proto3,enum=cloudsync.v1.ServerAuth" json:"auth,omitempty"`
+	Auth         ServerAuth             `protobuf:"varint,2,opt,name=auth,proto3,enum=selfhold.shard.v1.ServerAuth" json:"auth,omitempty"`
 	SshKeyId     string                 `protobuf:"bytes,3,opt,name=ssh_key_id,json=sshKeyId,proto3" json:"ssh_key_id,omitempty"`
 	HostKeys     []string               `protobuf:"bytes,4,rep,name=host_keys,json=hostKeys,proto3" json:"host_keys,omitempty"` // trusted host keys, authorized_keys format
 	JumpServerId string                 `protobuf:"bytes,5,opt,name=jump_server_id,json=jumpServerId,proto3" json:"jump_server_id,omitempty"`
@@ -3374,7 +3374,7 @@ type SecretServer struct {
 
 func (x *SecretServer) Reset() {
 	*x = SecretServer{}
-	mi := &file_cloudsync_proto_msgTypes[43]
+	mi := &file_shard_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3386,7 +3386,7 @@ func (x *SecretServer) String() string {
 func (*SecretServer) ProtoMessage() {}
 
 func (x *SecretServer) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[43]
+	mi := &file_shard_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3399,7 +3399,7 @@ func (x *SecretServer) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SecretServer.ProtoReflect.Descriptor instead.
 func (*SecretServer) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{43}
+	return file_shard_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *SecretServer) GetFolder() string {
@@ -3463,7 +3463,7 @@ type SecretGroup struct {
 
 func (x *SecretGroup) Reset() {
 	*x = SecretGroup{}
-	mi := &file_cloudsync_proto_msgTypes[44]
+	mi := &file_shard_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3475,7 +3475,7 @@ func (x *SecretGroup) String() string {
 func (*SecretGroup) ProtoMessage() {}
 
 func (x *SecretGroup) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[44]
+	mi := &file_shard_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3488,7 +3488,7 @@ func (x *SecretGroup) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SecretGroup.ProtoReflect.Descriptor instead.
 func (*SecretGroup) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{44}
+	return file_shard_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *SecretGroup) GetId() string {
@@ -3530,7 +3530,7 @@ type SecretsReply struct {
 
 func (x *SecretsReply) Reset() {
 	*x = SecretsReply{}
-	mi := &file_cloudsync_proto_msgTypes[45]
+	mi := &file_shard_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3542,7 +3542,7 @@ func (x *SecretsReply) String() string {
 func (*SecretsReply) ProtoMessage() {}
 
 func (x *SecretsReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[45]
+	mi := &file_shard_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3555,7 +3555,7 @@ func (x *SecretsReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SecretsReply.ProtoReflect.Descriptor instead.
 func (*SecretsReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{45}
+	return file_shard_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *SecretsReply) GetGroups() []*SecretGroup {
@@ -3581,8 +3581,8 @@ func (x *SecretsReply) GetBroken() int32 {
 
 type DeriveKeyRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Kind          SecretKind             `protobuf:"varint,1,opt,name=kind,proto3,enum=cloudsync.v1.SecretKind" json:"kind,omitempty"` // SSH or WEB3
-	Network       Web3Network            `protobuf:"varint,2,opt,name=network,proto3,enum=cloudsync.v1.Web3Network" json:"network,omitempty"`
+	Kind          SecretKind             `protobuf:"varint,1,opt,name=kind,proto3,enum=selfhold.shard.v1.SecretKind" json:"kind,omitempty"` // SSH or WEB3
+	Network       Web3Network            `protobuf:"varint,2,opt,name=network,proto3,enum=selfhold.shard.v1.Web3Network" json:"network,omitempty"`
 	PrivateKey    string                 `protobuf:"bytes,3,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
 	Passphrase    string                 `protobuf:"bytes,4,opt,name=passphrase,proto3" json:"passphrase,omitempty"`
 	Comment       string                 `protobuf:"bytes,5,opt,name=comment,proto3" json:"comment,omitempty"`
@@ -3592,7 +3592,7 @@ type DeriveKeyRequest struct {
 
 func (x *DeriveKeyRequest) Reset() {
 	*x = DeriveKeyRequest{}
-	mi := &file_cloudsync_proto_msgTypes[46]
+	mi := &file_shard_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3604,7 +3604,7 @@ func (x *DeriveKeyRequest) String() string {
 func (*DeriveKeyRequest) ProtoMessage() {}
 
 func (x *DeriveKeyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[46]
+	mi := &file_shard_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3617,7 +3617,7 @@ func (x *DeriveKeyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeriveKeyRequest.ProtoReflect.Descriptor instead.
 func (*DeriveKeyRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{46}
+	return file_shard_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *DeriveKeyRequest) GetKind() SecretKind {
@@ -3667,7 +3667,7 @@ type DerivedKey struct {
 
 func (x *DerivedKey) Reset() {
 	*x = DerivedKey{}
-	mi := &file_cloudsync_proto_msgTypes[47]
+	mi := &file_shard_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3679,7 +3679,7 @@ func (x *DerivedKey) String() string {
 func (*DerivedKey) ProtoMessage() {}
 
 func (x *DerivedKey) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[47]
+	mi := &file_shard_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3692,7 +3692,7 @@ func (x *DerivedKey) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DerivedKey.ProtoReflect.Descriptor instead.
 func (*DerivedKey) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{47}
+	return file_shard_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *DerivedKey) GetKeyType() string {
@@ -3736,7 +3736,7 @@ type TotpCode struct {
 
 func (x *TotpCode) Reset() {
 	*x = TotpCode{}
-	mi := &file_cloudsync_proto_msgTypes[48]
+	mi := &file_shard_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3748,7 +3748,7 @@ func (x *TotpCode) String() string {
 func (*TotpCode) ProtoMessage() {}
 
 func (x *TotpCode) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[48]
+	mi := &file_shard_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3761,7 +3761,7 @@ func (x *TotpCode) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TotpCode.ProtoReflect.Descriptor instead.
 func (*TotpCode) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{48}
+	return file_shard_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *TotpCode) GetId() string {
@@ -3809,7 +3809,7 @@ type TotpCodesReply struct {
 
 func (x *TotpCodesReply) Reset() {
 	*x = TotpCodesReply{}
-	mi := &file_cloudsync_proto_msgTypes[49]
+	mi := &file_shard_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3821,7 +3821,7 @@ func (x *TotpCodesReply) String() string {
 func (*TotpCodesReply) ProtoMessage() {}
 
 func (x *TotpCodesReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[49]
+	mi := &file_shard_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3834,7 +3834,7 @@ func (x *TotpCodesReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TotpCodesReply.ProtoReflect.Descriptor instead.
 func (*TotpCodesReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{49}
+	return file_shard_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *TotpCodesReply) GetCodes() []*TotpCode {
@@ -3861,7 +3861,7 @@ type RecoveryCodeRequest struct {
 
 func (x *RecoveryCodeRequest) Reset() {
 	*x = RecoveryCodeRequest{}
-	mi := &file_cloudsync_proto_msgTypes[50]
+	mi := &file_shard_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3873,7 +3873,7 @@ func (x *RecoveryCodeRequest) String() string {
 func (*RecoveryCodeRequest) ProtoMessage() {}
 
 func (x *RecoveryCodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[50]
+	mi := &file_shard_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3886,7 +3886,7 @@ func (x *RecoveryCodeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecoveryCodeRequest.ProtoReflect.Descriptor instead.
 func (*RecoveryCodeRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{50}
+	return file_shard_proto_rawDescGZIP(), []int{50}
 }
 
 func (x *RecoveryCodeRequest) GetId() string {
@@ -3916,7 +3916,7 @@ type CheckTotpRequest struct {
 
 func (x *CheckTotpRequest) Reset() {
 	*x = CheckTotpRequest{}
-	mi := &file_cloudsync_proto_msgTypes[51]
+	mi := &file_shard_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3928,7 +3928,7 @@ func (x *CheckTotpRequest) String() string {
 func (*CheckTotpRequest) ProtoMessage() {}
 
 func (x *CheckTotpRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[51]
+	mi := &file_shard_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3941,7 +3941,7 @@ func (x *CheckTotpRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CheckTotpRequest.ProtoReflect.Descriptor instead.
 func (*CheckTotpRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{51}
+	return file_shard_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *CheckTotpRequest) GetSecret() string {
@@ -3995,7 +3995,7 @@ type TotpPreview struct {
 
 func (x *TotpPreview) Reset() {
 	*x = TotpPreview{}
-	mi := &file_cloudsync_proto_msgTypes[52]
+	mi := &file_shard_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4007,7 +4007,7 @@ func (x *TotpPreview) String() string {
 func (*TotpPreview) ProtoMessage() {}
 
 func (x *TotpPreview) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[52]
+	mi := &file_shard_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4020,7 +4020,7 @@ func (x *TotpPreview) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TotpPreview.ProtoReflect.Descriptor instead.
 func (*TotpPreview) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{52}
+	return file_shard_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *TotpPreview) GetIssuer() string {
@@ -4088,7 +4088,7 @@ type TotpLinksRequest struct {
 
 func (x *TotpLinksRequest) Reset() {
 	*x = TotpLinksRequest{}
-	mi := &file_cloudsync_proto_msgTypes[53]
+	mi := &file_shard_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4100,7 +4100,7 @@ func (x *TotpLinksRequest) String() string {
 func (*TotpLinksRequest) ProtoMessage() {}
 
 func (x *TotpLinksRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[53]
+	mi := &file_shard_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4113,7 +4113,7 @@ func (x *TotpLinksRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TotpLinksRequest.ProtoReflect.Descriptor instead.
 func (*TotpLinksRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{53}
+	return file_shard_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *TotpLinksRequest) GetText() string {
@@ -4133,7 +4133,7 @@ type TotpLink struct {
 
 func (x *TotpLink) Reset() {
 	*x = TotpLink{}
-	mi := &file_cloudsync_proto_msgTypes[54]
+	mi := &file_shard_proto_msgTypes[54]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4145,7 +4145,7 @@ func (x *TotpLink) String() string {
 func (*TotpLink) ProtoMessage() {}
 
 func (x *TotpLink) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[54]
+	mi := &file_shard_proto_msgTypes[54]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4158,7 +4158,7 @@ func (x *TotpLink) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TotpLink.ProtoReflect.Descriptor instead.
 func (*TotpLink) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{54}
+	return file_shard_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *TotpLink) GetLink() string {
@@ -4187,7 +4187,7 @@ type TotpBatch struct {
 
 func (x *TotpBatch) Reset() {
 	*x = TotpBatch{}
-	mi := &file_cloudsync_proto_msgTypes[55]
+	mi := &file_shard_proto_msgTypes[55]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4199,7 +4199,7 @@ func (x *TotpBatch) String() string {
 func (*TotpBatch) ProtoMessage() {}
 
 func (x *TotpBatch) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[55]
+	mi := &file_shard_proto_msgTypes[55]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4212,7 +4212,7 @@ func (x *TotpBatch) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TotpBatch.ProtoReflect.Descriptor instead.
 func (*TotpBatch) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{55}
+	return file_shard_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *TotpBatch) GetId() int32 {
@@ -4246,7 +4246,7 @@ type TotpLinksReply struct {
 
 func (x *TotpLinksReply) Reset() {
 	*x = TotpLinksReply{}
-	mi := &file_cloudsync_proto_msgTypes[56]
+	mi := &file_shard_proto_msgTypes[56]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4258,7 +4258,7 @@ func (x *TotpLinksReply) String() string {
 func (*TotpLinksReply) ProtoMessage() {}
 
 func (x *TotpLinksReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[56]
+	mi := &file_shard_proto_msgTypes[56]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4271,7 +4271,7 @@ func (x *TotpLinksReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TotpLinksReply.ProtoReflect.Descriptor instead.
 func (*TotpLinksReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{56}
+	return file_shard_proto_rawDescGZIP(), []int{56}
 }
 
 func (x *TotpLinksReply) GetLinks() []*TotpLink {
@@ -4305,7 +4305,7 @@ type SecretImportRequest struct {
 
 func (x *SecretImportRequest) Reset() {
 	*x = SecretImportRequest{}
-	mi := &file_cloudsync_proto_msgTypes[57]
+	mi := &file_shard_proto_msgTypes[57]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4317,7 +4317,7 @@ func (x *SecretImportRequest) String() string {
 func (*SecretImportRequest) ProtoMessage() {}
 
 func (x *SecretImportRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[57]
+	mi := &file_shard_proto_msgTypes[57]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4330,7 +4330,7 @@ func (x *SecretImportRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SecretImportRequest.ProtoReflect.Descriptor instead.
 func (*SecretImportRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{57}
+	return file_shard_proto_rawDescGZIP(), []int{57}
 }
 
 func (x *SecretImportRequest) GetData() []byte {
@@ -4385,12 +4385,12 @@ func (x *SecretImportRequest) GetDryRun() bool {
 // One entry of the export, without its secrets.
 type SecretImportItem struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Kind          SecretKind             `protobuf:"varint,1,opt,name=kind,proto3,enum=cloudsync.v1.SecretKind" json:"kind,omitempty"`
+	Kind          SecretKind             `protobuf:"varint,1,opt,name=kind,proto3,enum=selfhold.shard.v1.SecretKind" json:"kind,omitempty"`
 	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
 	Url           string                 `protobuf:"bytes,4,opt,name=url,proto3" json:"url,omitempty"`
 	Group         string                 `protobuf:"bytes,5,opt,name=group,proto3" json:"group,omitempty"` // group name it goes to; empty = none
-	Status        SecretImportStatus     `protobuf:"varint,6,opt,name=status,proto3,enum=cloudsync.v1.SecretImportStatus" json:"status,omitempty"`
+	Status        SecretImportStatus     `protobuf:"varint,6,opt,name=status,proto3,enum=selfhold.shard.v1.SecretImportStatus" json:"status,omitempty"`
 	Error         string                 `protobuf:"bytes,7,opt,name=error,proto3" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -4398,7 +4398,7 @@ type SecretImportItem struct {
 
 func (x *SecretImportItem) Reset() {
 	*x = SecretImportItem{}
-	mi := &file_cloudsync_proto_msgTypes[58]
+	mi := &file_shard_proto_msgTypes[58]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4410,7 +4410,7 @@ func (x *SecretImportItem) String() string {
 func (*SecretImportItem) ProtoMessage() {}
 
 func (x *SecretImportItem) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[58]
+	mi := &file_shard_proto_msgTypes[58]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4423,7 +4423,7 @@ func (x *SecretImportItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SecretImportItem.ProtoReflect.Descriptor instead.
 func (*SecretImportItem) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{58}
+	return file_shard_proto_rawDescGZIP(), []int{58}
 }
 
 func (x *SecretImportItem) GetKind() SecretKind {
@@ -4491,7 +4491,7 @@ type SecretImportReply struct {
 
 func (x *SecretImportReply) Reset() {
 	*x = SecretImportReply{}
-	mi := &file_cloudsync_proto_msgTypes[59]
+	mi := &file_shard_proto_msgTypes[59]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4503,7 +4503,7 @@ func (x *SecretImportReply) String() string {
 func (*SecretImportReply) ProtoMessage() {}
 
 func (x *SecretImportReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[59]
+	mi := &file_shard_proto_msgTypes[59]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4516,7 +4516,7 @@ func (x *SecretImportReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SecretImportReply.ProtoReflect.Descriptor instead.
 func (*SecretImportReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{59}
+	return file_shard_proto_rawDescGZIP(), []int{59}
 }
 
 func (x *SecretImportReply) GetNeedPassword() bool {
@@ -4594,7 +4594,7 @@ type PairingRequestInfo struct {
 
 func (x *PairingRequestInfo) Reset() {
 	*x = PairingRequestInfo{}
-	mi := &file_cloudsync_proto_msgTypes[60]
+	mi := &file_shard_proto_msgTypes[60]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4606,7 +4606,7 @@ func (x *PairingRequestInfo) String() string {
 func (*PairingRequestInfo) ProtoMessage() {}
 
 func (x *PairingRequestInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[60]
+	mi := &file_shard_proto_msgTypes[60]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4619,7 +4619,7 @@ func (x *PairingRequestInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PairingRequestInfo.ProtoReflect.Descriptor instead.
 func (*PairingRequestInfo) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{60}
+	return file_shard_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *PairingRequestInfo) GetId() string {
@@ -4716,7 +4716,7 @@ type AppPairing struct {
 	Package           string                 `protobuf:"bytes,6,opt,name=package,proto3" json:"package,omitempty"`
 	Cert              string                 `protobuf:"bytes,7,opt,name=cert,proto3" json:"cert,omitempty"`
 	ApprovedUnixMs    int64                  `protobuf:"varint,8,opt,name=approved_unix_ms,json=approvedUnixMs,proto3" json:"approved_unix_ms,omitempty"`
-	LastUsedUnixMs    int64                  `protobuf:"varint,9,opt,name=last_used_unix_ms,json=lastUsedUnixMs,proto3" json:"last_used_unix_ms,omitempty"`           // 0: not since CloudSync started
+	LastUsedUnixMs    int64                  `protobuf:"varint,9,opt,name=last_used_unix_ms,json=lastUsedUnixMs,proto3" json:"last_used_unix_ms,omitempty"`           // 0: not since Shard started
 	Scopes            []string               `protobuf:"bytes,10,rep,name=scopes,proto3" json:"scopes,omitempty"`                                                     // granted, e.g. "passwords"
 	SecretsReadUnixMs int64                  `protobuf:"varint,11,opt,name=secrets_read_unix_ms,json=secretsReadUnixMs,proto3" json:"secrets_read_unix_ms,omitempty"` // last time it read passwords; 0 = never
 	KeysReadUnixMs    int64                  `protobuf:"varint,12,opt,name=keys_read_unix_ms,json=keysReadUnixMs,proto3" json:"keys_read_unix_ms,omitempty"`          // last time it read SSH private keys
@@ -4727,7 +4727,7 @@ type AppPairing struct {
 
 func (x *AppPairing) Reset() {
 	*x = AppPairing{}
-	mi := &file_cloudsync_proto_msgTypes[61]
+	mi := &file_shard_proto_msgTypes[61]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4739,7 +4739,7 @@ func (x *AppPairing) String() string {
 func (*AppPairing) ProtoMessage() {}
 
 func (x *AppPairing) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[61]
+	mi := &file_shard_proto_msgTypes[61]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4752,7 +4752,7 @@ func (x *AppPairing) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppPairing.ProtoReflect.Descriptor instead.
 func (*AppPairing) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{61}
+	return file_shard_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *AppPairing) GetId() string {
@@ -4857,7 +4857,7 @@ type AppDataInfo struct {
 
 func (x *AppDataInfo) Reset() {
 	*x = AppDataInfo{}
-	mi := &file_cloudsync_proto_msgTypes[62]
+	mi := &file_shard_proto_msgTypes[62]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4869,7 +4869,7 @@ func (x *AppDataInfo) String() string {
 func (*AppDataInfo) ProtoMessage() {}
 
 func (x *AppDataInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[62]
+	mi := &file_shard_proto_msgTypes[62]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4882,7 +4882,7 @@ func (x *AppDataInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppDataInfo.ProtoReflect.Descriptor instead.
 func (*AppDataInfo) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{62}
+	return file_shard_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *AppDataInfo) GetAppId() string {
@@ -4917,7 +4917,7 @@ type AppsReply struct {
 
 func (x *AppsReply) Reset() {
 	*x = AppsReply{}
-	mi := &file_cloudsync_proto_msgTypes[63]
+	mi := &file_shard_proto_msgTypes[63]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4929,7 +4929,7 @@ func (x *AppsReply) String() string {
 func (*AppsReply) ProtoMessage() {}
 
 func (x *AppsReply) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[63]
+	mi := &file_shard_proto_msgTypes[63]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4942,7 +4942,7 @@ func (x *AppsReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppsReply.ProtoReflect.Descriptor instead.
 func (*AppsReply) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{63}
+	return file_shard_proto_rawDescGZIP(), []int{63}
 }
 
 func (x *AppsReply) GetRequests() []*PairingRequestInfo {
@@ -4979,7 +4979,7 @@ type DecidePairingRequest struct {
 
 func (x *DecidePairingRequest) Reset() {
 	*x = DecidePairingRequest{}
-	mi := &file_cloudsync_proto_msgTypes[64]
+	mi := &file_shard_proto_msgTypes[64]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4991,7 +4991,7 @@ func (x *DecidePairingRequest) String() string {
 func (*DecidePairingRequest) ProtoMessage() {}
 
 func (x *DecidePairingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[64]
+	mi := &file_shard_proto_msgTypes[64]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5004,7 +5004,7 @@ func (x *DecidePairingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DecidePairingRequest.ProtoReflect.Descriptor instead.
 func (*DecidePairingRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{64}
+	return file_shard_proto_rawDescGZIP(), []int{64}
 }
 
 func (x *DecidePairingRequest) GetId() string {
@@ -5038,7 +5038,7 @@ type SetAppScopesRequest struct {
 
 func (x *SetAppScopesRequest) Reset() {
 	*x = SetAppScopesRequest{}
-	mi := &file_cloudsync_proto_msgTypes[65]
+	mi := &file_shard_proto_msgTypes[65]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5050,7 +5050,7 @@ func (x *SetAppScopesRequest) String() string {
 func (*SetAppScopesRequest) ProtoMessage() {}
 
 func (x *SetAppScopesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_cloudsync_proto_msgTypes[65]
+	mi := &file_shard_proto_msgTypes[65]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5063,7 +5063,7 @@ func (x *SetAppScopesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetAppScopesRequest.ProtoReflect.Descriptor instead.
 func (*SetAppScopesRequest) Descriptor() ([]byte, []int) {
-	return file_cloudsync_proto_rawDescGZIP(), []int{65}
+	return file_shard_proto_rawDescGZIP(), []int{65}
 }
 
 func (x *SetAppScopesRequest) GetId() string {
@@ -5080,11 +5080,11 @@ func (x *SetAppScopesRequest) GetScopes() []string {
 	return nil
 }
 
-var File_cloudsync_proto protoreflect.FileDescriptor
+var File_shard_proto protoreflect.FileDescriptor
 
-const file_cloudsync_proto_rawDesc = "" +
+const file_shard_proto_rawDesc = "" +
 	"\n" +
-	"\x0fcloudsync.proto\x12\fcloudsync.v1\"\a\n" +
+	"\vshard.proto\x12\x11selfhold.shard.v1\"\a\n" +
 	"\x05Empty\"\xc1\x03\n" +
 	"\x05State\x12!\n" +
 	"\fvault_exists\x18\x01 \x01(\bR\vvaultExists\x12\x1a\n" +
@@ -5137,20 +5137,20 @@ const file_cloudsync_proto_rawDesc = "" +
 	"\brequired\x18\x04 \x01(\bR\brequired\x12\x1a\n" +
 	"\bpassword\x18\x05 \x01(\bR\bpassword\x12\x1a\n" +
 	"\badvanced\x18\x06 \x01(\bR\badvanced\x12\x1a\n" +
-	"\bexamples\x18\a \x03(\tR\bexamples\"\x90\x01\n" +
+	"\bexamples\x18\a \x03(\tR\bexamples\"\x95\x01\n" +
 	"\vBackendType\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x14\n" +
-	"\x05oauth\x18\x03 \x01(\bR\x05oauth\x125\n" +
-	"\aoptions\x18\x04 \x03(\v2\x1b.cloudsync.v1.BackendOptionR\aoptions\"D\n" +
-	"\x11BackendTypesReply\x12/\n" +
-	"\x05types\x18\x01 \x03(\v2\x19.cloudsync.v1.BackendTypeR\x05types\"\x81\x02\n" +
+	"\x05oauth\x18\x03 \x01(\bR\x05oauth\x12:\n" +
+	"\aoptions\x18\x04 \x03(\v2 .selfhold.shard.v1.BackendOptionR\aoptions\"I\n" +
+	"\x11BackendTypesReply\x124\n" +
+	"\x05types\x18\x01 \x03(\v2\x1e.selfhold.shard.v1.BackendTypeR\x05types\"\x86\x02\n" +
 	"\x11AddBackendRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
 	"\x04type\x18\x02 \x01(\tR\x04type\x12\x16\n" +
 	"\x06domain\x18\x03 \x01(\tR\x06domain\x12\x12\n" +
-	"\x04root\x18\x04 \x01(\tR\x04root\x12C\n" +
-	"\x06params\x18\x05 \x03(\v2+.cloudsync.v1.AddBackendRequest.ParamsEntryR\x06params\x12\x18\n" +
+	"\x04root\x18\x04 \x01(\tR\x04root\x12H\n" +
+	"\x06params\x18\x05 \x03(\v20.selfhold.shard.v1.AddBackendRequest.ParamsEntryR\x06params\x12\x18\n" +
 	"\aaccount\x18\x06 \x01(\tR\aaccount\x1a9\n" +
 	"\vParamsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
@@ -5159,10 +5159,10 @@ const file_cloudsync_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"<\n" +
 	"\x14RemoveBackendRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
-	"\x05force\x18\x02 \x01(\bR\x05force\"\xa5\x01\n" +
+	"\x05force\x18\x02 \x01(\bR\x05force\"\xaa\x01\n" +
 	"\x10AuthorizeRequest\x12\x12\n" +
-	"\x04type\x18\x01 \x01(\tR\x04type\x12B\n" +
-	"\x06params\x18\x02 \x03(\v2*.cloudsync.v1.AuthorizeRequest.ParamsEntryR\x06params\x1a9\n" +
+	"\x04type\x18\x01 \x01(\tR\x04type\x12G\n" +
+	"\x06params\x18\x02 \x03(\v2/.selfhold.shard.v1.AuthorizeRequest.ParamsEntryR\x06params\x1a9\n" +
 	"\vParamsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"R\n" +
@@ -5206,13 +5206,13 @@ const file_cloudsync_proto_rawDesc = "" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
 	"\bplatform\x18\x03 \x01(\tR\bplatform\x12\x1d\n" +
 	"\n" +
-	"added_unix\x18\x04 \x01(\x03R\taddedUnix\"\xf9\x04\n" +
+	"added_unix\x18\x04 \x01(\x03R\taddedUnix\"\x83\x05\n" +
 	"\vStatusReply\x12\x1f\n" +
 	"\vdata_shards\x18\x01 \x01(\x05R\n" +
 	"dataShards\x12#\n" +
-	"\rparity_shards\x18\x02 \x01(\x05R\fparityShards\x121\n" +
-	"\bbackends\x18\x03 \x03(\v2\x15.cloudsync.v1.BackendR\bbackends\x12.\n" +
-	"\adevices\x18\x04 \x03(\v2\x14.cloudsync.v1.DeviceR\adevices\x12\x18\n" +
+	"\rparity_shards\x18\x02 \x01(\x05R\fparityShards\x126\n" +
+	"\bbackends\x18\x03 \x03(\v2\x1a.selfhold.shard.v1.BackendR\bbackends\x123\n" +
+	"\adevices\x18\x04 \x03(\v2\x19.selfhold.shard.v1.DeviceR\adevices\x12\x18\n" +
 	"\apending\x18\x05 \x01(\x05R\apending\x12#\n" +
 	"\rreload_needed\x18\x06 \x01(\bR\freloadNeeded\x12\x1f\n" +
 	"\vdomain_risk\x18\a \x01(\bR\n" +
@@ -5249,9 +5249,9 @@ const file_cloudsync_proto_rawDesc = "" +
 	"\x06pinned\x18\a \x01(\bR\x06pinned\x12\x16\n" +
 	"\x06device\x18\b \x01(\tR\x06device\x12\x1f\n" +
 	"\vconflict_of\x18\t \x01(\tR\n" +
-	"conflictOf\":\n" +
-	"\tListReply\x12-\n" +
-	"\aentries\x18\x01 \x03(\v2\x13.cloudsync.v1.EntryR\aentries\"A\n" +
+	"conflictOf\"?\n" +
+	"\tListReply\x122\n" +
+	"\aentries\x18\x01 \x03(\v2\x18.selfhold.shard.v1.EntryR\aentries\"A\n" +
 	"\rRemoveRequest\x12\x12\n" +
 	"\x04path\x18\x01 \x01(\tR\x04path\x12\x1c\n" +
 	"\trecursive\x18\x02 \x01(\bR\trecursive\"3\n" +
@@ -5277,10 +5277,10 @@ const file_cloudsync_proto_rawDesc = "" +
 	"deviceName\x12\x1d\n" +
 	"\n" +
 	"since_unix\x18\x04 \x01(\x03R\tsinceUnix\x12\x12\n" +
-	"\x04mine\x18\x05 \x01(\bR\x04mine\":\n" +
+	"\x04mine\x18\x05 \x01(\bR\x04mine\"?\n" +
 	"\n" +
-	"LocksReply\x12,\n" +
-	"\x05locks\x18\x01 \x03(\v2\x16.cloudsync.v1.LockInfoR\x05locks\"-\n" +
+	"LocksReply\x121\n" +
+	"\x05locks\x18\x01 \x03(\v2\x1b.selfhold.shard.v1.LockInfoR\x05locks\"-\n" +
 	"\rRepairRequest\x12\x1c\n" +
 	"\trebalance\x18\x01 \x01(\bR\trebalance\"\xeb\x01\n" +
 	"\vRepairReply\x12\x14\n" +
@@ -5303,9 +5303,9 @@ const file_cloudsync_proto_rawDesc = "" +
 	"\x14SetRedundancyRequest\x12\x1f\n" +
 	"\vdata_shards\x18\x01 \x01(\x05R\n" +
 	"dataShards\x12#\n" +
-	"\rparity_shards\x18\x02 \x01(\x05R\fparityShards\"\xd9\x01\n" +
-	"\x05Event\x12,\n" +
-	"\x04kind\x18\x01 \x01(\x0e2\x18.cloudsync.v1.Event.KindR\x04kind\x12\x18\n" +
+	"\rparity_shards\x18\x02 \x01(\x05R\fparityShards\"\xde\x01\n" +
+	"\x05Event\x121\n" +
+	"\x04kind\x18\x01 \x01(\x0e2\x1d.selfhold.shard.v1.Event.KindR\x04kind\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"\x87\x01\n" +
 	"\x04Kind\x12\x14\n" +
 	"\x10KIND_UNSPECIFIED\x10\x00\x12\x10\n" +
@@ -5330,19 +5330,19 @@ const file_cloudsync_proto_rawDesc = "" +
 	"\n" +
 	"backend_id\x18\x06 \x01(\tR\tbackendId\x12\x18\n" +
 	"\amessage\x18\a \x01(\tR\amessage\x12\x14\n" +
-	"\x05count\x18\b \x01(\x05R\x05count\"=\n" +
-	"\tLogsReply\x120\n" +
-	"\aentries\x18\x01 \x03(\v2\x16.cloudsync.v1.LogEntryR\aentries\"\x9d\a\n" +
+	"\x05count\x18\b \x01(\x05R\x05count\"B\n" +
+	"\tLogsReply\x125\n" +
+	"\aentries\x18\x01 \x03(\v2\x1b.selfhold.shard.v1.LogEntryR\aentries\"\xac\a\n" +
 	"\vSecretEntry\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
-	"\aversion\x18\x02 \x01(\tR\aversion\x12,\n" +
-	"\x04kind\x18\x03 \x01(\x0e2\x18.cloudsync.v1.SecretKindR\x04kind\x12\x14\n" +
+	"\aversion\x18\x02 \x01(\tR\aversion\x121\n" +
+	"\x04kind\x18\x03 \x01(\x0e2\x1d.selfhold.shard.v1.SecretKindR\x04kind\x12\x14\n" +
 	"\x05title\x18\x04 \x01(\tR\x05title\x12\x19\n" +
 	"\bgroup_id\x18\x05 \x01(\tR\agroupId\x12\x1a\n" +
 	"\busername\x18\x06 \x01(\tR\busername\x12\x10\n" +
 	"\x03url\x18\a \x01(\tR\x03url\x12\x18\n" +
-	"\acomment\x18\b \x01(\tR\acomment\x123\n" +
-	"\anetwork\x18\t \x01(\x0e2\x19.cloudsync.v1.Web3NetworkR\anetwork\x12\x19\n" +
+	"\acomment\x18\b \x01(\tR\acomment\x128\n" +
+	"\anetwork\x18\t \x01(\x0e2\x1e.selfhold.shard.v1.Web3NetworkR\anetwork\x12\x19\n" +
 	"\bkey_type\x18\n" +
 	" \x01(\tR\akeyType\x12\x1d\n" +
 	"\n" +
@@ -5370,11 +5370,11 @@ const file_cloudsync_proto_rawDesc = "" +
 	"totpDigits\x12\x1f\n" +
 	"\vtotp_period\x18\x1c \x01(\x05R\n" +
 	"totpPeriod\x12%\n" +
-	"\x0erecovery_codes\x18\x1d \x03(\tR\rrecoveryCodes\x122\n" +
-	"\x06server\x18\x1e \x01(\v2\x1a.cloudsync.v1.SecretServerR\x06server\"\xe8\x01\n" +
+	"\x0erecovery_codes\x18\x1d \x03(\tR\rrecoveryCodes\x127\n" +
+	"\x06server\x18\x1e \x01(\v2\x1f.selfhold.shard.v1.SecretServerR\x06server\"\xed\x01\n" +
 	"\fSecretServer\x12\x16\n" +
-	"\x06folder\x18\x01 \x01(\tR\x06folder\x12,\n" +
-	"\x04auth\x18\x02 \x01(\x0e2\x18.cloudsync.v1.ServerAuthR\x04auth\x12\x1c\n" +
+	"\x06folder\x18\x01 \x01(\tR\x06folder\x121\n" +
+	"\x04auth\x18\x02 \x01(\x0e2\x1d.selfhold.shard.v1.ServerAuthR\x04auth\x12\x1c\n" +
 	"\n" +
 	"ssh_key_id\x18\x03 \x01(\tR\bsshKeyId\x12\x1b\n" +
 	"\thost_keys\x18\x04 \x03(\tR\bhostKeys\x12$\n" +
@@ -5387,14 +5387,14 @@ const file_cloudsync_proto_rawDesc = "" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x12\n" +
 	"\x04icon\x18\x03 \x01(\fR\x04icon\x12\x1f\n" +
 	"\vconflict_of\x18\x04 \x01(\tR\n" +
-	"conflictOf\"\x8e\x01\n" +
-	"\fSecretsReply\x121\n" +
-	"\x06groups\x18\x01 \x03(\v2\x19.cloudsync.v1.SecretGroupR\x06groups\x123\n" +
-	"\aentries\x18\x02 \x03(\v2\x19.cloudsync.v1.SecretEntryR\aentries\x12\x16\n" +
-	"\x06broken\x18\x03 \x01(\x05R\x06broken\"\xd0\x01\n" +
-	"\x10DeriveKeyRequest\x12,\n" +
-	"\x04kind\x18\x01 \x01(\x0e2\x18.cloudsync.v1.SecretKindR\x04kind\x123\n" +
-	"\anetwork\x18\x02 \x01(\x0e2\x19.cloudsync.v1.Web3NetworkR\anetwork\x12\x1f\n" +
+	"conflictOf\"\x98\x01\n" +
+	"\fSecretsReply\x126\n" +
+	"\x06groups\x18\x01 \x03(\v2\x1e.selfhold.shard.v1.SecretGroupR\x06groups\x128\n" +
+	"\aentries\x18\x02 \x03(\v2\x1e.selfhold.shard.v1.SecretEntryR\aentries\x12\x16\n" +
+	"\x06broken\x18\x03 \x01(\x05R\x06broken\"\xda\x01\n" +
+	"\x10DeriveKeyRequest\x121\n" +
+	"\x04kind\x18\x01 \x01(\x0e2\x1d.selfhold.shard.v1.SecretKindR\x04kind\x128\n" +
+	"\anetwork\x18\x02 \x01(\x0e2\x1e.selfhold.shard.v1.Web3NetworkR\anetwork\x12\x1f\n" +
 	"\vprivate_key\x18\x03 \x01(\tR\n" +
 	"privateKey\x12\x1e\n" +
 	"\n" +
@@ -5413,9 +5413,9 @@ const file_cloudsync_proto_rawDesc = "" +
 	"\x04code\x18\x02 \x01(\tR\x04code\x12\x12\n" +
 	"\x04next\x18\x03 \x01(\tR\x04next\x12\x16\n" +
 	"\x06period\x18\x04 \x01(\x05R\x06period\x12!\n" +
-	"\fexpires_unix\x18\x05 \x01(\x03R\vexpiresUnix\"Y\n" +
-	"\x0eTotpCodesReply\x12,\n" +
-	"\x05codes\x18\x01 \x03(\v2\x16.cloudsync.v1.TotpCodeR\x05codes\x12\x19\n" +
+	"\fexpires_unix\x18\x05 \x01(\x03R\vexpiresUnix\"^\n" +
+	"\x0eTotpCodesReply\x121\n" +
+	"\x05codes\x18\x01 \x03(\v2\x1b.selfhold.shard.v1.TotpCodeR\x05codes\x12\x19\n" +
 	"\bnow_unix\x18\x02 \x01(\x03R\anowUnix\"9\n" +
 	"\x13RecoveryCodeRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
@@ -5436,17 +5436,17 @@ const file_cloudsync_proto_rawDesc = "" +
 	"\x0erecovery_codes\x18\a \x03(\tR\rrecoveryCodes\x12\x14\n" +
 	"\x05error\x18\b \x01(\tR\x05error\"&\n" +
 	"\x10TotpLinksRequest\x12\x12\n" +
-	"\x04text\x18\x01 \x01(\tR\x04text\"S\n" +
+	"\x04text\x18\x01 \x01(\tR\x04text\"X\n" +
 	"\bTotpLink\x12\x12\n" +
-	"\x04link\x18\x01 \x01(\tR\x04link\x123\n" +
-	"\apreview\x18\x02 \x01(\v2\x19.cloudsync.v1.TotpPreviewR\apreview\"E\n" +
+	"\x04link\x18\x01 \x01(\tR\x04link\x128\n" +
+	"\apreview\x18\x02 \x01(\v2\x1e.selfhold.shard.v1.TotpPreviewR\apreview\"E\n" +
 	"\tTotpBatch\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x14\n" +
 	"\x05index\x18\x02 \x01(\x05R\x05index\x12\x12\n" +
-	"\x04size\x18\x03 \x01(\x05R\x04size\"q\n" +
-	"\x0eTotpLinksReply\x12,\n" +
-	"\x05links\x18\x01 \x03(\v2\x16.cloudsync.v1.TotpLinkR\x05links\x121\n" +
-	"\abatches\x18\x02 \x03(\v2\x17.cloudsync.v1.TotpBatchR\abatches\"\xd2\x01\n" +
+	"\x04size\x18\x03 \x01(\x05R\x04size\"{\n" +
+	"\x0eTotpLinksReply\x121\n" +
+	"\x05links\x18\x01 \x03(\v2\x1b.selfhold.shard.v1.TotpLinkR\x05links\x126\n" +
+	"\abatches\x18\x02 \x03(\v2\x1c.selfhold.shard.v1.TotpBatchR\abatches\"\xd2\x01\n" +
 	"\x13SecretImportRequest\x12\x12\n" +
 	"\x04data\x18\x01 \x01(\fR\x04data\x12\x1b\n" +
 	"\tfile_name\x18\x02 \x01(\tR\bfileName\x12\x1a\n" +
@@ -5455,19 +5455,19 @@ const file_cloudsync_proto_rawDesc = "" +
 	"\bgroup_id\x18\x05 \x01(\tR\agroupId\x12\x1f\n" +
 	"\vkeep_groups\x18\x06 \x01(\bR\n" +
 	"keepGroups\x12\x17\n" +
-	"\adry_run\x18\a \x01(\bR\x06dryRun\"\xea\x01\n" +
-	"\x10SecretImportItem\x12,\n" +
-	"\x04kind\x18\x01 \x01(\x0e2\x18.cloudsync.v1.SecretKindR\x04kind\x12\x14\n" +
+	"\adry_run\x18\a \x01(\bR\x06dryRun\"\xf4\x01\n" +
+	"\x10SecretImportItem\x121\n" +
+	"\x04kind\x18\x01 \x01(\x0e2\x1d.selfhold.shard.v1.SecretKindR\x04kind\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x1a\n" +
 	"\busername\x18\x03 \x01(\tR\busername\x12\x10\n" +
 	"\x03url\x18\x04 \x01(\tR\x03url\x12\x14\n" +
-	"\x05group\x18\x05 \x01(\tR\x05group\x128\n" +
-	"\x06status\x18\x06 \x01(\x0e2 .cloudsync.v1.SecretImportStatusR\x06status\x12\x14\n" +
-	"\x05error\x18\a \x01(\tR\x05error\"\xf3\x01\n" +
+	"\x05group\x18\x05 \x01(\tR\x05group\x12=\n" +
+	"\x06status\x18\x06 \x01(\x0e2%.selfhold.shard.v1.SecretImportStatusR\x06status\x12\x14\n" +
+	"\x05error\x18\a \x01(\tR\x05error\"\xf8\x01\n" +
 	"\x11SecretImportReply\x12#\n" +
 	"\rneed_password\x18\x01 \x01(\bR\fneedPassword\x12\x16\n" +
-	"\x06format\x18\x02 \x01(\tR\x06format\x124\n" +
-	"\x05items\x18\x03 \x03(\v2\x1e.cloudsync.v1.SecretImportItemR\x05items\x12\x14\n" +
+	"\x06format\x18\x02 \x01(\tR\x06format\x129\n" +
+	"\x05items\x18\x03 \x03(\v2#.selfhold.shard.v1.SecretImportItemR\x05items\x12\x14\n" +
 	"\x05added\x18\x04 \x01(\x05R\x05added\x12\x1e\n" +
 	"\n" +
 	"duplicates\x18\x05 \x01(\x05R\n" +
@@ -5508,11 +5508,11 @@ const file_cloudsync_proto_rawDesc = "" +
 	"\vAppDataInfo\x12\x15\n" +
 	"\x06app_id\x18\x01 \x01(\tR\x05appId\x12\x18\n" +
 	"\arecords\x18\x02 \x01(\x05R\arecords\x12\x14\n" +
-	"\x05bytes\x18\x03 \x01(\x03R\x05bytes\"\xae\x01\n" +
-	"\tAppsReply\x12<\n" +
-	"\brequests\x18\x01 \x03(\v2 .cloudsync.v1.PairingRequestInfoR\brequests\x124\n" +
-	"\bpairings\x18\x02 \x03(\v2\x18.cloudsync.v1.AppPairingR\bpairings\x12-\n" +
-	"\x04data\x18\x03 \x03(\v2\x19.cloudsync.v1.AppDataInfoR\x04data\"X\n" +
+	"\x05bytes\x18\x03 \x01(\x03R\x05bytes\"\xbd\x01\n" +
+	"\tAppsReply\x12A\n" +
+	"\brequests\x18\x01 \x03(\v2%.selfhold.shard.v1.PairingRequestInfoR\brequests\x129\n" +
+	"\bpairings\x18\x02 \x03(\v2\x1d.selfhold.shard.v1.AppPairingR\bpairings\x122\n" +
+	"\x04data\x18\x03 \x03(\v2\x1e.selfhold.shard.v1.AppDataInfoR\x04data\"X\n" +
 	"\x14DecidePairingRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x18\n" +
 	"\aapprove\x18\x02 \x01(\bR\aapprove\x12\x16\n" +
@@ -5542,291 +5542,291 @@ const file_cloudsync_proto_rawDesc = "" +
 	"\x12SecretImportStatus\x12\x10\n" +
 	"\fIMPORT_ADDED\x10\x00\x12\x14\n" +
 	"\x10IMPORT_DUPLICATE\x10\x01\x12\x11\n" +
-	"\rIMPORT_FAILED\x10\x022\xd7\x1b\n" +
-	"\tCloudSync\x124\n" +
-	"\bGetState\x12\x13.cloudsync.v1.Empty\x1a\x13.cloudsync.v1.State\x12D\n" +
-	"\vCreateVault\x12 .cloudsync.v1.CreateVaultRequest\x1a\x13.cloudsync.v1.State\x12D\n" +
-	"\vImportVault\x12 .cloudsync.v1.ImportVaultRequest\x1a\x13.cloudsync.v1.State\x12:\n" +
-	"\x06Unlock\x12\x1b.cloudsync.v1.UnlockRequest\x1a\x13.cloudsync.v1.State\x125\n" +
-	"\tLockVault\x12\x13.cloudsync.v1.Empty\x1a\x13.cloudsync.v1.State\x12J\n" +
-	"\x0eChangePassword\x12#.cloudsync.v1.ChangePasswordRequest\x1a\x13.cloudsync.v1.Empty\x12H\n" +
-	"\rCheckPassword\x12\".cloudsync.v1.CheckPasswordRequest\x1a\x13.cloudsync.v1.Empty\x12;\n" +
-	"\vExportVault\x12\x13.cloudsync.v1.Empty\x1a\x17.cloudsync.v1.VaultFile\x12D\n" +
-	"\fBackendTypes\x12\x13.cloudsync.v1.Empty\x1a\x1f.cloudsync.v1.BackendTypesReply\x12D\n" +
+	"\rIMPORT_FAILED\x10\x022\xef\x1f\n" +
+	"\x05Shard\x12>\n" +
+	"\bGetState\x12\x18.selfhold.shard.v1.Empty\x1a\x18.selfhold.shard.v1.State\x12N\n" +
+	"\vCreateVault\x12%.selfhold.shard.v1.CreateVaultRequest\x1a\x18.selfhold.shard.v1.State\x12N\n" +
+	"\vImportVault\x12%.selfhold.shard.v1.ImportVaultRequest\x1a\x18.selfhold.shard.v1.State\x12D\n" +
+	"\x06Unlock\x12 .selfhold.shard.v1.UnlockRequest\x1a\x18.selfhold.shard.v1.State\x12?\n" +
+	"\tLockVault\x12\x18.selfhold.shard.v1.Empty\x1a\x18.selfhold.shard.v1.State\x12T\n" +
+	"\x0eChangePassword\x12(.selfhold.shard.v1.ChangePasswordRequest\x1a\x18.selfhold.shard.v1.Empty\x12R\n" +
+	"\rCheckPassword\x12'.selfhold.shard.v1.CheckPasswordRequest\x1a\x18.selfhold.shard.v1.Empty\x12E\n" +
+	"\vExportVault\x12\x18.selfhold.shard.v1.Empty\x1a\x1c.selfhold.shard.v1.VaultFile\x12N\n" +
+	"\fBackendTypes\x12\x18.selfhold.shard.v1.Empty\x1a$.selfhold.shard.v1.BackendTypesReply\x12N\n" +
 	"\n" +
-	"AddBackend\x12\x1f.cloudsync.v1.AddBackendRequest\x1a\x15.cloudsync.v1.Backend\x12R\n" +
-	"\x11SetBackendEnabled\x12&.cloudsync.v1.SetBackendEnabledRequest\x1a\x15.cloudsync.v1.Backend\x12J\n" +
-	"\rRenameBackend\x12\".cloudsync.v1.RenameBackendRequest\x1a\x15.cloudsync.v1.Backend\x12H\n" +
-	"\rRemoveBackend\x12\".cloudsync.v1.RemoveBackendRequest\x1a\x13.cloudsync.v1.Empty\x12K\n" +
-	"\tAuthorize\x12\x1e.cloudsync.v1.AuthorizeRequest\x1a\x1c.cloudsync.v1.AuthorizeReply0\x01\x12D\n" +
-	"\tReconnect\x12\x17.cloudsync.v1.IdRequest\x1a\x1c.cloudsync.v1.AuthorizeReply0\x01\x128\n" +
-	"\x06Status\x12\x13.cloudsync.v1.Empty\x1a\x19.cloudsync.v1.StatusReply\x12:\n" +
-	"\x04Logs\x12\x19.cloudsync.v1.LogsRequest\x1a\x17.cloudsync.v1.LogsReply\x125\n" +
-	"\tClearLogs\x12\x13.cloudsync.v1.Empty\x1a\x13.cloudsync.v1.Empty\x12?\n" +
-	"\rSetMountPoint\x12\x19.cloudsync.v1.PathRequest\x1a\x13.cloudsync.v1.State\x124\n" +
-	"\bShutdown\x12\x13.cloudsync.v1.Empty\x1a\x13.cloudsync.v1.Empty\x12:\n" +
-	"\x04List\x12\x19.cloudsync.v1.PathRequest\x1a\x17.cloudsync.v1.ListReply\x12>\n" +
-	"\x06Search\x12\x1b.cloudsync.v1.SearchRequest\x1a\x17.cloudsync.v1.ListReply\x126\n" +
-	"\x04Stat\x12\x19.cloudsync.v1.PathRequest\x1a\x13.cloudsync.v1.Entry\x127\n" +
-	"\x05Mkdir\x12\x19.cloudsync.v1.PathRequest\x1a\x13.cloudsync.v1.Empty\x12:\n" +
-	"\x06Remove\x12\x1b.cloudsync.v1.RemoveRequest\x1a\x13.cloudsync.v1.Empty\x12:\n" +
-	"\x06Rename\x12\x1b.cloudsync.v1.RenameRequest\x1a\x13.cloudsync.v1.Empty\x12@\n" +
-	"\x06Upload\x12\x1b.cloudsync.v1.UploadRequest\x1a\x19.cloudsync.v1.UploadReply\x12>\n" +
-	"\bDownload\x12\x1d.cloudsync.v1.DownloadRequest\x1a\x13.cloudsync.v1.Empty\x125\n" +
-	"\x03Pin\x12\x19.cloudsync.v1.PathRequest\x1a\x13.cloudsync.v1.Empty\x127\n" +
-	"\x05Unpin\x12\x19.cloudsync.v1.PathRequest\x1a\x13.cloudsync.v1.Empty\x12?\n" +
+	"AddBackend\x12$.selfhold.shard.v1.AddBackendRequest\x1a\x1a.selfhold.shard.v1.Backend\x12\\\n" +
+	"\x11SetBackendEnabled\x12+.selfhold.shard.v1.SetBackendEnabledRequest\x1a\x1a.selfhold.shard.v1.Backend\x12T\n" +
+	"\rRenameBackend\x12'.selfhold.shard.v1.RenameBackendRequest\x1a\x1a.selfhold.shard.v1.Backend\x12R\n" +
+	"\rRemoveBackend\x12'.selfhold.shard.v1.RemoveBackendRequest\x1a\x18.selfhold.shard.v1.Empty\x12U\n" +
+	"\tAuthorize\x12#.selfhold.shard.v1.AuthorizeRequest\x1a!.selfhold.shard.v1.AuthorizeReply0\x01\x12N\n" +
+	"\tReconnect\x12\x1c.selfhold.shard.v1.IdRequest\x1a!.selfhold.shard.v1.AuthorizeReply0\x01\x12B\n" +
+	"\x06Status\x12\x18.selfhold.shard.v1.Empty\x1a\x1e.selfhold.shard.v1.StatusReply\x12D\n" +
+	"\x04Logs\x12\x1e.selfhold.shard.v1.LogsRequest\x1a\x1c.selfhold.shard.v1.LogsReply\x12?\n" +
+	"\tClearLogs\x12\x18.selfhold.shard.v1.Empty\x1a\x18.selfhold.shard.v1.Empty\x12I\n" +
+	"\rSetMountPoint\x12\x1e.selfhold.shard.v1.PathRequest\x1a\x18.selfhold.shard.v1.State\x12>\n" +
+	"\bShutdown\x12\x18.selfhold.shard.v1.Empty\x1a\x18.selfhold.shard.v1.Empty\x12D\n" +
+	"\x04List\x12\x1e.selfhold.shard.v1.PathRequest\x1a\x1c.selfhold.shard.v1.ListReply\x12H\n" +
+	"\x06Search\x12 .selfhold.shard.v1.SearchRequest\x1a\x1c.selfhold.shard.v1.ListReply\x12@\n" +
+	"\x04Stat\x12\x1e.selfhold.shard.v1.PathRequest\x1a\x18.selfhold.shard.v1.Entry\x12A\n" +
+	"\x05Mkdir\x12\x1e.selfhold.shard.v1.PathRequest\x1a\x18.selfhold.shard.v1.Empty\x12D\n" +
+	"\x06Remove\x12 .selfhold.shard.v1.RemoveRequest\x1a\x18.selfhold.shard.v1.Empty\x12D\n" +
+	"\x06Rename\x12 .selfhold.shard.v1.RenameRequest\x1a\x18.selfhold.shard.v1.Empty\x12J\n" +
+	"\x06Upload\x12 .selfhold.shard.v1.UploadRequest\x1a\x1e.selfhold.shard.v1.UploadReply\x12H\n" +
+	"\bDownload\x12\".selfhold.shard.v1.DownloadRequest\x1a\x18.selfhold.shard.v1.Empty\x12?\n" +
+	"\x03Pin\x12\x1e.selfhold.shard.v1.PathRequest\x1a\x18.selfhold.shard.v1.Empty\x12A\n" +
+	"\x05Unpin\x12\x1e.selfhold.shard.v1.PathRequest\x1a\x18.selfhold.shard.v1.Empty\x12I\n" +
 	"\n" +
-	"LockHolder\x12\x19.cloudsync.v1.PathRequest\x1a\x16.cloudsync.v1.LockInfo\x12=\n" +
-	"\x05Locks\x12\x1a.cloudsync.v1.PathsRequest\x1a\x18.cloudsync.v1.LocksReply\x120\n" +
-	"\x04Sync\x12\x13.cloudsync.v1.Empty\x1a\x13.cloudsync.v1.Empty\x12@\n" +
-	"\x06Repair\x12\x1b.cloudsync.v1.RepairRequest\x1a\x19.cloudsync.v1.RepairReply\x124\n" +
-	"\x02GC\x12\x17.cloudsync.v1.GCRequest\x1a\x15.cloudsync.v1.GCReply\x12H\n" +
-	"\rSetRedundancy\x12\".cloudsync.v1.SetRedundancyRequest\x1a\x13.cloudsync.v1.Empty\x12>\n" +
-	"\vListSecrets\x12\x13.cloudsync.v1.Empty\x1a\x1a.cloudsync.v1.SecretsReply\x12?\n" +
-	"\tGetSecret\x12\x17.cloudsync.v1.IdRequest\x1a\x19.cloudsync.v1.SecretEntry\x12A\n" +
-	"\tPutSecret\x12\x19.cloudsync.v1.SecretEntry\x1a\x19.cloudsync.v1.SecretEntry\x12<\n" +
-	"\fDeleteSecret\x12\x17.cloudsync.v1.IdRequest\x1a\x13.cloudsync.v1.Empty\x12F\n" +
-	"\x0ePutSecretGroup\x12\x19.cloudsync.v1.SecretGroup\x1a\x19.cloudsync.v1.SecretGroup\x12A\n" +
-	"\x11DeleteSecretGroup\x12\x17.cloudsync.v1.IdRequest\x1a\x13.cloudsync.v1.Empty\x12E\n" +
-	"\tDeriveKey\x12\x1e.cloudsync.v1.DeriveKeyRequest\x1a\x18.cloudsync.v1.DerivedKey\x12>\n" +
-	"\tTotpCodes\x12\x13.cloudsync.v1.Empty\x1a\x1c.cloudsync.v1.TotpCodesReply\x12O\n" +
-	"\x0fUseRecoveryCode\x12!.cloudsync.v1.RecoveryCodeRequest\x1a\x19.cloudsync.v1.SecretEntry\x12F\n" +
-	"\tCheckTotp\x12\x1e.cloudsync.v1.CheckTotpRequest\x1a\x19.cloudsync.v1.TotpPreview\x12M\n" +
-	"\rReadTotpLinks\x12\x1e.cloudsync.v1.TotpLinksRequest\x1a\x1c.cloudsync.v1.TotpLinksReply\x12S\n" +
-	"\rImportSecrets\x12!.cloudsync.v1.SecretImportRequest\x1a\x1f.cloudsync.v1.SecretImportReply\x128\n" +
-	"\bListApps\x12\x13.cloudsync.v1.Empty\x1a\x17.cloudsync.v1.AppsReply\x12H\n" +
-	"\rDecidePairing\x12\".cloudsync.v1.DecidePairingRequest\x1a\x13.cloudsync.v1.Empty\x129\n" +
-	"\tRevokeApp\x12\x17.cloudsync.v1.IdRequest\x1a\x13.cloudsync.v1.Empty\x12F\n" +
-	"\fSetAppScopes\x12!.cloudsync.v1.SetAppScopesRequest\x1a\x13.cloudsync.v1.Empty\x12=\n" +
-	"\rDeleteAppData\x12\x17.cloudsync.v1.IdRequest\x1a\x13.cloudsync.v1.Empty\x123\n" +
-	"\x05Watch\x12\x13.cloudsync.v1.Empty\x1a\x13.cloudsync.v1.Event0\x01B\x17Z\x15cloudsync/core/rpc/pbb\x06proto3"
+	"LockHolder\x12\x1e.selfhold.shard.v1.PathRequest\x1a\x1b.selfhold.shard.v1.LockInfo\x12G\n" +
+	"\x05Locks\x12\x1f.selfhold.shard.v1.PathsRequest\x1a\x1d.selfhold.shard.v1.LocksReply\x12:\n" +
+	"\x04Sync\x12\x18.selfhold.shard.v1.Empty\x1a\x18.selfhold.shard.v1.Empty\x12J\n" +
+	"\x06Repair\x12 .selfhold.shard.v1.RepairRequest\x1a\x1e.selfhold.shard.v1.RepairReply\x12>\n" +
+	"\x02GC\x12\x1c.selfhold.shard.v1.GCRequest\x1a\x1a.selfhold.shard.v1.GCReply\x12R\n" +
+	"\rSetRedundancy\x12'.selfhold.shard.v1.SetRedundancyRequest\x1a\x18.selfhold.shard.v1.Empty\x12H\n" +
+	"\vListSecrets\x12\x18.selfhold.shard.v1.Empty\x1a\x1f.selfhold.shard.v1.SecretsReply\x12I\n" +
+	"\tGetSecret\x12\x1c.selfhold.shard.v1.IdRequest\x1a\x1e.selfhold.shard.v1.SecretEntry\x12K\n" +
+	"\tPutSecret\x12\x1e.selfhold.shard.v1.SecretEntry\x1a\x1e.selfhold.shard.v1.SecretEntry\x12F\n" +
+	"\fDeleteSecret\x12\x1c.selfhold.shard.v1.IdRequest\x1a\x18.selfhold.shard.v1.Empty\x12P\n" +
+	"\x0ePutSecretGroup\x12\x1e.selfhold.shard.v1.SecretGroup\x1a\x1e.selfhold.shard.v1.SecretGroup\x12K\n" +
+	"\x11DeleteSecretGroup\x12\x1c.selfhold.shard.v1.IdRequest\x1a\x18.selfhold.shard.v1.Empty\x12O\n" +
+	"\tDeriveKey\x12#.selfhold.shard.v1.DeriveKeyRequest\x1a\x1d.selfhold.shard.v1.DerivedKey\x12H\n" +
+	"\tTotpCodes\x12\x18.selfhold.shard.v1.Empty\x1a!.selfhold.shard.v1.TotpCodesReply\x12Y\n" +
+	"\x0fUseRecoveryCode\x12&.selfhold.shard.v1.RecoveryCodeRequest\x1a\x1e.selfhold.shard.v1.SecretEntry\x12P\n" +
+	"\tCheckTotp\x12#.selfhold.shard.v1.CheckTotpRequest\x1a\x1e.selfhold.shard.v1.TotpPreview\x12W\n" +
+	"\rReadTotpLinks\x12#.selfhold.shard.v1.TotpLinksRequest\x1a!.selfhold.shard.v1.TotpLinksReply\x12]\n" +
+	"\rImportSecrets\x12&.selfhold.shard.v1.SecretImportRequest\x1a$.selfhold.shard.v1.SecretImportReply\x12B\n" +
+	"\bListApps\x12\x18.selfhold.shard.v1.Empty\x1a\x1c.selfhold.shard.v1.AppsReply\x12R\n" +
+	"\rDecidePairing\x12'.selfhold.shard.v1.DecidePairingRequest\x1a\x18.selfhold.shard.v1.Empty\x12C\n" +
+	"\tRevokeApp\x12\x1c.selfhold.shard.v1.IdRequest\x1a\x18.selfhold.shard.v1.Empty\x12P\n" +
+	"\fSetAppScopes\x12&.selfhold.shard.v1.SetAppScopesRequest\x1a\x18.selfhold.shard.v1.Empty\x12G\n" +
+	"\rDeleteAppData\x12\x1c.selfhold.shard.v1.IdRequest\x1a\x18.selfhold.shard.v1.Empty\x12=\n" +
+	"\x05Watch\x12\x18.selfhold.shard.v1.Empty\x1a\x18.selfhold.shard.v1.Event0\x01B'Z%github.com/SelfHold/shard/core/rpc/pbb\x06proto3"
 
 var (
-	file_cloudsync_proto_rawDescOnce sync.Once
-	file_cloudsync_proto_rawDescData []byte
+	file_shard_proto_rawDescOnce sync.Once
+	file_shard_proto_rawDescData []byte
 )
 
-func file_cloudsync_proto_rawDescGZIP() []byte {
-	file_cloudsync_proto_rawDescOnce.Do(func() {
-		file_cloudsync_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_cloudsync_proto_rawDesc), len(file_cloudsync_proto_rawDesc)))
+func file_shard_proto_rawDescGZIP() []byte {
+	file_shard_proto_rawDescOnce.Do(func() {
+		file_shard_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_shard_proto_rawDesc), len(file_shard_proto_rawDesc)))
 	})
-	return file_cloudsync_proto_rawDescData
+	return file_shard_proto_rawDescData
 }
 
-var file_cloudsync_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
-var file_cloudsync_proto_msgTypes = make([]protoimpl.MessageInfo, 68)
-var file_cloudsync_proto_goTypes = []any{
-	(SecretKind)(0),                  // 0: cloudsync.v1.SecretKind
-	(Web3Network)(0),                 // 1: cloudsync.v1.Web3Network
-	(ServerAuth)(0),                  // 2: cloudsync.v1.ServerAuth
-	(SecretImportStatus)(0),          // 3: cloudsync.v1.SecretImportStatus
-	(Event_Kind)(0),                  // 4: cloudsync.v1.Event.Kind
-	(*Empty)(nil),                    // 5: cloudsync.v1.Empty
-	(*State)(nil),                    // 6: cloudsync.v1.State
-	(*CreateVaultRequest)(nil),       // 7: cloudsync.v1.CreateVaultRequest
-	(*ImportVaultRequest)(nil),       // 8: cloudsync.v1.ImportVaultRequest
-	(*UnlockRequest)(nil),            // 9: cloudsync.v1.UnlockRequest
-	(*ChangePasswordRequest)(nil),    // 10: cloudsync.v1.ChangePasswordRequest
-	(*CheckPasswordRequest)(nil),     // 11: cloudsync.v1.CheckPasswordRequest
-	(*VaultFile)(nil),                // 12: cloudsync.v1.VaultFile
-	(*BackendOption)(nil),            // 13: cloudsync.v1.BackendOption
-	(*BackendType)(nil),              // 14: cloudsync.v1.BackendType
-	(*BackendTypesReply)(nil),        // 15: cloudsync.v1.BackendTypesReply
-	(*AddBackendRequest)(nil),        // 16: cloudsync.v1.AddBackendRequest
-	(*IdRequest)(nil),                // 17: cloudsync.v1.IdRequest
-	(*RemoveBackendRequest)(nil),     // 18: cloudsync.v1.RemoveBackendRequest
-	(*AuthorizeRequest)(nil),         // 19: cloudsync.v1.AuthorizeRequest
-	(*AuthorizeReply)(nil),           // 20: cloudsync.v1.AuthorizeReply
-	(*RenameBackendRequest)(nil),     // 21: cloudsync.v1.RenameBackendRequest
-	(*SetBackendEnabledRequest)(nil), // 22: cloudsync.v1.SetBackendEnabledRequest
-	(*Backend)(nil),                  // 23: cloudsync.v1.Backend
-	(*Device)(nil),                   // 24: cloudsync.v1.Device
-	(*StatusReply)(nil),              // 25: cloudsync.v1.StatusReply
-	(*PathRequest)(nil),              // 26: cloudsync.v1.PathRequest
-	(*PathsRequest)(nil),             // 27: cloudsync.v1.PathsRequest
-	(*SearchRequest)(nil),            // 28: cloudsync.v1.SearchRequest
-	(*Entry)(nil),                    // 29: cloudsync.v1.Entry
-	(*ListReply)(nil),                // 30: cloudsync.v1.ListReply
-	(*RemoveRequest)(nil),            // 31: cloudsync.v1.RemoveRequest
-	(*RenameRequest)(nil),            // 32: cloudsync.v1.RenameRequest
-	(*UploadRequest)(nil),            // 33: cloudsync.v1.UploadRequest
-	(*UploadReply)(nil),              // 34: cloudsync.v1.UploadReply
-	(*DownloadRequest)(nil),          // 35: cloudsync.v1.DownloadRequest
-	(*LockInfo)(nil),                 // 36: cloudsync.v1.LockInfo
-	(*LocksReply)(nil),               // 37: cloudsync.v1.LocksReply
-	(*RepairRequest)(nil),            // 38: cloudsync.v1.RepairRequest
-	(*RepairReply)(nil),              // 39: cloudsync.v1.RepairReply
-	(*GCRequest)(nil),                // 40: cloudsync.v1.GCRequest
-	(*GCReply)(nil),                  // 41: cloudsync.v1.GCReply
-	(*SetRedundancyRequest)(nil),     // 42: cloudsync.v1.SetRedundancyRequest
-	(*Event)(nil),                    // 43: cloudsync.v1.Event
-	(*LogsRequest)(nil),              // 44: cloudsync.v1.LogsRequest
-	(*LogEntry)(nil),                 // 45: cloudsync.v1.LogEntry
-	(*LogsReply)(nil),                // 46: cloudsync.v1.LogsReply
-	(*SecretEntry)(nil),              // 47: cloudsync.v1.SecretEntry
-	(*SecretServer)(nil),             // 48: cloudsync.v1.SecretServer
-	(*SecretGroup)(nil),              // 49: cloudsync.v1.SecretGroup
-	(*SecretsReply)(nil),             // 50: cloudsync.v1.SecretsReply
-	(*DeriveKeyRequest)(nil),         // 51: cloudsync.v1.DeriveKeyRequest
-	(*DerivedKey)(nil),               // 52: cloudsync.v1.DerivedKey
-	(*TotpCode)(nil),                 // 53: cloudsync.v1.TotpCode
-	(*TotpCodesReply)(nil),           // 54: cloudsync.v1.TotpCodesReply
-	(*RecoveryCodeRequest)(nil),      // 55: cloudsync.v1.RecoveryCodeRequest
-	(*CheckTotpRequest)(nil),         // 56: cloudsync.v1.CheckTotpRequest
-	(*TotpPreview)(nil),              // 57: cloudsync.v1.TotpPreview
-	(*TotpLinksRequest)(nil),         // 58: cloudsync.v1.TotpLinksRequest
-	(*TotpLink)(nil),                 // 59: cloudsync.v1.TotpLink
-	(*TotpBatch)(nil),                // 60: cloudsync.v1.TotpBatch
-	(*TotpLinksReply)(nil),           // 61: cloudsync.v1.TotpLinksReply
-	(*SecretImportRequest)(nil),      // 62: cloudsync.v1.SecretImportRequest
-	(*SecretImportItem)(nil),         // 63: cloudsync.v1.SecretImportItem
-	(*SecretImportReply)(nil),        // 64: cloudsync.v1.SecretImportReply
-	(*PairingRequestInfo)(nil),       // 65: cloudsync.v1.PairingRequestInfo
-	(*AppPairing)(nil),               // 66: cloudsync.v1.AppPairing
-	(*AppDataInfo)(nil),              // 67: cloudsync.v1.AppDataInfo
-	(*AppsReply)(nil),                // 68: cloudsync.v1.AppsReply
-	(*DecidePairingRequest)(nil),     // 69: cloudsync.v1.DecidePairingRequest
-	(*SetAppScopesRequest)(nil),      // 70: cloudsync.v1.SetAppScopesRequest
-	nil,                              // 71: cloudsync.v1.AddBackendRequest.ParamsEntry
-	nil,                              // 72: cloudsync.v1.AuthorizeRequest.ParamsEntry
+var file_shard_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
+var file_shard_proto_msgTypes = make([]protoimpl.MessageInfo, 68)
+var file_shard_proto_goTypes = []any{
+	(SecretKind)(0),                  // 0: selfhold.shard.v1.SecretKind
+	(Web3Network)(0),                 // 1: selfhold.shard.v1.Web3Network
+	(ServerAuth)(0),                  // 2: selfhold.shard.v1.ServerAuth
+	(SecretImportStatus)(0),          // 3: selfhold.shard.v1.SecretImportStatus
+	(Event_Kind)(0),                  // 4: selfhold.shard.v1.Event.Kind
+	(*Empty)(nil),                    // 5: selfhold.shard.v1.Empty
+	(*State)(nil),                    // 6: selfhold.shard.v1.State
+	(*CreateVaultRequest)(nil),       // 7: selfhold.shard.v1.CreateVaultRequest
+	(*ImportVaultRequest)(nil),       // 8: selfhold.shard.v1.ImportVaultRequest
+	(*UnlockRequest)(nil),            // 9: selfhold.shard.v1.UnlockRequest
+	(*ChangePasswordRequest)(nil),    // 10: selfhold.shard.v1.ChangePasswordRequest
+	(*CheckPasswordRequest)(nil),     // 11: selfhold.shard.v1.CheckPasswordRequest
+	(*VaultFile)(nil),                // 12: selfhold.shard.v1.VaultFile
+	(*BackendOption)(nil),            // 13: selfhold.shard.v1.BackendOption
+	(*BackendType)(nil),              // 14: selfhold.shard.v1.BackendType
+	(*BackendTypesReply)(nil),        // 15: selfhold.shard.v1.BackendTypesReply
+	(*AddBackendRequest)(nil),        // 16: selfhold.shard.v1.AddBackendRequest
+	(*IdRequest)(nil),                // 17: selfhold.shard.v1.IdRequest
+	(*RemoveBackendRequest)(nil),     // 18: selfhold.shard.v1.RemoveBackendRequest
+	(*AuthorizeRequest)(nil),         // 19: selfhold.shard.v1.AuthorizeRequest
+	(*AuthorizeReply)(nil),           // 20: selfhold.shard.v1.AuthorizeReply
+	(*RenameBackendRequest)(nil),     // 21: selfhold.shard.v1.RenameBackendRequest
+	(*SetBackendEnabledRequest)(nil), // 22: selfhold.shard.v1.SetBackendEnabledRequest
+	(*Backend)(nil),                  // 23: selfhold.shard.v1.Backend
+	(*Device)(nil),                   // 24: selfhold.shard.v1.Device
+	(*StatusReply)(nil),              // 25: selfhold.shard.v1.StatusReply
+	(*PathRequest)(nil),              // 26: selfhold.shard.v1.PathRequest
+	(*PathsRequest)(nil),             // 27: selfhold.shard.v1.PathsRequest
+	(*SearchRequest)(nil),            // 28: selfhold.shard.v1.SearchRequest
+	(*Entry)(nil),                    // 29: selfhold.shard.v1.Entry
+	(*ListReply)(nil),                // 30: selfhold.shard.v1.ListReply
+	(*RemoveRequest)(nil),            // 31: selfhold.shard.v1.RemoveRequest
+	(*RenameRequest)(nil),            // 32: selfhold.shard.v1.RenameRequest
+	(*UploadRequest)(nil),            // 33: selfhold.shard.v1.UploadRequest
+	(*UploadReply)(nil),              // 34: selfhold.shard.v1.UploadReply
+	(*DownloadRequest)(nil),          // 35: selfhold.shard.v1.DownloadRequest
+	(*LockInfo)(nil),                 // 36: selfhold.shard.v1.LockInfo
+	(*LocksReply)(nil),               // 37: selfhold.shard.v1.LocksReply
+	(*RepairRequest)(nil),            // 38: selfhold.shard.v1.RepairRequest
+	(*RepairReply)(nil),              // 39: selfhold.shard.v1.RepairReply
+	(*GCRequest)(nil),                // 40: selfhold.shard.v1.GCRequest
+	(*GCReply)(nil),                  // 41: selfhold.shard.v1.GCReply
+	(*SetRedundancyRequest)(nil),     // 42: selfhold.shard.v1.SetRedundancyRequest
+	(*Event)(nil),                    // 43: selfhold.shard.v1.Event
+	(*LogsRequest)(nil),              // 44: selfhold.shard.v1.LogsRequest
+	(*LogEntry)(nil),                 // 45: selfhold.shard.v1.LogEntry
+	(*LogsReply)(nil),                // 46: selfhold.shard.v1.LogsReply
+	(*SecretEntry)(nil),              // 47: selfhold.shard.v1.SecretEntry
+	(*SecretServer)(nil),             // 48: selfhold.shard.v1.SecretServer
+	(*SecretGroup)(nil),              // 49: selfhold.shard.v1.SecretGroup
+	(*SecretsReply)(nil),             // 50: selfhold.shard.v1.SecretsReply
+	(*DeriveKeyRequest)(nil),         // 51: selfhold.shard.v1.DeriveKeyRequest
+	(*DerivedKey)(nil),               // 52: selfhold.shard.v1.DerivedKey
+	(*TotpCode)(nil),                 // 53: selfhold.shard.v1.TotpCode
+	(*TotpCodesReply)(nil),           // 54: selfhold.shard.v1.TotpCodesReply
+	(*RecoveryCodeRequest)(nil),      // 55: selfhold.shard.v1.RecoveryCodeRequest
+	(*CheckTotpRequest)(nil),         // 56: selfhold.shard.v1.CheckTotpRequest
+	(*TotpPreview)(nil),              // 57: selfhold.shard.v1.TotpPreview
+	(*TotpLinksRequest)(nil),         // 58: selfhold.shard.v1.TotpLinksRequest
+	(*TotpLink)(nil),                 // 59: selfhold.shard.v1.TotpLink
+	(*TotpBatch)(nil),                // 60: selfhold.shard.v1.TotpBatch
+	(*TotpLinksReply)(nil),           // 61: selfhold.shard.v1.TotpLinksReply
+	(*SecretImportRequest)(nil),      // 62: selfhold.shard.v1.SecretImportRequest
+	(*SecretImportItem)(nil),         // 63: selfhold.shard.v1.SecretImportItem
+	(*SecretImportReply)(nil),        // 64: selfhold.shard.v1.SecretImportReply
+	(*PairingRequestInfo)(nil),       // 65: selfhold.shard.v1.PairingRequestInfo
+	(*AppPairing)(nil),               // 66: selfhold.shard.v1.AppPairing
+	(*AppDataInfo)(nil),              // 67: selfhold.shard.v1.AppDataInfo
+	(*AppsReply)(nil),                // 68: selfhold.shard.v1.AppsReply
+	(*DecidePairingRequest)(nil),     // 69: selfhold.shard.v1.DecidePairingRequest
+	(*SetAppScopesRequest)(nil),      // 70: selfhold.shard.v1.SetAppScopesRequest
+	nil,                              // 71: selfhold.shard.v1.AddBackendRequest.ParamsEntry
+	nil,                              // 72: selfhold.shard.v1.AuthorizeRequest.ParamsEntry
 }
-var file_cloudsync_proto_depIdxs = []int32{
-	13, // 0: cloudsync.v1.BackendType.options:type_name -> cloudsync.v1.BackendOption
-	14, // 1: cloudsync.v1.BackendTypesReply.types:type_name -> cloudsync.v1.BackendType
-	71, // 2: cloudsync.v1.AddBackendRequest.params:type_name -> cloudsync.v1.AddBackendRequest.ParamsEntry
-	72, // 3: cloudsync.v1.AuthorizeRequest.params:type_name -> cloudsync.v1.AuthorizeRequest.ParamsEntry
-	23, // 4: cloudsync.v1.StatusReply.backends:type_name -> cloudsync.v1.Backend
-	24, // 5: cloudsync.v1.StatusReply.devices:type_name -> cloudsync.v1.Device
-	29, // 6: cloudsync.v1.ListReply.entries:type_name -> cloudsync.v1.Entry
-	36, // 7: cloudsync.v1.LocksReply.locks:type_name -> cloudsync.v1.LockInfo
-	4,  // 8: cloudsync.v1.Event.kind:type_name -> cloudsync.v1.Event.Kind
-	45, // 9: cloudsync.v1.LogsReply.entries:type_name -> cloudsync.v1.LogEntry
-	0,  // 10: cloudsync.v1.SecretEntry.kind:type_name -> cloudsync.v1.SecretKind
-	1,  // 11: cloudsync.v1.SecretEntry.network:type_name -> cloudsync.v1.Web3Network
-	48, // 12: cloudsync.v1.SecretEntry.server:type_name -> cloudsync.v1.SecretServer
-	2,  // 13: cloudsync.v1.SecretServer.auth:type_name -> cloudsync.v1.ServerAuth
-	49, // 14: cloudsync.v1.SecretsReply.groups:type_name -> cloudsync.v1.SecretGroup
-	47, // 15: cloudsync.v1.SecretsReply.entries:type_name -> cloudsync.v1.SecretEntry
-	0,  // 16: cloudsync.v1.DeriveKeyRequest.kind:type_name -> cloudsync.v1.SecretKind
-	1,  // 17: cloudsync.v1.DeriveKeyRequest.network:type_name -> cloudsync.v1.Web3Network
-	53, // 18: cloudsync.v1.TotpCodesReply.codes:type_name -> cloudsync.v1.TotpCode
-	57, // 19: cloudsync.v1.TotpLink.preview:type_name -> cloudsync.v1.TotpPreview
-	59, // 20: cloudsync.v1.TotpLinksReply.links:type_name -> cloudsync.v1.TotpLink
-	60, // 21: cloudsync.v1.TotpLinksReply.batches:type_name -> cloudsync.v1.TotpBatch
-	0,  // 22: cloudsync.v1.SecretImportItem.kind:type_name -> cloudsync.v1.SecretKind
-	3,  // 23: cloudsync.v1.SecretImportItem.status:type_name -> cloudsync.v1.SecretImportStatus
-	63, // 24: cloudsync.v1.SecretImportReply.items:type_name -> cloudsync.v1.SecretImportItem
-	65, // 25: cloudsync.v1.AppsReply.requests:type_name -> cloudsync.v1.PairingRequestInfo
-	66, // 26: cloudsync.v1.AppsReply.pairings:type_name -> cloudsync.v1.AppPairing
-	67, // 27: cloudsync.v1.AppsReply.data:type_name -> cloudsync.v1.AppDataInfo
-	5,  // 28: cloudsync.v1.CloudSync.GetState:input_type -> cloudsync.v1.Empty
-	7,  // 29: cloudsync.v1.CloudSync.CreateVault:input_type -> cloudsync.v1.CreateVaultRequest
-	8,  // 30: cloudsync.v1.CloudSync.ImportVault:input_type -> cloudsync.v1.ImportVaultRequest
-	9,  // 31: cloudsync.v1.CloudSync.Unlock:input_type -> cloudsync.v1.UnlockRequest
-	5,  // 32: cloudsync.v1.CloudSync.LockVault:input_type -> cloudsync.v1.Empty
-	10, // 33: cloudsync.v1.CloudSync.ChangePassword:input_type -> cloudsync.v1.ChangePasswordRequest
-	11, // 34: cloudsync.v1.CloudSync.CheckPassword:input_type -> cloudsync.v1.CheckPasswordRequest
-	5,  // 35: cloudsync.v1.CloudSync.ExportVault:input_type -> cloudsync.v1.Empty
-	5,  // 36: cloudsync.v1.CloudSync.BackendTypes:input_type -> cloudsync.v1.Empty
-	16, // 37: cloudsync.v1.CloudSync.AddBackend:input_type -> cloudsync.v1.AddBackendRequest
-	22, // 38: cloudsync.v1.CloudSync.SetBackendEnabled:input_type -> cloudsync.v1.SetBackendEnabledRequest
-	21, // 39: cloudsync.v1.CloudSync.RenameBackend:input_type -> cloudsync.v1.RenameBackendRequest
-	18, // 40: cloudsync.v1.CloudSync.RemoveBackend:input_type -> cloudsync.v1.RemoveBackendRequest
-	19, // 41: cloudsync.v1.CloudSync.Authorize:input_type -> cloudsync.v1.AuthorizeRequest
-	17, // 42: cloudsync.v1.CloudSync.Reconnect:input_type -> cloudsync.v1.IdRequest
-	5,  // 43: cloudsync.v1.CloudSync.Status:input_type -> cloudsync.v1.Empty
-	44, // 44: cloudsync.v1.CloudSync.Logs:input_type -> cloudsync.v1.LogsRequest
-	5,  // 45: cloudsync.v1.CloudSync.ClearLogs:input_type -> cloudsync.v1.Empty
-	26, // 46: cloudsync.v1.CloudSync.SetMountPoint:input_type -> cloudsync.v1.PathRequest
-	5,  // 47: cloudsync.v1.CloudSync.Shutdown:input_type -> cloudsync.v1.Empty
-	26, // 48: cloudsync.v1.CloudSync.List:input_type -> cloudsync.v1.PathRequest
-	28, // 49: cloudsync.v1.CloudSync.Search:input_type -> cloudsync.v1.SearchRequest
-	26, // 50: cloudsync.v1.CloudSync.Stat:input_type -> cloudsync.v1.PathRequest
-	26, // 51: cloudsync.v1.CloudSync.Mkdir:input_type -> cloudsync.v1.PathRequest
-	31, // 52: cloudsync.v1.CloudSync.Remove:input_type -> cloudsync.v1.RemoveRequest
-	32, // 53: cloudsync.v1.CloudSync.Rename:input_type -> cloudsync.v1.RenameRequest
-	33, // 54: cloudsync.v1.CloudSync.Upload:input_type -> cloudsync.v1.UploadRequest
-	35, // 55: cloudsync.v1.CloudSync.Download:input_type -> cloudsync.v1.DownloadRequest
-	26, // 56: cloudsync.v1.CloudSync.Pin:input_type -> cloudsync.v1.PathRequest
-	26, // 57: cloudsync.v1.CloudSync.Unpin:input_type -> cloudsync.v1.PathRequest
-	26, // 58: cloudsync.v1.CloudSync.LockHolder:input_type -> cloudsync.v1.PathRequest
-	27, // 59: cloudsync.v1.CloudSync.Locks:input_type -> cloudsync.v1.PathsRequest
-	5,  // 60: cloudsync.v1.CloudSync.Sync:input_type -> cloudsync.v1.Empty
-	38, // 61: cloudsync.v1.CloudSync.Repair:input_type -> cloudsync.v1.RepairRequest
-	40, // 62: cloudsync.v1.CloudSync.GC:input_type -> cloudsync.v1.GCRequest
-	42, // 63: cloudsync.v1.CloudSync.SetRedundancy:input_type -> cloudsync.v1.SetRedundancyRequest
-	5,  // 64: cloudsync.v1.CloudSync.ListSecrets:input_type -> cloudsync.v1.Empty
-	17, // 65: cloudsync.v1.CloudSync.GetSecret:input_type -> cloudsync.v1.IdRequest
-	47, // 66: cloudsync.v1.CloudSync.PutSecret:input_type -> cloudsync.v1.SecretEntry
-	17, // 67: cloudsync.v1.CloudSync.DeleteSecret:input_type -> cloudsync.v1.IdRequest
-	49, // 68: cloudsync.v1.CloudSync.PutSecretGroup:input_type -> cloudsync.v1.SecretGroup
-	17, // 69: cloudsync.v1.CloudSync.DeleteSecretGroup:input_type -> cloudsync.v1.IdRequest
-	51, // 70: cloudsync.v1.CloudSync.DeriveKey:input_type -> cloudsync.v1.DeriveKeyRequest
-	5,  // 71: cloudsync.v1.CloudSync.TotpCodes:input_type -> cloudsync.v1.Empty
-	55, // 72: cloudsync.v1.CloudSync.UseRecoveryCode:input_type -> cloudsync.v1.RecoveryCodeRequest
-	56, // 73: cloudsync.v1.CloudSync.CheckTotp:input_type -> cloudsync.v1.CheckTotpRequest
-	58, // 74: cloudsync.v1.CloudSync.ReadTotpLinks:input_type -> cloudsync.v1.TotpLinksRequest
-	62, // 75: cloudsync.v1.CloudSync.ImportSecrets:input_type -> cloudsync.v1.SecretImportRequest
-	5,  // 76: cloudsync.v1.CloudSync.ListApps:input_type -> cloudsync.v1.Empty
-	69, // 77: cloudsync.v1.CloudSync.DecidePairing:input_type -> cloudsync.v1.DecidePairingRequest
-	17, // 78: cloudsync.v1.CloudSync.RevokeApp:input_type -> cloudsync.v1.IdRequest
-	70, // 79: cloudsync.v1.CloudSync.SetAppScopes:input_type -> cloudsync.v1.SetAppScopesRequest
-	17, // 80: cloudsync.v1.CloudSync.DeleteAppData:input_type -> cloudsync.v1.IdRequest
-	5,  // 81: cloudsync.v1.CloudSync.Watch:input_type -> cloudsync.v1.Empty
-	6,  // 82: cloudsync.v1.CloudSync.GetState:output_type -> cloudsync.v1.State
-	6,  // 83: cloudsync.v1.CloudSync.CreateVault:output_type -> cloudsync.v1.State
-	6,  // 84: cloudsync.v1.CloudSync.ImportVault:output_type -> cloudsync.v1.State
-	6,  // 85: cloudsync.v1.CloudSync.Unlock:output_type -> cloudsync.v1.State
-	6,  // 86: cloudsync.v1.CloudSync.LockVault:output_type -> cloudsync.v1.State
-	5,  // 87: cloudsync.v1.CloudSync.ChangePassword:output_type -> cloudsync.v1.Empty
-	5,  // 88: cloudsync.v1.CloudSync.CheckPassword:output_type -> cloudsync.v1.Empty
-	12, // 89: cloudsync.v1.CloudSync.ExportVault:output_type -> cloudsync.v1.VaultFile
-	15, // 90: cloudsync.v1.CloudSync.BackendTypes:output_type -> cloudsync.v1.BackendTypesReply
-	23, // 91: cloudsync.v1.CloudSync.AddBackend:output_type -> cloudsync.v1.Backend
-	23, // 92: cloudsync.v1.CloudSync.SetBackendEnabled:output_type -> cloudsync.v1.Backend
-	23, // 93: cloudsync.v1.CloudSync.RenameBackend:output_type -> cloudsync.v1.Backend
-	5,  // 94: cloudsync.v1.CloudSync.RemoveBackend:output_type -> cloudsync.v1.Empty
-	20, // 95: cloudsync.v1.CloudSync.Authorize:output_type -> cloudsync.v1.AuthorizeReply
-	20, // 96: cloudsync.v1.CloudSync.Reconnect:output_type -> cloudsync.v1.AuthorizeReply
-	25, // 97: cloudsync.v1.CloudSync.Status:output_type -> cloudsync.v1.StatusReply
-	46, // 98: cloudsync.v1.CloudSync.Logs:output_type -> cloudsync.v1.LogsReply
-	5,  // 99: cloudsync.v1.CloudSync.ClearLogs:output_type -> cloudsync.v1.Empty
-	6,  // 100: cloudsync.v1.CloudSync.SetMountPoint:output_type -> cloudsync.v1.State
-	5,  // 101: cloudsync.v1.CloudSync.Shutdown:output_type -> cloudsync.v1.Empty
-	30, // 102: cloudsync.v1.CloudSync.List:output_type -> cloudsync.v1.ListReply
-	30, // 103: cloudsync.v1.CloudSync.Search:output_type -> cloudsync.v1.ListReply
-	29, // 104: cloudsync.v1.CloudSync.Stat:output_type -> cloudsync.v1.Entry
-	5,  // 105: cloudsync.v1.CloudSync.Mkdir:output_type -> cloudsync.v1.Empty
-	5,  // 106: cloudsync.v1.CloudSync.Remove:output_type -> cloudsync.v1.Empty
-	5,  // 107: cloudsync.v1.CloudSync.Rename:output_type -> cloudsync.v1.Empty
-	34, // 108: cloudsync.v1.CloudSync.Upload:output_type -> cloudsync.v1.UploadReply
-	5,  // 109: cloudsync.v1.CloudSync.Download:output_type -> cloudsync.v1.Empty
-	5,  // 110: cloudsync.v1.CloudSync.Pin:output_type -> cloudsync.v1.Empty
-	5,  // 111: cloudsync.v1.CloudSync.Unpin:output_type -> cloudsync.v1.Empty
-	36, // 112: cloudsync.v1.CloudSync.LockHolder:output_type -> cloudsync.v1.LockInfo
-	37, // 113: cloudsync.v1.CloudSync.Locks:output_type -> cloudsync.v1.LocksReply
-	5,  // 114: cloudsync.v1.CloudSync.Sync:output_type -> cloudsync.v1.Empty
-	39, // 115: cloudsync.v1.CloudSync.Repair:output_type -> cloudsync.v1.RepairReply
-	41, // 116: cloudsync.v1.CloudSync.GC:output_type -> cloudsync.v1.GCReply
-	5,  // 117: cloudsync.v1.CloudSync.SetRedundancy:output_type -> cloudsync.v1.Empty
-	50, // 118: cloudsync.v1.CloudSync.ListSecrets:output_type -> cloudsync.v1.SecretsReply
-	47, // 119: cloudsync.v1.CloudSync.GetSecret:output_type -> cloudsync.v1.SecretEntry
-	47, // 120: cloudsync.v1.CloudSync.PutSecret:output_type -> cloudsync.v1.SecretEntry
-	5,  // 121: cloudsync.v1.CloudSync.DeleteSecret:output_type -> cloudsync.v1.Empty
-	49, // 122: cloudsync.v1.CloudSync.PutSecretGroup:output_type -> cloudsync.v1.SecretGroup
-	5,  // 123: cloudsync.v1.CloudSync.DeleteSecretGroup:output_type -> cloudsync.v1.Empty
-	52, // 124: cloudsync.v1.CloudSync.DeriveKey:output_type -> cloudsync.v1.DerivedKey
-	54, // 125: cloudsync.v1.CloudSync.TotpCodes:output_type -> cloudsync.v1.TotpCodesReply
-	47, // 126: cloudsync.v1.CloudSync.UseRecoveryCode:output_type -> cloudsync.v1.SecretEntry
-	57, // 127: cloudsync.v1.CloudSync.CheckTotp:output_type -> cloudsync.v1.TotpPreview
-	61, // 128: cloudsync.v1.CloudSync.ReadTotpLinks:output_type -> cloudsync.v1.TotpLinksReply
-	64, // 129: cloudsync.v1.CloudSync.ImportSecrets:output_type -> cloudsync.v1.SecretImportReply
-	68, // 130: cloudsync.v1.CloudSync.ListApps:output_type -> cloudsync.v1.AppsReply
-	5,  // 131: cloudsync.v1.CloudSync.DecidePairing:output_type -> cloudsync.v1.Empty
-	5,  // 132: cloudsync.v1.CloudSync.RevokeApp:output_type -> cloudsync.v1.Empty
-	5,  // 133: cloudsync.v1.CloudSync.SetAppScopes:output_type -> cloudsync.v1.Empty
-	5,  // 134: cloudsync.v1.CloudSync.DeleteAppData:output_type -> cloudsync.v1.Empty
-	43, // 135: cloudsync.v1.CloudSync.Watch:output_type -> cloudsync.v1.Event
+var file_shard_proto_depIdxs = []int32{
+	13, // 0: selfhold.shard.v1.BackendType.options:type_name -> selfhold.shard.v1.BackendOption
+	14, // 1: selfhold.shard.v1.BackendTypesReply.types:type_name -> selfhold.shard.v1.BackendType
+	71, // 2: selfhold.shard.v1.AddBackendRequest.params:type_name -> selfhold.shard.v1.AddBackendRequest.ParamsEntry
+	72, // 3: selfhold.shard.v1.AuthorizeRequest.params:type_name -> selfhold.shard.v1.AuthorizeRequest.ParamsEntry
+	23, // 4: selfhold.shard.v1.StatusReply.backends:type_name -> selfhold.shard.v1.Backend
+	24, // 5: selfhold.shard.v1.StatusReply.devices:type_name -> selfhold.shard.v1.Device
+	29, // 6: selfhold.shard.v1.ListReply.entries:type_name -> selfhold.shard.v1.Entry
+	36, // 7: selfhold.shard.v1.LocksReply.locks:type_name -> selfhold.shard.v1.LockInfo
+	4,  // 8: selfhold.shard.v1.Event.kind:type_name -> selfhold.shard.v1.Event.Kind
+	45, // 9: selfhold.shard.v1.LogsReply.entries:type_name -> selfhold.shard.v1.LogEntry
+	0,  // 10: selfhold.shard.v1.SecretEntry.kind:type_name -> selfhold.shard.v1.SecretKind
+	1,  // 11: selfhold.shard.v1.SecretEntry.network:type_name -> selfhold.shard.v1.Web3Network
+	48, // 12: selfhold.shard.v1.SecretEntry.server:type_name -> selfhold.shard.v1.SecretServer
+	2,  // 13: selfhold.shard.v1.SecretServer.auth:type_name -> selfhold.shard.v1.ServerAuth
+	49, // 14: selfhold.shard.v1.SecretsReply.groups:type_name -> selfhold.shard.v1.SecretGroup
+	47, // 15: selfhold.shard.v1.SecretsReply.entries:type_name -> selfhold.shard.v1.SecretEntry
+	0,  // 16: selfhold.shard.v1.DeriveKeyRequest.kind:type_name -> selfhold.shard.v1.SecretKind
+	1,  // 17: selfhold.shard.v1.DeriveKeyRequest.network:type_name -> selfhold.shard.v1.Web3Network
+	53, // 18: selfhold.shard.v1.TotpCodesReply.codes:type_name -> selfhold.shard.v1.TotpCode
+	57, // 19: selfhold.shard.v1.TotpLink.preview:type_name -> selfhold.shard.v1.TotpPreview
+	59, // 20: selfhold.shard.v1.TotpLinksReply.links:type_name -> selfhold.shard.v1.TotpLink
+	60, // 21: selfhold.shard.v1.TotpLinksReply.batches:type_name -> selfhold.shard.v1.TotpBatch
+	0,  // 22: selfhold.shard.v1.SecretImportItem.kind:type_name -> selfhold.shard.v1.SecretKind
+	3,  // 23: selfhold.shard.v1.SecretImportItem.status:type_name -> selfhold.shard.v1.SecretImportStatus
+	63, // 24: selfhold.shard.v1.SecretImportReply.items:type_name -> selfhold.shard.v1.SecretImportItem
+	65, // 25: selfhold.shard.v1.AppsReply.requests:type_name -> selfhold.shard.v1.PairingRequestInfo
+	66, // 26: selfhold.shard.v1.AppsReply.pairings:type_name -> selfhold.shard.v1.AppPairing
+	67, // 27: selfhold.shard.v1.AppsReply.data:type_name -> selfhold.shard.v1.AppDataInfo
+	5,  // 28: selfhold.shard.v1.Shard.GetState:input_type -> selfhold.shard.v1.Empty
+	7,  // 29: selfhold.shard.v1.Shard.CreateVault:input_type -> selfhold.shard.v1.CreateVaultRequest
+	8,  // 30: selfhold.shard.v1.Shard.ImportVault:input_type -> selfhold.shard.v1.ImportVaultRequest
+	9,  // 31: selfhold.shard.v1.Shard.Unlock:input_type -> selfhold.shard.v1.UnlockRequest
+	5,  // 32: selfhold.shard.v1.Shard.LockVault:input_type -> selfhold.shard.v1.Empty
+	10, // 33: selfhold.shard.v1.Shard.ChangePassword:input_type -> selfhold.shard.v1.ChangePasswordRequest
+	11, // 34: selfhold.shard.v1.Shard.CheckPassword:input_type -> selfhold.shard.v1.CheckPasswordRequest
+	5,  // 35: selfhold.shard.v1.Shard.ExportVault:input_type -> selfhold.shard.v1.Empty
+	5,  // 36: selfhold.shard.v1.Shard.BackendTypes:input_type -> selfhold.shard.v1.Empty
+	16, // 37: selfhold.shard.v1.Shard.AddBackend:input_type -> selfhold.shard.v1.AddBackendRequest
+	22, // 38: selfhold.shard.v1.Shard.SetBackendEnabled:input_type -> selfhold.shard.v1.SetBackendEnabledRequest
+	21, // 39: selfhold.shard.v1.Shard.RenameBackend:input_type -> selfhold.shard.v1.RenameBackendRequest
+	18, // 40: selfhold.shard.v1.Shard.RemoveBackend:input_type -> selfhold.shard.v1.RemoveBackendRequest
+	19, // 41: selfhold.shard.v1.Shard.Authorize:input_type -> selfhold.shard.v1.AuthorizeRequest
+	17, // 42: selfhold.shard.v1.Shard.Reconnect:input_type -> selfhold.shard.v1.IdRequest
+	5,  // 43: selfhold.shard.v1.Shard.Status:input_type -> selfhold.shard.v1.Empty
+	44, // 44: selfhold.shard.v1.Shard.Logs:input_type -> selfhold.shard.v1.LogsRequest
+	5,  // 45: selfhold.shard.v1.Shard.ClearLogs:input_type -> selfhold.shard.v1.Empty
+	26, // 46: selfhold.shard.v1.Shard.SetMountPoint:input_type -> selfhold.shard.v1.PathRequest
+	5,  // 47: selfhold.shard.v1.Shard.Shutdown:input_type -> selfhold.shard.v1.Empty
+	26, // 48: selfhold.shard.v1.Shard.List:input_type -> selfhold.shard.v1.PathRequest
+	28, // 49: selfhold.shard.v1.Shard.Search:input_type -> selfhold.shard.v1.SearchRequest
+	26, // 50: selfhold.shard.v1.Shard.Stat:input_type -> selfhold.shard.v1.PathRequest
+	26, // 51: selfhold.shard.v1.Shard.Mkdir:input_type -> selfhold.shard.v1.PathRequest
+	31, // 52: selfhold.shard.v1.Shard.Remove:input_type -> selfhold.shard.v1.RemoveRequest
+	32, // 53: selfhold.shard.v1.Shard.Rename:input_type -> selfhold.shard.v1.RenameRequest
+	33, // 54: selfhold.shard.v1.Shard.Upload:input_type -> selfhold.shard.v1.UploadRequest
+	35, // 55: selfhold.shard.v1.Shard.Download:input_type -> selfhold.shard.v1.DownloadRequest
+	26, // 56: selfhold.shard.v1.Shard.Pin:input_type -> selfhold.shard.v1.PathRequest
+	26, // 57: selfhold.shard.v1.Shard.Unpin:input_type -> selfhold.shard.v1.PathRequest
+	26, // 58: selfhold.shard.v1.Shard.LockHolder:input_type -> selfhold.shard.v1.PathRequest
+	27, // 59: selfhold.shard.v1.Shard.Locks:input_type -> selfhold.shard.v1.PathsRequest
+	5,  // 60: selfhold.shard.v1.Shard.Sync:input_type -> selfhold.shard.v1.Empty
+	38, // 61: selfhold.shard.v1.Shard.Repair:input_type -> selfhold.shard.v1.RepairRequest
+	40, // 62: selfhold.shard.v1.Shard.GC:input_type -> selfhold.shard.v1.GCRequest
+	42, // 63: selfhold.shard.v1.Shard.SetRedundancy:input_type -> selfhold.shard.v1.SetRedundancyRequest
+	5,  // 64: selfhold.shard.v1.Shard.ListSecrets:input_type -> selfhold.shard.v1.Empty
+	17, // 65: selfhold.shard.v1.Shard.GetSecret:input_type -> selfhold.shard.v1.IdRequest
+	47, // 66: selfhold.shard.v1.Shard.PutSecret:input_type -> selfhold.shard.v1.SecretEntry
+	17, // 67: selfhold.shard.v1.Shard.DeleteSecret:input_type -> selfhold.shard.v1.IdRequest
+	49, // 68: selfhold.shard.v1.Shard.PutSecretGroup:input_type -> selfhold.shard.v1.SecretGroup
+	17, // 69: selfhold.shard.v1.Shard.DeleteSecretGroup:input_type -> selfhold.shard.v1.IdRequest
+	51, // 70: selfhold.shard.v1.Shard.DeriveKey:input_type -> selfhold.shard.v1.DeriveKeyRequest
+	5,  // 71: selfhold.shard.v1.Shard.TotpCodes:input_type -> selfhold.shard.v1.Empty
+	55, // 72: selfhold.shard.v1.Shard.UseRecoveryCode:input_type -> selfhold.shard.v1.RecoveryCodeRequest
+	56, // 73: selfhold.shard.v1.Shard.CheckTotp:input_type -> selfhold.shard.v1.CheckTotpRequest
+	58, // 74: selfhold.shard.v1.Shard.ReadTotpLinks:input_type -> selfhold.shard.v1.TotpLinksRequest
+	62, // 75: selfhold.shard.v1.Shard.ImportSecrets:input_type -> selfhold.shard.v1.SecretImportRequest
+	5,  // 76: selfhold.shard.v1.Shard.ListApps:input_type -> selfhold.shard.v1.Empty
+	69, // 77: selfhold.shard.v1.Shard.DecidePairing:input_type -> selfhold.shard.v1.DecidePairingRequest
+	17, // 78: selfhold.shard.v1.Shard.RevokeApp:input_type -> selfhold.shard.v1.IdRequest
+	70, // 79: selfhold.shard.v1.Shard.SetAppScopes:input_type -> selfhold.shard.v1.SetAppScopesRequest
+	17, // 80: selfhold.shard.v1.Shard.DeleteAppData:input_type -> selfhold.shard.v1.IdRequest
+	5,  // 81: selfhold.shard.v1.Shard.Watch:input_type -> selfhold.shard.v1.Empty
+	6,  // 82: selfhold.shard.v1.Shard.GetState:output_type -> selfhold.shard.v1.State
+	6,  // 83: selfhold.shard.v1.Shard.CreateVault:output_type -> selfhold.shard.v1.State
+	6,  // 84: selfhold.shard.v1.Shard.ImportVault:output_type -> selfhold.shard.v1.State
+	6,  // 85: selfhold.shard.v1.Shard.Unlock:output_type -> selfhold.shard.v1.State
+	6,  // 86: selfhold.shard.v1.Shard.LockVault:output_type -> selfhold.shard.v1.State
+	5,  // 87: selfhold.shard.v1.Shard.ChangePassword:output_type -> selfhold.shard.v1.Empty
+	5,  // 88: selfhold.shard.v1.Shard.CheckPassword:output_type -> selfhold.shard.v1.Empty
+	12, // 89: selfhold.shard.v1.Shard.ExportVault:output_type -> selfhold.shard.v1.VaultFile
+	15, // 90: selfhold.shard.v1.Shard.BackendTypes:output_type -> selfhold.shard.v1.BackendTypesReply
+	23, // 91: selfhold.shard.v1.Shard.AddBackend:output_type -> selfhold.shard.v1.Backend
+	23, // 92: selfhold.shard.v1.Shard.SetBackendEnabled:output_type -> selfhold.shard.v1.Backend
+	23, // 93: selfhold.shard.v1.Shard.RenameBackend:output_type -> selfhold.shard.v1.Backend
+	5,  // 94: selfhold.shard.v1.Shard.RemoveBackend:output_type -> selfhold.shard.v1.Empty
+	20, // 95: selfhold.shard.v1.Shard.Authorize:output_type -> selfhold.shard.v1.AuthorizeReply
+	20, // 96: selfhold.shard.v1.Shard.Reconnect:output_type -> selfhold.shard.v1.AuthorizeReply
+	25, // 97: selfhold.shard.v1.Shard.Status:output_type -> selfhold.shard.v1.StatusReply
+	46, // 98: selfhold.shard.v1.Shard.Logs:output_type -> selfhold.shard.v1.LogsReply
+	5,  // 99: selfhold.shard.v1.Shard.ClearLogs:output_type -> selfhold.shard.v1.Empty
+	6,  // 100: selfhold.shard.v1.Shard.SetMountPoint:output_type -> selfhold.shard.v1.State
+	5,  // 101: selfhold.shard.v1.Shard.Shutdown:output_type -> selfhold.shard.v1.Empty
+	30, // 102: selfhold.shard.v1.Shard.List:output_type -> selfhold.shard.v1.ListReply
+	30, // 103: selfhold.shard.v1.Shard.Search:output_type -> selfhold.shard.v1.ListReply
+	29, // 104: selfhold.shard.v1.Shard.Stat:output_type -> selfhold.shard.v1.Entry
+	5,  // 105: selfhold.shard.v1.Shard.Mkdir:output_type -> selfhold.shard.v1.Empty
+	5,  // 106: selfhold.shard.v1.Shard.Remove:output_type -> selfhold.shard.v1.Empty
+	5,  // 107: selfhold.shard.v1.Shard.Rename:output_type -> selfhold.shard.v1.Empty
+	34, // 108: selfhold.shard.v1.Shard.Upload:output_type -> selfhold.shard.v1.UploadReply
+	5,  // 109: selfhold.shard.v1.Shard.Download:output_type -> selfhold.shard.v1.Empty
+	5,  // 110: selfhold.shard.v1.Shard.Pin:output_type -> selfhold.shard.v1.Empty
+	5,  // 111: selfhold.shard.v1.Shard.Unpin:output_type -> selfhold.shard.v1.Empty
+	36, // 112: selfhold.shard.v1.Shard.LockHolder:output_type -> selfhold.shard.v1.LockInfo
+	37, // 113: selfhold.shard.v1.Shard.Locks:output_type -> selfhold.shard.v1.LocksReply
+	5,  // 114: selfhold.shard.v1.Shard.Sync:output_type -> selfhold.shard.v1.Empty
+	39, // 115: selfhold.shard.v1.Shard.Repair:output_type -> selfhold.shard.v1.RepairReply
+	41, // 116: selfhold.shard.v1.Shard.GC:output_type -> selfhold.shard.v1.GCReply
+	5,  // 117: selfhold.shard.v1.Shard.SetRedundancy:output_type -> selfhold.shard.v1.Empty
+	50, // 118: selfhold.shard.v1.Shard.ListSecrets:output_type -> selfhold.shard.v1.SecretsReply
+	47, // 119: selfhold.shard.v1.Shard.GetSecret:output_type -> selfhold.shard.v1.SecretEntry
+	47, // 120: selfhold.shard.v1.Shard.PutSecret:output_type -> selfhold.shard.v1.SecretEntry
+	5,  // 121: selfhold.shard.v1.Shard.DeleteSecret:output_type -> selfhold.shard.v1.Empty
+	49, // 122: selfhold.shard.v1.Shard.PutSecretGroup:output_type -> selfhold.shard.v1.SecretGroup
+	5,  // 123: selfhold.shard.v1.Shard.DeleteSecretGroup:output_type -> selfhold.shard.v1.Empty
+	52, // 124: selfhold.shard.v1.Shard.DeriveKey:output_type -> selfhold.shard.v1.DerivedKey
+	54, // 125: selfhold.shard.v1.Shard.TotpCodes:output_type -> selfhold.shard.v1.TotpCodesReply
+	47, // 126: selfhold.shard.v1.Shard.UseRecoveryCode:output_type -> selfhold.shard.v1.SecretEntry
+	57, // 127: selfhold.shard.v1.Shard.CheckTotp:output_type -> selfhold.shard.v1.TotpPreview
+	61, // 128: selfhold.shard.v1.Shard.ReadTotpLinks:output_type -> selfhold.shard.v1.TotpLinksReply
+	64, // 129: selfhold.shard.v1.Shard.ImportSecrets:output_type -> selfhold.shard.v1.SecretImportReply
+	68, // 130: selfhold.shard.v1.Shard.ListApps:output_type -> selfhold.shard.v1.AppsReply
+	5,  // 131: selfhold.shard.v1.Shard.DecidePairing:output_type -> selfhold.shard.v1.Empty
+	5,  // 132: selfhold.shard.v1.Shard.RevokeApp:output_type -> selfhold.shard.v1.Empty
+	5,  // 133: selfhold.shard.v1.Shard.SetAppScopes:output_type -> selfhold.shard.v1.Empty
+	5,  // 134: selfhold.shard.v1.Shard.DeleteAppData:output_type -> selfhold.shard.v1.Empty
+	43, // 135: selfhold.shard.v1.Shard.Watch:output_type -> selfhold.shard.v1.Event
 	82, // [82:136] is the sub-list for method output_type
 	28, // [28:82] is the sub-list for method input_type
 	28, // [28:28] is the sub-list for extension type_name
@@ -5834,29 +5834,29 @@ var file_cloudsync_proto_depIdxs = []int32{
 	0,  // [0:28] is the sub-list for field type_name
 }
 
-func init() { file_cloudsync_proto_init() }
-func file_cloudsync_proto_init() {
-	if File_cloudsync_proto != nil {
+func init() { file_shard_proto_init() }
+func file_shard_proto_init() {
+	if File_shard_proto != nil {
 		return
 	}
-	file_cloudsync_proto_msgTypes[18].OneofWrappers = []any{}
-	file_cloudsync_proto_msgTypes[20].OneofWrappers = []any{}
+	file_shard_proto_msgTypes[18].OneofWrappers = []any{}
+	file_shard_proto_msgTypes[20].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_cloudsync_proto_rawDesc), len(file_cloudsync_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_shard_proto_rawDesc), len(file_shard_proto_rawDesc)),
 			NumEnums:      5,
 			NumMessages:   68,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_cloudsync_proto_goTypes,
-		DependencyIndexes: file_cloudsync_proto_depIdxs,
-		EnumInfos:         file_cloudsync_proto_enumTypes,
-		MessageInfos:      file_cloudsync_proto_msgTypes,
+		GoTypes:           file_shard_proto_goTypes,
+		DependencyIndexes: file_shard_proto_depIdxs,
+		EnumInfos:         file_shard_proto_enumTypes,
+		MessageInfos:      file_shard_proto_msgTypes,
 	}.Build()
-	File_cloudsync_proto = out.File
-	file_cloudsync_proto_goTypes = nil
-	file_cloudsync_proto_depIdxs = nil
+	File_shard_proto = out.File
+	file_shard_proto_goTypes = nil
+	file_shard_proto_depIdxs = nil
 }

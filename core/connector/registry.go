@@ -1,6 +1,6 @@
 // Package connector serves the Connector API (proto/connector.proto) to
-// other applications: an app pairs with CloudSync once per device (the
-// user approves it in CloudSync) and then keeps small records in the vault
+// other applications: an app pairs with Shard once per device (the
+// user approves it in Shard) and then keeps small records in the vault
 // (engine/apps.go), the same on every device.
 //
 // Pairings are per device and live in <data root>/apps.json: a desktop app
@@ -24,8 +24,8 @@ import (
 	"sync"
 	"time"
 
-	"cloudsync/core/crypto"
-	"cloudsync/core/engine"
+	"github.com/SelfHold/shard/core/crypto"
+	"github.com/SelfHold/shard/core/engine"
 )
 
 const (
@@ -125,7 +125,7 @@ func (p Pairing) Platform() string {
 
 // Request is a pairing request waiting for the user.
 type Request struct {
-	ID          string // shown to the CloudSync UI (not the ticket)
+	ID          string // shown to the Shard UI (not the ticket)
 	App         string
 	Name        string
 	Description string
@@ -163,7 +163,7 @@ var (
 type Registry struct {
 	path string
 	// OnChange runs (in its own goroutine) after requests or pairings
-	// changed: the host tells the CloudSync UI.
+	// changed: the host tells the Shard UI.
 	OnChange func()
 
 	mu       sync.Mutex

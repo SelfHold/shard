@@ -7,7 +7,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"cloudsync/core/crypto"
+	"github.com/SelfHold/shard/core/crypto"
 )
 
 var small = Params{Min: 1 << 10, Avg: 4 << 10, Max: 16 << 10}

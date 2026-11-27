@@ -22,7 +22,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: Shown on the Vault screen, or `cs status`.
+      description: Shown on the Vault screen, or `shard status`.
     validations:
       required: true
   - type: dropdown
@@ -42,5 +42,5 @@ body:
     id: logs
     attributes:
       label: Logs
-      description: Event log from the app or cloudsyncd.log (check that nothing secret is in it).
+      description: Event log from the app or shardd.log (check that nothing secret is in it).
       render: text

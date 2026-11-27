@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:cloudsync/app.dart';
-import 'package:cloudsync/data/rpc/endpoint.dart';
-import 'package:cloudsync/presentation/core/core_cubit.dart';
+import 'package:shard/app.dart';
+import 'package:shard/data/rpc/endpoint.dart';
+import 'package:shard/presentation/core/core_cubit.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -18,7 +18,7 @@ void main() {
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.reset);
       final core = CoreCubit(_NoCore());
-      await tester.pumpWidget(CloudSyncApp(core: core));
+      await tester.pumpWidget(ShardApp(core: core));
       await core.connect();
       await tester.pump();
       expect(find.text('No connection to the core'), findsWidgets);

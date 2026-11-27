@@ -13,8 +13,8 @@ func TestDocCarriesContracts(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	aidl := "../../app/android/app/src/main/aidl/dev/cloudsync/connector/"
-	for _, f := range []string{"../../proto/connector.proto", aidl + "ICloudSyncConnector.aidl", aidl + "IConnectorWatcher.aidl"} {
+	aidl := "../../app/android/app/src/main/aidl/dev/selfhold/shard/connector/"
+	for _, f := range []string{"../../proto/connector.proto", aidl + "IShardConnector.aidl", aidl + "IConnectorWatcher.aidl"} {
 		b, err := os.ReadFile(f)
 		if err != nil {
 			t.Fatal(err)

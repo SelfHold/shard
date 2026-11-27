@@ -1,6 +1,6 @@
 // This is a generated file - do not edit.
 //
-// Generated from cloudsync.proto.
+// Generated from shard.proto.
 
 // @dart = 3.3
 

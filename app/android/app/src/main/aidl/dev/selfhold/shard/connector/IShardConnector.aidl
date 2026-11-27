@@ -1,16 +1,16 @@
-// The CloudSync Connector API on Android (docs/CONNECTOR.md). Apps copy
+// The Shard Connector API on Android (docs/CONNECTOR.md). Apps copy
 // this file and IConnectorWatcher.aidl as is, in the same package
-// (dev.cloudsync.connector), and bind with an explicit intent:
-// action "dev.cloudsync.connector.BIND", package "dev.cloudsync.cloudsync".
+// (dev.selfhold.shard.connector), and bind with an explicit intent:
+// action "dev.selfhold.shard.connector.BIND", package "dev.selfhold.shard".
 //
 // Requests and replies are serialized messages of proto/connector.proto.
-// CloudSync knows the caller from Binder (package + signing certificate):
+// Shard knows the caller from Binder (package + signing certificate):
 // there is no token on Android.
-package dev.cloudsync.connector;
+package dev.selfhold.shard.connector;
 
-import dev.cloudsync.connector.IConnectorWatcher;
+import dev.selfhold.shard.connector.IConnectorWatcher;
 
-interface ICloudSyncConnector {
+interface IShardConnector {
     // Version of this binder interface: 1.
     int version();
 
