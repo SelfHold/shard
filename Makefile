@@ -1,4 +1,4 @@
-.PHONY: all test race vet build build-windows build-linux build-apk proto aar app-deps app-test app-run clean
+.PHONY: all test race vet build build-windows build-linux build-apk proto aar app-deps app-test app-run clean package-linux icons
 
 # Every build output lands in builds/ at the repo root.
 BIN := builds
@@ -44,12 +44,36 @@ build-apk: aar app-deps
 	@ls -lh $(BIN)/android/*.apk
 
 # Desktop app; shardd is put next to it, the app starts it when needed.
+# A CMake cache made at another checkout path (the repo was moved or renamed)
+# breaks `flutter build linux`, so it is dropped first.
 build-linux: build app-deps
+	@c=app/build/linux/x64/release/CMakeCache.txt; \
+	if [ -f "$$c" ] && ! grep -qxF "CMAKE_CACHEFILE_DIR:INTERNAL=$(CURDIR)/app/build/linux/x64/release" "$$c"; then \
+		echo "CMake cache from another checkout path: removing app/build/linux"; \
+		rm -rf app/build/linux; \
+	fi
 	cd app && flutter build linux --release $(DEFINES)
 	cp $(BIN)/shardd app/build/linux/x64/release/bundle/
 	rm -rf $(BIN)/linux && mkdir -p $(BIN)/linux
 	cp -r app/build/linux/x64/release/bundle/. $(BIN)/linux/
 	@echo "app: $(BIN)/linux/shard"
+
+# Linux packages from the build-linux output, described in packaging/linux/nfpm.yaml.
+# PKG picks the formats (deb, rpm, archlinux; all three by default), e.g.
+#   make package-linux PKG=archlinux
+# Packages land in $(BIN)/packages/. nfpm runs through `go run` unless it is installed.
+PKG ?= deb rpm archlinux
+NFPM ?= $(or $(shell command -v nfpm 2>/dev/null),go run github.com/goreleaser/nfpm/v2/cmd/nfpm@v2.49.0)
+
+package-linux: build-linux
+	mkdir -p $(BIN)/packages
+	@for p in $(PKG); do \
+		PKG_VERSION=$(VERSION) $(NFPM) package -f packaging/linux/nfpm.yaml -p $$p -t $(BIN)/packages/ || exit 1; \
+	done
+
+# Re-renders the committed PNG icons (app, tray, Android) from the SVGs in branding/.
+icons:
+	branding/render.sh
 
 # Windows needs no cgo: cgofuse talks to WinFsp directly.
 build-windows:

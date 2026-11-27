@@ -1,0 +1,80 @@
+# Linux packages (deb, rpm, archlinux) for Shard. Built by `make package-linux`
+# from the output of make build-linux (bundle in builds/linux, CLI in builds/shard);
+# paths are relative to the repo root.
+# The Flutter bundle is relocatable and finds its data next to the binary, so it
+# stays together under /opt/selfhold/shard. Icon and menu caches are refreshed by the
+# package managers' own hooks (pacman hooks, dpkg and rpm file triggers).
+name: shard
+arch: amd64
+platform: linux
+version: ${PKG_VERSION}
+release: 1
+section: net
+priority: optional
+maintainer: SelfHold <https://github.com/SelfHold>
+vendor: SelfHold
+homepage: https://github.com/SelfHold/shard
+license: GPL-3.0-only
+description: |-
+  Serverless, encrypted, erasure-coded file sync with a password safe.
+  Includes the desktop app, the shard CLI and the shardd daemon the app starts.
+
+contents:
+  - src: builds/linux
+    dst: /opt/selfhold/shard
+    type: tree
+  # The shard CLI (make build). The app binary in the bundle has the same name,
+  # so the app is started from the menu entry, not from PATH.
+  - src: builds/shard
+    dst: /usr/bin/shard
+    file_info: { mode: 0755 }
+  # The app starts shardd from next to itself; the link is for running it by hand.
+  - src: /opt/selfhold/shard/shardd
+    dst: /usr/bin/shardd
+    type: symlink
+  - src: packaging/linux/dev.selfhold.shard.desktop
+    dst: /usr/share/applications/dev.selfhold.shard.desktop
+    file_info: { mode: 0644 }
+  - src: branding/shard_icon.svg
+    dst: /usr/share/icons/hicolor/scalable/apps/dev.selfhold.shard.svg
+    file_info: { mode: 0644 }
+  - src: app/assets/icon/shard.png
+    dst: /usr/share/icons/hicolor/256x256/apps/dev.selfhold.shard.png
+    file_info: { mode: 0644 }
+  - src: LICENSE
+    dst: /usr/share/licenses/shard/LICENSE
+    packager: archlinux
+    file_info: { mode: 0644 }
+  - src: LICENSE
+    dst: /usr/share/doc/shard/copyright
+    packager: deb
+    file_info: { mode: 0644 }
+  - src: LICENSE
+    dst: /usr/share/licenses/shard/LICENSE
+    type: license
+    packager: rpm
+    file_info: { mode: 0644 }
+
+# Library names differ per distribution.
+overrides:
+  deb:
+    depends:
+      - "libgtk-3-0t64 | libgtk-3-0"
+      - "libayatana-appindicator3-1"
+      - "libfuse2t64 | libfuse2"
+    recommends:
+      - "fuse3 | fuse"
+      - "xdg-utils"
+  rpm:
+    depends:
+      - "gtk3"
+      - "libayatana-appindicator-gtk3"
+      - "fuse-libs"
+    recommends:
+      - "fuse3"
+      - "xdg-utils"
+  archlinux:
+    depends:
+      - "gtk3"
+      - "libayatana-appindicator"
+      - "fuse2"

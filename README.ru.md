@@ -215,6 +215,8 @@ Reed-Solomon k+m (m=1 работает как RAID 5). Всё шифруется
 make build         # builds/shard, builds/shardd (Linux, FUSE 2)
 make build FUSE_TAGS=-tags=fuse3   # если есть libfuse3.so.3
 make build-linux   # десктоп-приложение в builds/linux (shardd рядом)
+make package-linux # пакеты deb, rpm и Arch в builds/packages (PKG=archlinux — только один)
+make icons         # перерисовать PNG-иконки из SVG в branding/ (rsvg-convert)
 make aar           # Go-ядро для Android (gomobile AAR)
 make build-apk     # APK для Android (arm64, x86_64) в builds/android; сначала собирает AAR
 make app-run       # собрать shardd и запустить приложение в режиме разработки

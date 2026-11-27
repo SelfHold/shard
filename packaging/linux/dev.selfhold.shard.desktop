@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Shard
+GenericName=File Sync
+Comment=Encrypted file sync over several cloud storages
+Exec=/opt/selfhold/shard/shard
+Icon=dev.selfhold.shard
+Terminal=false
+Categories=Network;FileTransfer;
+Keywords=sync;cloud;encryption;password;vault;
+StartupWMClass=dev.selfhold.shard
+StartupNotify=true

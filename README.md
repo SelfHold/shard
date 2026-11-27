@@ -203,6 +203,8 @@ Requirements:
 make build         # builds/shard, builds/shardd (Linux, FUSE 2)
 make build FUSE_TAGS=-tags=fuse3   # if libfuse3.so.3 is available
 make build-linux   # desktop app in builds/linux (shardd next to it)
+make package-linux # deb, rpm and Arch packages in builds/packages (PKG=archlinux for one)
+make icons         # re-render the PNG icons from the SVGs in branding/ (rsvg-convert)
 make aar           # the Go core for Android (gomobile AAR)
 make build-apk     # Android APKs (arm64, x86_64) in builds/android; builds the AAR first
 make app-run       # build shardd and run the app in development mode

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8.8 -8.8 273.6 273.6">
+  <!-- Shard Android adaptive icon, background layer: hm-bg with the accent grid. -->
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse" x="20" y="20">
+      <path d="M24 0H0V24" fill="none" stroke="#00d4ff" stroke-opacity="0.10" stroke-width="2"/>
+    </pattern>
+    <filter id="glow" x="-1" y="-1" width="3" height="3">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+  <rect x="-8.8" y="-8.8" width="273.6" height="273.6" fill="#080c10"/>
+  <rect x="-8.8" y="-8.8" width="273.6" height="273.6" fill="url(#grid)"/>
+</svg>

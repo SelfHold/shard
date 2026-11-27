@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="36 36 184 184">
+  <!-- Shard tray icon (the glyph alone, transparent): a crystal split in two, with a node on three of its four corners: erasure-coded pieces, any three restore the whole.
+       Colours from the design palette: bezel #000000, hm-bg #080c10, hm-accent #00d4ff. -->
+  <defs>
+    <pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse" x="20" y="20">
+      <path d="M24 0H0V24" fill="none" stroke="#00d4ff" stroke-opacity="0.10" stroke-width="2"/>
+    </pattern>
+    <filter id="glow" x="-1" y="-1" width="3" height="3">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+  <path d="M128 52L196 128L128 204L60 128Z" fill="none" stroke="#00d4ff" stroke-width="14" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M128 52V204" fill="none" stroke="#00d4ff" stroke-width="14" stroke-linecap="square" stroke-linejoin="miter"/>
+  <g fill="#00d4ff">
+    <circle cx="128" cy="52" r="16" filter="url(#glow)" opacity="0.8"/>
+    <circle cx="196" cy="128" r="16" filter="url(#glow)" opacity="0.8"/>
+    <circle cx="128" cy="204" r="16" filter="url(#glow)" opacity="0.8"/>
+    <circle cx="128" cy="52" r="16"/>
+    <circle cx="196" cy="128" r="16"/>
+    <circle cx="128" cy="204" r="16"/>
+  </g>
+  <g fill="#080c10">
+    <circle cx="128" cy="52" r="6"/>
+    <circle cx="196" cy="128" r="6"/>
+    <circle cx="128" cy="204" r="6"/>
+  </g>
+</svg>
